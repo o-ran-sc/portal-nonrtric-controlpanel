@@ -1,0 +1,7 @@
+Code-Review+2: LF Jenkins CI <releng+lf-jobbuilder@linuxfoundation.org>
+Verified+1: LF Jenkins CI <releng+lf-jobbuilder@linuxfoundation.org>
+Submitted-by: LF Jenkins CI <releng+lf-jobbuilder@linuxfoundation.org>
+Submitted-at: Thu, 12 Mar 2020 17:07:56 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/portal/nonrtric-controlpanel/+/2662
+Project: portal/nonrtric-controlpanel
+Branch: refs/heads/master
