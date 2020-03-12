@@ -1,0 +1,45 @@
+---
+project: 'portal_nonrtric_controlpanel'
+project_creation_date: '2020-03-10'
+project_category: ''
+lifecycle_state: 'Incubation'
+project_lead: &oran_portal_nonrtric_controlpanel_ptl
+    name: 'John Keeney'
+    email: 'John.Keeney@est.tech'
+    id: 'johnkeeney'
+    company: 'Ericsson Software Technology'
+    timezone: 'Europe/Dublin'
+primary_contact: *oran_portal_nonrtric_controlpanel_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.o-ran-sc.org/projects/NONRTRIC'
+    key: 'NONRTRIC'
+mailing_list:
+    type: 'groups.io'
+    url: 'https://lists.o-ran-sc.org/g/main'
+realtime_discussion:
+    type: 'irc'
+    server: 'freenode.net'
+    channel: '#oran'
+meetings:
+    - type: 'zoom'
+      agenda: 'https://wiki.o-ran-sc.org/display/RICNR/Meetings'
+      url: 'https://wiki.o-ran-sc.org/display/RICNR/Meetings'
+      repeats: 'weekly'
+      time: 'Mondays, 13:00 UTC'
+repositories:
+    - portal/nonrtric-controlpanel
+committers:
+    - <<: *oran_portal_nonrtric_controlpanel_ptl
+    - name: 'Patrik Buhr'
+      email: 'patrik.buhr@est.tech'
+      company: 'Ericsson Software Technology'
+      id: 'PatrikBuhr'
+      timezone: 'Sweden/Stockholm'
+tsc:
+    # yamllint disable rule:line-length
+    approval: 'https://wiki.o-ran-sc.org/display/TOC#ORANSCTechnicalOversightCommittee(TOC)-20200304'
+    changes:
+        - type: ''
+          name: ''
+          link: ''
