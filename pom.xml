@@ -44,6 +44,8 @@ limitations under the License.
 		<lmp.license.name>apache_v2</lmp.license.name>
 		<lmp.process.start.tag>========================LICENSE_START=================================</lmp.process.start.tag>
 		<lmp.process.end.tag>========================LICENSE_END===================================</lmp.process.end.tag>
+        <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
+        <license-maven-plugin.version>1.20</license-maven-plugin.version>
 	</properties>
 	<modules>
 		<module>webapp-frontend</module>
@@ -106,7 +108,7 @@ limitations under the License.
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.6.0.1398</version>
+				<version>${sonar-maven-plugin.version}</version>
 			</plugin>
 		</plugins>
 		<pluginManagement>
@@ -114,7 +116,7 @@ limitations under the License.
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>license-maven-plugin</artifactId>
-					<version>1.20</version>
+					<version>${license-maven-plugin.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
