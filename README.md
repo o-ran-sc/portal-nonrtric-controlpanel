@@ -1,6 +1,6 @@
 # O-RAN-SC NonRT RIC Controlpanel Web Application
 
-The O-RAN NonRT RIC Controlpanel provides administrative and operator functions for a NearRT RIC through the A1 API.
+The O-RAN Non-RT RIC Controlpanel provides administrative and operator functions for a Near-RT RIC through the A1 API.
 This web app consists of an Angular (version 8) front end
 and a Java (version 11) Spring-Boot (version 2.1) back end.
 
