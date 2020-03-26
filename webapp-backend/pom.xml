@@ -33,7 +33,7 @@ limitations under the License.
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>nonrtric-controlpanel-be</artifactId>
-    <name>NonRT RIC Controlpanel Webapp backend</name>
+    <name>Non-RT RIC Controlpanel Webapp backend</name>
     <properties>
         <epsdk-fw.version>2.6.0</epsdk-fw.version>
         <springfox.version>2.9.2</springfox.version>
