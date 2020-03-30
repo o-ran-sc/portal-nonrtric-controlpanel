@@ -28,7 +28,7 @@ import { ControlpanelSuccessTransport, EcompUser } from '../../interfaces/contro
 })
 
 /**
- * Services to query the Controlpanel's admin endpoints.
+ * Services to query the Control Panel's admin endpoints.
  */
 export class ControlpanelService {
 
@@ -47,7 +47,7 @@ export class ControlpanelService {
   }
 
   /**
-   * Gets Controlpanel version details
+   * Gets Control Panel version details
    * @returns Observable that should yield a ControlpanelSuccessTransport object
    */
   getVersion(): Observable<ControlpanelSuccessTransport> {
@@ -55,7 +55,7 @@ export class ControlpanelService {
   }
 
   /**
-   * Gets Controlpanel users
+   * Gets Control Panel users
    * @returns Observable that should yield a EcompUser array
    */
   getUsers(): Observable<EcompUser[]> {

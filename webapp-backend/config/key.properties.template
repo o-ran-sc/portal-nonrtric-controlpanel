@@ -16,6 +16,6 @@
 # limitations under the License.
 # ========================LICENSE_END===================================
 
-# Template for the file that provides a secret key for the Non-RT RIC Controlpanel.
+# Template for the file that provides a secret key for the Non-RT RIC Control Panel.
 
 cipher.enc.key =

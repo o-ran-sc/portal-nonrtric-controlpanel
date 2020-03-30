@@ -230,7 +230,7 @@ public class PortalAuthenticationFilter implements Filter {
             System.getProperty("line.separator"), //
             "<html>", //
             "<head>", //
-            "<title>Non-RT RIC Controlpanel</title>", //
+            "<title>Non-RT RIC Control Panel</title>", //
             "<style>", //
             "html, body { ", //
             "  font-family: Helvetica, Arial, sans-serif;", //
@@ -238,7 +238,7 @@ public class PortalAuthenticationFilter implements Filter {
             "</style>", //
             "</head>", //
             "<body>", //
-            "<h2>Non-RT RIC Controlpanel</h2>", //
+            "<h2>Non-RT RIC Control Panel</h2>", //
             "<h4>Please log in.</h4>", //
             "<p>", //
             aHref, "Click here to authenticate at the ONAP Portal</a>", //
