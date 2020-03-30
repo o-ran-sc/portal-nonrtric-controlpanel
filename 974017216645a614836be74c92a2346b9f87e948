@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "dfb6038a_bb533a2d",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-03-30T07:41:10Z",
+      "side": 1,
+      "message": "I do not think there is a word called \u0027Controlpanel\u0027 (according to google). It is called \u0027control panel\u0027. The name should be aligned.",
+      "range": {
+        "startLine": 7,
+        "startChar": 69,
+        "endLine": 7,
+        "endChar": 81
+      },
+      "revId": "974017216645a614836be74c92a2346b9f87e948",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "827b4b15_aad635ca",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-03-30T07:41:10Z",
+      "side": 1,
+      "message": "Maybe this would be shorter: \n\n\u0027The policy types and their definitions are retrieved from each Near-RT RIC\u0027 ?",
+      "range": {
+        "startLine": 13,
+        "startChar": 27,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "974017216645a614836be74c92a2346b9f87e948",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45dca92e_25d91bb4",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 2
@@ -25,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "5a239e56_cf73947d",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-03-30T07:41:10Z",
+      "side": 1,
+      "message": "Maybe it would be good to be clear on that this is a stand alone mode where the underlying services such as the the \u0027XX\u0027 (do no remember the new name of the policy agent) is simulated.",
+      "range": {
+        "startLine": 18,
+        "startChar": 19,
+        "endLine": 18,
+        "endChar": 32
+      },
+      "revId": "974017216645a614836be74c92a2346b9f87e948",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "826a2f2a_175c7c4b",
         "filename": "docs/images/non-RT_RIC_controlpanel.png",
         "patchSetId": 2
@@ -36,6 +105,24 @@
       "writtenOn": "2020-03-30T07:27:10Z",
       "side": 1,
       "message": "Only Controlpan displayed, maybe should be discussed with Patrik.",
+      "revId": "974017216645a614836be74c92a2346b9f87e948",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbce9fe3_6f02452e",
+        "filename": "docs/images/non-RT_RIC_controlpanel.png",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-03-30T07:41:10Z",
+      "side": 1,
+      "message": "I think it is fine as long as it is clear that that this is just one example view and and also that it is explained what we see. \n\nThe window says \u0027Controlpan\u0027 by the way .. I think it should be \n\u0027Control Panel\u0027 or \u0027control panel\u0027",
+      "parentUuid": "826a2f2a_175c7c4b",
       "revId": "974017216645a614836be74c92a2346b9f87e948",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
