@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45dca92e_25d91bb4",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2020-03-30T07:27:10Z",
+      "side": 1,
+      "message": "Not consistent with the previous Controlpanel",
+      "range": {
+        "startLine": 18,
+        "startChar": 11,
+        "endLine": 18,
+        "endChar": 24
+      },
+      "revId": "974017216645a614836be74c92a2346b9f87e948",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "826a2f2a_175c7c4b",
+        "filename": "docs/images/non-RT_RIC_controlpanel.png",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2020-03-30T07:27:10Z",
+      "side": 1,
+      "message": "Only Controlpan displayed, maybe should be discussed with Patrik.",
+      "revId": "974017216645a614836be74c92a2346b9f87e948",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c57f0c49_2da39110",
+        "filename": "docs/overview.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2020-03-30T07:27:10Z",
+      "side": 1,
+      "message": "Non-RT",
+      "range": {
+        "startLine": 8,
+        "startChar": 4,
+        "endLine": 8,
+        "endChar": 9
+      },
+      "revId": "974017216645a614836be74c92a2346b9f87e948",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
