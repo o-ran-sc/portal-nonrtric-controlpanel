@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e824cb9c_ae25c60e",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2020-03-30T09:37:01Z",
+      "side": 1,
+      "message": "Control Panel",
+      "range": {
+        "startLine": 14,
+        "startChar": 10,
+        "endLine": 14,
+        "endChar": 22
+      },
+      "revId": "38422f8d5fb5c28aaa6a004ee4d421243fa4e71a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44ee9489_538b7c39",
+        "filename": "docs/overview.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2020-03-30T09:37:01Z",
+      "side": 1,
+      "message": "Control Panel",
+      "range": {
+        "startLine": 8,
+        "startChar": 15,
+        "endLine": 8,
+        "endChar": 27
+      },
+      "revId": "38422f8d5fb5c28aaa6a004ee4d421243fa4e71a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
