@@ -32,12 +32,12 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 // Limit scan to controlpanel classes; exclude generated API classes
 @ComponentScan("org.oransc.portal.nonrtric.controlpanel")
-public class ControlpanelApplication {
+public class ControlPanelApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static void main(String[] args) {
-        SpringApplication.run(ControlpanelApplication.class);
+        SpringApplication.run(ControlPanelApplication.class);
         // Ensure this appears on the console by using level WARN
         logger.warn("main: version '{}' successful start",
             getImplementationVersion(MethodHandles.lookup().lookupClass()));

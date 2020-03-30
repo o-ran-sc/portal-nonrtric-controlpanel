@@ -33,7 +33,7 @@ limitations under the License.
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>nonrtric-controlpanel-be</artifactId>
-    <name>Non-RT RIC Controlpanel Webapp backend</name>
+    <name>Non-RT RIC Control Panel Webapp backend</name>
     <properties>
         <epsdk-fw.version>2.6.0</epsdk-fw.version>
         <springfox.version>2.9.2</springfox.version>
@@ -327,7 +327,7 @@ limitations under the License.
                                         <arg>-Xmx256m</arg>
                                         <arg>-cp</arg>
                                         <arg>maven:maven/${project.artifactId}-${project.version}.${project.packaging}</arg>
-                                        <arg>-Dloader.main=org.oransc.portal.nonrtric.controlpanel.ControlpanelApplication</arg>
+                                        <arg>-Dloader.main=org.oransc.portal.nonrtric.controlpanel.ControlPanelApplication</arg>
                                         <arg>-Djava.security.egd=file:/dev/./urandom</arg>
                                         <arg>org.springframework.boot.loader.PropertiesLauncher</arg>
                                     </exec>

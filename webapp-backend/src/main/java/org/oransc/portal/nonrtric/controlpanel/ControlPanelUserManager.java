@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  *
  * This first implementation serializes user details to a file.
  */
-public class ControlpanelUserManager {
+public class ControlPanelUserManager {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -62,11 +62,11 @@ public class ControlpanelUserManager {
      * @throws IOException
      *         On file error
      */
-    public ControlpanelUserManager(boolean clear) throws IOException {
+    public ControlPanelUserManager(boolean clear) throws IOException {
         this(USER_FILE_PATH);
         if (clear) {
             logger.debug("ctor: removing file {}", userFile.getAbsolutePath());
-            File f = new File(ControlpanelUserManager.USER_FILE_PATH);
+            File f = new File(ControlPanelUserManager.USER_FILE_PATH);
             if (f.exists())
                 Files.delete(f.toPath());
             users.clear();
@@ -81,7 +81,7 @@ public class ControlpanelUserManager {
      * @throws IOException
      *         If file cannot be read
      */
-    public ControlpanelUserManager(final String userFilePath) throws IOException {
+    public ControlPanelUserManager(final String userFilePath) throws IOException {
         logger.debug("ctor: userfile {}", userFilePath);
         if (userFilePath == null)
             throw new IllegalArgumentException("Missing or empty user file property");
@@ -164,7 +164,7 @@ public class ControlpanelUserManager {
 
     // Test infrastructure
     public static void main(String[] args) throws Exception {
-        ControlpanelUserManager dum = new ControlpanelUserManager(false);
+        ControlPanelUserManager dum = new ControlPanelUserManager(false);
         EcompUser user = new EcompUser();
         user.setActive(true);
         user.setLoginId("demo");
@@ -172,7 +172,7 @@ public class ControlpanelUserManager {
         user.setLastName("Last");
         EcompRole role = new EcompRole();
         role.setId(1L);
-        role.setName(ControlpanelConstants.ROLE_NAME_ADMIN);
+        role.setName(ControlPanelConstants.ROLE_NAME_ADMIN);
         Set<EcompRole> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);

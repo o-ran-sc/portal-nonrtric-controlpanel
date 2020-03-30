@@ -27,7 +27,7 @@ import java.time.Instant;
  * This mimics the model Spring-Boot uses for a message returned on failure, to
  * be serialized as JSON.
  */
-public class ErrorTransport implements IControlpanelResponse {
+public class ErrorTransport implements IControlPanelResponse {
 
     private Instant timestamp;
     private Integer status;

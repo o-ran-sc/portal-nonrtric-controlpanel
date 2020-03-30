@@ -72,7 +72,7 @@ public class PortalRestCentralServiceTest extends AbstractControllerTest {
      * EcompRole role = new EcompRole();
      * role.setRoleFunctions(Collections.EMPTY_SET);
      * role.setId(1L);
-     * role.setName(ControlpanelConstants.ROLE_NAME_ADMIN);
+     * role.setName(ControlPanelConstants.ROLE_NAME_ADMIN);
      * Set<EcompRole> roles = new HashSet<>();
      * roles.add(role);
      * user.setRoles(roles);

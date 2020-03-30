@@ -21,7 +21,7 @@
 package org.oransc.portal.nonrtric.controlpanel.config;
 
 import java.lang.invoke.MethodHandles;
-import org.oransc.portal.nonrtric.controlpanel.ControlpanelConstants;
+import org.oransc.portal.nonrtric.controlpanel.ControlPanelConstants;
 import org.oransc.portal.nonrtric.controlpanel.config.WebSecurityConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,12 +60,12 @@ public class WebSecurityMockConfiguration extends WebSecurityConfigurerAdapter {
             // The admin user has the admin AND standard roles
             .withUser(TEST_CRED_ADMIN) //
             .password(encoder.encode(TEST_CRED_ADMIN))
-            .roles(ControlpanelConstants.ROLE_NAME_ADMIN, ControlpanelConstants.ROLE_NAME_STANDARD)//
+            .roles(ControlPanelConstants.ROLE_NAME_ADMIN, ControlPanelConstants.ROLE_NAME_STANDARD)//
             .and()//
             // The standard user has only the standard role
             .withUser(TEST_CRED_STANDARD) //
             .password(encoder.encode(TEST_CRED_STANDARD)) //
-            .roles(ControlpanelConstants.ROLE_NAME_STANDARD);
+            .roles(ControlPanelConstants.ROLE_NAME_STANDARD);
     }
 
     @Override

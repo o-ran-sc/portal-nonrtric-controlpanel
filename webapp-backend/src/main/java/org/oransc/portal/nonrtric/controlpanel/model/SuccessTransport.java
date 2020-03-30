@@ -20,7 +20,7 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.model;
 
-public class SuccessTransport implements IControlpanelResponse {
+public class SuccessTransport implements IControlPanelResponse {
 
     private int status;
     private Object data;

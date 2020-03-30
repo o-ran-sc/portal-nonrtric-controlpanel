@@ -25,7 +25,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.InvocationTargetException;
 
 import org.onap.portalsdk.core.onboarding.util.PortalApiConstants;
-import org.oransc.portal.nonrtric.controlpanel.ControlpanelUserManager;
+import org.oransc.portal.nonrtric.controlpanel.ControlPanelUserManager;
 import org.oransc.portal.nonrtric.controlpanel.controller.PolicyController;
 import org.oransc.portal.nonrtric.controlpanel.controller.SimpleErrorController;
 import org.oransc.portal.nonrtric.controlpanel.portalapi.PortalAuthManager;
@@ -69,7 +69,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private String userCookie;
 
     @Autowired
-    ControlpanelUserManager userManager;
+    ControlPanelUserManager userManager;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

@@ -22,7 +22,7 @@ package org.oransc.portal.nonrtric.controlpanel.config;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import org.oransc.portal.nonrtric.controlpanel.ControlpanelUserManager;
+import org.oransc.portal.nonrtric.controlpanel.ControlPanelUserManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +51,8 @@ public class AdminConfiguration {
 
     @Bean
     // The bean (method) name must be globally unique
-    public ControlpanelUserManager userManager() throws IOException {
-        return new ControlpanelUserManager(userfile);
+    public ControlPanelUserManager userManager() throws IOException {
+        return new ControlPanelUserManager(userfile);
     }
 
 }

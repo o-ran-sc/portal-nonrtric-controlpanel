@@ -4,17 +4,17 @@
 Developer Guide
 ===============
 
-This document provides a quickstart for developers of the Non-RT RIC Controlpanel.
+This document provides a quickstart for developers of the Non-RT RIC Control Panel.
 
-The Non-RT RIC Controlpanel is an interface that allows human users to create, edit and delete policy instances, for
+The Non-RT RIC Control Panel is an interface that allows human users to create, edit and delete policy instances, for
 each existing policy type. The policy types and their definitions are retrieved from each Near-RT RIC.
 
 See the README.md file in the nonrtric-controlpanel repo for info about how to use it.
 
-Start the Controlpanel for development
-======================================
+Start the Control Panel for development
+=======================================
 
-To run the control panel locally for development with simulated services, follow these steps:
+To run the Control Panel locally for development with simulated services, follow these steps:
 
 - Fetch the latest code from `gerrit`_
 
@@ -26,7 +26,7 @@ To run the control panel locally for development with simulated services, follow
 
     mvn clean install
 
-    mvn -Dorg.oransc.portal.nonrtric.controlpanel=mock -Dtest=ControlpanelTestServer -DfailIfNoTests=false test
+    mvn -Dorg.oransc.portal.nonrtric.controlpanel=mock -Dtest=ControlPanelTestServer -DfailIfNoTests=false test
 
 
 - Now you can open URL:  `localhost:8080`_ in a browser to access the backend directly.
@@ -39,7 +39,7 @@ Start the frontend:
 
     ./ng serve --proxy-config proxy.conf.json
 
-- Now you can open URL:  `localhost:4200`_ in a browser to access the Controlpanel.
+- Now you can open URL:  `localhost:4200`_ in a browser to access the Control Panel.
 
 .. _localhost:4200: localhost:4200
 

@@ -23,6 +23,6 @@ package org.oransc.portal.nonrtric.controlpanel.model;
 /**
  * Marker interface used by all transport models.
  */
-public interface IControlpanelResponse {
+public interface IControlPanelResponse {
 
 }

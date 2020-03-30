@@ -42,8 +42,8 @@ import org.onap.portalsdk.core.onboarding.util.PortalApiConstants;
 import org.onap.portalsdk.core.onboarding.util.PortalApiProperties;
 import org.onap.portalsdk.core.restful.domain.EcompRole;
 import org.onap.portalsdk.core.restful.domain.EcompUser;
-import org.oransc.portal.nonrtric.controlpanel.ControlpanelConstants;
-import org.oransc.portal.nonrtric.controlpanel.ControlpanelUserManager;
+import org.oransc.portal.nonrtric.controlpanel.ControlPanelConstants;
+import org.oransc.portal.nonrtric.controlpanel.ControlPanelUserManager;
 import org.oransc.portal.nonrtric.controlpanel.model.EcompUserDetails;
 import org.owasp.esapi.reference.DefaultSecurityConfiguration;
 import org.slf4j.Logger;
@@ -92,10 +92,10 @@ public class PortalAuthenticationFilter implements Filter {
     private final boolean enforcePortalSecurity;
     private final PortalAuthManager authManager;
 
-    private final ControlpanelUserManager userManager;
+    private final ControlPanelUserManager userManager;
 
     public PortalAuthenticationFilter(boolean portalSecurity, PortalAuthManager authManager,
-        ControlpanelUserManager userManager) throws IOException {
+        ControlPanelUserManager userManager) throws IOException {
         this.enforcePortalSecurity = portalSecurity;
         this.authManager = authManager;
         this.userManager = userManager;
@@ -159,7 +159,7 @@ public class PortalAuthenticationFilter implements Filter {
             }
             EcompRole admin = new EcompRole();
             admin.setId(1L);
-            admin.setName(ControlpanelConstants.ROLE_ADMIN);
+            admin.setName(ControlPanelConstants.ROLE_ADMIN);
             HashSet<EcompRole> roles = new HashSet<>();
             roles.add(admin);
             EcompUser user = new EcompUser();
@@ -230,7 +230,7 @@ public class PortalAuthenticationFilter implements Filter {
             System.getProperty("line.separator"), //
             "<html>", //
             "<head>", //
-            "<title>Non-RT RIC Controlpanel</title>", //
+            "<title>Non-RT RIC Control Panel</title>", //
             "<style>", //
             "html, body { ", //
             "  font-family: Helvetica, Arial, sans-serif;", //
@@ -238,7 +238,7 @@ public class PortalAuthenticationFilter implements Filter {
             "</style>", //
             "</head>", //
             "<body>", //
-            "<h2>Non-RT RIC Controlpanel</h2>", //
+            "<h2>Non-RT RIC Control Panel</h2>", //
             "<h4>Please log in.</h4>", //
             "<p>", //
             aHref, "Click here to authenticate at the ONAP Portal</a>", //

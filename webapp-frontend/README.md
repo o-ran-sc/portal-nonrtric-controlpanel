@@ -1,4 +1,4 @@
-# Non-RT RIC Controlpanel Web Application Frontend
+# Non-RT RIC Control Panel Web Application Frontend
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.3.
 

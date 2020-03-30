@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.onap.portalsdk.core.onboarding.crossapi.IPortalRestCentralService;
 import org.onap.portalsdk.core.onboarding.exception.PortalAPIException;
 import org.onap.portalsdk.core.restful.domain.EcompUser;
-import org.oransc.portal.nonrtric.controlpanel.ControlpanelUserManager;
+import org.oransc.portal.nonrtric.controlpanel.ControlPanelUserManager;
 import org.oransc.portal.nonrtric.controlpanel.config.SpringContextCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,12 +52,12 @@ public class PortalRestCentralServiceImpl implements IPortalRestCentralService {
     @Autowired
     private SpringContextCache springContextCache;
     private final PortalAuthManager authManager;
-    private final ControlpanelUserManager userManager;
+    private final ControlPanelUserManager userManager;
 
     public PortalRestCentralServiceImpl() throws IOException, PortalAPIException {
         final ApplicationContext context = springContextCache.getApplicationContext();
         authManager = context.getBean(PortalAuthManager.class);
-        userManager = context.getBean(ControlpanelUserManager.class);
+        userManager = context.getBean(ControlPanelUserManager.class);
     }
 
     /*

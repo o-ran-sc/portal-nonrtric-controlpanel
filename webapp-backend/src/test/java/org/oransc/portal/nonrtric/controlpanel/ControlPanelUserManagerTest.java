@@ -29,14 +29,14 @@ import org.junit.jupiter.api.Test;
 import org.onap.portalsdk.core.onboarding.exception.PortalAPIException;
 import org.onap.portalsdk.core.restful.domain.EcompRole;
 import org.onap.portalsdk.core.restful.domain.EcompUser;
-import org.oransc.portal.nonrtric.controlpanel.ControlpanelConstants;
-import org.oransc.portal.nonrtric.controlpanel.ControlpanelUserManager;
+import org.oransc.portal.nonrtric.controlpanel.ControlPanelConstants;
+import org.oransc.portal.nonrtric.controlpanel.ControlPanelUserManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-public class ControlpanelUserManagerTest {
+public class ControlPanelUserManagerTest {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -48,7 +48,7 @@ public class ControlpanelUserManagerTest {
         user.setLastName("Last");
         EcompRole role = new EcompRole();
         role.setId(1L);
-        role.setName(ControlpanelConstants.ROLE_NAME_ADMIN);
+        role.setName(ControlPanelConstants.ROLE_NAME_ADMIN);
         Set<EcompRole> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);
@@ -58,7 +58,7 @@ public class ControlpanelUserManagerTest {
     @Test
     public void testUserMgr() throws Exception {
         final String loginId = "demo";
-        ControlpanelUserManager dum = new ControlpanelUserManager(true);
+        ControlPanelUserManager dum = new ControlPanelUserManager(true);
         EcompUser user = createEcompUser(loginId);
         dum.createUser(user);
         logger.info("Created user {}", user);

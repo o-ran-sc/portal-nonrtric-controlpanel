@@ -21,7 +21,7 @@
 
 package org.oransc.portal.nonrtric.controlpanel.config;
 
-import org.oransc.portal.nonrtric.controlpanel.ControlpanelApplication;
+import org.oransc.portal.nonrtric.controlpanel.ControlPanelApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -47,19 +47,19 @@ public class SwaggerConfiguration {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select() //
-            .apis(RequestHandlerSelectors.basePackage(ControlpanelApplication.class.getPackage().getName())) //
+            .apis(RequestHandlerSelectors.basePackage(ControlPanelApplication.class.getPackage().getName())) //
             .paths(PathSelectors.any()) //
             .build() //
             .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
-        final String version = ControlpanelApplication.class.getPackage().getImplementationVersion();
+        final String version = ControlPanelApplication.class.getPackage().getImplementationVersion();
         return new ApiInfoBuilder() //
-            .title("Non-RT RIC Controlpanel backend") //
+            .title("Non-RT RIC Control Panel backend") //
             .description("Proxies access to Near-RT RIC.")//
             .termsOfServiceUrl("Terms of service") //
-            .contact(new Contact("Non-RT RIC Controlpanel Dev Team", //
+            .contact(new Contact("Non-RT RIC Control Panel Dev Team", //
                 "http://no-docs-yet.org/", //
                 "noreply@O-RAN-SC.org")) //
             .license("Apache 2.0 License").licenseUrl("http://www.apache.org/licenses/LICENSE-2.0") //

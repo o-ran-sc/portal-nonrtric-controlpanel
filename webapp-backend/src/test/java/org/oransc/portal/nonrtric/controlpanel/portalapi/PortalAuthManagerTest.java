@@ -31,7 +31,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.onap.portalsdk.core.onboarding.util.PortalApiConstants;
-import org.oransc.portal.nonrtric.controlpanel.ControlpanelUserManager;
+import org.oransc.portal.nonrtric.controlpanel.ControlPanelUserManager;
 import org.oransc.portal.nonrtric.controlpanel.portalapi.PortalAuthManager;
 import org.oransc.portal.nonrtric.controlpanel.portalapi.PortalAuthenticationFilter;
 import org.slf4j.Logger;
@@ -73,7 +73,7 @@ public class PortalAuthManagerTest {
         logger.debug("validateEcompSso answers {}", s);
         Assert.assertNull(s);
 
-        ControlpanelUserManager dum = new ControlpanelUserManager(true);
+        ControlPanelUserManager dum = new ControlPanelUserManager(true);
         PortalAuthenticationFilter filter = new PortalAuthenticationFilter(false, m, dum);
         filter.init(null);
         filter.destroy();

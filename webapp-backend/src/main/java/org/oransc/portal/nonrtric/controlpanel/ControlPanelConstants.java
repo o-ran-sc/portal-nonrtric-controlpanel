@@ -20,9 +20,9 @@
  */
 package org.oransc.portal.nonrtric.controlpanel;
 
-public abstract class ControlpanelConstants {
+public abstract class ControlPanelConstants {
 
-    private ControlpanelConstants() {
+    private ControlPanelConstants() {
         // Sonar insists on hiding the constructor
     }
 
