@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41e5984c_cc36168a",
+        "filename": "webapp-backend/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-03-30T11:49:41Z",
+      "side": 1,
+      "message": "A bit picky maybe, but \u0027backend\u0027 should be \u0027back end\u0027",
+      "range": {
+        "startLine": 1,
+        "startChar": 43,
+        "endLine": 1,
+        "endChar": 50
+      },
+      "revId": "22cfc3d48f2c8fdd395d820d623c11924af960f8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d42c8d1c_e537b41f",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/config/SwaggerConfiguration.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-03-30T11:49:41Z",
+      "side": 1,
+      "message": "back end\n(and \u0027front end\u0027)",
+      "range": {
+        "startLine": 59,
+        "startChar": 45,
+        "endLine": 59,
+        "endChar": 52
+      },
+      "revId": "22cfc3d48f2c8fdd395d820d623c11924af960f8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
