@@ -1,6 +1,6 @@
-# Non-RT RIC Controlpanel Web Application Backend
+# Non-RT RIC Control Panel Web Application Backend
 
-The Non-RT RIC Controlpanel back-end provides REST services to the Controlpanel
+The Non-RT RIC Control Panel back-end provides REST services to the Control Panel
 front-end Typescript features running in the user's browser.  For
 production use, it also serves the Angular application files.
 

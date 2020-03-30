@@ -6,7 +6,7 @@ Release-Notes
 =============
 
 
-This document provides the release notes for the release of the Non-RT RIC Controlpanel.
+This document provides the release notes for the release of the Non-RT RIC Control Panel.
 
 .. contents::
    :depth: 3
@@ -37,7 +37,7 @@ Release Data
 Bronze
 ------
 +--------------------------------------+--------------------------------------------------+
-| **Project**                          | Non-RT RIC Controlpanel                          |
+| **Project**                          | Non-RT RIC Control Panel                         |
 |                                      |                                                  |
 +--------------------------------------+--------------------------------------------------+
 | **Repo/commit-ID**                   |                                                  |
@@ -49,6 +49,6 @@ Bronze
 | **Release date**                     |                                                  |
 |                                      |                                                  |
 +--------------------------------------+--------------------------------------------------+
-| **Purpose of the delivery**          | Introducing Non-RT RIC Controlpanel              |
+| **Purpose of the delivery**          | Introducing Non-RT RIC Control Panel             |
 |                                      |                                                  |
 +--------------------------------------+--------------------------------------------------+

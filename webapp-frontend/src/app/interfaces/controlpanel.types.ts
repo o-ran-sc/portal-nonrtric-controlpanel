@@ -19,7 +19,7 @@
  * ========================LICENSE_END===================================
  */
 
-// Models of data used by Controlpanel admin services
+// Models of data used by Control Panel admin services
 
 export interface ControlpanelSuccessTransport {
   status: number;

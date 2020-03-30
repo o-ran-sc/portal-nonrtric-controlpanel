@@ -13,9 +13,9 @@ Installation Guide
 Abstract
 --------
 
-This document describes how to install the Non-RT RIC Controlpanel, its dependencies and required system resources.
+This document describes how to install the Non-RT RIC Control Panel, its dependencies and required system resources.
 
-This work is in progress. For now, it is possible to use the Non-RT RIC Controlpanel.
+This work is in progress. For now, it is possible to use the Non-RT RIC Control Panel.
 
 Version history
 

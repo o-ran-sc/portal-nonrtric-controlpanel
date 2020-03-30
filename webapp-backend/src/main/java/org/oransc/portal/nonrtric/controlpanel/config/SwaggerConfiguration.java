@@ -56,10 +56,10 @@ public class SwaggerConfiguration {
     private ApiInfo apiInfo() {
         final String version = ControlpanelApplication.class.getPackage().getImplementationVersion();
         return new ApiInfoBuilder() //
-            .title("Non-RT RIC Controlpanel backend") //
+            .title("Non-RT RIC Control Panel backend") //
             .description("Proxies access to Near-RT RIC.")//
             .termsOfServiceUrl("Terms of service") //
-            .contact(new Contact("Non-RT RIC Controlpanel Dev Team", //
+            .contact(new Contact("Non-RT RIC Control Panel Dev Team", //
                 "http://no-docs-yet.org/", //
                 "noreply@O-RAN-SC.org")) //
             .license("Apache 2.0 License").licenseUrl("http://www.apache.org/licenses/LICENSE-2.0") //
