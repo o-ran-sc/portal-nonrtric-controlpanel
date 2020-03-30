@@ -24,7 +24,7 @@ import { V1PodList } from '@kubernetes/client-node';
 import { Observable } from 'rxjs';
 
 /**
-* Services for calling the Controlpanel caas-ingress endpoints to get Kubernetes details.
+* Services for calling the Control Panel caas-ingress endpoints to get Kubernetes details.
 */
 @Injectable({
   providedIn: 'root'

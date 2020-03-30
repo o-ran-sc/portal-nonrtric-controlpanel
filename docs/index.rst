@@ -2,10 +2,8 @@
 .. SPDX-License-Identifier: CC-BY-4.0
 
 
-Non-RT RIC Controlpanel
-=======================
-
-.. Add or remove sections below as appropriate for the platform component.
+Non-RT RIC Control Panel
+========================
 
 .. toctree::
    :maxdepth: 2
