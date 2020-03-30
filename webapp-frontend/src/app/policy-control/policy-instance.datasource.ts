@@ -91,7 +91,7 @@ export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
                 case 'instanceId': return compare(a.id, b.id, isAsc);
                 case 'ric': return compare(a.ric, b.ric, isAsc);
                 case 'service': return compare(a.service, b.service, isAsc);
-                case 'lastModified': return compare(a.lastModified, b.lastModified, isAsc)
+                case 'lastModified': return compare(a.lastModified, b.lastModified, isAsc);
                 default: return 0;
             }
         });

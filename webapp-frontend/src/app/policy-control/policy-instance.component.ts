@@ -95,7 +95,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
     toLocalTime(utcTime: string): string {
         const date = new Date(utcTime);
         const toutc = date.toUTCString();
-        return new Date(toutc + " UTC").toLocaleString();
+        return new Date(toutc + ' UTC').toLocaleString();
 
     }
 

@@ -88,13 +88,14 @@ export class PolicyService {
      * @returns Observable that should yield a response code, no data
      */
     putPolicy(policyTypeId: string, policyInstanceId: string, policyJson: string, ric: string): Observable<any> {
-        const url = this.buildPath(this.policyTypePath, policyTypeId, this.policyPath, policyInstanceId) + "?ric=" + ric;
+        const url = this.buildPath(this.policyTypePath, policyTypeId, this.policyPath, policyInstanceId) + '?ric=' + ric;
         return this.httpClient.put<PolicyInstanceAck>(url, policyJson, { observe: 'response' });
     }
 
     /**
      * Deletes a policy instance.
-     * @param policyTypeId
+     * @param policyTypeId ID of the policy type that the instance belong to
+     * @param policyInstanceId ID of the instance
      * @returns Observable that should yield a response code, no data
      */
     deletePolicy(policyTypeId: string, policyInstanceId: string): Observable<any> {
