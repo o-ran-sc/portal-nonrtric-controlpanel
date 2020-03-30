@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5e49870f_a7901d90",
+        "filename": "webapp-backend/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-03-30T12:03:44Z",
+      "side": 1,
+      "message": "Actually I searched, and found that you can call it backend/frontend. On this page they use both, see https://www.geeksforgeeks.org/frontend-vs-backend/. And here thay only use it, https://learn.onemonth.com/frontend-vs-backend-developers/.\nSo I don\u0027t think we need to change this, or?",
+      "parentUuid": "41e5984c_cc36168a",
+      "range": {
+        "startLine": 1,
+        "startChar": 43,
+        "endLine": 1,
+        "endChar": 50
+      },
+      "revId": "22cfc3d48f2c8fdd395d820d623c11924af960f8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d42c8d1c_e537b41f",
         "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/config/SwaggerConfiguration.java",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-30T11:49:41Z",
       "side": 1,
       "message": "back end\n(and \u0027front end\u0027)",
+      "range": {
+        "startLine": 59,
+        "startChar": 45,
+        "endLine": 59,
+        "endChar": 52
+      },
+      "revId": "22cfc3d48f2c8fdd395d820d623c11924af960f8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba56e56e_ecf4a667",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/config/SwaggerConfiguration.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-03-30T12:03:44Z",
+      "side": 1,
+      "message": "See other answer.",
+      "parentUuid": "d42c8d1c_e537b41f",
       "range": {
         "startLine": 59,
         "startChar": 45,
