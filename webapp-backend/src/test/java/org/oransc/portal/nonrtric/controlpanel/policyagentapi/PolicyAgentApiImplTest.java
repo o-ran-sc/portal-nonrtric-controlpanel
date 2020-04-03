@@ -64,9 +64,9 @@ public class PolicyAgentApiImplTest {
     private static final String URL_PREFIX = "UrlPrefix";
     private static final String URL_POLICY_SCHEMAS = "/policy_schemas";
     private static final String URL_POLICY_INSTANCES = "/policies?type={type}";
-    private static final String URL_POLICY_INSTANCE = "/policy?instance={id}";
-    private static final String URL_PUT_POLICY = "/policy?type={type}&instance={instance}&ric={ric}&service={service}";
-    private static final String URL_DELETE_POLICY = "/policy?instance={instance}";
+    private static final String URL_POLICY_INSTANCE = "/policy?id={id}";
+    private static final String URL_PUT_POLICY = "/policy?type={type}&id={id}&ric={ric}&service={service}";
+    private static final String URL_DELETE_POLICY = "/policy?id={id}";
     private static final String URL_RIC_INFO = "/rics?policyType={typeName}";
     private static final String POLICY_TYPE_1_ID = "type1";
     private static final String POLICY_TYPE_1_VALID = "{\"title\":\"type1\"}";
@@ -200,7 +200,7 @@ public class PolicyAgentApiImplTest {
         HttpEntity<Object> jsonHttpEntity = createJsonHttpEntity(POLICY_1_VALID);
         Map<String, ?> uriVariables = Map.of( //
             "type", POLICY_TYPE_1_ID, //
-            "instance", POLICY_1_ID, //
+            "id", POLICY_1_ID, //
             "ric", RIC_1_ID, //
             "service", "controlpanel");
         doThrow(new RestClientException(CLIENT_ERROR_MESSAGE)).when(restTemplateMock)
@@ -219,7 +219,7 @@ public class PolicyAgentApiImplTest {
         HttpEntity<Object> jsonHttpEntity = createJsonHttpEntity(POLICY_1_VALID);
         Map<String, ?> uriVariables = Map.of( //
             "type", POLICY_TYPE_1_ID, //
-            "instance", POLICY_1_ID, //
+            "id", POLICY_1_ID, //
             "ric", RIC_1_ID, //
             "service", "controlpanel");
 
@@ -233,7 +233,7 @@ public class PolicyAgentApiImplTest {
 
     @Test
     public void testDeletePolicyFailure() {
-        Map<String, ?> uriVariables = Map.of("instance", POLICY_1_ID);
+        Map<String, ?> uriVariables = Map.of("id", POLICY_1_ID);
         doThrow(new RestClientException(CLIENT_ERROR_MESSAGE)).when(restTemplateMock)
             .delete(eq(URL_PREFIX + URL_DELETE_POLICY), eq(uriVariables));
 
@@ -246,7 +246,7 @@ public class PolicyAgentApiImplTest {
 
     @Test
     public void testDeletePolicySuccess() {
-        Map<String, ?> uriVariables = Map.of("instance", POLICY_1_ID);
+        Map<String, ?> uriVariables = Map.of("id", POLICY_1_ID);
 
         ResponseEntity<String> returnedResp = apiUnderTest.deletePolicy(POLICY_1_ID);
 

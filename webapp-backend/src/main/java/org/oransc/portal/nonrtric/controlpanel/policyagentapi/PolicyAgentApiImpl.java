@@ -138,7 +138,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<Object> getPolicyInstance(String id) {
-        String url = baseUrl() + "/policy?instance={id}";
+        String url = baseUrl() + "/policy?id={id}";
         Map<String, ?> uriVariables = Map.of("id", id);
 
         return this.restTemplate.getForEntity(url, Object.class, uriVariables);
@@ -147,10 +147,10 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     @Override
     public ResponseEntity<String> putPolicy(String policyTypeIdString, String policyInstanceId, Object json,
         String ric) {
-        String url = baseUrl() + "/policy?type={type}&instance={instance}&ric={ric}&service={service}";
+        String url = baseUrl() + "/policy?type={type}&id={id}&ric={ric}&service={service}";
         Map<String, ?> uriVariables = Map.of( //
             "type", policyTypeIdString, //
-            "instance", policyInstanceId, //
+            "id", policyInstanceId, //
             "ric", ric, //
             "service", "controlpanel");
 
@@ -164,8 +164,8 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<String> deletePolicy(String policyInstanceId) {
-        String url = baseUrl() + "/policy?instance={instance}";
-        Map<String, ?> uriVariables = Map.of("instance", policyInstanceId);
+        String url = baseUrl() + "/policy?id={id}";
+        Map<String, ?> uriVariables = Map.of("id", policyInstanceId);
         try {
             this.restTemplate.delete(url, uriVariables);
             return new ResponseEntity<>(HttpStatus.OK);
