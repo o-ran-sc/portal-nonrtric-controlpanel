@@ -50,6 +50,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component("PolicyAgentApi")
@@ -110,7 +112,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             }
             return new ResponseEntity<>(gson.toJson(result), rsp.getStatusCode());
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return handleException(e);
         }
     }
 
@@ -132,7 +134,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             }
             return new ResponseEntity<>(gson.toJson(result), rsp.getStatusCode());
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return handleException(e);
         }
     }
 
@@ -158,7 +160,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             this.restTemplate.put(url, createJsonHttpEntity(json), uriVariables);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return handleException(e);
         }
     }
 
@@ -170,7 +172,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             this.restTemplate.delete(url, uriVariables);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return handleException(e);
         }
 
     }
@@ -200,7 +202,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             }
             return new ResponseEntity<>(gson.toJson(result), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return handleException(e);
         }
     }
 
@@ -208,6 +210,17 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(content, headers);
+    }
+
+    private ResponseEntity<String> handleException(Exception throwable) {
+        if (throwable instanceof HttpClientErrorException) {
+            HttpClientErrorException e = (HttpClientErrorException) throwable;
+            return new ResponseEntity<>(e.getMessage(), e.getStatusCode());
+        } else if (throwable instanceof HttpServerErrorException) {
+            HttpServerErrorException e = (HttpServerErrorException) throwable;
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+        }
+        return new ResponseEntity<>(throwable.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

@@ -51,7 +51,7 @@ export class PolicyTypeDataSource extends DataSource<PolicyType> {
         this.policySvc.getPolicyTypes()
             .pipe(
                 catchError((her: HttpErrorResponse) => {
-                    this.notificationService.error('Failed to get policy types: ' + her.message);
+                    this.notificationService.error('Failed to get policy types: ' + her.statusText + ', ' + her.error);
                     return of([]);
                 }),
                 finalize(() => this.loadingSubject.next(false))

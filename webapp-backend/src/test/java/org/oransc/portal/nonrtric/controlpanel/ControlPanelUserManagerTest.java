@@ -29,8 +29,6 @@ import org.junit.jupiter.api.Test;
 import org.onap.portalsdk.core.onboarding.exception.PortalAPIException;
 import org.onap.portalsdk.core.restful.domain.EcompRole;
 import org.onap.portalsdk.core.restful.domain.EcompUser;
-import org.oransc.portal.nonrtric.controlpanel.ControlPanelConstants;
-import org.oransc.portal.nonrtric.controlpanel.ControlPanelUserManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ActiveProfiles;
