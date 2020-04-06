@@ -32,8 +32,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.onap.portalsdk.core.onboarding.util.PortalApiConstants;
 import org.oransc.portal.nonrtric.controlpanel.ControlPanelUserManager;
-import org.oransc.portal.nonrtric.controlpanel.portalapi.PortalAuthManager;
-import org.oransc.portal.nonrtric.controlpanel.portalapi.PortalAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

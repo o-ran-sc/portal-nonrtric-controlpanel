@@ -45,13 +45,12 @@ import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInstances;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyType;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyTypes;
-import org.oransc.portal.nonrtric.controlpanel.policyagentapi.PolicyAgentApiImpl;
 import org.oransc.portal.nonrtric.controlpanel.policyagentapi.PolicyAgentApiImpl.RicInfo;
-import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

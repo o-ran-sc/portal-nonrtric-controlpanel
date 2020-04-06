@@ -28,6 +28,7 @@ import { PolicyService } from '../services/policy/policy.service';
 import { ErrorDialogService } from '../services/ui/error-dialog.service';
 import { NotificationService } from './../services/ui/notification.service';
 import { UiService } from '../services/ui/ui.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -91,8 +92,8 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
                     self.allRics = value;
                     console.log(value);
                 },
-                error(error) {
-                    self.errorService.displayError('Fetching of rics failed: ' + error.message);
+                error(error: HttpErrorResponse) {
+                    this.errorService.displayError('Fetching of rics failed: ' + error.message);
                 },
                 complete() { }
             });
@@ -138,8 +139,8 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
                 next(value) {
                     self.notificationService.success('Policy ' + self.policyTypeName + ':' + self.policyInstanceId + ' submitted');
                 },
-                error(error) {
-                    self.errorService.displayError('updatePolicy failed: ' + error.message);
+                error(error: HttpErrorResponse) {
+                    this.errorService.displayError('Submit failed: ' + error.error);
                 },
                 complete() { }
             });

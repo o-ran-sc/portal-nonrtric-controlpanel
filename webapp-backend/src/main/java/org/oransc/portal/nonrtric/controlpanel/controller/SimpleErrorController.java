@@ -60,7 +60,7 @@ public class SimpleErrorController implements ErrorController {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @SuppressWarnings("squid:S1075") //URIs should not be hardcoded
+    @SuppressWarnings("squid:S1075") // URIs should not be hardcoded
     public static final String ERROR_PATH = "/error";
 
     private final ErrorAttributes errorAttributes;

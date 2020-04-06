@@ -114,7 +114,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
                                             this.instanceDataSource.loadTable();
                                             break;
                                         default:
-                                            this.notificationService.warn('Delete failed.');
+                                            this.notificationService.warn('Delete failed ' + response.status + ' ' + response.body);
                                     }
                                 },
                                 (error: HttpErrorResponse) => {
