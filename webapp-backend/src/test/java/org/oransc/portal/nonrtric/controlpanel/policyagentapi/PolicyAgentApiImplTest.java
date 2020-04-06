@@ -45,19 +45,18 @@ import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInstances;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyType;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyTypes;
-import org.oransc.portal.nonrtric.controlpanel.policyagentapi.PolicyAgentApiImpl;
 import org.oransc.portal.nonrtric.controlpanel.policyagentapi.PolicyAgentApiImpl.RicInfo;
-import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 public class PolicyAgentApiImplTest {
@@ -78,7 +77,7 @@ public class PolicyAgentApiImplTest {
     private static final String RIC_1_ID = "ric1";
     private static final String RIC_1_INFO_VALID = "{\"name\":\"ric1\",\"policyTypes\":[\"type1\"]}";
     private static final String RIC_1_INFO_INVALID = "{\"name\":\"ric1\",\"policyTypes\":\"type1\"]}";
-    private static final String CLIENT_ERROR_MESSAGE = "Exception: Client returned failure";
+    private static final String CLIENT_ERROR_MESSAGE = "XXXXXXX";
 
     private static com.google.gson.Gson gson = new GsonBuilder() //
         .serializeNulls() //
@@ -203,15 +202,16 @@ public class PolicyAgentApiImplTest {
             "id", POLICY_1_ID, //
             "ric", RIC_1_ID, //
             "service", "controlpanel");
-        doThrow(new RestClientException(CLIENT_ERROR_MESSAGE)).when(restTemplateMock)
-            .put(eq(URL_PREFIX + URL_PUT_POLICY), eq(jsonHttpEntity), eq(uriVariables));
+        HttpClientErrorException exception = new HttpClientErrorException(HttpStatus.NOT_FOUND, CLIENT_ERROR_MESSAGE);
+        doThrow(exception).when(restTemplateMock).put(eq(URL_PREFIX + URL_PUT_POLICY), eq(jsonHttpEntity),
+            eq(uriVariables));
 
         ResponseEntity<String> returnedResp =
             apiUnderTest.putPolicy(POLICY_TYPE_1_ID, POLICY_1_ID, POLICY_1_VALID, RIC_1_ID);
 
         verify(restTemplateMock).put(URL_PREFIX + URL_PUT_POLICY, jsonHttpEntity, uriVariables);
-        assertTrue(returnedResp.getBody().contains("Exception"));
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, returnedResp.getStatusCode());
+        assertTrue(returnedResp.getBody().contains(CLIENT_ERROR_MESSAGE));
+        assertEquals(HttpStatus.NOT_FOUND, returnedResp.getStatusCode());
     }
 
     @Test
@@ -234,13 +234,13 @@ public class PolicyAgentApiImplTest {
     @Test
     public void testDeletePolicyFailure() {
         Map<String, ?> uriVariables = Map.of("id", POLICY_1_ID);
-        doThrow(new RestClientException(CLIENT_ERROR_MESSAGE)).when(restTemplateMock)
-            .delete(eq(URL_PREFIX + URL_DELETE_POLICY), eq(uriVariables));
+        HttpClientErrorException exception = new HttpClientErrorException(HttpStatus.NOT_FOUND, CLIENT_ERROR_MESSAGE);
+        doThrow(exception).when(restTemplateMock).delete(eq(URL_PREFIX + URL_DELETE_POLICY), eq(uriVariables));
 
         ResponseEntity<String> returnedResp = apiUnderTest.deletePolicy(POLICY_1_ID);
 
         verify(restTemplateMock).delete(URL_PREFIX + URL_DELETE_POLICY, uriVariables);
-        assertTrue(returnedResp.getBody().contains("Exception"));
+        assertTrue(returnedResp.getBody().contains(CLIENT_ERROR_MESSAGE));
         assertEquals(HttpStatus.NOT_FOUND, returnedResp.getStatusCode());
     }
 

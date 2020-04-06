@@ -22,6 +22,7 @@ package org.oransc.portal.nonrtric.controlpanel.config;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+
 import org.oransc.portal.nonrtric.controlpanel.ControlPanelUserManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

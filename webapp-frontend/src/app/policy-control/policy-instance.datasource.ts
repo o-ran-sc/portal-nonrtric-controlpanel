@@ -54,7 +54,7 @@ export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
         this.policySvc.getPolicyInstances(this.policyType.name)
             .pipe(
                 catchError((her: HttpErrorResponse) => {
-                    this.notificationService.error('Failed to get policy instances: ' + her.message);
+                    this.notificationService.error('Failed to get policy instances: ' + her.error);
                     return of([]);
                 }),
                 finalize(() => this.loadingSubject.next(false))

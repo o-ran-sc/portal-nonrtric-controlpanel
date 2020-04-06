@@ -21,6 +21,7 @@
 package org.oransc.portal.nonrtric.controlpanel.controller;
 
 import java.lang.invoke.MethodHandles;
+
 import org.oransc.portal.nonrtric.controlpanel.model.ErrorTransport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

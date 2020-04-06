@@ -21,8 +21,8 @@
 package org.oransc.portal.nonrtric.controlpanel.config;
 
 import java.lang.invoke.MethodHandles;
+
 import org.oransc.portal.nonrtric.controlpanel.ControlPanelConstants;
-import org.oransc.portal.nonrtric.controlpanel.config.WebSecurityConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
