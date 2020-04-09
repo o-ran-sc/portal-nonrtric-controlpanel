@@ -37,15 +37,7 @@ limitations under the License.
 	<version>1.0.0-SNAPSHOT</version>
 	<properties>
 		<java.version>11</java.version>
-		<!-- Properties for the license-maven-plugin in child POMs -->
-		<lmp.organization.name>AT&amp;T Intellectual Property</lmp.organization.name>
-		<lmp.project.name>O-RAN-SC</lmp.project.name>
-		<lmp.inception.year>2019</lmp.inception.year>
-		<lmp.license.name>apache_v2</lmp.license.name>
-		<lmp.process.start.tag>========================LICENSE_START=================================</lmp.process.start.tag>
-		<lmp.process.end.tag>========================LICENSE_END===================================</lmp.process.end.tag>
         <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
-        <license-maven-plugin.version>1.20</license-maven-plugin.version>
 	</properties>
 	<modules>
 		<module>webapp-frontend</module>
@@ -53,28 +45,6 @@ limitations under the License.
 	</modules>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<configuration>
-					<organizationName>${lmp.organization.name}</organizationName>
-					<inceptionYear>${lmp.inception.year}</inceptionYear>
-					<projectName>${lmp.project.name}</projectName>
-					<licenseName>${lmp.license.name}</licenseName>
-					<processStartTag>${lmp.process.start.tag}</processStartTag>
-					<processEndTag>${lmp.process.end.tag}</processEndTag>
-					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-				</configuration>
-				<executions>
-					<execution>
-						<id>first</id>
-						<goals>
-							<goal>update-file-header</goal>
-						</goals>
-						<phase>process-sources</phase>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -111,14 +81,5 @@ limitations under the License.
 				<version>${sonar-maven-plugin.version}</version>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>license-maven-plugin</artifactId>
-					<version>${license-maven-plugin.version}</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 </project>

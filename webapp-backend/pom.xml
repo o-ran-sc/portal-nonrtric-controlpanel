@@ -211,19 +211,6 @@ limitations under the License.
                     use mvn spotless:apply to rewrite source files use mvn spotless:check to
                     validate source files -->
             </plugin>
-            <plugin>
-                <!-- Most configuration and all execution is inherited -->
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <configuration>
-                    <roots>
-                        <root>src</root>
-                    </roots>
-                    <excludes>
-                        <exclude>**/*.json</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
             <!-- Add the build number to the jar manifest. Spring-Boot uses a complex 
 				packaging process that makes access to the original Manifest.MF very difficult. 
 				However, Java provides access to the implementation version for a package, 
