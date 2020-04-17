@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Proxies calls from the front end to the Policy agent API.
+ * Proxies calls from the front end to the Policy Agent API.
  *
  * If a method throws RestClientResponseException, it is handled by
  * {@link CustomResponseEntityExceptionHandler#handleProxyMethodException(Exception, org.springframework.web.context.request.WebRequest)}
@@ -80,7 +80,7 @@ public class PolicyController {
     /*
      * The fields are defined in the Policy Control Typescript interface.
      */
-    @ApiOperation(value = "Gets the policy types from Near Realtime-RIC")
+    @ApiOperation(value = "Gets the policy types from Near-RealTime RIC")
     @GetMapping(POLICY_TYPES_METHOD)
     @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<String> getAllPolicyTypes(HttpServletResponse response) {
