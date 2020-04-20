@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4868780_d14e35cc",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/controller/PolicyController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-04-20T07:00:53Z",
+      "side": 1,
+      "message": "We normally use Near-RT RIC, so I think it should be the same here",
+      "range": {
+        "startLine": 83,
+        "startChar": 59,
+        "endLine": 83,
+        "endChar": 68
+      },
+      "revId": "fed13a41b944df20e4172738e180e390bb881bb2",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
