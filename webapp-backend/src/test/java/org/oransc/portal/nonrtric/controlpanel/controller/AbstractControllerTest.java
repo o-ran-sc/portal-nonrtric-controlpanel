@@ -27,13 +27,11 @@ import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.oransc.portal.nonrtric.controlpanel.config.WebSecurityMockConfiguration;
+import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -52,22 +50,19 @@ public class AbstractControllerTest {
     @LocalServerPort
     private int localServerPort;
 
-    @Autowired
-    protected TestRestTemplate restTemplate;
+    protected final AsyncRestClient webClient = new AsyncRestClient("");
 
     /**
      * Flexible URI builder.
      *
-     * @param queryParams
-     *        Map of string-string query parameters
-     * @param path
-     *        Array of path components. If a component has an
-     *        embedded slash, the string is split and each
-     *        subcomponent is added individually.
+     * @param queryParams Map of string-string query parameters
+     * @param path Array of path components. If a component has an embedded
+     *        slash, the string is split and each subcomponent is added
+     *        individually.
      * @return URI
      */
     protected URI buildUri(final Map<String, String> queryParams, final String... path) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:" + localServerPort + "/");
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://localhost:" + localServerPort + "/");
         for (int p = 0; p < path.length; ++p) {
             if (path[p] == null || path[p].isEmpty()) {
                 throw new IllegalArgumentException("Unexpected null or empty at path index " + Integer.toString(p));
@@ -98,16 +93,6 @@ public class AbstractControllerTest {
         // Silence Sonar warning about missing assertion.
         Assertions.assertTrue(logger.isWarnEnabled());
         logger.info("Context loads on mock profile");
-    }
-
-    public TestRestTemplate testRestTemplateAdminRole() {
-        return restTemplate.withBasicAuth(WebSecurityMockConfiguration.TEST_CRED_ADMIN,
-            WebSecurityMockConfiguration.TEST_CRED_ADMIN);
-    }
-
-    public TestRestTemplate testRestTemplateStandardRole() {
-        return restTemplate.withBasicAuth(WebSecurityMockConfiguration.TEST_CRED_STANDARD,
-            WebSecurityMockConfiguration.TEST_CRED_STANDARD);
     }
 
 }
