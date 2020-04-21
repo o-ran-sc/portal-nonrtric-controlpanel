@@ -105,10 +105,14 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             JsonArray schemas = JsonParser.parseString(rsp.getBody()).getAsJsonArray();
             for (JsonElement schema : schemas) {
                 JsonObject schemaObj = schema.getAsJsonObject();
-                String title = schemaObj.get("title").getAsString();
-                String schemaAsStr = schemaObj.toString();
-                PolicyType pt = new PolicyType(title, schemaAsStr);
-                result.add(pt);
+                if (schemaObj.get("title") != null) {
+                    String title = schemaObj.get("title").getAsString();
+                    String schemaAsStr = schemaObj.toString();
+                    PolicyType pt = new PolicyType(title, schemaAsStr);
+                    result.add(pt);
+                } else {
+                    logger.warn("Ignoring schema: {}", schemaObj);
+                }
             }
             return new ResponseEntity<>(gson.toJson(result), rsp.getStatusCode());
         } catch (Exception e) {
