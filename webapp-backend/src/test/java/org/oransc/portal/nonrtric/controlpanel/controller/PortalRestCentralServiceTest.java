@@ -20,6 +20,8 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.controller;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 
@@ -28,8 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.onap.portalsdk.core.onboarding.util.PortalApiConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 public class PortalRestCentralServiceTest extends AbstractControllerTest {
 
@@ -40,73 +41,63 @@ public class PortalRestCentralServiceTest extends AbstractControllerTest {
         // paths are hardcoded here exactly like the EPSDK-FW library :(
         URI uri = buildUri(null, PortalApiConstants.API_PREFIX, "/analytics");
         logger.info("Invoking {}", uri);
-        ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, null, String.class);
+        WebClientResponseException e = assertThrows(WebClientResponseException.class, () -> {
+            webClient.getForEntity(uri.toString()).block();
+        });
         // No Portal is available so this always fails
-        Assertions.assertTrue(response.getStatusCode().is4xxClientError());
+        Assertions.assertTrue(e.getStatusCode().is4xxClientError());
     }
 
     @Test
     public void getErrorPageTest() {
         // Send unauthorized request
+
         URI uri = buildUri(null, "/favicon.ico");
         logger.info("Invoking {}", uri);
-        ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, null, String.class);
-        Assertions.assertTrue(response.getStatusCode().is4xxClientError());
-        Assertions.assertTrue(response.getBody().contains("Static error page"));
+        WebClientResponseException e = assertThrows(WebClientResponseException.class, () -> {
+            webClient.getForEntity(uri.toString()).block();
+        });
+        Assertions.assertTrue(e.getStatusCode().is4xxClientError());
+        Assertions.assertTrue(e.getResponseBodyAsString().contains("Static error page"));
     }
 
     /*
-     * private HttpEntity<Object> getEntityWithHeaders(Object body) {
-     * HttpHeaders headers = new HttpHeaders();
+     * private HttpEntity<Object> getEntityWithHeaders(Object body) { HttpHeaders
+     * headers = new HttpHeaders();
      * headers.set(PortalApIMockConfiguration.PORTAL_USERNAME_HEADER_KEY,
      * PortalApIMockConfiguration.PORTAL_USERNAME_HEADER_KEY);
      * headers.set(PortalApIMockConfiguration.PORTAL_PASSWORD_HEADER_KEY,
-     * PortalApIMockConfiguration.PORTAL_PASSWORD_HEADER_KEY);
-     * HttpEntity<Object> entity = new HttpEntity<>(body, headers);
-     * return entity;
-     * }
+     * PortalApIMockConfiguration.PORTAL_PASSWORD_HEADER_KEY); HttpEntity<Object>
+     * entity = new HttpEntity<>(body, headers); return entity; }
      *
-     * private EcompUser createEcompUser(String loginId) {
-     * EcompUser user = new EcompUser();
-     * user.setLoginId(loginId);
-     * EcompRole role = new EcompRole();
-     * role.setRoleFunctions(Collections.EMPTY_SET);
-     * role.setId(1L);
-     * role.setName(ControlPanelConstants.ROLE_NAME_ADMIN);
-     * Set<EcompRole> roles = new HashSet<>();
-     * roles.add(role);
-     * user.setRoles(roles);
-     * return user;
-     * }
+     * private EcompUser createEcompUser(String loginId) { EcompUser user = new
+     * EcompUser(); user.setLoginId(loginId); EcompRole role = new EcompRole();
+     * role.setRoleFunctions(Collections.EMPTY_SET); role.setId(1L);
+     * role.setName(ControlPanelConstants.ROLE_NAME_ADMIN); Set<EcompRole> roles =
+     * new HashSet<>(); roles.add(role); user.setRoles(roles); return user; }
      *
      * @Test
      *
-     * @Test
-     * public void createUserTest() {
-     * final String loginId = "login1";
-     * URI create = buildUri(null, PortalApiConstants.API_PREFIX, "user");
-     * logger.info("Invoking {}", create);
-     * HttpEntity<Object> requestEntity = getEntityWithHeaders(createEcompUser(loginId));
-     * ResponseEntity<String> response = restTemplate.exchange(create, HttpMethod.POST, requestEntity, String.class);
-     * Assertions.assertTrue(response.getStatusCode().is2xxSuccessful());
-     * }
+     * @Test public void createUserTest() { final String loginId = "login1"; URI
+     * create = buildUri(null, PortalApiConstants.API_PREFIX, "user");
+     * logger.info("Invoking {}", create); HttpEntity<Object> requestEntity =
+     * getEntityWithHeaders(createEcompUser(loginId)); ResponseEntity<String>
+     * response = restTemplate.exchange(create, HttpMethod.POST, requestEntity,
+     * String.class);
+     * Assertions.assertTrue(response.getStatusCode().is2xxSuccessful()); }
      *
-     * @Test
-     * public void updateUserTest() {
-     * final String loginId = "login2";
-     * URI create = buildUri(null, PortalApiConstants.API_PREFIX, "user");
-     * EcompUser user = createEcompUser(loginId);
-     * logger.info("Invoking {}", create);
-     * HttpEntity<Object> requestEntity = getEntityWithHeaders(user);
-     * // Create
-     * ResponseEntity<String> response = restTemplate.exchange(create, HttpMethod.POST, requestEntity, String.class);
-     * Assertions.assertTrue(response.getStatusCode().is2xxSuccessful());
-     * URI update = buildUri(null, PortalApiConstants.API_PREFIX, "user", loginId);
-     * user.setEmail("user@company.org");
-     * requestEntity = getEntityWithHeaders(user);
-     * response = restTemplate.exchange(update, HttpMethod.POST, requestEntity, String.class);
-     * Assertions.assertTrue(response.getStatusCode().is2xxSuccessful());
-     * }
+     * @Test public void updateUserTest() { final String loginId = "login2"; URI
+     * create = buildUri(null, PortalApiConstants.API_PREFIX, "user"); EcompUser
+     * user = createEcompUser(loginId); logger.info("Invoking {}", create);
+     * HttpEntity<Object> requestEntity = getEntityWithHeaders(user); // Create
+     * ResponseEntity<String> response = restTemplate.exchange(create,
+     * HttpMethod.POST, requestEntity, String.class);
+     * Assertions.assertTrue(response.getStatusCode().is2xxSuccessful()); URI update
+     * = buildUri(null, PortalApiConstants.API_PREFIX, "user", loginId);
+     * user.setEmail("user@company.org"); requestEntity =
+     * getEntityWithHeaders(user); response = restTemplate.exchange(update,
+     * HttpMethod.POST, requestEntity, String.class);
+     * Assertions.assertTrue(response.getStatusCode().is2xxSuccessful()); }
      */
 
 }

@@ -32,7 +32,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+
+import javax.net.ssl.SSLException;
 
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
@@ -41,61 +42,42 @@ import org.oransc.portal.nonrtric.controlpanel.model.PolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInstances;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyType;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyTypes;
+import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
 
 @Component("PolicyAgentApi")
 public class PolicyAgentApiImpl implements PolicyAgentApi {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    RestTemplate restTemplate;
+    private final AsyncRestClient webClient;
 
     private static com.google.gson.Gson gson = new GsonBuilder() //
         .serializeNulls() //
         .create(); //
 
-    private final String urlPrefix;
-
     @Autowired
     public PolicyAgentApiImpl(
         @org.springframework.beans.factory.annotation.Value("${policycontroller.url.prefix}") final String urlPrefix) {
-        this(urlPrefix, new RestTemplate());
+        this(new AsyncRestClient(urlPrefix));
         logger.debug("ctor prefix '{}'", urlPrefix);
     }
 
-    public PolicyAgentApiImpl(String urlPrefix, RestTemplate restTemplate) {
-        this.urlPrefix = urlPrefix;
-        this.restTemplate = restTemplate;
-    }
-
-    private String baseUrl() {
-        return urlPrefix;
-    }
-
-    @Value.Immutable
-    @Gson.TypeAdapters
-    interface PolicyTypeInfo {
-
-        public String name();
-
-        public String schema();
+    public PolicyAgentApiImpl(AsyncRestClient webClient) {
+        this.webClient = webClient;
     }
 
     @Override
     public ResponseEntity<String> getAllPolicyTypes() {
         try {
-            String url = baseUrl() + "/policy_schemas";
-            ResponseEntity<String> rsp = this.restTemplate.getForEntity(url, String.class);
+            final String url = "/policy_schemas";
+            ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             if (!rsp.getStatusCode().is2xxSuccessful()) {
                 return rsp;
             }
@@ -122,14 +104,13 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<String> getPolicyInstancesForType(String type) {
-        String url = baseUrl() + "/policies?type={type}";
-        Map<String, ?> uriVariables = Map.of("type", type);
-        ResponseEntity<String> rsp = this.restTemplate.getForEntity(url, String.class, uriVariables);
-        if (!rsp.getStatusCode().is2xxSuccessful()) {
-            return rsp;
-        }
-
         try {
+            String url = "/policies?type=" + type;
+            ResponseEntity<String> rsp = webClient.getForEntity(url).block();
+            if (!rsp.getStatusCode().is2xxSuccessful()) {
+                return rsp;
+            }
+
             Type listType = new TypeToken<List<ImmutablePolicyInfo>>() {}.getType();
             List<PolicyInfo> rspParsed = gson.fromJson(rsp.getBody(), listType);
             PolicyInstances result = new PolicyInstances();
@@ -144,24 +125,27 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<Object> getPolicyInstance(String id) {
-        String url = baseUrl() + "/policy?id={id}";
-        Map<String, ?> uriVariables = Map.of("id", id);
-
-        return this.restTemplate.getForEntity(url, Object.class, uriVariables);
+        try {
+            String url = "/policy?id=" + id;
+            ResponseEntity<String> rsp = webClient.getForEntity(url).block();
+            JsonObject obj = JsonParser.parseString(rsp.getBody()).getAsJsonObject();
+            String str = obj.toString();
+            return new ResponseEntity<>(str, rsp.getStatusCode());
+        } catch (Exception e) {
+            ResponseEntity<String> rsp = handleException(e);
+            return new ResponseEntity<>(rsp.getBody(), rsp.getStatusCode());
+        }
     }
 
     @Override
     public ResponseEntity<String> putPolicy(String policyTypeIdString, String policyInstanceId, Object json,
         String ric) {
-        String url = baseUrl() + "/policy?type={type}&id={id}&ric={ric}&service={service}";
-        Map<String, ?> uriVariables = Map.of( //
-            "type", policyTypeIdString, //
-            "id", policyInstanceId, //
-            "ric", ric, //
-            "service", "controlpanel");
+        String url =
+            "/policy?type=" + policyTypeIdString + "&id=" + policyInstanceId + "&ric=" + ric + "&service=controlpanel";
 
         try {
-            this.restTemplate.put(url, createJsonHttpEntity(json), uriVariables);
+            String jsonStr = json.toString();
+            webClient.putForEntity(url, jsonStr).block();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return handleException(e);
@@ -170,15 +154,13 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<String> deletePolicy(String policyInstanceId) {
-        String url = baseUrl() + "/policy?id={id}";
-        Map<String, ?> uriVariables = Map.of("id", policyInstanceId);
+        String url = "/policy?id=" + policyInstanceId;
         try {
-            this.restTemplate.delete(url, uriVariables);
+            webClient.deleteForEntity(url).block();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return handleException(e);
         }
-
     }
 
     @Value.Immutable
@@ -193,27 +175,21 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<String> getRicsSupportingType(String typeName) {
-        String url = baseUrl() + "/rics?policyType={typeName}";
-        Map<String, ?> uriVariables = Map.of("typeName", typeName);
-        String rsp = this.restTemplate.getForObject(url, String.class, uriVariables);
-
         try {
+            String url = "/rics?policyType=" + typeName;
+            ResponseEntity<String> rsp = webClient.getForEntity(url).block();
+
             Type listType = new TypeToken<List<ImmutableRicInfo>>() {}.getType();
-            List<RicInfo> rspParsed = gson.fromJson(rsp, listType);
+            List<RicInfo> rspParsed = gson.fromJson(rsp.getBody(), listType);
             Collection<String> result = new ArrayList<>(rspParsed.size());
             for (RicInfo ric : rspParsed) {
                 result.add(ric.ricName());
             }
-            return new ResponseEntity<>(gson.toJson(result), HttpStatus.OK);
+            String json = gson.toJson(result);
+            return new ResponseEntity<>(json, HttpStatus.OK);
         } catch (Exception e) {
             return handleException(e);
         }
-    }
-
-    private HttpEntity<Object> createJsonHttpEntity(Object content) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(content, headers);
     }
 
     private ResponseEntity<String> handleException(Exception throwable) {
@@ -223,8 +199,11 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
         } else if (throwable instanceof HttpServerErrorException) {
             HttpServerErrorException e = (HttpServerErrorException) throwable;
             return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+        } else if (throwable instanceof SSLException) {
+            SSLException e = (SSLException) throwable;
+            return new ResponseEntity<>("Could not create WebClient " + e.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(throwable.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }

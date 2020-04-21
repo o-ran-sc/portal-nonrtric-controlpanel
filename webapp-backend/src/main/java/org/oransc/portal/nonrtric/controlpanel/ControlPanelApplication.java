@@ -46,8 +46,7 @@ public class ControlPanelApplication {
     /**
      * Gets version details for the specified class.
      *
-     * @param clazz
-     *        Class to get the version
+     * @param clazz Class to get the version
      *
      * @return the value of the MANIFEST.MF property Implementation-Version as
      *         written by maven when packaged in a jar; 'unknown' otherwise.
