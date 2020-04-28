@@ -68,9 +68,9 @@ public class PolicyAgentApiImplTest {
     private static final String URL_DELETE_POLICY = "/policy?id={id}";
     private static final String URL_RIC_INFO = "/rics?policyType={typeName}";
     private static final String POLICY_TYPE_1_ID = "type1";
-    private static final String POLICY_TYPE_1_VALID = "{\"title\":\"type1\"}";
+    private static final String POLICY_TYPE_1_VALID = "{\"create_schema\": {\"title\":\"type1\"}}";
     private static final String POLICY_TYPE_1_INVALID = "\"title\":\"type1\"}";
-    private static final String POLICY_TYPE_2_VALID = "{\"title\":\"type2\"}";
+    private static final String POLICY_TYPE_2_VALID = "{\"create_schema\": {\"title\":\"type1\"}}";
     private static final String POLICY_1_ID = "policy1";
     private static final String POLICY_1_VALID = "{\"policyId\":\"policy1\"}";
     private static final String POLICY_1_INVALID = "\"policyId\":\"policy1\"}";
@@ -289,7 +289,7 @@ public class PolicyAgentApiImplTest {
         JsonArray schemas = JsonParser.parseString(inputString).getAsJsonArray();
         for (JsonElement schema : schemas) {
             JsonObject schemaObj = schema.getAsJsonObject();
-            policyTypes.add(new PolicyType(schemaObj.get("title").getAsString(), schemaObj.toString()));
+            policyTypes.add(new PolicyType(schemaObj.getAsJsonObject("create_schema").get("title").getAsString(), schemaObj.toString()));
         }
         return gson.toJson(policyTypes);
     }

@@ -26,14 +26,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
@@ -57,6 +55,7 @@ import org.springframework.web.client.RestTemplate;
 @Component("PolicyAgentApi")
 public class PolicyAgentApiImpl implements PolicyAgentApi {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static final String CREATE_SCHEMA = "create_schema";
 
     RestTemplate restTemplate;
 
@@ -105,8 +104,9 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             JsonArray schemas = JsonParser.parseString(rsp.getBody()).getAsJsonArray();
             for (JsonElement schema : schemas) {
                 JsonObject schemaObj = schema.getAsJsonObject();
-                if (schemaObj.get("title") != null) {
-                    String title = schemaObj.get("title").getAsString();
+                if (schemaObj.getAsJsonObject(CREATE_SCHEMA) != null
+                        && schemaObj.getAsJsonObject(CREATE_SCHEMA).get("title") != null) {
+                    String title = schemaObj.getAsJsonObject(CREATE_SCHEMA).get("title").getAsString();
                     String schemaAsStr = schemaObj.toString();
                     PolicyType pt = new PolicyType(title, schemaAsStr);
                     result.add(pt);
