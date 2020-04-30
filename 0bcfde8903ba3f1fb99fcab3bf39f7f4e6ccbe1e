@@ -1,0 +1,8 @@
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Code-Review+1: Henrik Andersson <henrik.b.andersson@est.tech>
+Code-Review+2: John  Keeney <John.Keeney@est.tech>
+Submitted-by: John  Keeney <John.Keeney@est.tech>
+Submitted-at: Thu, 30 Apr 2020 12:14:29 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/portal/nonrtric-controlpanel/+/3527
+Project: portal/nonrtric-controlpanel
+Branch: refs/heads/master
