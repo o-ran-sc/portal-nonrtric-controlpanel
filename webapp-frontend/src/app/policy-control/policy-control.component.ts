@@ -88,6 +88,10 @@ export class PolicyControlComponent implements OnInit {
         info.isExpanded.next(!info.isExpanded.getValue());
     }
 
+    private isSchemaEmpty(policyType: PolicyType): boolean {
+        return Object.keys(policyType.schemaObject).length === 0;
+    }
+
     getPolicyTypeInfo(policyType: PolicyType): PolicyTypeInfo {
         let info: PolicyTypeInfo = this.policyTypeInfo.get(policyType.name);
         if (!info) {
@@ -97,9 +101,11 @@ export class PolicyControlComponent implements OnInit {
         return info;
     }
 
-    getName(policyType: PolicyType): string {
-        if (policyType.schemaObject.title) { return policyType.schemaObject.title; }
-        return policyType.name;
+    getDisplayName(policyType: PolicyType): string {
+        if (policyType.schemaObject.title) {
+            return policyType.schemaObject.title;
+        }
+        return '< No type >';
     }
 
     isInstancesShown(policyType: PolicyType): boolean {

@@ -28,7 +28,7 @@
         <mat-cell *matCellDef="let policyType">
             <mat-icon matTooltip="Properties">{{isInstancesShown(policyType)  ? 'expand_less' : 'expand_more'}}
             </mat-icon>
-            {{this.getName(policyType)}}
+            {{this.getDisplayName(policyType)}}
         </mat-cell>
     </ng-container>
 
@@ -41,7 +41,8 @@
     <ng-container matColumnDef="action">
         <mat-header-cell class="action-cell" *matHeaderCellDef>Action </mat-header-cell>
         <mat-cell class="action-cell" *matCellDef="let policyType" (click)="$event.stopPropagation()">
-            <button mat-icon-button (click)="createPolicyInstance(policyType)">
+            <button [disabled]="this.isSchemaEmpty(policyType)" mat-icon-button
+                (click)="createPolicyInstance(policyType)">
                 <mat-icon matTooltip="Create instance">add_box</mat-icon>
             </button>
         </mat-cell>

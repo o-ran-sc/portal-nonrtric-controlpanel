@@ -123,9 +123,18 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         if (!this.policyInstanceId) {
             this.fetchRics();
         }
+        if (this.isSchemaEmpty()) {
+            // Empty schema, hide form, show json instead
+            this.isVisible.form = false;
+            this.isVisible.json = true;
+        }
     }
 
     ngAfterViewInit() {
+    }
+
+    private isSchemaEmpty(): boolean {
+        return Object.keys(this.jsonSchemaObject).length === 0;
     }
 
     onSubmit() {
@@ -154,15 +163,18 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         this.liveFormData = formData;
     }
 
-    get prettyLiveFormData() {
+    get prettyLiveFormData(): string {
+        if (this.isSchemaEmpty()) {
+            return this.jsonAsString;
+        }
         return JSON.stringify(this.liveFormData, null, 2);
     }
 
-    get schemaAsString() {
+    get schemaAsString(): string {
         return JSON.stringify(this.jsonSchemaObject, null, 2);
     }
 
-    get jsonAsString() {
+    get jsonAsString(): string {
         return JSON.stringify(this.jsonObject, null, 2);
     }
 

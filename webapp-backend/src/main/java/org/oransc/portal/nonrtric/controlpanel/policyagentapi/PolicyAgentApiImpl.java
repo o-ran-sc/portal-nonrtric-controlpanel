@@ -75,6 +75,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<String> getAllPolicyTypes() {
+        final String TITLE = "title";
         try {
             final String url = "/policy_schemas";
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
@@ -83,18 +84,15 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             }
 
             PolicyTypes result = new PolicyTypes();
-
             JsonArray schemas = JsonParser.parseString(rsp.getBody()).getAsJsonArray();
             for (JsonElement schema : schemas) {
                 JsonObject schemaObj = schema.getAsJsonObject();
-                if (schemaObj.get("title") != null) {
-                    String title = schemaObj.get("title").getAsString();
-                    String schemaAsStr = schemaObj.toString();
-                    PolicyType pt = new PolicyType(title, schemaAsStr);
-                    result.add(pt);
-                } else {
-                    logger.warn("Ignoring schema: {}", schemaObj);
+                String title = "";
+                if (schemaObj.get(TITLE) != null) {
+                    title = schemaObj.get(TITLE).getAsString();
                 }
+                PolicyType pt = new PolicyType(title, schemaObj.toString());
+                result.add(pt);
             }
             return new ResponseEntity<>(gson.toJson(result), rsp.getStatusCode());
         } catch (Exception e) {

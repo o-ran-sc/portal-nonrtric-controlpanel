@@ -67,7 +67,7 @@ export class PolicyService {
     }
 
     getPolicyInstances(policyTypeId: string): Observable<PolicyInstance[]> {
-        const url = this.buildPath(this.policyTypePath, policyTypeId, this.policyPath);
+        const url = this.buildPath(this.policyPath) + '?type=' + policyTypeId;
         return this.httpClient.get<PolicyInstance[]>(url);
     }
 
@@ -76,7 +76,7 @@ export class PolicyService {
      * @returns Observable that should yield a policy instance
      */
     getPolicy(policyTypeId: string, policyInstanceId: string): Observable<any> {
-        const url = this.buildPath(this.policyTypePath, policyTypeId, this.policyPath, policyInstanceId);
+        const url = this.buildPath(this.policyPath, policyInstanceId) + '?type=' + policyTypeId;
         return this.httpClient.get<any>(url);
     }
 
@@ -88,7 +88,7 @@ export class PolicyService {
      * @returns Observable that should yield a response code, no data
      */
     putPolicy(policyTypeId: string, policyInstanceId: string, policyJson: string, ric: string): Observable<any> {
-        const url = this.buildPath(this.policyTypePath, policyTypeId, this.policyPath, policyInstanceId) + '?ric=' + ric;
+        const url = this.buildPath(this.policyPath, policyInstanceId) + '?ric=' + ric + '&type=' + policyTypeId;
         return this.httpClient.put<PolicyInstanceAck>(url, policyJson, { observe: 'response' });
     }
 
@@ -99,7 +99,7 @@ export class PolicyService {
      * @returns Observable that should yield a response code, no data
      */
     deletePolicy(policyTypeId: string, policyInstanceId: string): Observable<any> {
-        const url = this.buildPath(this.policyTypePath, policyTypeId, this.policyPath, policyInstanceId);
+        const url = this.buildPath(this.policyPath, policyInstanceId) + '?type=' + policyTypeId;
         return this.httpClient.delete(url, { observe: 'response' });
     }
 

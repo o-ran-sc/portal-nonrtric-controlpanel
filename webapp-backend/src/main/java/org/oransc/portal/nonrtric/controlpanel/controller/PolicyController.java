@@ -63,7 +63,7 @@ public class PolicyController {
     // Endpoints
     public static final String VERSION_METHOD = ControlPanelConstants.VERSION_METHOD;
     public static final String POLICY_TYPES_METHOD = "policytypes";
-    public static final String POLICY_TYPE_ID_NAME = "policy_type_id";
+    public static final String POLICY_TYPE_PARAM = "type";
     public static final String POLICIES_NAME = "policies";
     public static final String POLICY_INSTANCE_ID_NAME = "policy_instance_id";
 
@@ -89,40 +89,42 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "Returns the policy instances for the given policy type.")
-    @GetMapping(POLICY_TYPES_METHOD + "/{" + POLICY_TYPE_ID_NAME + "}/" + POLICIES_NAME)
+    @GetMapping(POLICIES_NAME)
     @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
-    public ResponseEntity<String> getPolicyInstances(@PathVariable(POLICY_TYPE_ID_NAME) String policyTypeIdString) {
+    public ResponseEntity<String> getPolicyInstances(
+        @RequestParam(name = "type", required = true) String policyTypeIdString) {
         logger.debug("getPolicyInstances {}", policyTypeIdString);
         return this.policyAgentApi.getPolicyInstancesForType(policyTypeIdString);
     }
 
     @ApiOperation(value = "Returns a policy instance of a type")
-    @GetMapping(POLICY_TYPES_METHOD + "/{" + POLICY_TYPE_ID_NAME + "}/" + POLICIES_NAME + "/{" + POLICY_INSTANCE_ID_NAME
-        + "}")
+    @GetMapping(POLICIES_NAME + "/{" + POLICY_INSTANCE_ID_NAME + "}")
     @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
-    public ResponseEntity<Object> getPolicyInstance(@PathVariable(POLICY_TYPE_ID_NAME) String policyTypeIdString,
+    public ResponseEntity<Object> getPolicyInstance(
+        @RequestParam(name = "type", required = true) String policyTypeIdString,
         @PathVariable(POLICY_INSTANCE_ID_NAME) String policyInstanceId) {
         logger.debug("getPolicyInstance {}:{}", policyTypeIdString, policyInstanceId);
         return this.policyAgentApi.getPolicyInstance(policyInstanceId);
     }
 
     @ApiOperation(value = "Creates the policy instances for the given policy type.")
-    @PutMapping(POLICY_TYPES_METHOD + "/{" + POLICY_TYPE_ID_NAME + "}/" + POLICIES_NAME + "/{" + POLICY_INSTANCE_ID_NAME
-        + "}")
+    @PutMapping(POLICIES_NAME + "/{" + POLICY_INSTANCE_ID_NAME + "}")
     @Secured({ControlPanelConstants.ROLE_ADMIN})
-    public ResponseEntity<String> putPolicyInstance(@PathVariable(POLICY_TYPE_ID_NAME) String policyTypeIdString,
-        @RequestParam(name = "ric", required = true) String ric,
-        @PathVariable(POLICY_INSTANCE_ID_NAME) String policyInstanceId, @RequestBody String instance) {
+    public ResponseEntity<String> putPolicyInstance( //
+        @RequestParam(POLICY_TYPE_PARAM) String policyTypeIdString, //
+        @RequestParam(name = "ric", required = true) String ric, //
+        @PathVariable(POLICY_INSTANCE_ID_NAME) String policyInstanceId, //
+        @RequestBody String instance) {
         logger.debug("putPolicyInstance ric: {}, typeId: {}, instanceId: {}, instance: {}", ric, policyTypeIdString,
             policyInstanceId, instance);
         return this.policyAgentApi.putPolicy(policyTypeIdString, policyInstanceId, instance, ric);
     }
 
     @ApiOperation(value = "Deletes the policy instances for the given policy type.")
-    @DeleteMapping(POLICY_TYPES_METHOD + "/{" + POLICY_TYPE_ID_NAME + "}/" + POLICIES_NAME + "/{"
-        + POLICY_INSTANCE_ID_NAME + "}")
+    @DeleteMapping(POLICIES_NAME + "/{" + POLICY_INSTANCE_ID_NAME + "}")
     @Secured({ControlPanelConstants.ROLE_ADMIN})
-    public ResponseEntity<String> deletePolicyInstance(@PathVariable(POLICY_TYPE_ID_NAME) String policyTypeIdString,
+    public ResponseEntity<String> deletePolicyInstance( //
+        @RequestParam(POLICY_TYPE_PARAM) String policyTypeIdString,
         @PathVariable(POLICY_INSTANCE_ID_NAME) String policyInstanceId) {
         logger.debug("deletePolicyInstance typeId: {}, instanceId: {}", policyTypeIdString, policyInstanceId);
         return this.policyAgentApi.deletePolicy(policyInstanceId);
