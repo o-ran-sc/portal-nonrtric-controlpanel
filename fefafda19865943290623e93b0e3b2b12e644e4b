@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a68ae49_9093ccb5",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/config/TomcatWebServerConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-05-14T11:49:35Z",
+      "side": 1,
+      "message": "I do not know if it matters but in the similar fix I did in the agent, I initialized this to 0.\nAnd \nif (httpPort !\u003d 0) {\n tomcat.addAdditionalTomcatConnectors(getHttpConnector(httpPort));\n}\n\nThen no http port will be opened if the entry is missing or 0 in the file.",
+      "range": {
+        "startLine": 38,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 25
+      },
+      "revId": "fefafda19865943290623e93b0e3b2b12e644e4b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
