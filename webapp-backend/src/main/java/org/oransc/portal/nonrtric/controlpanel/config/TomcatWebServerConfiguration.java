@@ -19,7 +19,11 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.config;
 
+import java.lang.invoke.MethodHandles;
 import org.apache.catalina.connector.Connector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -28,17 +32,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TomcatWebServerConfiguration {
 
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    @Value("${server.http.port}")
+    private int httpPort;
+
     @Bean
     public ServletWebServerFactory servletContainer() {
+        logger.debug("Http Port: {}", httpPort);
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-        tomcat.addAdditionalTomcatConnectors(getHttpConnector());
+        tomcat.addAdditionalTomcatConnectors(getHttpConnector(httpPort));
         return tomcat;
     }
 
-    private static Connector getHttpConnector() {
+    private static Connector getHttpConnector(int port) {
         Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
         connector.setScheme("http");
-        connector.setPort(8080);
+        connector.setPort(port);
         connector.setSecure(false);
         return connector;
     }
