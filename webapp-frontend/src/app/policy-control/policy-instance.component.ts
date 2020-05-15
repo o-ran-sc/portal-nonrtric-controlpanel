@@ -28,6 +28,7 @@ import { NotificationService } from '../services/ui/notification.service';
 import { PolicyService } from '../services/policy/policy.service';
 import { ConfirmDialogService } from './../services/ui/confirm-dialog.service';
 import { PolicyInstance } from '../interfaces/policy.types';
+import { NoTypePolicyInstanceDialogComponent } from './no-type-policy-instance-dialog.component';
 import { PolicyInstanceDialogComponent } from './policy-instance-dialog.component';
 import { getPolicyDialogProperties } from './policy-instance-dialog.component';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
@@ -75,15 +76,26 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
         }
     }
 
+    private isSchemaEmpty(): boolean {
+        return Object.keys(this.policyType.schemaObject).length === 0;
+    }
+
     modifyInstance(instance: PolicyInstance): void {
         this.policySvc.getPolicy(this.policyType.name, instance.id).subscribe(
             (refreshedJson: any) => {
                 instance.json = JSON.stringify(refreshedJson);
-                this.dialog.open(PolicyInstanceDialogComponent, getPolicyDialogProperties(this.policyType, instance, this.darkMode));
+                if (this.isSchemaEmpty()) {
+                    this.dialog.open(
+                        NoTypePolicyInstanceDialogComponent,
+                        getPolicyDialogProperties(this.policyType, instance, this.darkMode));
+                } else {
+                    this.dialog.open(
+                        PolicyInstanceDialogComponent,
+                        getPolicyDialogProperties(this.policyType, instance, this.darkMode));
+                }
             },
             (httpError: HttpErrorResponse) => {
-                this.notificationService.error('Could not refresh instance ' + httpError.message);
-                this.dialog.open(PolicyInstanceDialogComponent, getPolicyDialogProperties(this.policyType, instance, this.darkMode));
+                this.notificationService.error('Could not refresh instance. Please try again.' + httpError.message);
             }
         );
     }

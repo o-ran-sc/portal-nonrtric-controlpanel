@@ -78,7 +78,7 @@
                     [class.text-danger]="!formIsValid">
                     {{formIsValid ? 'Json' : 'Not valid'}}
                 </strong>
-                <strong class="text-danger" *ngIf="!formIsValid && !prettyValidationErrors">Not submittable</strong>
+                <span *ngIf="!formIsValid && !prettyValidationErrors">Invalid form</span>
                 <span *ngIf="prettyValidationErrors">— errors:</span>
                 <div *ngIf="prettyValidationErrors" class="text-danger" [innerHTML]="prettyValidationErrors"></div>
             </div>

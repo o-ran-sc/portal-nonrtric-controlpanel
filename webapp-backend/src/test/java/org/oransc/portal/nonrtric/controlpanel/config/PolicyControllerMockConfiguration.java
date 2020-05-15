@@ -21,7 +21,6 @@
 package org.oransc.portal.nonrtric.controlpanel.config;
 
 import com.google.gson.GsonBuilder;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,7 +33,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Vector;
 import java.util.stream.Collectors;
-
 import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInstances;
@@ -116,8 +114,11 @@ public class PolicyControllerMockConfiguration {
     class Database {
 
         Database() {
+            PolicyType policyType = new PolicyType("", "{}");
+            types.put("", policyType);
+
             String schema = getStringFromFile("demo-policy-schema-1.json");
-            PolicyType policyType = new PolicyType("type2", schema);
+            policyType = new PolicyType("type2", schema);
             types.put("type2", policyType);
 
             schema = getStringFromFile("demo-policy-schema-2.json");
@@ -127,6 +128,8 @@ public class PolicyControllerMockConfiguration {
             schema = getStringFromFile("demo-policy-schema-3.json");
             policyType = new PolicyType("type4", schema);
             types.put("type4", policyType);
+
+            putInstance("", "123", "{\"data\":\"data\"}", "ric_1");
         }
 
         private String getStringFromFile(String path) {

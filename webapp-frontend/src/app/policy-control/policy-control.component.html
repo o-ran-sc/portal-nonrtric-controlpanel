@@ -41,8 +41,7 @@
     <ng-container matColumnDef="action">
         <mat-header-cell class="action-cell" *matHeaderCellDef>Action </mat-header-cell>
         <mat-cell class="action-cell" *matCellDef="let policyType" (click)="$event.stopPropagation()">
-            <button [disabled]="this.isSchemaEmpty(policyType)" mat-icon-button
-                (click)="createPolicyInstance(policyType)">
+            <button mat-icon-button (click)="createPolicyInstance(policyType)">
                 <mat-icon matTooltip="Create instance">add_box</mat-icon>
             </button>
         </mat-cell>
