@@ -46,6 +46,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FooterComponent } from './footer/footer.component';
 import { MainComponent } from './main/main.component';
 import { MaterialDesignFrameworkModule } from 'angular6-json-schema-form';
+import { NoTypePolicyInstanceDialogComponent } from './policy-control/no-type-policy-instance-dialog.component';
 import { PolicyCardComponent } from './ui/policy-card/policy-card.component';
 import { PolicyControlComponent } from './policy-control/policy-control.component';
 import { PolicyInstanceComponent } from './policy-control/policy-instance.component';
@@ -62,6 +63,7 @@ import { CookieModule } from 'ngx-cookie';
     ErrorDialogComponent,
     FooterComponent,
     MainComponent,
+    NoTypePolicyInstanceDialogComponent,
     PolicyCardComponent,
     PolicyControlComponent,
     PolicyInstanceComponent,
@@ -129,6 +131,7 @@ import { CookieModule } from 'ngx-cookie';
   entryComponents: [
     ConfirmDialogComponent,
     ErrorDialogComponent,
+    NoTypePolicyInstanceDialogComponent,
     PolicyInstanceDialogComponent
   ],
   providers: [

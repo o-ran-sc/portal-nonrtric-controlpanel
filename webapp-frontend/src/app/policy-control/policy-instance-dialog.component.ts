@@ -123,18 +123,9 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         if (!this.policyInstanceId) {
             this.fetchRics();
         }
-        if (this.isSchemaEmpty()) {
-            // Empty schema, hide form, show json instead
-            this.isVisible.form = false;
-            this.isVisible.json = true;
-        }
     }
 
     ngAfterViewInit() {
-    }
-
-    private isSchemaEmpty(): boolean {
-        return Object.keys(this.jsonSchemaObject).length === 0;
     }
 
     onSubmit() {
@@ -145,8 +136,9 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         const self: PolicyInstanceDialogComponent = this;
         this.dataService.putPolicy(this.policyTypeName, this.policyInstanceId, policyJson, this.ric).subscribe(
             {
-                next(value) {
-                    self.notificationService.success('Policy ' + self.policyTypeName + ':' + self.policyInstanceId + ' submitted');
+                next(_) {
+                    self.notificationService.success('Policy ' + self.policyTypeName + ':' + self.policyInstanceId +
+                    ' submitted');
                 },
                 error(error: HttpErrorResponse) {
                     self.errorService.displayError('Submit failed: ' + error.error);
@@ -163,18 +155,15 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         this.liveFormData = formData;
     }
 
-    get prettyLiveFormData(): string {
-        if (this.isSchemaEmpty()) {
-            return this.jsonAsString;
-        }
+    get prettyLiveFormData() {
         return JSON.stringify(this.liveFormData, null, 2);
     }
 
-    get schemaAsString(): string {
+    get schemaAsString() {
         return JSON.stringify(this.jsonSchemaObject, null, 2);
     }
 
-    get jsonAsString(): string {
+    get jsonAsString() {
         return JSON.stringify(this.jsonObject, null, 2);
     }
 

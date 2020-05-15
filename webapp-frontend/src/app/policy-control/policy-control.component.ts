@@ -30,6 +30,7 @@ import { PolicyInstanceDialogComponent } from './policy-instance-dialog.componen
 import { NotificationService } from '../services/ui/notification.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UiService } from '../services/ui/ui.service';
+import { NoTypePolicyInstanceDialogComponent } from './no-type-policy-instance-dialog.component';
 
 class PolicyTypeInfo {
     constructor(public type: PolicyType) { }
@@ -74,10 +75,17 @@ export class PolicyControlComponent implements OnInit {
     }
 
     createPolicyInstance(policyType: PolicyType): void {
-        const dialogRef = this.dialog.open(PolicyInstanceDialogComponent, getPolicyDialogProperties(policyType, null, this.darkMode));
+        let dialogRef;
+        if (this.isSchemaEmpty(policyType)) {
+            dialogRef = this.dialog.open(NoTypePolicyInstanceDialogComponent,
+                getPolicyDialogProperties(policyType, null, this.darkMode));
+        } else {
+            dialogRef = this.dialog.open(PolicyInstanceDialogComponent,
+                getPolicyDialogProperties(policyType, null, this.darkMode));
+        }
         const info: PolicyTypeInfo = this.getPolicyTypeInfo(policyType);
         dialogRef.afterClosed().subscribe(
-            (result: any) => {
+            (_) => {
                 info.isExpanded.next(info.isExpanded.getValue());
             }
         );
