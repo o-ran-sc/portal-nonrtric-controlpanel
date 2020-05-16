@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5533275_3ad1f781",
+        "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-05-16T06:44:11Z",
+      "side": 1,
+      "message": "why remove type definitions?",
+      "range": {
+        "startLine": 158,
+        "startChar": 29,
+        "endLine": 158,
+        "endChar": 30
+      },
+      "revId": "f3153ee6f2ea63afda276c7c3abab9ee4004820b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e342810f_4f4316a0",
+        "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-05-16T06:44:11Z",
+      "side": 1,
+      "message": "why remove type definitions?",
+      "revId": "f3153ee6f2ea63afda276c7c3abab9ee4004820b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32cb828d_31233883",
+        "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-05-16T06:44:11Z",
+      "side": 1,
+      "message": "same comment",
+      "revId": "f3153ee6f2ea63afda276c7c3abab9ee4004820b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
