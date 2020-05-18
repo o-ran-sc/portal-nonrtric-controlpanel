@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "176f485f_c34289f1",
+        "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-05-18T06:09:01Z",
+      "side": 1,
+      "message": "Accidentally removed. Will be put back in later commit.",
+      "parentUuid": "d5533275_3ad1f781",
+      "range": {
+        "startLine": 158,
+        "startChar": 29,
+        "endLine": 158,
+        "endChar": 30
+      },
+      "revId": "f3153ee6f2ea63afda276c7c3abab9ee4004820b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e342810f_4f4316a0",
         "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.ts",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "d7e66060_a73883b6",
+        "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-05-18T06:09:01Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "e342810f_4f4316a0",
+      "revId": "f3153ee6f2ea63afda276c7c3abab9ee4004820b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32cb828d_31233883",
         "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.ts",
         "patchSetId": 1
@@ -53,6 +95,24 @@
       "writtenOn": "2020-05-16T06:44:11Z",
       "side": 1,
       "message": "same comment",
+      "revId": "f3153ee6f2ea63afda276c7c3abab9ee4004820b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8792c052_a7b2c67f",
+        "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-05-18T06:09:01Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "32cb828d_31233883",
       "revId": "f3153ee6f2ea63afda276c7c3abab9ee4004820b",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
