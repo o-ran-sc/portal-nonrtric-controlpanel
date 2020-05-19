@@ -29,6 +29,7 @@ import { ErrorDialogService } from '../services/ui/error-dialog.service';
 import { NotificationService } from './../services/ui/notification.service';
 import { UiService } from '../services/ui/ui.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 
 @Component({
@@ -49,6 +50,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     ],
 })
 export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
+    instanceForm: FormGroup;
+
 
     formActive = false;
     isVisible = {
@@ -120,6 +123,11 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
         });
+        this.instanceForm = new FormGroup({
+            'ricSelector': new FormControl(this.ric, [
+                Validators.required
+            ])
+        });
         if (!this.policyInstanceId) {
             this.fetchRics();
         }
@@ -155,15 +163,15 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         this.liveFormData = formData;
     }
 
-    get prettyLiveFormData() {
+    get prettyLiveFormData(): string {
         return JSON.stringify(this.liveFormData, null, 2);
     }
 
-    get schemaAsString() {
+    get schemaAsString(): string {
         return JSON.stringify(this.jsonSchemaObject, null, 2);
     }
 
-    get jsonAsString() {
+    get jsonAsString(): string {
         return JSON.stringify(this.jsonObject, null, 2);
     }
 

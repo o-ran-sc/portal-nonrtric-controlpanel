@@ -33,8 +33,6 @@ import * as uuid from 'uuid';
   styleUrls: ['./no-type-policy-instance-dialog.component.scss']
 })
 export class NoTypePolicyInstanceDialogComponent implements OnInit {
-
-  // Declare following variables as Public variable. Private variables should not be used in template HTML
   instanceForm: FormGroup;
 
   policyInstanceId: string; // null if not yet created

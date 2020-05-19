@@ -17,6 +17,7 @@
   limitations under the License.
   ========================LICENSE_END===================================
   -->
+
 <div class="text-muted logo" fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="space-around center">
     <div *ngIf="policyInstanceId">{{policyInstanceId}}</div>
 </div>
@@ -35,14 +36,15 @@
 
 <div class="text-muted" *ngIf="jsonSchemaObject.description">{{jsonSchemaObject.description}}</div>
 
-<div fxLayout="row" fxLayoutAlign="space-around start" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="flex-start center">
+<div [formGroup]="instanceForm" fxLayout="row" fxLayoutAlign="space-around start" fxLayout.lt-sm="column"
+    fxLayoutAlign.lt-sm="flex-start center">
 
 
     <mat-card class="card" [ngClass]="{'card-dark': darkMode}">
 
         <mat-form-field *ngIf="!this.policyInstanceId">
-            <mat-label [class.text-danger]="!this.ric">Select RIC</mat-label>
-            <mat-select [(value)]="this.ric">
+            <mat-label>Select RIC</mat-label>
+            <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric">
                 <mat-option *ngFor="let ric of this.allRics" [value]="ric">
                     {{ric}}
                 </mat-option>
@@ -83,7 +85,7 @@
                 <div *ngIf="prettyValidationErrors" class="text-danger" [innerHTML]="prettyValidationErrors"></div>
             </div>
             <div>
-                <pre [class.text__dark]='this.darkMode'>{{prettyLiveFormData}}</pre>
+                <pre [class.text__dark]="this.darkMode">{{prettyLiveFormData}}</pre>
             </div>
         </div>
 
@@ -93,7 +95,7 @@
         </h4>
         <div *ngIf="isVisible.schema" fxLayout="column" [@expandSection]="true">
             <strong class="text-muted">Schema</strong>
-            <pre [class.text__dark]='this.darkMode'>{{schemaAsString}}</pre>
+            <pre [class.text__dark]="this.darkMode">{{schemaAsString}}</pre>
         </div>
     </mat-card>
 </div>

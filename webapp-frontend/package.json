@@ -27,7 +27,7 @@
     "@material/radio": "^2.3.0",
     "@types/chart.js": "^2.9.11",
     "angular-bootstrap-md": "^7.5.4",
-    "angular6-json-schema-form": "^7.3.0",
+    "angular6-json-schema-form": "^8.0.0",
     "bootstrap": "^4.4.1",
     "chart.js": "^2.9.3",
     "core-js": "^2.6.11",
