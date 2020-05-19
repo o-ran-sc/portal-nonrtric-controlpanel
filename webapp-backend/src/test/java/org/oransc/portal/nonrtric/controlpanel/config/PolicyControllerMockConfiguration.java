@@ -77,13 +77,13 @@ public class PolicyControllerMockConfiguration {
         public ResponseEntity<String> putPolicy(String policyTypeIdString, String policyInstanceId, Object json,
             String ric) {
             database.putInstance(policyTypeIdString, policyInstanceId, json, ric);
-            return new ResponseEntity<>("Policy was put successfully", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
         @Override
         public ResponseEntity<String> deletePolicy(String policyInstanceId) {
             database.deleteInstance(policyInstanceId);
-            return new ResponseEntity<>("Policy was deleted successfully", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
         @Override

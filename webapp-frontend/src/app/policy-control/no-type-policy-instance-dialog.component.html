@@ -18,6 +18,9 @@
   ========================LICENSE_END===================================
   -->
 
+<div class="text-muted logo" fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="space-around center">
+    <div *ngIf="policyInstanceId">{{policyInstanceId}}</div>
+</div>
 <div class="mat-elevation-z8 header row" [ngClass]="{'header-dark': darkMode}">
     <div class="logo">
         <img src="../../assets/oran-logo.png" width="30px" height="30px" style="position: relative; z-index: 50" />
@@ -29,21 +32,20 @@
         </svg>
     </div>
 </div>
-
-<div class="text-muted">Since this is a policy type without a schema, the user will have to make sure that the content
-    of the policy has the necessary content. This dialog will only validate that it is a valid JSON string.</div>
+<br/>
+<div class="text-muted">Enter policy statements (JSON).</div>
 
 <form [formGroup]="instanceForm" novalidate autocomplete="off">
     <div mat-dialog-content>
         <mat-form-field *ngIf="!this.policyInstanceId">
-            <mat-label [class.text-danger]="!this.ric">Select RIC</mat-label>
+            <mat-label>Select RIC</mat-label>
             <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric">
                 <mat-option *ngFor="let ric of this.allRics" [value]="ric">
                     {{ric}}
                 </mat-option>
             </mat-select>
             <div *ngIf="ricSelector.invalid && (ricSelector.dirty || ricSelector.touched)"
-                class="alert alert-danger">
+                class="alert mat-error">
                 <div *ngIf="ricSelector.errors.required">
                     A Ric must be selected.
                 </div>
@@ -56,7 +58,7 @@
                 cdkAutosizeMinRows="10" required>
             </textarea>
             <div *ngIf="policyJsonTextArea.invalid && (policyJsonTextArea.dirty || policyJsonTextArea.touched)"
-                class="alert alert-danger">
+                class="alert mat-error">
                 <div *ngIf="policyJsonTextArea.errors.required">
                     The policy body is required.
                 </div>
@@ -66,7 +68,7 @@
             </div>
         </mat-form-field>
     </div>
-    <div mat-dialog-actions class="modal-footer justify-content-center">
+    <div mat-dialog-actions>
         <button mat-raised-button (click)="this.onSubmit()" class="submitBtn" [disabled]="!instanceForm.valid">
             Submit
         </button>
