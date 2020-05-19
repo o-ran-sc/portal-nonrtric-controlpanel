@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "903a8f37_5d703f48",
+        "filename": "webapp-frontend/src/app/policy-control/no-type-policy-instance-dialog.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-05-19T09:09:19Z",
+      "side": 1,
+      "message": "Should it not be \u003cbr/\u003e  (otherwise it is just a begin XML tag) ?",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 4
+      },
+      "revId": "bceddf0b960662d3eddb0b79b4c40645466b2f1f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00e7d1c6_db7de39c",
+        "filename": "webapp-frontend/src/app/policy-control/no-type-policy-instance-dialog.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-05-19T09:09:19Z",
+      "side": 1,
+      "message": "Maybe this is too verbose. I would have chosen something much shorter, like \n\u0027Enter policy statements (JSON)\u0027",
+      "range": {
+        "startLine": 36,
+        "startChar": 24,
+        "endLine": 37,
+        "endChar": 106
+      },
+      "revId": "bceddf0b960662d3eddb0b79b4c40645466b2f1f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
