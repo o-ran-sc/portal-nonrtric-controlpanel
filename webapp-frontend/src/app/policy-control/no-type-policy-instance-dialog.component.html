@@ -27,21 +27,22 @@
         <svg class="logo__icon" viewBox="150.3 22.2 1000 50">
             <text class="logo__text" [ngClass]="{'logo__text-dark': darkMode}" font-size="30" font-weight="600"
                 letter-spacing=".1em" transform="translate(149 56)">
-                <tspan>Policy with no type</tspan>
+                <tspan>Policy without type</tspan>
             </text>
         </svg>
     </div>
 </div>
-<br />
-<div class="text-muted">Enter policy statements (JSON).</div>
 
 <div [formGroup]="instanceForm" fxLayout="row" fxLayoutAlign="space-around start" fxLayout.lt-sm="column"
     fxLayoutAlign.lt-sm="flex-start center">
 
     <mat-card class="card" [ngClass]="{'card-dark': darkMode}">
+        <h4>
+            Near-RT RIC
+        </h4>
         <mat-form-field *ngIf="!this.policyInstanceId">
-            <mat-label>Select RIC</mat-label>
-            <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric">
+            <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric"
+                placeholder="Select Near-RT RIC">
                 <mat-option *ngFor="let ric of this.allRics" [value]="ric">
                     {{ric}}
                 </mat-option>
@@ -50,26 +51,31 @@
                 style="width: 300px;">
                 <div *ngIf="ricSelector.errors.required">
                     <mat-error role="alert">
-                        A Ric must be selected.
+                        A Near-RT RIC must be selected.
                     </mat-error>
                 </div>
             </div>
         </mat-form-field>
+        <div *ngIf="this.policyInstanceId">
+            {{this.ric}}
+        </div>
 
+        <h4>
+            Properties
+        </h4>
         <mat-form-field style="width: 800px;">
-            <mat-label>Policy content</mat-label>
             <textarea id="policyJsonTextArea" formControlName="policyJsonTextArea" matInput cdkTextareaAutosize
-                cdkAutosizeMinRows="10" required [(value)]="this.policyJson">
+                cdkAutosizeMinRows="10" required [(value)]="this.policyJson" placeholder="Policy properties">
             </textarea>
             <div *ngIf="policyJsonTextArea.invalid && (policyJsonTextArea.dirty || policyJsonTextArea.touched)">
                 <div *ngIf="policyJsonTextArea.errors.required">
                     <mat-error role="alert">
-                        The policy body is required.
+                        The policy properties are required.
                     </mat-error>
                 </div>
                 <div *ngIf="policyJsonTextArea.errors.invalidJson">
                     <mat-error role="alert">
-                        The policy body must be a valid JSON.
+                        The policy properties must be a valid JSON.
                     </mat-error>
                 </div>
             </div>

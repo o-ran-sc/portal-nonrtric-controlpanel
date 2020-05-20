@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Example_TrafficSteeringPreference_1.0.0",
-  "description": "Example QoE Target policy type",
+  "description": "Example Traffic Steering Preference policy type",
   "type": "object",
   "properties": {
     "scope": {
