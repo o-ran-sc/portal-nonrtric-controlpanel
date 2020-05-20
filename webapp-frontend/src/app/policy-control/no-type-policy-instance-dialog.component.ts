@@ -48,7 +48,7 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data,
     private ui: UiService) {
     this.policyInstanceId = data.instanceId;
-    this.policyJson = data.instanceJson ? JSON.stringify(JSON.parse(data.instanceJson), null, 2) : '';
+    this.policyJson = data.instanceJson ? this.formatJsonString(data.instanceJson) : '';
     this.ric = data.ric;
   }
 
@@ -105,6 +105,14 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
         complete() { }
       });
   }
+
+ private formatJsonString(jsonToFormat: string) {
+   return JSON.stringify(JSON.parse(jsonToFormat), null, 2);
+ }
+
+ formatJsonInput() {
+   this.policyJson = this.formatJsonString(this.policyJsonTextArea.value);
+ }
 }
 
 export function jsonValidator(): ValidatorFn {

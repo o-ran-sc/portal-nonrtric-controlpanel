@@ -136,6 +136,8 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
     }
 
+    get ricSelector() { return this.instanceForm.get('ricSelector'); }
+
     onSubmit() {
         if (this.policyInstanceId == null) {
             this.policyInstanceId = uuid.v4();

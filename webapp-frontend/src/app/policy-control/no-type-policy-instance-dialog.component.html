@@ -32,11 +32,13 @@
         </svg>
     </div>
 </div>
-<br/>
+<br />
 <div class="text-muted">Enter policy statements (JSON).</div>
 
-<form [formGroup]="instanceForm" novalidate autocomplete="off">
-    <div mat-dialog-content>
+<div [formGroup]="instanceForm" fxLayout="row" fxLayoutAlign="space-around start" fxLayout.lt-sm="column"
+    fxLayoutAlign.lt-sm="flex-start center">
+
+    <mat-card class="card" [ngClass]="{'card-dark': darkMode}">
         <mat-form-field *ngIf="!this.policyInstanceId">
             <mat-label>Select RIC</mat-label>
             <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric">
@@ -44,10 +46,12 @@
                     {{ric}}
                 </mat-option>
             </mat-select>
-            <div *ngIf="ricSelector.invalid && (ricSelector.dirty || ricSelector.touched)"
-                class="alert mat-error">
+            <div *ngIf="ricSelector.invalid && (ricSelector.dirty || ricSelector.touched)" class="alert mat-error"
+                style="width: 300px;">
                 <div *ngIf="ricSelector.errors.required">
-                    A Ric must be selected.
+                    <mat-error role="alert">
+                        A Ric must be selected.
+                    </mat-error>
                 </div>
             </div>
         </mat-form-field>
@@ -55,23 +59,29 @@
         <mat-form-field style="width: 800px;">
             <mat-label>Policy content</mat-label>
             <textarea id="policyJsonTextArea" formControlName="policyJsonTextArea" matInput cdkTextareaAutosize
-                cdkAutosizeMinRows="10" required>
+                cdkAutosizeMinRows="10" required [(value)]="this.policyJson">
             </textarea>
-            <div *ngIf="policyJsonTextArea.invalid && (policyJsonTextArea.dirty || policyJsonTextArea.touched)"
-                class="alert mat-error">
+            <div *ngIf="policyJsonTextArea.invalid && (policyJsonTextArea.dirty || policyJsonTextArea.touched)">
                 <div *ngIf="policyJsonTextArea.errors.required">
-                    The policy body is required.
+                    <mat-error role="alert">
+                        The policy body is required.
+                    </mat-error>
                 </div>
                 <div *ngIf="policyJsonTextArea.errors.invalidJson">
-                    The policy body must be a valid JSON.
+                    <mat-error role="alert">
+                        The policy body must be a valid JSON.
+                    </mat-error>
                 </div>
             </div>
         </mat-form-field>
-    </div>
-    <div mat-dialog-actions>
-        <button mat-raised-button (click)="this.onSubmit()" class="submitBtn" [disabled]="!instanceForm.valid">
-            Submit
-        </button>
-        <button mat-raised-button class="mat-raised-button" [mat-dialog-close]="false">Close</button>
-    </div>
-</form>
+        <div mat-dialog-actions>
+            <button (click)="formatJsonInput();" class="mat-raised-button" [disabled]="!policyJsonTextArea.valid">
+                Format JSON
+            </button>
+            <button mat-raised-button class="mat-raised-button" [mat-dialog-close]="false">Close</button>
+            <button mat-raised-button (click)="this.onSubmit()" class="submitBtn" [disabled]="!instanceForm.valid">
+                Submit
+            </button>
+        </div>
+    </mat-card>
+</div>
