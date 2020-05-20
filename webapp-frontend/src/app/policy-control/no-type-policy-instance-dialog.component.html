@@ -32,16 +32,17 @@
         </svg>
     </div>
 </div>
-<br />
-<div class="text-muted">Enter policy statements (JSON).</div>
 
 <div [formGroup]="instanceForm" fxLayout="row" fxLayoutAlign="space-around start" fxLayout.lt-sm="column"
     fxLayoutAlign.lt-sm="flex-start center">
 
     <mat-card class="card" [ngClass]="{'card-dark': darkMode}">
+        <h4>
+            Ric
+        </h4>
         <mat-form-field *ngIf="!this.policyInstanceId">
-            <mat-label>Select RIC</mat-label>
-            <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric">
+            <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric"
+                placeholder="Select Ric">
                 <mat-option *ngFor="let ric of this.allRics" [value]="ric">
                     {{ric}}
                 </mat-option>
@@ -55,21 +56,26 @@
                 </div>
             </div>
         </mat-form-field>
+        <div *ngIf="this.policyInstanceId">
+            {{this.ric}}
+        </div>
 
+        <h4>
+            Properties
+        </h4>
         <mat-form-field style="width: 800px;">
-            <mat-label>Policy content</mat-label>
             <textarea id="policyJsonTextArea" formControlName="policyJsonTextArea" matInput cdkTextareaAutosize
-                cdkAutosizeMinRows="10" required [(value)]="this.policyJson">
+                cdkAutosizeMinRows="10" required [(value)]="this.policyJson" placeholder="Policy properties">
             </textarea>
             <div *ngIf="policyJsonTextArea.invalid && (policyJsonTextArea.dirty || policyJsonTextArea.touched)">
                 <div *ngIf="policyJsonTextArea.errors.required">
                     <mat-error role="alert">
-                        The policy body is required.
+                        The policy properties are required.
                     </mat-error>
                 </div>
                 <div *ngIf="policyJsonTextArea.errors.invalidJson">
                     <mat-error role="alert">
-                        The policy body must be a valid JSON.
+                        The policy properties must be a valid JSON.
                     </mat-error>
                 </div>
             </div>

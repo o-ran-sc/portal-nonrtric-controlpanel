@@ -39,12 +39,13 @@
 <div [formGroup]="instanceForm" fxLayout="row" fxLayoutAlign="space-around start" fxLayout.lt-sm="column"
     fxLayoutAlign.lt-sm="flex-start center">
 
-
     <mat-card class="card" [ngClass]="{'card-dark': darkMode}">
-
+        <h4>
+            Ric
+        </h4>
         <mat-form-field *ngIf="!this.policyInstanceId">
-            <mat-label>Select RIC</mat-label>
-            <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric">
+            <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric"
+                placeholder="Select Ric">
                 <mat-option *ngFor="let ric of this.allRics" [value]="ric">
                     {{ric}}
                 </mat-option>
@@ -55,6 +56,9 @@
                 </div>
             </div>
         </mat-form-field>
+        <div *ngIf="this.policyInstanceId">
+            {{this.ric}}
+        </div>
 
         <h4 class="default-cursor" (click)="toggleVisible('form')">
             <mat-icon matTooltip="Properties">{{isVisible.form ? 'expand_less' : 'expand_more'}}</mat-icon>
