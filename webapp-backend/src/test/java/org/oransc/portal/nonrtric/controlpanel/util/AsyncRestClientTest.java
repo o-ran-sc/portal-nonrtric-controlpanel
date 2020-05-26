@@ -39,7 +39,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import reactor.util.Loggers;
 
-public class AsyncRestClientTest {
+class AsyncRestClientTest {
     private static final String BASE_URL = "BaseUrl";
     private static final String REQUEST_URL = "/test";
     private static final String TEST_JSON = "{\"type\":\"type1\"}";
@@ -65,7 +65,7 @@ public class AsyncRestClientTest {
     }
 
     @Test
-    public void testGetNoError() {
+    void testGetNoError() {
         mockWebServer.enqueue(new MockResponse().setResponseCode(SUCCESS_CODE) //
             .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE) //
             .setBody(TEST_JSON));
@@ -75,7 +75,7 @@ public class AsyncRestClientTest {
     }
 
     @Test
-    public void testGetError() {
+    void testGetError() {
         mockWebServer.enqueue(new MockResponse().setResponseCode(ERROR_CODE));
 
         Mono<String> returnedMono = clientUnderTest.get(REQUEST_URL);
@@ -84,7 +84,7 @@ public class AsyncRestClientTest {
     }
 
     @Test
-    public void testPutNoError() {
+    void testPutNoError() {
         mockWebServer.enqueue(new MockResponse().setResponseCode(SUCCESS_CODE) //
             .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE) //
             .setBody(TEST_JSON));
@@ -94,7 +94,7 @@ public class AsyncRestClientTest {
     }
 
     @Test
-    public void testPutError() {
+    void testPutError() {
         mockWebServer.enqueue(new MockResponse().setResponseCode(ERROR_CODE));
 
         Mono<String> returnedMono = clientUnderTest.put(REQUEST_URL, TEST_JSON);
@@ -103,7 +103,7 @@ public class AsyncRestClientTest {
     }
 
     @Test
-    public void testDeleteNoError() {
+    void testDeleteNoError() {
         mockWebServer.enqueue(new MockResponse().setResponseCode(SUCCESS_CODE));
 
         Mono<String> returnedMono = clientUnderTest.delete(REQUEST_URL);
@@ -111,7 +111,7 @@ public class AsyncRestClientTest {
     }
 
     @Test
-    public void testDeleteError() {
+    void testDeleteError() {
         mockWebServer.enqueue(new MockResponse().setResponseCode(ERROR_CODE));
 
         Mono<String> returnedMono = clientUnderTest.delete(REQUEST_URL);

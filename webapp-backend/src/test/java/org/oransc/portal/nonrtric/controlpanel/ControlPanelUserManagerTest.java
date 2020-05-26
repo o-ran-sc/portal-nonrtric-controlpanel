@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-public class ControlPanelUserManagerTest {
+class ControlPanelUserManagerTest {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -54,7 +54,7 @@ public class ControlPanelUserManagerTest {
     }
 
     @Test
-    public void testUserMgr() throws Exception {
+    void testUserMgr() throws Exception {
         final String loginId = "demo";
         ControlPanelUserManager dum = new ControlPanelUserManager(true);
         EcompUser user = createEcompUser(loginId);

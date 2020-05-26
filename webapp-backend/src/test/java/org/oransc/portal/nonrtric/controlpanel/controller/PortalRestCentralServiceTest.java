@@ -30,32 +30,36 @@ import org.junit.jupiter.api.Test;
 import org.onap.portalsdk.core.onboarding.util.PortalApiConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
-public class PortalRestCentralServiceTest extends AbstractControllerTest {
+class PortalRestCentralServiceTest extends AbstractControllerTest {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Test
-    public void getAnalyticsTest() {
+    void getAnalyticsTest() {
         // paths are hardcoded here exactly like the EPSDK-FW library :(
         URI uri = buildUri(null, PortalApiConstants.API_PREFIX, "/analytics");
         logger.info("Invoking {}", uri);
+        Mono<ResponseEntity<String>> forEntity = webClient.getForEntity(uri.toString());
         WebClientResponseException e = assertThrows(WebClientResponseException.class, () -> {
-            webClient.getForEntity(uri.toString()).block();
+            forEntity.block();
         });
         // No Portal is available so this always fails
         Assertions.assertTrue(e.getStatusCode().is4xxClientError());
     }
 
     @Test
-    public void getErrorPageTest() {
+    void getErrorPageTest() {
         // Send unauthorized request
 
         URI uri = buildUri(null, "/favicon.ico");
         logger.info("Invoking {}", uri);
+        Mono<ResponseEntity<String>> forEntity = webClient.getForEntity(uri.toString());
         WebClientResponseException e = assertThrows(WebClientResponseException.class, () -> {
-            webClient.getForEntity(uri.toString()).block();
+            forEntity.block();
         });
         Assertions.assertTrue(e.getStatusCode().is4xxClientError());
         Assertions.assertTrue(e.getResponseBodyAsString().contains("Static error page"));

@@ -46,7 +46,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
-public class ControlPanelTestServer {
+class ControlPanelTestServer {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -57,7 +57,7 @@ public class ControlPanelTestServer {
     @SuppressWarnings("squid:S2699") // To avoid warning about missing assertion.
     @EnabledIfSystemProperty(named = "org.oransc.portal.nonrtric.controlpanel", matches = "mock")
     @Test
-    public void keepServerAlive() {
+    void keepServerAlive() {
         logger.warn("Keeping server alive!");
         try {
             synchronized (this) {

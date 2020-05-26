@@ -46,7 +46,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Mono;
 
-public class PolicyAgentApiImplTest {
+class PolicyAgentApiImplTest {
     private static final String URL_POLICY_SCHEMAS = "/policy_schemas";
     private static final String POLICY_TYPE_1_ID = "type1";
     private static final String POLICY_TYPE_1_VALID = "{\"title\":\"type1\"}";
@@ -69,7 +69,7 @@ public class PolicyAgentApiImplTest {
     AsyncRestClient restClient;
 
     @BeforeEach
-    public void init() {
+    void init() {
         restClient = mock(AsyncRestClient.class);
         apiUnderTest = new PolicyAgentApiImpl(restClient);
     }
@@ -85,14 +85,14 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testGetAllPolicyTypesFailure() {
+    void testGetAllPolicyTypesFailure() {
         whenGetReturnFailure(URL_POLICY_SCHEMAS, HttpStatus.NOT_FOUND, "");
         ResponseEntity<String> returnedResp = apiUnderTest.getAllPolicyTypes();
         assertEquals(HttpStatus.NOT_FOUND, returnedResp.getStatusCode());
     }
 
     @Test
-    public void testGetAllPolicyTypesSuccessValidJson() {
+    void testGetAllPolicyTypesSuccessValidJson() {
         String policyTypes = Arrays.asList(POLICY_TYPE_1_VALID, POLICY_TYPE_2_VALID).toString();
 
         whenGetReturnOK(URL_POLICY_SCHEMAS, HttpStatus.OK, policyTypes);
@@ -103,7 +103,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testGetAllPolicyTypesSuccessInvalidJson() {
+    void testGetAllPolicyTypesSuccessInvalidJson() {
         String policyTypes = Arrays.asList(POLICY_TYPE_1_INVALID, POLICY_TYPE_2_VALID).toString();
         whenGetReturnOK(URL_POLICY_SCHEMAS, HttpStatus.OK, policyTypes);
 
@@ -118,7 +118,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testGetPolicyInstancesForTypeFailure() {
+    void testGetPolicyInstancesForTypeFailure() {
         whenGetReturnFailure(urlPolicyInstances(POLICY_TYPE_1_ID), HttpStatus.NOT_FOUND, "");
 
         ResponseEntity<String> returnedResp = apiUnderTest.getPolicyInstancesForType(POLICY_TYPE_1_ID);
@@ -127,7 +127,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testGetPolicyInstancesForTypeSuccessValidJson() {
+    void testGetPolicyInstancesForTypeSuccessValidJson() {
         String policyInstances = Arrays.asList(POLICY_1_VALID).toString();
         String policyInstancesJson = parsePolicyInstancesJson(policyInstances);
 
@@ -140,7 +140,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testGetPolicyInstancesForTypeSuccessInvalidJson() {
+    void testGetPolicyInstancesForTypeSuccessInvalidJson() {
         String policyInstances = Arrays.asList(POLICY_1_INVALID).toString();
 
         whenGetReturnOK(urlPolicyInstances(POLICY_TYPE_1_ID), HttpStatus.OK, policyInstances);
@@ -156,7 +156,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testGetPolicyInstance() {
+    void testGetPolicyInstance() {
         whenGetReturnOK(urlPolicyInstance(POLICY_1_ID), HttpStatus.OK, POLICY_1_VALID);
 
         ResponseEntity<Object> returnedResp = apiUnderTest.getPolicyInstance(POLICY_1_ID);
@@ -182,7 +182,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testPutPolicyFailure() {
+    void testPutPolicyFailure() {
         String url = urlPutPolicy(POLICY_TYPE_1_ID, POLICY_1_ID, RIC_1_ID);
         whenPutReturnFailure(url, POLICY_1_VALID, HttpStatus.NOT_FOUND, CLIENT_ERROR_MESSAGE);
 
@@ -194,7 +194,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testPutPolicySuccess() {
+    void testPutPolicySuccess() {
         String url = urlPutPolicy(POLICY_TYPE_1_ID, POLICY_1_ID, RIC_1_ID);
         whenPutReturnOK(url, POLICY_1_VALID, HttpStatus.OK, POLICY_1_VALID);
 
@@ -221,7 +221,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testDeletePolicyFailure() {
+    void testDeletePolicyFailure() {
         whenDeleteReturnFailure(deletePolicyUrl(POLICY_1_ID), HttpStatus.NOT_FOUND, CLIENT_ERROR_MESSAGE);
 
         ResponseEntity<String> returnedResp = apiUnderTest.deletePolicy(POLICY_1_ID);
@@ -231,7 +231,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testDeletePolicySuccess() {
+    void testDeletePolicySuccess() {
         whenDeleteReturnOK(deletePolicyUrl(POLICY_1_ID), HttpStatus.OK);
         ResponseEntity<String> returnedResp = apiUnderTest.deletePolicy(POLICY_1_ID);
 
@@ -243,7 +243,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testGetRicsSupportingTypeValidJson() {
+    void testGetRicsSupportingTypeValidJson() {
         String rics = Arrays.asList(RIC_1_INFO_VALID).toString();
 
         this.whenGetReturnOK(urlRicInfo(POLICY_TYPE_1_ID), HttpStatus.OK, rics);
@@ -255,7 +255,7 @@ public class PolicyAgentApiImplTest {
     }
 
     @Test
-    public void testGetRicsSupportingTypeInvalidJson() {
+    void testGetRicsSupportingTypeInvalidJson() {
         String rics = Arrays.asList(RIC_1_INFO_INVALID).toString();
 
         this.whenGetReturnOK(urlRicInfo(POLICY_TYPE_1_ID), HttpStatus.OK, rics);

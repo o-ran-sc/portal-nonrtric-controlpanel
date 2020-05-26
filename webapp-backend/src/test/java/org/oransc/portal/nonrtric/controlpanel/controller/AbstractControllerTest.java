@@ -41,7 +41,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 // Need the fake answers from the backend
 @ActiveProfiles("test")
-public class AbstractControllerTest {
+class AbstractControllerTest {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -89,7 +89,7 @@ public class AbstractControllerTest {
     // Because I put the annotations on this parent class,
     // must define at least one test here.
     @Test
-    public void contextLoads() {
+    void contextLoads() {
         // Silence Sonar warning about missing assertion.
         Assertions.assertTrue(logger.isWarnEnabled());
         logger.info("Context loads on mock profile");

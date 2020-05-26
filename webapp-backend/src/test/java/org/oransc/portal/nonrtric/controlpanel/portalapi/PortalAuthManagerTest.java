@@ -45,7 +45,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class PortalAuthManagerTest {
+class PortalAuthManagerTest {
 
     @Value("${portalapi.decryptor}")
     private String decryptor;
@@ -53,7 +53,7 @@ public class PortalAuthManagerTest {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Test
-    public void testPortalStuff() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
+    void testPortalStuff() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
         InvocationTargetException, NoSuchMethodException, IOException, ServletException {
 
         PortalAuthManager m = new PortalAuthManager("app", "user", "secret", decryptor, "cookie");

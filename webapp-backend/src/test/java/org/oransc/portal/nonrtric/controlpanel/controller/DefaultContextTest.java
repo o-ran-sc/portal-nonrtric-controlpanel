@@ -35,12 +35,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class DefaultContextTest {
+class DefaultContextTest {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Test
-    public void contextLoads() {
+    void contextLoads() {
         // Silence Sonar warning about missing assertion.
         Assertions.assertTrue(logger.isWarnEnabled());
         logger.info("Context loads on default profile");
