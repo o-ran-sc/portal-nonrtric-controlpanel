@@ -27,54 +27,130 @@ import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
-import javax.net.ssl.SSLException;
-
+import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.lang.Nullable;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.RequestHeadersSpec;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
+import reactor.netty.resources.ConnectionProvider;
 import reactor.netty.tcp.TcpClient;
 
 /**
  * Generic reactive REST client.
  */
 public class AsyncRestClient {
+
+    @Value.Immutable
+    @Value.Style(redactedMask = "####")
+    public interface WebClientConfig {
+        public boolean isTrustStoreUsed();
+
+        @Value.Redacted
+        public String trustStorePassword();
+
+        public String trustStore();
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private WebClient webClient = null;
     private final String baseUrl;
+    private static final AtomicInteger sequenceNumber = new AtomicInteger();
+    private final WebClientConfig clientConfig;
+    static KeyStore clientTrustStore = null;
 
     public AsyncRestClient(String baseUrl) {
+        this(baseUrl,
+            ImmutableWebClientConfig.builder().isTrustStoreUsed(false).trustStore("").trustStorePassword("").build());
+    }
+
+    public AsyncRestClient(String baseUrl, WebClientConfig config) {
         this.baseUrl = baseUrl;
+        this.clientConfig = config;
+    }
+
+    public Mono<ResponseEntity<String>> postForEntity(String uri, @Nullable String body) {
+        Object traceTag = createTraceTag();
+        logger.debug("{} POST uri = '{}{}''", traceTag, baseUrl, uri);
+        logger.trace("{} POST body: {}", traceTag, body);
+        Mono<String> bodyProducer = body != null ? Mono.just(body) : Mono.empty();
+        return getWebClient() //
+            .flatMap(client -> {
+                RequestHeadersSpec<?> request = client.post() //
+                    .uri(uri) //
+                    .contentType(MediaType.APPLICATION_JSON) //
+                    .body(bodyProducer, String.class);
+                return retrieve(traceTag, request);
+            });
+    }
+
+    public Mono<String> post(String uri, @Nullable String body) {
+        return postForEntity(uri, body) //
+            .flatMap(this::toBody);
+    }
+
+    public Mono<String> postWithAuthHeader(String uri, String body, String username, String password) {
+        Object traceTag = createTraceTag();
+        logger.debug("{} POST (auth) uri = '{}{}''", traceTag, baseUrl, uri);
+        logger.trace("{} POST body: {}", traceTag, body);
+        return getWebClient() //
+            .flatMap(client -> {
+                RequestHeadersSpec<?> request = client.post() //
+                    .uri(uri) //
+                    .headers(headers -> headers.setBasicAuth(username, password)) //
+                    .contentType(MediaType.APPLICATION_JSON) //
+                    .bodyValue(body);
+                return retrieve(traceTag, request) //
+                    .flatMap(this::toBody);
+            });
     }
 
     public Mono<ResponseEntity<String>> putForEntity(String uri, String body) {
-        logger.debug("PUT uri = '{}{}''", baseUrl, uri);
+        Object traceTag = createTraceTag();
+        logger.debug("{} PUT uri = '{}{}''", traceTag, baseUrl, uri);
+        logger.trace("{} PUT body: {}", traceTag, body);
         return getWebClient() //
             .flatMap(client -> {
                 RequestHeadersSpec<?> request = client.put() //
                     .uri(uri) //
                     .contentType(MediaType.APPLICATION_JSON) //
                     .bodyValue(body);
-                return retrieve(request);
+                return retrieve(traceTag, request);
             });
     }
 
     public Mono<ResponseEntity<String>> putForEntity(String uri) {
-        logger.debug("PUT uri = '{}{}''", baseUrl, uri);
+        Object traceTag = createTraceTag();
+        logger.debug("{} PUT uri = '{}{}''", traceTag, baseUrl, uri);
+        logger.trace("{} PUT body: <empty>", traceTag);
         return getWebClient() //
             .flatMap(client -> {
                 RequestHeadersSpec<?> request = client.put() //
                     .uri(uri);
-                return retrieve(request);
+                return retrieve(traceTag, request);
             });
     }
 
@@ -84,11 +160,12 @@ public class AsyncRestClient {
     }
 
     public Mono<ResponseEntity<String>> getForEntity(String uri) {
-        logger.debug("GET uri = '{}{}''", baseUrl, uri);
+        Object traceTag = createTraceTag();
+        logger.debug("{} GET uri = '{}{}''", traceTag, baseUrl, uri);
         return getWebClient() //
             .flatMap(client -> {
                 RequestHeadersSpec<?> request = client.get().uri(uri);
-                return retrieve(request);
+                return retrieve(traceTag, request);
             });
     }
 
@@ -98,11 +175,12 @@ public class AsyncRestClient {
     }
 
     public Mono<ResponseEntity<String>> deleteForEntity(String uri) {
-        logger.debug("DELETE uri = '{}{}''", baseUrl, uri);
+        Object traceTag = createTraceTag();
+        logger.debug("{} DELETE uri = '{}{}''", traceTag, baseUrl, uri);
         return getWebClient() //
             .flatMap(client -> {
                 RequestHeadersSpec<?> request = client.delete().uri(uri);
-                return retrieve(request);
+                return retrieve(traceTag, request);
             });
     }
 
@@ -111,19 +189,25 @@ public class AsyncRestClient {
             .flatMap(this::toBody);
     }
 
-    private Mono<ResponseEntity<String>> retrieve(RequestHeadersSpec<?> request) {
+    private Mono<ResponseEntity<String>> retrieve(Object traceTag, RequestHeadersSpec<?> request) {
+        final Class<String> clazz = String.class;
         return request.retrieve() //
-            .toEntity(String.class) //
-            .doOnError(this::onHttpError);
+            .toEntity(clazz) //
+            .doOnNext(entity -> logger.trace("{} Received: {}", traceTag, entity.getBody())) //
+            .doOnError(throwable -> onHttpError(traceTag, throwable));
     }
 
-    private void onHttpError(Throwable t) {
+    private static Object createTraceTag() {
+        return sequenceNumber.incrementAndGet();
+    }
+
+    private void onHttpError(Object traceTag, Throwable t) {
         if (t instanceof WebClientResponseException) {
             WebClientResponseException exception = (WebClientResponseException) t;
-            logger.debug("HTTP error status = '{}', body '{}'", exception.getStatusCode(),
+            logger.debug("{} HTTP error status = '{}', body '{}'", traceTag, exception.getStatusCode(),
                 exception.getResponseBodyAsString());
         } else {
-            logger.debug("HTTP error: {}", t.getMessage());
+            logger.debug("{} HTTP error: {}", traceTag, t.getMessage());
         }
     }
 
@@ -135,26 +219,83 @@ public class AsyncRestClient {
         }
     }
 
-    private static SslContext createSslContext() throws SSLException {
+    private boolean isCertificateEntry(KeyStore trustStore, String alias) {
+        try {
+            return trustStore.isCertificateEntry(alias);
+        } catch (KeyStoreException e) {
+            logger.error("Error reading truststore {}", e.getMessage());
+            return false;
+        }
+    }
+
+    private Certificate getCertificate(KeyStore trustStore, String alias) {
+        try {
+            return trustStore.getCertificate(alias);
+        } catch (KeyStoreException e) {
+            logger.error("Error reading truststore {}", e.getMessage());
+            return null;
+        }
+    }
+
+    private static synchronized KeyStore getTrustStore(String trustStorePath, String trustStorePass)
+        throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
+        if (clientTrustStore == null) {
+            KeyStore store = KeyStore.getInstance(KeyStore.getDefaultType());
+            store.load(new FileInputStream(ResourceUtils.getFile(trustStorePath)), trustStorePass.toCharArray());
+            clientTrustStore = store;
+        }
+        return clientTrustStore;
+    }
+
+    private SslContext createSslContextRejectingUntrustedPeers(String trustStorePath, String trustStorePass)
+        throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
+
+        final KeyStore trustStore = getTrustStore(trustStorePath, trustStorePass);
+        List<Certificate> certificateList = Collections.list(trustStore.aliases()).stream() //
+            .filter(alias -> isCertificateEntry(trustStore, alias)) //
+            .map(alias -> getCertificate(trustStore, alias)) //
+            .collect(Collectors.toList());
+        final X509Certificate[] certificates = certificateList.toArray(new X509Certificate[certificateList.size()]);
+
         return SslContextBuilder.forClient() //
-            .trustManager(InsecureTrustManagerFactory.INSTANCE) //
+            .trustManager(certificates) //
             .build();
     }
 
-    private static WebClient createWebClient(String baseUrl, SslContext sslContext) {
-        TcpClient tcpClient = TcpClient.create() //
+    private SslContext createSslContext()
+        throws NoSuchAlgorithmException, CertificateException, KeyStoreException, IOException {
+        if (this.clientConfig.isTrustStoreUsed()) {
+            return createSslContextRejectingUntrustedPeers(this.clientConfig.trustStore(),
+                this.clientConfig.trustStorePassword());
+        } else {
+            // Trust anyone
+            return SslContextBuilder.forClient() //
+                .trustManager(InsecureTrustManagerFactory.INSTANCE) //
+                .build();
+        }
+    }
+
+    private WebClient createWebClient(String baseUrl, SslContext sslContext) {
+        ConnectionProvider connectionProvider = ConnectionProvider.newConnection();
+        TcpClient tcpClient = TcpClient.create(connectionProvider) //
             .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000) //
             .secure(c -> c.sslContext(sslContext)) //
+
             .doOnConnected(connection -> {
-                connection.addHandler(new ReadTimeoutHandler(10));
-                connection.addHandler(new WriteTimeoutHandler(30));
+                connection.addHandlerLast(new ReadTimeoutHandler(30));
+                connection.addHandlerLast(new WriteTimeoutHandler(30));
             });
         HttpClient httpClient = HttpClient.from(tcpClient);
         ReactorClientHttpConnector connector = new ReactorClientHttpConnector(httpClient);
 
+        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder() //
+            .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(-1)) //
+            .build();
+
         return WebClient.builder() //
             .clientConnector(connector) //
             .baseUrl(baseUrl) //
+            .exchangeStrategies(exchangeStrategies) //
             .build();
     }
 
@@ -163,7 +304,7 @@ public class AsyncRestClient {
             try {
                 SslContext sslContext = createSslContext();
                 this.webClient = createWebClient(this.baseUrl, sslContext);
-            } catch (SSLException e) {
+            } catch (Exception e) {
                 logger.error("Could not create WebClient {}", e.getMessage());
                 return Mono.error(e);
             }
