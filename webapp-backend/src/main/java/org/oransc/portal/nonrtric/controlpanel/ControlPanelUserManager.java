@@ -100,7 +100,7 @@ public class ControlPanelUserManager {
      *
      * @return List of EcompUser objects, possibly empty
      */
-    public List<EcompUser> getUsers() {
+    public synchronized List<EcompUser> getUsers() {
         return this.users;
     }
 
@@ -112,7 +112,7 @@ public class ControlPanelUserManager {
      * @return User object; null if Id is not known
      */
     public EcompUser getUser(String loginId) {
-        for (EcompUser u : this.users) {
+        for (EcompUser u : getUsers()) {
             if (u.getLoginId().equals(loginId)) {
                 logger.debug("getUser: match on {}", loginId);
                 return u;
