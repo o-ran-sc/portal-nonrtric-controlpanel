@@ -1,0 +1,10 @@
+---
+distribution_type: container
+container_release_tag: 2.0.0
+container_pull_registry: nexus3.o-ran-sc.org:10004
+container_push_registry: nexus3.o-ran-sc.org:10002
+project: nonrtric
+ref: 95bc56f19620e94a84a0203d965fb57a74368718
+containers:
+    - name: nonrtric-controlpanel
+      version: 2.0.0
