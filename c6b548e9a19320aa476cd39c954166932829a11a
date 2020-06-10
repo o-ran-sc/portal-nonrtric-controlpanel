@@ -45,6 +45,30 @@
       "revId": "c6b548e9a19320aa476cd39c954166932829a11a",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7782e38_d670999f",
+        "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-06-10T11:57:57Z",
+      "side": 1,
+      "message": "I think that the RIC name is not visible. \nThe first line show how it looks now. \nThe next two lines are suggestions on how it could be more visible. \nMaybe this looks OK?\n[ric_1] a25ca8fa-0153-4319-aa0a-53deac6c93e4",
+      "parentUuid": "e36de50f_760537d6",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 73
+      },
+      "revId": "c6b548e9a19320aa476cd39c954166932829a11a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
