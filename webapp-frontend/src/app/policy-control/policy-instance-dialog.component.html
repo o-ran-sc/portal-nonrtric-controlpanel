@@ -19,7 +19,7 @@
   -->
 
 <div class="text-muted logo" fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="space-around center">
-    <div *ngIf="policyInstanceId">{{policyInstanceId}}</div>
+    <div *ngIf="policyInstanceId">{{policyInstanceId}} {{this.ric}}</div>
 </div>
 <div class="mat-elevation-z8 header row" [ngClass]="{'header-dark': darkMode}">
     <div class="logo">
@@ -40,25 +40,20 @@
     fxLayoutAlign.lt-sm="flex-start center">
 
     <mat-card class="card" [ngClass]="{'card-dark': darkMode}">
-        <h4>
-            Near-RT RIC
-        </h4>
         <mat-form-field *ngIf="!this.policyInstanceId">
             <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric"
-                placeholder="Select Near-RT RIC">
+                placeholder="Target"
+                matTooltip="Element where the policy instance resides, e.g. a gNodeB or Near-RT RIC">
                 <mat-option *ngFor="let ric of this.allRics" [value]="ric">
                     {{ric}}
                 </mat-option>
             </mat-select>
             <div *ngIf="ricSelector.invalid && (ricSelector.dirty || ricSelector.touched)">
                 <div *ngIf="ricSelector.errors.required">
-                    <mat-error role="alert">A Near-RT RIC must be selected.</mat-error>
+                    <mat-error role="alert">This field is required.</mat-error>
                 </div>
             </div>
         </mat-form-field>
-        <div *ngIf="this.policyInstanceId">
-            {{this.ric}}
-        </div>
 
         <h4 class="default-cursor" (click)="toggleVisible('form')">
             <mat-icon matTooltip="Properties">{{isVisible.form ? 'expand_less' : 'expand_more'}}</mat-icon>
