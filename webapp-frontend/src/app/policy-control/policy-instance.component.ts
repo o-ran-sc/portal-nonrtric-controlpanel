@@ -87,11 +87,20 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
                 if (this.isSchemaEmpty()) {
                     this.dialog.open(
                         NoTypePolicyInstanceDialogComponent,
-                        getPolicyDialogProperties(this.policyType, instance, this.darkMode));
+                        getPolicyDialogProperties(this.policyType, instance, this.darkMode)).afterClosed().subscribe(
+                           (_: any) => {
+                                this.instanceDataSource.loadTable();
+                           }
+                        );
                 } else {
                     this.dialog.open(
                         PolicyInstanceDialogComponent,
-                        getPolicyDialogProperties(this.policyType, instance, this.darkMode));
+                        getPolicyDialogProperties(this.policyType, instance, this.darkMode)).afterClosed().subscribe(
+                           (_: any) => {
+                                this.instanceDataSource.loadTable();
+                           }
+                        );
+
                 }
             },
             (httpError: HttpErrorResponse) => {
