@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ea2ddf1_f7aa4485",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/ControlPanelUserManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-06-25T13:13:57Z",
+      "side": 1,
+      "message": "this change makes no difference. An object reference in java is atomic. \nIf this class needs to be thread safe, there are a bunch of of problems (and this is not one of them). \nI do not think this class is used, there is no support for users.",
+      "range": {
+        "startLine": 103,
+        "startChar": 3,
+        "endLine": 103,
+        "endChar": 52
+      },
+      "revId": "27cc6dbdc2e82edc20d7d22813dabbca326d1f30",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4843de70_cd6c4bc2",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/ControlPanelUserManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-06-25T13:13:57Z",
+      "side": 1,
+      "message": "This change does not solve any threading issue. \nThe threading problem here is that the function iterates through a list, which can be be changed by other functions. \nEither this function needs to iterate through a copy of the list or that this function should be synchronized.",
+      "range": {
+        "startLine": 115,
+        "startChar": 7,
+        "endLine": 115,
+        "endChar": 40
+      },
+      "revId": "27cc6dbdc2e82edc20d7d22813dabbca326d1f30",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
