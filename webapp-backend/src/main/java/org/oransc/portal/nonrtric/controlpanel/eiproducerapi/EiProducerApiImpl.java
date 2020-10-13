@@ -20,8 +20,11 @@
 package org.oransc.portal.nonrtric.controlpanel.eiproducerapi;
 
 import com.google.gson.GsonBuilder;
+
 import java.lang.invoke.MethodHandles;
+
 import javax.net.ssl.SSLException;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;

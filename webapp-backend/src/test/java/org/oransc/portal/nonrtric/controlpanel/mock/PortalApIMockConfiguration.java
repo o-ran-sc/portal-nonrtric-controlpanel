@@ -18,7 +18,7 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-package org.oransc.portal.nonrtric.controlpanel.config;
+package org.oransc.portal.nonrtric.controlpanel.mock;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;

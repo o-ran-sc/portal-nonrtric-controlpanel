@@ -86,7 +86,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * Swagger-generated documentation.
      */
     @SuppressWarnings("squid:S1075") // URIs should not be hardcoded
-    protected static final String[] OPEN_PATHS = { //
+    public static final String[] OPEN_PATHS = { //
         "/v2/api-docs", //
         "/swagger-resources/**", //
         "/swagger-ui.html", //

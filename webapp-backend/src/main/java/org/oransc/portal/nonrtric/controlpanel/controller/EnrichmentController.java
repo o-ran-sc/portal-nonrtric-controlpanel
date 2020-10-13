@@ -19,7 +19,10 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.controller;
 
+import io.swagger.annotations.ApiOperation;
+
 import java.lang.invoke.MethodHandles;
+
 import org.oransc.portal.nonrtric.controlpanel.ControlPanelConstants;
 import org.oransc.portal.nonrtric.controlpanel.eiproducerapi.EiProducerApi;
 import org.slf4j.Logger;
@@ -33,7 +36,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import io.swagger.annotations.ApiOperation;
 
 /**
  * Proxies calls from the front end to the EI Producer API.

@@ -18,7 +18,7 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-package org.oransc.portal.nonrtric.controlpanel.config;
+package org.oransc.portal.nonrtric.controlpanel.mock;
 
 import com.google.gson.GsonBuilder;
 
