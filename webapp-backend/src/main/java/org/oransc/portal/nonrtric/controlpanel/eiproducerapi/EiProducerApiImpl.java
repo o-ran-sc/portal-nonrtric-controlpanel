@@ -129,6 +129,7 @@ public class EiProducerApiImpl implements EiProducerApi {
             return new ResponseEntity<>("Could not create WebClient " + e.getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(throwable.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(throwable.getClass().getName() + ": " + throwable.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
