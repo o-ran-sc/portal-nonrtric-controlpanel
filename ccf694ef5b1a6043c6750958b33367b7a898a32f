@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e645065d_745e6926",
+        "filename": "webapp-backend/src/test/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2020-10-14T15:48:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b1b0b5c_35fbaef2",
+      "range": {
+        "startLine": 60,
+        "startChar": 22,
+        "endLine": 60,
+        "endChar": 34
+      },
+      "revId": "ccf694ef5b1a6043c6750958b33367b7a898a32f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01ab4c2f_ba5fd327",
         "filename": "webapp-backend/src/test/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImplTest.java",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "ccf694ef5b1a6043c6750958b33367b7a898a32f",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "449dd2eb_3c9e1c5b",
+        "filename": "webapp-backend/src/test/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2020-10-14T15:48:46Z",
+      "side": 1,
+      "message": "Tried to use annotation but then I was getting NullPointerException. But anyways, I have renamed it to restClientMock.",
+      "parentUuid": "01ab4c2f_ba5fd327",
+      "revId": "ccf694ef5b1a6043c6750958b33367b7a898a32f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "73294ce9_22a36eef",
+        "filename": "webapp-backend/src/test/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2020-10-14T15:48:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb633220_e5e921a7",
+      "range": {
+        "startLine": 94,
+        "startChar": 25,
+        "endLine": 94,
+        "endChar": 44
+      },
+      "revId": "ccf694ef5b1a6043c6750958b33367b7a898a32f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f387a356_522c34b7",
         "filename": "webapp-backend/src/test/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImplTest.java",
         "patchSetId": 2
@@ -85,6 +151,30 @@
       "revId": "ccf694ef5b1a6043c6750958b33367b7a898a32f",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e10b708_3efda646",
+        "filename": "webapp-backend/src/test/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2020-10-14T15:48:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f387a356_522c34b7",
+      "range": {
+        "startLine": 132,
+        "startChar": 25,
+        "endLine": 132,
+        "endChar": 44
+      },
+      "revId": "ccf694ef5b1a6043c6750958b33367b7a898a32f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
