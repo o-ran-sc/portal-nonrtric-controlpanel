@@ -16,6 +16,24 @@
       "revId": "6a0d68af8c49785d4373f9e188033ece5ad498fe",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aba14b37_48134597",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/model/EiJob.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000247
+      },
+      "writtenOn": "2020-10-14T08:16:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "111d22c5_985c6447",
+      "revId": "6a0d68af8c49785d4373f9e188033ece5ad498fe",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
