@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "111d22c5_985c6447",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/model/EiJob.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-10-14T06:40:29Z",
+      "side": 1,
+      "message": "Since these classes are only used for test, I think they should be under test. \n\nI suggest renaming the catalogue webapp-backend/src/test/java/org/oransc/portal/nonrtric/controlpanel/config \nto mocks and to put these classes there instead.",
+      "revId": "6a0d68af8c49785d4373f9e188033ece5ad498fe",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
