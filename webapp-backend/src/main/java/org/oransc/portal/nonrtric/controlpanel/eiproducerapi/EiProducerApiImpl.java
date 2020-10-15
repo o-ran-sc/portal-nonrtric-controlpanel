@@ -19,23 +19,16 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.eiproducerapi;
 
-import com.google.gson.GsonBuilder;
-
 import java.lang.invoke.MethodHandles;
-
-import javax.net.ssl.SSLException;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.oransc.portal.nonrtric.controlpanel.exceptionhandler.ResponseException;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
 @Component("EiProducerApi")
 public class EiProducerApiImpl implements EiProducerApi {
@@ -48,9 +41,7 @@ public class EiProducerApiImpl implements EiProducerApi {
 
     private final AsyncRestClient webClient;
 
-    private static com.google.gson.Gson gson = new GsonBuilder() //
-        .serializeNulls() //
-        .create(); //
+    private static ResponseException responseException = new ResponseException();
 
     @Autowired
     public EiProducerApiImpl(
@@ -101,7 +92,7 @@ public class EiProducerApiImpl implements EiProducerApi {
             }
             return new ResponseEntity<>(new JSONArray(rsp.getBody()).toString(), rsp.getStatusCode());
         } catch (Exception e) {
-            return handleException(e);
+            return responseException.handleException(e);
         }
     }
 
@@ -113,23 +104,7 @@ public class EiProducerApiImpl implements EiProducerApi {
             }
             return new ResponseEntity<>(new JSONObject(rsp.getBody()).toString(), rsp.getStatusCode());
         } catch (Exception e) {
-            return handleException(e);
+            return responseException.handleException(e);
         }
-    }
-
-    private ResponseEntity<String> handleException(Exception throwable) {
-        if (throwable instanceof HttpClientErrorException) {
-            HttpClientErrorException e = (HttpClientErrorException) throwable;
-            return new ResponseEntity<>(e.getMessage(), e.getStatusCode());
-        } else if (throwable instanceof HttpServerErrorException) {
-            HttpServerErrorException e = (HttpServerErrorException) throwable;
-            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
-        } else if (throwable instanceof SSLException) {
-            SSLException e = (SSLException) throwable;
-            return new ResponseEntity<>("Could not create WebClient " + e.getMessage(),
-                HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(throwable.getClass().getName() + ": " + throwable.getMessage(),
-                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
