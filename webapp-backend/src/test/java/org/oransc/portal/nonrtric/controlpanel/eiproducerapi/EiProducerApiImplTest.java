@@ -32,7 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Mono;
 
-public class EiProducerApiImplTest {
+class EiProducerApiImplTest {
     private static final String URL_EI_TYPES = "/eitypes";
     private static final String EI_TYPE_1 = "eitype1";
     private static final String EI_TYPE_2 = "eitype2";

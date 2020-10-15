@@ -26,15 +26,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import javax.net.ssl.SSLException;
-
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
@@ -43,14 +39,13 @@ import org.oransc.portal.nonrtric.controlpanel.model.PolicyInstances;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyType;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyTypes;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
+import org.oransc.portal.nonrtric.controlpanel.util.ErrorResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
 @Component("PolicyAgentApi")
 public class PolicyAgentApiImpl implements PolicyAgentApi {
@@ -96,7 +91,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             }
             return new ResponseEntity<>(gson.toJson(result), rsp.getStatusCode());
         } catch (Exception e) {
-            return handleException(e);
+            return ErrorResponseHandler.handleException(e);
         }
     }
 
@@ -117,7 +112,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             }
             return new ResponseEntity<>(gson.toJson(result), rsp.getStatusCode());
         } catch (Exception e) {
-            return handleException(e);
+            return ErrorResponseHandler.handleException(e);
         }
     }
 
@@ -130,7 +125,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             String str = obj.toString();
             return new ResponseEntity<>(str, rsp.getStatusCode());
         } catch (Exception e) {
-            ResponseEntity<String> rsp = handleException(e);
+            ResponseEntity<String> rsp = ErrorResponseHandler.handleException(e);
             return new ResponseEntity<>(rsp.getBody(), rsp.getStatusCode());
         }
     }
@@ -146,7 +141,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             webClient.putForEntity(url, jsonStr).block();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return handleException(e);
+            return ErrorResponseHandler.handleException(e);
         }
     }
 
@@ -157,7 +152,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             webClient.deleteForEntity(url).block();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return handleException(e);
+            return ErrorResponseHandler.handleException(e);
         }
     }
 
@@ -186,22 +181,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             String json = gson.toJson(result);
             return new ResponseEntity<>(json, HttpStatus.OK);
         } catch (Exception e) {
-            return handleException(e);
+            return ErrorResponseHandler.handleException(e);
         }
-    }
-
-    private ResponseEntity<String> handleException(Exception throwable) {
-        if (throwable instanceof HttpClientErrorException) {
-            HttpClientErrorException e = (HttpClientErrorException) throwable;
-            return new ResponseEntity<>(e.getMessage(), e.getStatusCode());
-        } else if (throwable instanceof HttpServerErrorException) {
-            HttpServerErrorException e = (HttpServerErrorException) throwable;
-            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
-        } else if (throwable instanceof SSLException) {
-            SSLException e = (SSLException) throwable;
-            return new ResponseEntity<>("Could not create WebClient " + e.getMessage(),
-                HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(throwable.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
