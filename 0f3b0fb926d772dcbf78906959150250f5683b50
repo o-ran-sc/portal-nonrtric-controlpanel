@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1473bc7b_db3fba23",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/exceptionhandler/ResponseException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-10-16T08:41:58Z",
+      "side": 1,
+      "message": "Or ResponseExceptionHelper",
+      "parentUuid": "31f50a10_9e746c21",
+      "range": {
+        "startLine": 28,
+        "startChar": 13,
+        "endLine": 28,
+        "endChar": 31
+      },
+      "revId": "0f3b0fb926d772dcbf78906959150250f5683b50",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8479c1d_144a81fa",
         "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/exceptionhandler/ResponseException.java",
         "patchSetId": 1
