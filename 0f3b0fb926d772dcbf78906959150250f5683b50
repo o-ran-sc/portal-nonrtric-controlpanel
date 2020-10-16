@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f8606fca_b0997a64",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/exceptionhandler/ResponseException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2020-10-16T10:48:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "059cecd8_cc7fe130",
+      "range": {
+        "startLine": 20,
+        "startChar": 48,
+        "endLine": 20,
+        "endChar": 64
+      },
+      "revId": "0f3b0fb926d772dcbf78906959150250f5683b50",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31f50a10_9e746c21",
         "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/exceptionhandler/ResponseException.java",
         "patchSetId": 1
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "d01e5aab_a27540b3",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/exceptionhandler/ResponseException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2020-10-16T10:48:01Z",
+      "side": 1,
+      "message": "Renamed this to ErrorResponseHandler since Sonar does not allow to have Exception in the class name without extending \"Exception\".",
+      "parentUuid": "1473bc7b_db3fba23",
+      "range": {
+        "startLine": 28,
+        "startChar": 13,
+        "endLine": 28,
+        "endChar": 31
+      },
+      "revId": "0f3b0fb926d772dcbf78906959150250f5683b50",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8479c1d_144a81fa",
         "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/exceptionhandler/ResponseException.java",
         "patchSetId": 1
@@ -116,6 +164,30 @@
       "revId": "0f3b0fb926d772dcbf78906959150250f5683b50",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aadba25_1f78b18d",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/exceptionhandler/ResponseException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2020-10-16T10:48:01Z",
+      "side": 1,
+      "message": "Changed to static method. However, I think it should not be moved to AsyncRestClient since it does not only handle REST related exceptions, but also other exceptions, JSONException for example.",
+      "parentUuid": "757371d1_b78f68f8",
+      "range": {
+        "startLine": 30,
+        "startChar": 34,
+        "endLine": 30,
+        "endChar": 49
+      },
+      "revId": "0f3b0fb926d772dcbf78906959150250f5683b50",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
