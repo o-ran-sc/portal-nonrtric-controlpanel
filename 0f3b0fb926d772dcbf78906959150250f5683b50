@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31f50a10_9e746c21",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/exceptionhandler/ResponseException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-10-16T08:41:21Z",
+      "side": 1,
+      "message": "I would suggest calling this ResponseExceptionHandler, since it is not an Exception as such.",
+      "range": {
+        "startLine": 28,
+        "startChar": 13,
+        "endLine": 28,
+        "endChar": 31
+      },
+      "revId": "0f3b0fb926d772dcbf78906959150250f5683b50",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8479c1d_144a81fa",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/exceptionhandler/ResponseException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-10-16T08:41:21Z",
+      "side": 1,
+      "message": "I suggest making this a static method since it uses no instance variables and therefore have no side effects. Then no instance of the class is needed to use it.",
+      "range": {
+        "startLine": 30,
+        "startChar": 34,
+        "endLine": 30,
+        "endChar": 49
+      },
+      "revId": "0f3b0fb926d772dcbf78906959150250f5683b50",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
