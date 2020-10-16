@@ -92,6 +92,30 @@
       "revId": "0f3b0fb926d772dcbf78906959150250f5683b50",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "757371d1_b78f68f8",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/exceptionhandler/ResponseException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-10-16T08:56:28Z",
+      "side": 1,
+      "message": "Or make this a static method in the AsyncRestClient",
+      "parentUuid": "c8479c1d_144a81fa",
+      "range": {
+        "startLine": 30,
+        "startChar": 34,
+        "endLine": 30,
+        "endChar": 49
+      },
+      "revId": "0f3b0fb926d772dcbf78906959150250f5683b50",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
