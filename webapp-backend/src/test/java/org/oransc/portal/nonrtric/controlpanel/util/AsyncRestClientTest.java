@@ -20,21 +20,18 @@
 
 package org.oransc.portal.nonrtric.controlpanel.util;
 
-import io.netty.util.internal.logging.InternalLoggerFactory;
-import io.netty.util.internal.logging.JdkLoggerFactory;
-
 import java.io.IOException;
-
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-
+import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty.util.internal.logging.JdkLoggerFactory;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import reactor.util.Loggers;
@@ -43,6 +40,8 @@ class AsyncRestClientTest {
     private static final String BASE_URL = "BaseUrl";
     private static final String REQUEST_URL = "/test";
     private static final String TEST_JSON = "{\"type\":\"type1\"}";
+    private static final String USERNAME = "user";
+    private static final String PASSWORD = "pass";
     private static final int SUCCESS_CODE = 200;
     private static final int ERROR_CODE = 500;
 
@@ -91,6 +90,15 @@ class AsyncRestClientTest {
 
         Mono<String> returnedMono = clientUnderTest.put(REQUEST_URL, TEST_JSON);
         StepVerifier.create(returnedMono).expectNext(TEST_JSON).expectComplete().verify();
+    }
+
+    @Test
+    void testPutWithoutBodyNoError() {
+        mockWebServer.enqueue(new MockResponse().setResponseCode(SUCCESS_CODE) //
+            .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
+
+        Mono<ResponseEntity<String>> returnedMono = clientUnderTest.putForEntity(REQUEST_URL);
+        StepVerifier.create(returnedMono).expectNextCount(1).expectComplete().verify();
     }
 
     @Test

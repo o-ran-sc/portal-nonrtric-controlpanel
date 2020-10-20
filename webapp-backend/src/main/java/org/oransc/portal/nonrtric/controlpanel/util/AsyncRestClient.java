@@ -20,13 +20,6 @@
 
 package org.oransc.portal.nonrtric.controlpanel.util;
 
-import io.netty.channel.ChannelOption;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
@@ -40,20 +33,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
 import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.lang.Nullable;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.RequestHeadersSpec;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-
+import io.netty.channel.ChannelOption;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
@@ -90,42 +86,6 @@ public class AsyncRestClient {
     public AsyncRestClient(String baseUrl, WebClientConfig config) {
         this.baseUrl = baseUrl;
         this.clientConfig = config;
-    }
-
-    public Mono<ResponseEntity<String>> postForEntity(String uri, @Nullable String body) {
-        Object traceTag = createTraceTag();
-        logger.debug("{} POST uri = '{}{}''", traceTag, baseUrl, uri);
-        logger.trace("{} POST body: {}", traceTag, body);
-        Mono<String> bodyProducer = body != null ? Mono.just(body) : Mono.empty();
-        return getWebClient() //
-            .flatMap(client -> {
-                RequestHeadersSpec<?> request = client.post() //
-                    .uri(uri) //
-                    .contentType(MediaType.APPLICATION_JSON) //
-                    .body(bodyProducer, String.class);
-                return retrieve(traceTag, request);
-            });
-    }
-
-    public Mono<String> post(String uri, @Nullable String body) {
-        return postForEntity(uri, body) //
-            .flatMap(this::toBody);
-    }
-
-    public Mono<String> postWithAuthHeader(String uri, String body, String username, String password) {
-        Object traceTag = createTraceTag();
-        logger.debug("{} POST (auth) uri = '{}{}''", traceTag, baseUrl, uri);
-        logger.trace("{} POST body: {}", traceTag, body);
-        return getWebClient() //
-            .flatMap(client -> {
-                RequestHeadersSpec<?> request = client.post() //
-                    .uri(uri) //
-                    .headers(headers -> headers.setBasicAuth(username, password)) //
-                    .contentType(MediaType.APPLICATION_JSON) //
-                    .bodyValue(body);
-                return retrieve(traceTag, request) //
-                    .flatMap(this::toBody);
-            });
     }
 
     public Mono<ResponseEntity<String>> putForEntity(String uri, String body) {
