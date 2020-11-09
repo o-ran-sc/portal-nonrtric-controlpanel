@@ -56,10 +56,16 @@ import { ControlpanelRoutingModule } from './controlpanel-routing.module';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import { UiService } from './services/ui/ui.service';
 import { CookieModule } from 'ngx-cookie';
+import { NodeModulesComponent } from './node-modules/node-modules.component';
+import { EICardComponent } from './ui/ei-card/ei-card.component';
+import { EICoordinatorComponent } from './ei-coordinator/ei-coordinator.component';
+
 
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
+    EICardComponent,
+    EICoordinatorComponent,
     ErrorDialogComponent,
     FooterComponent,
     MainComponent,
@@ -69,7 +75,8 @@ import { CookieModule } from 'ngx-cookie';
     PolicyInstanceComponent,
     PolicyInstanceDialogComponent,
     ControlpanelComponent,
-    SidenavListComponent
+    SidenavListComponent,
+    NodeModulesComponent
   ],
   imports: [
     BrowserModule,

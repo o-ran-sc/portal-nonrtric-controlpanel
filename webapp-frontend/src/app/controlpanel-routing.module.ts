@@ -23,11 +23,13 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './main/main.component';
 import { PolicyControlComponent } from './policy-control/policy-control.component';
+import { EICoordinatorComponent } from './ei-coordinator/ei-coordinator.component';
 
 
 const routes: Routes = [
     { path: '', component: MainComponent },
-    { path: 'policy', component: PolicyControlComponent }
+    { path: 'policy', component: PolicyControlComponent },
+    { path: 'ei-coordinator', component: EICoordinatorComponent }
 ];
 
 @NgModule({
