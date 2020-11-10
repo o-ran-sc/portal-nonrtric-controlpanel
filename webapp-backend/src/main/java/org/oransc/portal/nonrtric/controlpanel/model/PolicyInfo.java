@@ -20,6 +20,9 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
+
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 
@@ -27,16 +30,35 @@ import org.immutables.value.Value;
 @Gson.TypeAdapters
 public interface PolicyInfo {
 
+    @SerializedName("policy_id")
+    @JsonProperty("policy_id")
     public String id();
 
+    @SerializedName("policytype_id")
+    @JsonProperty("policytype_id")
     public String type();
 
+    @SerializedName("ric_id")
+    @JsonProperty("ric_id")
     public String ric();
 
+    @SerializedName("policy_data")
+    @JsonProperty("policy_data")
     public Object json();
 
+    @SerializedName("service_id")
+    @JsonProperty("service_id")
     public String service();
 
+    @SerializedName("lastModified")
+    @JsonProperty("lastModified")
     public String lastModified();
 
+    @SerializedName("status_notification_uri")
+    @JsonProperty("status_notification_uri")
+    public String status_notification_uri();
+
+    @SerializedName("transient")
+    @JsonProperty("transient")
+    public boolean isTransient();
 }

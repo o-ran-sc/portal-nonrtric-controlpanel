@@ -119,19 +119,12 @@ public class PolicyControllerMockConfiguration {
             PolicyType policyType = new PolicyType("", "{}");
             types.put("", policyType);
 
-            String schema = getStringFromFile("demo-policy-schema-1.json");
+            String schema = getStringFromFile("STD2/qos-agent-modified.json");
             policyType = new PolicyType("type2", schema);
             types.put("type2", policyType);
 
-            schema = getStringFromFile("demo-policy-schema-2.json");
-            policyType = new PolicyType("type3", schema);
-            types.put("type3", policyType);
-
-            schema = getStringFromFile("demo-policy-schema-3.json");
-            policyType = new PolicyType("type4", schema);
-            types.put("type4", policyType);
-
             putInstance("", "123", "{\"data\":\"data\"}", "ric_1");
+            putInstance("type2", "456", "{\"data\":\"data\"}", "ric_2");
         }
 
         private String getStringFromFile(String path) {
@@ -154,8 +147,16 @@ public class PolicyControllerMockConfiguration {
         }
 
         void putInstance(String typeId, String instanceId, Object instanceData, String ric) {
-            PolicyInfo i = ImmutablePolicyInfo.builder().json(instanceData).lastModified(getTimeStampUTC())
-                .id(instanceId).ric(ric).service("service").type(typeId).build();
+            PolicyInfo i = ImmutablePolicyInfo.builder() //
+                .json(instanceData) //
+                .lastModified(getTimeStampUTC()) //
+                .id(instanceId) //
+                .ric(ric) //
+                .service("service") //
+                .type(typeId) //
+                .isTransient(false) //
+                .status_notification_uri("https://example.com") //
+                .build(); //
             instances.put(instanceId, i);
         }
 

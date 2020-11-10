@@ -72,23 +72,25 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<String> getAllPolicyTypes() {
-        final String TITLE = "title";
         try {
-            final String url = "/policy_schemas";
+            final String url = "/v2/policy-types";
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             if (!rsp.getStatusCode().is2xxSuccessful()) {
                 return rsp;
             }
 
             PolicyTypes result = new PolicyTypes();
-            JsonArray schemas = JsonParser.parseString(rsp.getBody()).getAsJsonArray();
-            for (JsonElement schema : schemas) {
-                JsonObject schemaObj = schema.getAsJsonObject();
-                String title = "";
-                if (schemaObj.get(TITLE) != null) {
-                    title = schemaObj.get(TITLE).getAsString();
-                }
-                PolicyType pt = new PolicyType(title, schemaObj.toString());
+            JsonArray policytype_ids = JsonParser.parseString(rsp.getBody()).getAsJsonObject() //
+                .get("policytype_ids") //
+                .getAsJsonArray(); //
+
+            logger.debug("policytype_ids '{}'", policytype_ids);
+            for (JsonElement policytype_id : policytype_ids) {
+
+                String type_id = policytype_id.getAsString();
+
+                JsonObject schemaObj = getIndividualPolicySchema(type_id);
+                PolicyType pt = new PolicyType(type_id, schemaObj.toString());
                 result.add(pt);
             }
             return new ResponseEntity<>(gson.toJson(result), rsp.getStatusCode());
@@ -97,21 +99,62 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
         }
     }
 
+    public JsonObject getIndividualPolicySchema(String id) {
+        try {
+            final String url = "/v2/policy-types/" + id;
+            ResponseEntity<String> rsp = webClient.getForEntity(url).block();
+            if (!rsp.getStatusCode().is2xxSuccessful()) {
+                return null;
+            }
+
+            JsonObject policy_schema = JsonParser.parseString(rsp.getBody()).getAsJsonObject() //
+                .get("policy_schema") //
+                .getAsJsonObject(); //
+
+            return policy_schema;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String getTimeStampUTC() {
+        return java.time.Instant.now().toString();
+    }
+
     @Override
     public ResponseEntity<String> getPolicyInstancesForType(String type) {
         try {
-            String url = "/policies?type=" + type;
+            String url = "/v2/policies?policytype_id=" + type;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             if (!rsp.getStatusCode().is2xxSuccessful()) {
                 return rsp;
             }
 
-            Type listType = new TypeToken<List<ImmutablePolicyInfo>>() {}.getType();
-            List<PolicyInfo> rspParsed = gson.fromJson(rsp.getBody(), listType);
+            JsonArray policyInstances = JsonParser.parseString(rsp.getBody()).getAsJsonObject() //
+                .get("policy_ids") //
+                .getAsJsonArray(); //
+
             PolicyInstances result = new PolicyInstances();
-            for (PolicyInfo p : rspParsed) {
+
+            for (JsonElement policy_id : policyInstances) {
+
+                String p_id = policy_id.getAsString();
+
+                ResponseEntity<Object> ans = getPolicyInstance(p_id);
+
+                JsonObject policy_info = JsonParser.parseString(ans.getBody().toString()).getAsJsonObject(); //
+
+                PolicyInfo p = ImmutablePolicyInfo.builder().id(policy_info.get("policy_id").getAsString()) //
+                    .isTransient(policy_info.get("transient").getAsBoolean()) //
+                    .json(policy_info.get("policy_data").getAsJsonObject()).lastModified(getTimeStampUTC()) //
+                    .ric(policy_info.get("ric_id").getAsString()) //
+                    .service(policy_info.get("service_id").getAsString()) //
+                    .status_notification_uri(policy_info.get("status_notification_uri").getAsString()) //
+                    .type(policy_info.get("policytype_id").getAsString()).build(); //
+
                 result.add(p);
             }
+
             return new ResponseEntity<>(gson.toJson(result), rsp.getStatusCode());
         } catch (Exception e) {
             return ErrorResponseHandler.handleException(e);
@@ -119,9 +162,9 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     }
 
     @Override
-    public ResponseEntity<Object> getPolicyInstance(String id) {
+    public ResponseEntity<Object> getPolicyInstance(String policyInstanceId) {
         try {
-            String url = "/policy?id=" + id;
+            String url = "/v2/policies/" + policyInstanceId;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             JsonObject obj = JsonParser.parseString(rsp.getBody()).getAsJsonObject();
             String str = obj.toString();
@@ -133,13 +176,23 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     }
 
     @Override
-    public ResponseEntity<String> putPolicy(String policyTypeIdString, String policyInstanceId, Object json,
+    public ResponseEntity<String> putPolicy(String policyTypeIdString, String policyInstanceId, Object instance,
         String ric) {
-        String url =
-            "/policy?type=" + policyTypeIdString + "&id=" + policyInstanceId + "&ric=" + ric + "&service=controlpanel";
+        String url = "/v2/policies/";
 
         try {
-            String jsonStr = json.toString();
+            String jsonStr = "{\n" + //
+                " \"policy_id\": \"" + policyInstanceId + "\",\n" + //
+                " \"policytype_id\": \"" + policyTypeIdString + "\",\n" + //
+                " \"ric_id\": \"" + ric + "\",\n" + //
+                " \"policy_data\": " + instance + ",\n" + //
+                " \"service_id\": \"ric-registration\",\n" + //
+                // " \"lastModified\":" + getTimeStampUTC() + ",\n" + //
+                " \"status_notification_uri\": \"http://callback-receiver:8090/callbacks/test\",\n" + //
+                " \"transient\": true\n" + //
+                "}"; //
+            logger.debug("jsonStr '{}'", jsonStr);
+
             webClient.putForEntity(url, jsonStr).block();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
@@ -149,7 +202,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<String> deletePolicy(String policyInstanceId) {
-        String url = "/policy?id=" + policyInstanceId;
+        String url = "/v2/policies/" + policyInstanceId;
         try {
             webClient.deleteForEntity(url).block();
             return new ResponseEntity<>(HttpStatus.OK);
@@ -161,24 +214,33 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     @Value.Immutable
     @Gson.TypeAdapters
     interface RicInfo {
-        public String ricName();
+        public String ric_id();
 
-        public Collection<String> nodeNames();
+        public Collection<String> managed_element_ids();
 
-        public Collection<String> policyTypes();
+        public Collection<String> policytype_ids();
     }
 
     @Override
     public ResponseEntity<String> getRicsSupportingType(String typeName) {
         try {
-            String url = "/rics?policyType=" + typeName;
+            String url = "/v2/rics?policytype_id=" + typeName;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
 
+            if (!rsp.getStatusCode().is2xxSuccessful()) {
+                return rsp;
+            }
+
+            JsonArray rics = JsonParser.parseString(rsp.getBody()).getAsJsonObject() //
+                .get("rics") //
+                .getAsJsonArray(); //
+
             Type listType = new TypeToken<List<ImmutableRicInfo>>() {}.getType();
-            List<RicInfo> rspParsed = gson.fromJson(rsp.getBody(), listType);
+            List<RicInfo> rspParsed = gson.fromJson(gson.toJson(rics), listType);
             Collection<String> result = new ArrayList<>(rspParsed.size());
+
             for (RicInfo ric : rspParsed) {
-                result.add(ric.ricName());
+                result.add(ric.ric_id());
             }
             String json = gson.toJson(result);
             return new ResponseEntity<>(json, HttpStatus.OK);

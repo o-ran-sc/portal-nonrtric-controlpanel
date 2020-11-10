@@ -124,9 +124,8 @@ public class PolicyController {
     @DeleteMapping(POLICIES_NAME + "/{" + POLICY_INSTANCE_ID_NAME + "}")
     @Secured({ControlPanelConstants.ROLE_ADMIN})
     public ResponseEntity<String> deletePolicyInstance( //
-        @RequestParam(POLICY_TYPE_PARAM) String policyTypeIdString,
         @PathVariable(POLICY_INSTANCE_ID_NAME) String policyInstanceId) {
-        logger.debug("deletePolicyInstance typeId: {}, instanceId: {}", policyTypeIdString, policyInstanceId);
+        logger.debug("deletePolicyInstance instanceId: {}", policyInstanceId);
         return this.policyAgentApi.deletePolicy(policyInstanceId);
     }
 
