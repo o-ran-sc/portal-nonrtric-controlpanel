@@ -19,15 +19,23 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.controller;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import io.swagger.annotations.ApiOperation;
 
 import java.lang.invoke.MethodHandles;
-
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.oransc.portal.nonrtric.controlpanel.ControlPanelConstants;
 import org.oransc.portal.nonrtric.controlpanel.eiproducerapi.EiProducerApi;
+import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -50,6 +58,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class EnrichmentController {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    private static com.google.gson.Gson gson = new GsonBuilder() //
+        .serializeNulls() //
+        .create(); //
 
     // Publish paths in constants so tests are easy to write
     public static final String CONTROLLER_PATH = ControlPanelConstants.ENDPOINT_PREFIX + "/enrichment";
@@ -113,6 +125,22 @@ public class EnrichmentController {
     public ResponseEntity<String> getEiJobsForOneEiProducer(@PathVariable(EI_PRODUCER_ID) String eiProducerId) {
         logger.debug("getEiJobsForOneEiProducer {}", eiProducerId);
         return this.eiProducerApi.getEiJobsForOneEiProducer(eiProducerId);
+    }
+
+    @ApiOperation(value = "Get the EI job definitions for one EI producer")
+    @GetMapping(EI_JOBS)
+    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
+    public ResponseEntity<JobInfo[]> getEiJobs() {
+        ResponseEntity<String> response = this.eiProducerApi.getAllEiProducerIds();
+        JsonArray bodyJson = JsonParser.parseString(response.getBody()).getAsJsonArray();
+        List<JobInfo> jobsList = new ArrayList<>();
+        for (JsonElement producerId : bodyJson) {
+            ResponseEntity<String> jobsResponse =
+                this.eiProducerApi.getEiJobsForOneEiProducer(producerId.getAsString());
+            JobInfo jobInfo = gson.fromJson(jobsResponse.getBody(), JobInfo.class);
+            jobsList.add(jobInfo);
+        }
+        return new ResponseEntity<>(jobsList.toArray(new JobInfo[0]), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get the status of an EI producer")
