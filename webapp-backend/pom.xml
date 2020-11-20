@@ -119,6 +119,11 @@ limitations under the License.
             <artifactId>axis2-kernel</artifactId>
             <version>${apache-axis2.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!-- Bridge uses of Apache commons logging, like EPSDK-FW -->
         <dependency>
             <groupId>org.slf4j</groupId>

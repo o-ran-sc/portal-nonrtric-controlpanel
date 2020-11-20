@@ -24,7 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
 import org.springframework.http.HttpStatus;
@@ -37,24 +39,24 @@ class EiProducerApiImplTest {
     private static final String EI_TYPE_1 = "eitype1";
     private static final String EI_TYPE_2 = "eitype2";
     private static final String EI_TYPE_1_INFO_VALID =
-            "{\"ei_producer_ids\":[\"eiprod1\",\"eiprod2\"],\"ei_job_data_schema\":{\"title\":\"eijob1\"}}";
+        "{\"ei_producer_ids\":[\"eiprod1\",\"eiprod2\"],\"ei_job_data_schema\":{\"title\":\"eijob1\"}}";
     private static final String EI_TYPE_1_INFO_INVALID =
-            "{\"ei_producer_ids\":[\"eiprod1\",\"eiprod2\"],\"ei_job_data_schema\":\"title\":\"eijob1\"}}";
+        "{\"ei_producer_ids\":[\"eiprod1\",\"eiprod2\"],\"ei_job_data_schema\":\"title\":\"eijob1\"}}";
     private static final String URL_EI_PRODUCERS = "/eiproducers";
     private static final String EI_PRODUCER_1 = "eiprod1";
     private static final String EI_PRODUCER_2 = "eiprod2";
     private static final String EI_PRODUCER_1_INFO_VALID =
-            "{\"supported_ei_types\":[{\"ei_type_identity\":\"eitype1\",\"ei_job_data_schema\":{\"title\":\"eijob1\"}}]}";
+        "{\"supported_ei_types\":[{\"ei_type_identity\":\"eitype1\",\"ei_job_data_schema\":{\"title\":\"eijob1\"}}]}";
     private static final String EI_PRODUCER_1_INFO_INVALID =
-            "{\"supported_ei_types\":[{\"ei_type_identity\":\"eitype1\",\"ei_job_data_schema\":\"title\":\"eijob1\"}}]}";
+        "{\"supported_ei_types\":[{\"ei_type_identity\":\"eitype1\",\"ei_job_data_schema\":\"title\":\"eijob1\"}}]}";
     private static final String URL_STATUS = "/status";
     private static final String EI_PRODUCER_1_STATUS_VALID = "{\"operational_state\":\"ENABLED\"}";
     private static final String EI_PRODUCER_1_STATUS_INVALID = "\"operational_state\":\"ENABLED\"}";
     private static final String URL_EI_JOBS = "/eijobs";
     private static final String EI_JOB_1_INFO =
-            "{\"ei_job_identity\":\"eijob1\",\"ei_job_data\":{},\"ei_type_identity\":\"eitype1\"}";
+        "{\"ei_job_identity\":\"eijob1\",\"ei_job_data\":{},\"ei_type_identity\":\"eitype1\"}";
     private static final String EI_JOB_2_INFO =
-            "{\"ei_job_identity\":\"eijob2\",\"ei_job_data\":{},\"ei_type_identity\":\"eitype2\"}";
+        "{\"ei_job_identity\":\"eijob2\",\"ei_job_data\":{},\"ei_type_identity\":\"eitype2\"}";
 
     AsyncRestClient restClientMock = mock(AsyncRestClient.class);
     EiProducerApiImpl apiUnderTest = new EiProducerApiImpl(restClientMock);
@@ -176,7 +178,8 @@ class EiProducerApiImplTest {
 
     @Test
     void testGetEiProducerStatusInvalidJson() {
-        whenGetReturnOK(URL_EI_PRODUCERS + "/" + EI_PRODUCER_1 + URL_STATUS, HttpStatus.OK, EI_PRODUCER_1_STATUS_INVALID);
+        whenGetReturnOK(URL_EI_PRODUCERS + "/" + EI_PRODUCER_1 + URL_STATUS, HttpStatus.OK,
+            EI_PRODUCER_1_STATUS_INVALID);
 
         ResponseEntity<String> returnedResp = apiUnderTest.getEiProducerStatus(EI_PRODUCER_1);
 
