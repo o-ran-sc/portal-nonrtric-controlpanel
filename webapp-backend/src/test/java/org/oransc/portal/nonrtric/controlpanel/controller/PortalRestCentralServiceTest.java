@@ -27,7 +27,6 @@ import java.net.URI;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.onap.portalsdk.core.onboarding.util.PortalApiConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -37,19 +36,6 @@ import reactor.core.publisher.Mono;
 class PortalRestCentralServiceTest extends AbstractControllerTest {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    @Test
-    void getAnalyticsTest() {
-        // paths are hardcoded here exactly like the EPSDK-FW library :(
-        URI uri = buildUri(null, PortalApiConstants.API_PREFIX, "/analytics");
-        logger.info("Invoking {}", uri);
-        Mono<ResponseEntity<String>> forEntity = webClient.getForEntity(uri.toString());
-        WebClientResponseException e = assertThrows(WebClientResponseException.class, () -> {
-            forEntity.block();
-        });
-        // No Portal is available so this always fails
-        Assertions.assertTrue(e.getStatusCode().is4xxClientError());
-    }
 
     @Test
     void getErrorPageTest() {
