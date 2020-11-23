@@ -44,7 +44,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
 class PortalAuthManagerTest {
 
     @Value("${portalapi.decryptor}")

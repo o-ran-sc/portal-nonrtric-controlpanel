@@ -152,7 +152,7 @@ public class EnrichmentControllerMockConfiguration {
 
             // Create EiProducer instance
             putEiProducerInstance("prod-1", "http://example.com/", "http://example.com/", "http://example.com/",
-                supported_types, "ENABLED");
+                supported_types, "{\"operational_state\":\"ENABLED\"}");
 
             // Create EiJob instance
             schema = getStringFromFile("job-1.json");
