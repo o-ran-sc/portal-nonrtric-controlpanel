@@ -20,7 +20,14 @@
 
 package org.oransc.portal.nonrtric.controlpanel.util;
 
+import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty.util.internal.logging.JdkLoggerFactory;
+
 import java.io.IOException;
+
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,10 +35,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import io.netty.util.internal.logging.InternalLoggerFactory;
-import io.netty.util.internal.logging.JdkLoggerFactory;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
+
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import reactor.util.Loggers;
@@ -40,8 +44,6 @@ class AsyncRestClientTest {
     private static final String BASE_URL = "BaseUrl";
     private static final String REQUEST_URL = "/test";
     private static final String TEST_JSON = "{\"type\":\"type1\"}";
-    private static final String USERNAME = "user";
-    private static final String PASSWORD = "pass";
     private static final int SUCCESS_CODE = 200;
     private static final int ERROR_CODE = 500;
 

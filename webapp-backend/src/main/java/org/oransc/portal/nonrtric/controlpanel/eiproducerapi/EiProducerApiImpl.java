@@ -20,6 +20,7 @@
 package org.oransc.portal.nonrtric.controlpanel.eiproducerapi;
 
 import java.lang.invoke.MethodHandles;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;

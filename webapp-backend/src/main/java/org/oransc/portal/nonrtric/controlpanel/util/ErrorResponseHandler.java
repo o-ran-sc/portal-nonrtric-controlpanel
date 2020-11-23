@@ -20,6 +20,7 @@
 package org.oransc.portal.nonrtric.controlpanel.util;
 
 import javax.net.ssl.SSLException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
@@ -44,6 +45,6 @@ public class ErrorResponseHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(throwable.getClass().getName() + ": " + throwable.getMessage(),
-                HttpStatus.INTERNAL_SERVER_ERROR);
+            HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
