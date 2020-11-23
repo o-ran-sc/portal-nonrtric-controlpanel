@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
@@ -44,11 +45,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * -Dorg.org.oransc.portal.nonrtric.controlpanel=mock
  * </pre>
  */
+@SuppressWarnings("java:S3577") // Class name should start or end with Test. This is not a test class per se, but a mock
+                                // of the server.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 class ControlPanelTestServer {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    @LocalServerPort
+    private int port;
 
     /*
      * Keeps the test server alive forever. Use a guard so this test is never run by
@@ -58,7 +64,7 @@ class ControlPanelTestServer {
     @EnabledIfSystemProperty(named = "org.oransc.portal.nonrtric.controlpanel", matches = "mock")
     @Test
     void keepServerAlive() {
-        logger.warn("Keeping server alive!");
+        logger.warn("Keeping server alive! Port: " + this.port);
         try {
             synchronized (this) {
                 this.wait();
