@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.oransc.portal.nonrtric.controlpanel.eiproducerapi.EiProducerApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,7 +151,7 @@ public class EnrichmentControllerMockConfiguration {
 
             // Create EiProducer instance
             putEiProducerInstance("prod-1", "http://example.com/", "http://example.com/", "http://example.com/",
-                supported_types, "ENABLED");
+                supported_types, new ProducerStatusInfo(ProducerStatusInfo.OperationalState.ENABLED));
 
             // Create EiJob instance
             schema = getStringFromFile("job-1.json");
@@ -187,7 +186,7 @@ public class EnrichmentControllerMockConfiguration {
         }
 
         void putEiProducerInstance(String id, String creation_url, String deletion_url, String callback_url,
-            List<EiType> supported_types, String status) {
+            List<EiType> supported_types, ProducerStatusInfo status) {
             EiProducer eiProducer = ImmutableEiProducer.builder() //
                 .ei_producer_id(id) //
                 .ei_job_creation_callback_url(creation_url) //

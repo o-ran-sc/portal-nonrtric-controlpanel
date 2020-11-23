@@ -3,7 +3,6 @@
  * O-RAN-SC
  * %%
  * Copyright (C) 2019 Nordix Foundation
- * Modifications Copyright (C) 2020 Nordix Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +17,28 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
+
 package org.oransc.portal.nonrtric.controlpanel.mock;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import org.immutables.gson.Gson;
-import org.immutables.value.Value;
 
-@Value.Immutable
 @Gson.TypeAdapters
-public interface EiProducer {
+public class ProducerStatusInfo {
 
-    public String ei_producer_id();
+    @Gson.TypeAdapters
+    public enum OperationalState {
+        ENABLED, DISABLED
+    }
 
-    public String ei_job_creation_callback_url();
+    @SerializedName("operational_state")
+    @JsonProperty(value = "operational_state", required = true)
+    public final OperationalState opState;
 
-    public String ei_job_deletion_callback_url();
+    public ProducerStatusInfo(OperationalState state) {
+        this.opState = state;
+    }
 
-    public String ei_producer_supervision_callback_url();
-
-    public List<EiType> supported_ei_types();
-
-    public ProducerStatusInfo status();
 }

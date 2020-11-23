@@ -40,7 +40,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 // Need the fake answers from the backend
-@ActiveProfiles("test")
 class AbstractControllerTest {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
