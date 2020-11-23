@@ -23,12 +23,12 @@ package org.oransc.portal.nonrtric.controlpanel;
 import java.lang.invoke.MethodHandles;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
@@ -39,26 +39,26 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * To launch a development server set the environment variable as listed below.
  * This runs a Spring-Boot server with mock back-end beans, and keeps the server
  * alive for manual testing. Supply this JVM argument:
- *
- * <pre>
- * -Dorg.org.oransc.portal.nonrtric.controlpanel=mock
- * </pre>
  */
+@SuppressWarnings("java:S3577") // Class name should start or end with Test. This is not a test class per se, but a mock
+                                // of the server.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
-class ControlPanelTestServer {
+class MockControlPanelBackEnd {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    @LocalServerPort
+    private int port;
 
     /*
      * Keeps the test server alive forever. Use a guard so this test is never run by
      * Jenkins.
      */
     @SuppressWarnings("squid:S2699") // To avoid warning about missing assertion.
-    @EnabledIfSystemProperty(named = "org.oransc.portal.nonrtric.controlpanel", matches = "mock")
     @Test
     void keepServerAlive() {
-        logger.warn("Keeping server alive!");
+        logger.warn("Keeping server alive! Port: " + this.port);
         try {
             synchronized (this) {
                 this.wait();
