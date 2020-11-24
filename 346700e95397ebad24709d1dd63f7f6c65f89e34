@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0343684f_d3157bc2",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/controller/EnrichmentController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2020-11-24T10:39:29Z",
+      "side": 1,
+      "message": "Just a minor comment, i think instead of constructor autowire, if you add @Autowired on eiProducerApi it would do the injection.",
+      "revId": "346700e95397ebad24709d1dd63f7f6c65f89e34",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
