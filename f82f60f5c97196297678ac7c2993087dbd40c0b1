@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a52d6014_8ffa5347",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/controller/EnrichmentController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-11-24T08:30:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35c6e056_fa1a3bb5",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 27
+      },
+      "revId": "f82f60f5c97196297678ac7c2993087dbd40c0b1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4e74d83_7f28edc4",
         "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/controller/EnrichmentController.java",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "ad75a256_ca20c1eb",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/controller/EnrichmentController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-11-24T08:30:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e4e74d83_7f28edc4",
+      "range": {
+        "startLine": 108,
+        "startChar": 2,
+        "endLine": 122,
+        "endChar": 5
+      },
+      "revId": "f82f60f5c97196297678ac7c2993087dbd40c0b1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "07d135e3_16b80a90",
         "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/controller/EnrichmentController.java",
         "patchSetId": 5
@@ -62,6 +110,24 @@
       "revId": "f82f60f5c97196297678ac7c2993087dbd40c0b1",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06cafd4c_b365105f",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/controller/EnrichmentController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-11-24T08:30:01Z",
+      "side": 1,
+      "message": "Patrik and I have been disussing this regarding other controllers. There are pros and cons with both approaches. The PolicyController in the backend uses this so I think they should be the same. But we can change this later if we want. For now I think it is best to get this new functionality in.",
+      "parentUuid": "07d135e3_16b80a90",
+      "revId": "f82f60f5c97196297678ac7c2993087dbd40c0b1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +165,24 @@
     },
     {
       "key": {
+        "uuid": "427414c8_192f881c",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/controller/EnrichmentController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-11-24T08:30:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54f8d862_0b9832cc",
+      "revId": "f82f60f5c97196297678ac7c2993087dbd40c0b1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "153f1286_6d50b81b",
         "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/controller/EnrichmentController.java",
         "patchSetId": 5
@@ -113,6 +197,24 @@
       "revId": "f82f60f5c97196297678ac7c2993087dbd40c0b1",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c2535dd_dee671ad",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/controller/EnrichmentController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-11-24T08:30:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "153f1286_6d50b81b",
+      "revId": "f82f60f5c97196297678ac7c2993087dbd40c0b1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
