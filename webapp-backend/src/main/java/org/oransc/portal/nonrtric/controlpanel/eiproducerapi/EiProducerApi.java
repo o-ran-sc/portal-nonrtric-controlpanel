@@ -23,10 +23,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface EiProducerApi {
 
-    public ResponseEntity<String> getAllEiTypeIds();
-
-    public ResponseEntity<String> getEiType(String eiTypeId);
-
     public ResponseEntity<String> getAllEiProducerIds();
 
     public ResponseEntity<String> getEiProducer(String eiProducerId);

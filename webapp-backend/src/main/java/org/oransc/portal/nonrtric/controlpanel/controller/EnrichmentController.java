@@ -42,7 +42,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -80,37 +79,6 @@ public class EnrichmentController {
         Assert.notNull(eiProducerApi, "API must not be null");
         this.eiProducerApi = eiProducerApi;
         logger.debug("enrichment: configured with client type {}", eiProducerApi.getClass().getName());
-    }
-
-    /*
-     * The fields are defined in the Enrichment Control Typescript interface.
-     */
-    @ApiOperation(value = "Get the EI type identifiers")
-    @GetMapping(EI_TYPES)
-    public ResponseEntity<String> getAllEiTypeIds() {
-        logger.debug("getAllEiTypeIds");
-        return this.eiProducerApi.getAllEiTypeIds();
-    }
-
-    @ApiOperation(value = "Get an individual EI type")
-    @GetMapping(EI_TYPES + "/{" + EI_TYPE_ID + "}")
-    public ResponseEntity<String> getEiType(@PathVariable(EI_TYPE_ID) String eiTypeId) {
-        logger.debug("getEiType {}", eiTypeId);
-        return this.eiProducerApi.getEiType(eiTypeId);
-    }
-
-    @ApiOperation(value = "Get an individual EI producer")
-    @GetMapping(EI_PRODUCERS + "/{" + EI_PRODUCER_ID + "}")
-    public ResponseEntity<String> getEiProducer(@PathVariable(EI_PRODUCER_ID) String eiProducerId) {
-        logger.debug("getEiProducer {}", eiProducerId);
-        return this.eiProducerApi.getEiProducer(eiProducerId);
-    }
-
-    @ApiOperation(value = "Get the EI job definitions for one EI producer")
-    @GetMapping(EI_PRODUCERS + "/{" + EI_PRODUCER_ID + "}/" + EI_JOBS)
-    public ResponseEntity<String> getEiJobsForOneEiProducer(@PathVariable(EI_PRODUCER_ID) String eiProducerId) {
-        logger.debug("getEiJobsForOneEiProducer {}", eiProducerId);
-        return this.eiProducerApi.getEiJobsForOneEiProducer(eiProducerId);
     }
 
     @ApiOperation(value = "Get the EI job definitions for one EI producer")
@@ -171,12 +139,5 @@ public class EnrichmentController {
         ResponseEntity<String> statusResponse = this.eiProducerApi.getEiProducerStatus(producerId.getAsString());
         return JsonParser.parseString(statusResponse.getBody()).getAsJsonObject().get("operational_state")
             .getAsString();
-    }
-
-    @ApiOperation(value = "Get the status of an EI producer")
-    @GetMapping(EI_PRODUCERS + "/{" + EI_PRODUCER_ID + "}/" + STATUS)
-    public ResponseEntity<String> getEiProducerStatus(@PathVariable(EI_PRODUCER_ID) String eiProducerId) {
-        logger.debug("getEiProducerStatus {}", eiProducerId);
-        return this.eiProducerApi.getEiProducerStatus(eiProducerId);
     }
 }
