@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75685034_c36c1817",
+        "filename": "webapp-backend/src/test/java/org/oransc/portal/nonrtric/controlpanel/mock/PolicyControllerMockConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-11-26T11:50:38Z",
+      "side": 1,
+      "message": "I do not think you need to doany changes in this class?",
+      "revId": "f31037ca310b6b068db0cb6bf0ecd702b5fc7cb8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
