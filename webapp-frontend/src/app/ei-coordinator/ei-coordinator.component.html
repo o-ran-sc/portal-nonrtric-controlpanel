@@ -18,7 +18,34 @@ limitations under the License.
 ========================LICENSE_END===================================
 -->
 
-<h3 class="rd-global-page-title">Enrichment Information Coordinator</h3>
+<div fxLayout="row">
+    <div class="rd-global-page-title">Enrichment Information Coordinator</div>
+    <div class="refresh-button">
+        <button mat-icon-button color="primary" aria-label="Button with a refresh icon" (click)="refresh()">
+            <mat-icon>refresh</mat-icon>
+        </button>
+    </div>
+</div>
+
+<br>
+<h4>Producers</h4>
+<table mat-table EIProducerTable [dataSource]="eiProducersDataSource" [ngClass]="{'table-dark': darkMode}" matSort
+    multiTemplateDataRows class="ei-coordinator-table mat-elevation-z8">
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Producer ID </th>
+        <td mat-cell *matCellDef="let eiProducer"> {{this.getEIProducerId(eiProducer)}} </td>
+    </ng-container>
+    <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef> Producer type </th>
+        <td mat-cell *matCellDef="let eiProducer"> {{this.getEIProducerTypes(eiProducer)}} </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> Producer status </th>
+        <td mat-cell *matCellDef="let eiProducer"> {{this.getEIProducerStatus(eiProducer)}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['id', 'type', 'status']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id', 'type', 'status'];"></tr>
+</table>
 
 <br>
 <h4>Jobs</h4>
@@ -42,24 +69,4 @@ limitations under the License.
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="['id', 'typeId', 'targetUri']"></tr>
     <tr mat-row *matRowDef="let row; columns: ['id', 'typeId', 'targetUri'];"></tr>
-</table>
-
-<br>
-<h4>Producers</h4>
-<table mat-table EIProducerTable [dataSource]="eiProducersDataSource" [ngClass]="{'table-dark': darkMode}" matSort
-    multiTemplateDataRows class="ei-coordinator-table mat-elevation-z8">
-    <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> Producer ID </th>
-        <td mat-cell *matCellDef="let eiProducer"> {{this.getEIProducerId(eiProducer)}} </td>
-    </ng-container>
-    <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef> Producer type </th>
-        <td mat-cell *matCellDef="let eiProducer"> {{this.getEIProducerTypes(eiProducer)}} </td>
-    </ng-container>
-    <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> Producer status </th>
-        <td mat-cell *matCellDef="let eiProducer"> {{this.getEIProducerStatus(eiProducer)}} </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="['id', 'type', 'status']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['id', 'type', 'status'];"></tr>
 </table>

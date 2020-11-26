@@ -18,7 +18,14 @@
   ========================LICENSE_END===================================
   -->
 
-<h3 class="rd-global-page-title">Policy Control</h3>
+<div fxLayout="row">
+    <div class="rd-global-page-title">Policy Control</div>
+    <div class="refresh-button">
+        <button mat-icon-button color="primary" aria-label="Button with a refresh icon" (click)="refresh()">
+            <mat-icon>refresh</mat-icon>
+        </button>
+    </div>
+</div>
 
 <table mat-table [dataSource]="policyTypesDataSource" matSort multiTemplateDataRows
     class="policy-type-table mat-elevation-z8">
