@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4707b532_8573383e",
+        "filename": "webapp-backend/src/main/resources/application.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2020-11-26T10:53:27Z",
+      "side": 1,
+      "message": "Just a minor comment, I think we can remove this as well.",
+      "revId": "944b725a83184a145192bb2e667f052c5f3bf5b0",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
