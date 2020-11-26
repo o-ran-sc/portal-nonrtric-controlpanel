@@ -40,7 +40,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,7 +65,6 @@ public class EnrichmentController {
     // Publish paths in constants so tests are easy to write
     public static final String CONTROLLER_PATH = ControlPanelConstants.ENDPOINT_PREFIX + "/enrichment";
     // Endpoints
-    public static final String VERSION_METHOD = ControlPanelConstants.VERSION_METHOD;
     public static final String EI_TYPES = "eitypes";
     public static final String EI_PRODUCERS = "eiproducers";
     public static final String EI_JOBS = "eijobs";
@@ -89,7 +87,6 @@ public class EnrichmentController {
      */
     @ApiOperation(value = "Get the EI type identifiers")
     @GetMapping(EI_TYPES)
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<String> getAllEiTypeIds() {
         logger.debug("getAllEiTypeIds");
         return this.eiProducerApi.getAllEiTypeIds();
@@ -97,7 +94,6 @@ public class EnrichmentController {
 
     @ApiOperation(value = "Get an individual EI type")
     @GetMapping(EI_TYPES + "/{" + EI_TYPE_ID + "}")
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<String> getEiType(@PathVariable(EI_TYPE_ID) String eiTypeId) {
         logger.debug("getEiType {}", eiTypeId);
         return this.eiProducerApi.getEiType(eiTypeId);
@@ -105,7 +101,6 @@ public class EnrichmentController {
 
     @ApiOperation(value = "Get an individual EI producer")
     @GetMapping(EI_PRODUCERS + "/{" + EI_PRODUCER_ID + "}")
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<String> getEiProducer(@PathVariable(EI_PRODUCER_ID) String eiProducerId) {
         logger.debug("getEiProducer {}", eiProducerId);
         return this.eiProducerApi.getEiProducer(eiProducerId);
@@ -113,7 +108,6 @@ public class EnrichmentController {
 
     @ApiOperation(value = "Get the EI job definitions for one EI producer")
     @GetMapping(EI_PRODUCERS + "/{" + EI_PRODUCER_ID + "}/" + EI_JOBS)
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<String> getEiJobsForOneEiProducer(@PathVariable(EI_PRODUCER_ID) String eiProducerId) {
         logger.debug("getEiJobsForOneEiProducer {}", eiProducerId);
         return this.eiProducerApi.getEiJobsForOneEiProducer(eiProducerId);
@@ -121,7 +115,6 @@ public class EnrichmentController {
 
     @ApiOperation(value = "Get the EI job definitions for one EI producer")
     @GetMapping(EI_JOBS)
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<List<JobInfo>> getEiJobs() {
         logger.debug("getEiJobs");
         ResponseEntity<String> response = this.eiProducerApi.getAllEiProducerIds();
@@ -146,7 +139,6 @@ public class EnrichmentController {
 
     @ApiOperation(value = "Get EI producers")
     @GetMapping(EI_PRODUCERS)
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<List<ProducerInfo>> getEiProducers() {
         logger.debug("getEiProducers");
         ResponseEntity<String> response = this.eiProducerApi.getAllEiProducerIds();
@@ -183,7 +175,6 @@ public class EnrichmentController {
 
     @ApiOperation(value = "Get the status of an EI producer")
     @GetMapping(EI_PRODUCERS + "/{" + EI_PRODUCER_ID + "}/" + STATUS)
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<String> getEiProducerStatus(@PathVariable(EI_PRODUCER_ID) String eiProducerId) {
         logger.debug("getEiProducerStatus {}", eiProducerId);
         return this.eiProducerApi.getEiProducerStatus(eiProducerId);
