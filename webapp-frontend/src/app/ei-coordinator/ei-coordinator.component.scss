@@ -43,3 +43,9 @@
 .display-none {
   display: none;
 }
+
+.refresh-button {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}

@@ -138,4 +138,8 @@ export class EICoordinatorComponent implements OnInit {
         }
         return '< No status >';
     }
+
+    refresh() {
+        location.reload();
+    }
 }

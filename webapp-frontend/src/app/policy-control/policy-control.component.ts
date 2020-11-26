@@ -123,4 +123,8 @@ export class PolicyControlComponent implements OnInit {
     getExpandedObserver(policyType: PolicyType): Observable<boolean> {
         return this.getPolicyTypeInfo(policyType).isExpanded.asObservable();
     }
+
+    refresh() {
+        location.reload();
+    }
 }
