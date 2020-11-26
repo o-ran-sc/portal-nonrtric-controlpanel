@@ -35,7 +35,6 @@ import org.springframework.stereotype.Component;
 public class EiProducerApiImpl implements EiProducerApi {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final String EI_TYPES = "/eitypes";
     private static final String EI_PRODUCERS = "/eiproducers";
     private static final String EI_JOBS = "/eijobs";
     private static final String STATUS = "/status";
@@ -51,16 +50,6 @@ public class EiProducerApiImpl implements EiProducerApi {
 
     public EiProducerApiImpl(AsyncRestClient webClient) {
         this.webClient = webClient;
-    }
-
-    @Override
-    public ResponseEntity<String> getAllEiTypeIds() {
-        return getResponseArray(EI_TYPES);
-    }
-
-    @Override
-    public ResponseEntity<String> getEiType(String eiTypeId) {
-        return getResponseObject(EI_TYPES + "/" + eiTypeId);
     }
 
     @Override

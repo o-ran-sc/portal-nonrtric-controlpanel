@@ -35,13 +35,6 @@ import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Mono;
 
 class EiProducerApiImplTest {
-    private static final String URL_EI_TYPES = "/eitypes";
-    private static final String EI_TYPE_1 = "eitype1";
-    private static final String EI_TYPE_2 = "eitype2";
-    private static final String EI_TYPE_1_INFO_VALID =
-        "{\"ei_producer_ids\":[\"eiprod1\",\"eiprod2\"],\"ei_job_data_schema\":{\"title\":\"eijob1\"}}";
-    private static final String EI_TYPE_1_INFO_INVALID =
-        "{\"ei_producer_ids\":[\"eiprod1\",\"eiprod2\"],\"ei_job_data_schema\":\"title\":\"eijob1\"}}";
     private static final String URL_EI_PRODUCERS = "/eiproducers";
     private static final String EI_PRODUCER_1 = "eiprod1";
     private static final String EI_PRODUCER_2 = "eiprod2";
@@ -69,44 +62,6 @@ class EiProducerApiImplTest {
     private void whenGetReturnFailure(String url, HttpStatus status, String body) {
         HttpServerErrorException e = new HttpServerErrorException(status, body);
         when(restClientMock.getForEntity(eq(url))).thenReturn(Mono.error(e));
-    }
-
-    @Test
-    void testGetAllEiTypeIdsFailure() {
-        whenGetReturnFailure(URL_EI_TYPES, HttpStatus.NOT_FOUND, "");
-        ResponseEntity<String> returnedResp = apiUnderTest.getAllEiTypeIds();
-        assertEquals(HttpStatus.NOT_FOUND, returnedResp.getStatusCode());
-    }
-
-    @Test
-    void testGetAllEiTypeIdsSuccess() {
-        String eiTypeIds = Arrays.asList(EI_TYPE_1, EI_TYPE_2).toString();
-
-        whenGetReturnOK(URL_EI_TYPES, HttpStatus.OK, eiTypeIds);
-
-        ResponseEntity<String> returnedResp = apiUnderTest.getAllEiTypeIds();
-        assertEquals("[\"" + EI_TYPE_1 + "\",\"" + EI_TYPE_2 + "\"]", returnedResp.getBody());
-        assertEquals(HttpStatus.OK, returnedResp.getStatusCode());
-    }
-
-    @Test
-    void testGetEiTypeValidJson() {
-        whenGetReturnOK(URL_EI_TYPES + "/" + EI_TYPE_1, HttpStatus.OK, EI_TYPE_1_INFO_VALID);
-
-        ResponseEntity<String> returnedResp = apiUnderTest.getEiType(EI_TYPE_1);
-
-        assertEquals(HttpStatus.OK, returnedResp.getStatusCode());
-        assertEquals(EI_TYPE_1_INFO_VALID, returnedResp.getBody());
-    }
-
-    @Test
-    void testGetEiTypeInvalidJson() {
-        whenGetReturnOK(URL_EI_TYPES + "/" + EI_TYPE_1, HttpStatus.OK, EI_TYPE_1_INFO_INVALID);
-
-        ResponseEntity<String> returnedResp = apiUnderTest.getEiType(EI_TYPE_1);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, returnedResp.getStatusCode());
-        assertTrue(returnedResp.getBody().contains("JSONException"));
     }
 
     @Test
