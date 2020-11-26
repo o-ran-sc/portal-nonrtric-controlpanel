@@ -72,7 +72,6 @@ class RestApiTest {
         String url = "/v2/api-docs";
         ResponseEntity<String> resp = restClient().getForEntity(url).block();
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
-
         JsonElement jsonElement = JsonParser.parseString(resp.getBody());
         String indented = gson.toJson(jsonElement);
         try (PrintStream out = new PrintStream(new FileOutputStream("../docs/api.json"))) {
