@@ -68,19 +68,6 @@ class RestApiTest {
     private int port;
 
     @Test
-    void createApiDoc() throws FileNotFoundException {
-        String url = "/v2/api-docs";
-        ResponseEntity<String> resp = restClient().getForEntity(url).block();
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-        JsonElement jsonElement = JsonParser.parseString(resp.getBody());
-        String indented = gson.toJson(jsonElement);
-        try (PrintStream out = new PrintStream(new FileOutputStream("../docs/api.json"))) {
-            out.println(indented);
-        }
-    }
-
-    @Test
     void getJobs() throws FileNotFoundException {
         String url = "/api/enrichment/eijobs";
         ResponseEntity<String> resp = restClient().getForEntity(url).block();

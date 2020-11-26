@@ -67,25 +67,6 @@ public class EnrichmentControllerMockConfiguration {
         private final Database database = new Database();
 
         @Override
-        public ResponseEntity<String> getAllEiTypeIds() {
-            List<String> result = new ArrayList<>();
-            result.addAll(database.getAllEiTypeIds());
-            return new ResponseEntity<>(gson.toJson(result), HttpStatus.OK);
-        }
-
-        public ResponseEntity<String> getAllEiTypes() {
-            EiTypes result = new EiTypes();
-            result.addAll(database.getAllEiTypes());
-            return new ResponseEntity<>(gson.toJson(result), HttpStatus.OK);
-        }
-
-        @Override
-        public ResponseEntity<String> getEiType(String eiTypeId) {
-            EiType result = database.getEiTypeInstance(eiTypeId);
-            return new ResponseEntity<>(gson.toJson(result), HttpStatus.OK);
-        }
-
-        @Override
         public ResponseEntity<String> getAllEiProducerIds() {
             List<String> result = new ArrayList<>();
             result.addAll(database.getAllEiProducerIds());
@@ -117,21 +98,6 @@ public class EnrichmentControllerMockConfiguration {
             EiProducer result = database.getEiProducerInstance(eiProducerId);
             return new ResponseEntity<>(gson.toJson(result.status()), HttpStatus.OK);
         }
-
-        public ResponseEntity<String> deleteEiProducerInstance(String eiProducerId) {
-            database.deleteEiProducerInstance(eiProducerId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-
-        public ResponseEntity<String> deleteEiTypeInstance(String eiTypeId) {
-            database.deleteEiTypeInstance(eiTypeId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-
-        public ResponseEntity<String> deleteEiJobInstance(String eiJobId) {
-            database.deleteEiJobInstance(eiJobId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
     }
 
     class Database {
@@ -142,12 +108,12 @@ public class EnrichmentControllerMockConfiguration {
 
             // Create EiType instance
             String schema = getStringFromFile("ei-type-1.json");
-            EiType eiType1 = putEiTypeInstance("type1", schema, Arrays.asList("prod-1"));
+            EiType eiType1 = getEiTypeInstance("type1", schema, Arrays.asList("prod-1"));
             supported_types.add(eiType1);
 
             // Create EiType instance
             schema = getStringFromFile("ei-type-2.json");
-            EiType eiType2 = putEiTypeInstance("type2", schema, Arrays.asList("prod-1"));
+            EiType eiType2 = getEiTypeInstance("type2", schema, Arrays.asList("prod-1"));
             supported_types.add(eiType2);
 
             // Create EiProducer instance
@@ -198,18 +164,12 @@ public class EnrichmentControllerMockConfiguration {
             eiProducers.put(id, eiProducer);
         }
 
-        EiType putEiTypeInstance(String id, Object data, List<String> producer_ids) {
-            EiType i = ImmutableEiType.builder() //
+        EiType getEiTypeInstance(String id, Object data, List<String> producer_ids) {
+            return ImmutableEiType.builder() //
                 .ei_type_identity(id) //
                 .ei_job_data_schema(data) //
                 .ei_producer_ids(producer_ids) //
                 .build(); //
-            eiTypes.put(id, i);
-            return eiTypes.get(id);
-        }
-
-        public void deleteEiTypeInstance(String id) {
-            eiTypes.remove(id);
         }
 
         public void deleteEiProducerInstance(String id) {
@@ -220,28 +180,12 @@ public class EnrichmentControllerMockConfiguration {
             eiJobs.remove(id);
         }
 
-        EiType getEiTypeInstance(String id) throws RestClientException {
-            EiType i = eiTypes.get(id);
-            if (i == null) {
-                throw new RestClientException("Type not found: " + id);
-            }
-            return i;
-        }
-
         EiProducer getEiProducerInstance(String id) throws RestClientException {
             EiProducer i = eiProducers.get(id);
             if (i == null) {
                 throw new RestClientException("Producer not found: " + id);
             }
             return i;
-        }
-
-        public Collection<String> getAllEiTypeIds() {
-            return Collections.unmodifiableCollection(eiTypes.keySet());
-        }
-
-        public Collection<EiType> getAllEiTypes() {
-            return eiTypes.values();
         }
 
         public Collection<String> getAllEiProducerIds() {
@@ -271,7 +215,6 @@ public class EnrichmentControllerMockConfiguration {
             return result;
         }
 
-        private Map<String, EiType> eiTypes = new HashMap<>();
         private Map<String, EiProducer> eiProducers = new HashMap<>();
         private Map<String, EiJob> eiJobs = new HashMap<>();
 

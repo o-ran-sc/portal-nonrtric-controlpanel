@@ -72,44 +72,6 @@ class EiProducerApiImplTest {
     }
 
     @Test
-    void testGetAllEiTypeIdsFailure() {
-        whenGetReturnFailure(URL_EI_TYPES, HttpStatus.NOT_FOUND, "");
-        ResponseEntity<String> returnedResp = apiUnderTest.getAllEiTypeIds();
-        assertEquals(HttpStatus.NOT_FOUND, returnedResp.getStatusCode());
-    }
-
-    @Test
-    void testGetAllEiTypeIdsSuccess() {
-        String eiTypeIds = Arrays.asList(EI_TYPE_1, EI_TYPE_2).toString();
-
-        whenGetReturnOK(URL_EI_TYPES, HttpStatus.OK, eiTypeIds);
-
-        ResponseEntity<String> returnedResp = apiUnderTest.getAllEiTypeIds();
-        assertEquals("[\"" + EI_TYPE_1 + "\",\"" + EI_TYPE_2 + "\"]", returnedResp.getBody());
-        assertEquals(HttpStatus.OK, returnedResp.getStatusCode());
-    }
-
-    @Test
-    void testGetEiTypeValidJson() {
-        whenGetReturnOK(URL_EI_TYPES + "/" + EI_TYPE_1, HttpStatus.OK, EI_TYPE_1_INFO_VALID);
-
-        ResponseEntity<String> returnedResp = apiUnderTest.getEiType(EI_TYPE_1);
-
-        assertEquals(HttpStatus.OK, returnedResp.getStatusCode());
-        assertEquals(EI_TYPE_1_INFO_VALID, returnedResp.getBody());
-    }
-
-    @Test
-    void testGetEiTypeInvalidJson() {
-        whenGetReturnOK(URL_EI_TYPES + "/" + EI_TYPE_1, HttpStatus.OK, EI_TYPE_1_INFO_INVALID);
-
-        ResponseEntity<String> returnedResp = apiUnderTest.getEiType(EI_TYPE_1);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, returnedResp.getStatusCode());
-        assertTrue(returnedResp.getBody().contains("JSONException"));
-    }
-
-    @Test
     void testGetAllEiProducerIdsFailure() {
         whenGetReturnFailure(URL_EI_PRODUCERS, HttpStatus.NOT_FOUND, "");
         ResponseEntity<String> returnedResp = apiUnderTest.getAllEiProducerIds();
