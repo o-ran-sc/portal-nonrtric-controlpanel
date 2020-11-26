@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +60,6 @@ public class PolicyController {
     // Publish paths in constants so tests are easy to write
     public static final String CONTROLLER_PATH = ControlPanelConstants.ENDPOINT_PREFIX + "/policy";
     // Endpoints
-    public static final String VERSION_METHOD = ControlPanelConstants.VERSION_METHOD;
     public static final String POLICY_TYPES_METHOD = "policytypes";
     public static final String POLICY_TYPE_PARAM = "type";
     public static final String POLICIES_NAME = "policies";
@@ -82,7 +80,6 @@ public class PolicyController {
      */
     @ApiOperation(value = "Gets the policy types from Near-RT RIC")
     @GetMapping(POLICY_TYPES_METHOD)
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<String> getAllPolicyTypes(HttpServletResponse response) {
         logger.debug("getAllPolicyTypes");
         return this.policyAgentApi.getAllPolicyTypes();
@@ -90,7 +87,6 @@ public class PolicyController {
 
     @ApiOperation(value = "Returns the policy instances for the given policy type.")
     @GetMapping(POLICIES_NAME)
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<String> getPolicyInstances(
         @RequestParam(name = "type", required = true) String policyTypeIdString) {
         logger.debug("getPolicyInstances {}", policyTypeIdString);
@@ -99,7 +95,6 @@ public class PolicyController {
 
     @ApiOperation(value = "Returns a policy instance of a type")
     @GetMapping(POLICIES_NAME + "/{" + POLICY_INSTANCE_ID_NAME + "}")
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<Object> getPolicyInstance(
         @RequestParam(name = "type", required = true) String policyTypeIdString,
         @PathVariable(POLICY_INSTANCE_ID_NAME) String policyInstanceId) {
@@ -109,7 +104,6 @@ public class PolicyController {
 
     @ApiOperation(value = "Creates the policy instances for the given policy type.")
     @PutMapping(POLICIES_NAME + "/{" + POLICY_INSTANCE_ID_NAME + "}")
-    @Secured({ControlPanelConstants.ROLE_ADMIN})
     public ResponseEntity<String> putPolicyInstance( //
         @RequestParam(POLICY_TYPE_PARAM) String policyTypeIdString, //
         @RequestParam(name = "ric", required = true) String ric, //
@@ -122,7 +116,6 @@ public class PolicyController {
 
     @ApiOperation(value = "Deletes the policy instances for the given policy type.")
     @DeleteMapping(POLICIES_NAME + "/{" + POLICY_INSTANCE_ID_NAME + "}")
-    @Secured({ControlPanelConstants.ROLE_ADMIN})
     public ResponseEntity<String> deletePolicyInstance( //
         @RequestParam(POLICY_TYPE_PARAM) String policyTypeIdString,
         @PathVariable(POLICY_INSTANCE_ID_NAME) String policyInstanceId) {
@@ -132,7 +125,6 @@ public class PolicyController {
 
     @ApiOperation(value = "Returns the rics supporting the given policy type.")
     @GetMapping("/rics")
-    @Secured({ControlPanelConstants.ROLE_ADMIN, ControlPanelConstants.ROLE_STANDARD})
     public ResponseEntity<String> getRicsSupportingType(
         @RequestParam(name = "policyType", required = true) String supportingPolicyType) {
         logger.debug("getRicsSupportingType {}", supportingPolicyType);
