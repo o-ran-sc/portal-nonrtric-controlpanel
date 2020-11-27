@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "401689b3_e72336f8",
+        "filename": "webapp-backend/src/test/java/org/oransc/portal/nonrtric/controlpanel/RestApiTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-11-27T08:45:03Z",
+      "side": 0,
+      "message": "Why remove this? I think it is very useful that the api.json is generated automatically.",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 5
+      },
+      "revId": "f11a883a0b7d0dff421e5a79bc9f2378b76d3318",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
