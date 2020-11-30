@@ -91,6 +91,7 @@ class RestApiTest {
             .typeId("type1") //
             .jobData(getStringFromFile("job-1.json")) //
             .targetUri("http://example.com/") //
+            .owner("owner") //
             .build();
         assertThat(jobs).hasSize(1) //
             .contains(gson.toJsonTree(wantedJobInfo));

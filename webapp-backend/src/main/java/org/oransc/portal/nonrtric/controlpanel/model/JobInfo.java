@@ -54,4 +54,9 @@ public class JobInfo {
     @JsonProperty("target_uri")
     public String targetUri;
 
+    @ApiModelProperty(value = "The owner of the job")
+    @SerializedName("owner")
+    @JsonProperty("owner")
+    public String owner;
+
 }
