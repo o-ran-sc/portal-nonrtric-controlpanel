@@ -124,7 +124,7 @@ export class PolicyControlComponent implements OnInit {
         return this.getPolicyTypeInfo(policyType).isExpanded.asObservable();
     }
 
-    refresh() {
-        location.reload();
+    refreshTables() {
+        this.policyTypesDataSource.loadTable();
     }
 }

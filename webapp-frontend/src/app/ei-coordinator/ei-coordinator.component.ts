@@ -139,7 +139,8 @@ export class EICoordinatorComponent implements OnInit {
         return '< No status >';
     }
 
-    refresh() {
-        location.reload();
+    refreshTables() {
+        this.eiJobsDataSource.loadTable();
+        this.eiProducersDataSource.loadTable();
     }
 }
