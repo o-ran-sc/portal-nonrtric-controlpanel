@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6489c38_5312c474",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2020-11-30T14:40:12Z",
+      "side": 1,
+      "message": "Maybe this one could get a function like the other columns.",
+      "range": {
+        "startLine": 68,
+        "startChar": 48,
+        "endLine": 68,
+        "endChar": 59
+      },
+      "revId": "d8e8633cdb1927a79ee1c5866a6c3d7cf455db42",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
