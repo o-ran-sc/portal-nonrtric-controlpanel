@@ -21,27 +21,28 @@
 // Models of data used by the EI Coordinator
 
 export interface EIJobBis {
-    eiTypeId: string;
-    jobResultUri: string;
-    jobOwner: string;
-    jobStatusNotificationUri: string;
-    jobDefinition: any;
-  }
+  eiTypeId: string;
+  jobResultUri: string;
+  jobOwner: string;
+  jobStatusNotificationUri: string;
+  jobDefinition: any;
+}
 
-  export interface EIJob {
-    ei_job_identity: string;
-    ei_job_data: any;
-    ei_type_identity: string;
-    target_uri: string;
-  }
+export interface EIJob {
+  ei_job_identity: string;
+  ei_job_data: any;
+  ei_type_identity: string;
+  target_uri: string;
+  owner: string;
+}
 
-  export interface EIType {
-    id: string;
-    description: string;
-  }
+export interface EIType {
+  id: string;
+  description: string;
+}
 
-  export interface EIProducer {
-    ei_producer_id: string;
-    ei_producer_types: string[];
-    status: string;
-  }
+export interface EIProducer {
+  ei_producer_id: string;
+  ei_producer_types: string[];
+  status: string;
+}

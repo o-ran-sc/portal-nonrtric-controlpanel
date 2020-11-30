@@ -97,14 +97,14 @@ export class EICoordinatorComponent implements OnInit {
     }
 
     getEITypeId(eiJob: EIJob): string {
-        if (eiJob.ei_type_identity){
+        if (eiJob.ei_type_identity) {
             return eiJob.ei_type_identity;
         }
         return '< No type >';
     }
 
     getTargetUri(eiJob: EIJob): string {
-        if (eiJob.target_uri){
+        if (eiJob.target_uri) {
             return eiJob.target_uri;
         }
         return '< No target URI >';
@@ -119,21 +119,21 @@ export class EICoordinatorComponent implements OnInit {
     }
 
     getEIProducerId(eiProducer: EIProducer): string {
-        if (eiProducer.ei_producer_id){
+        if (eiProducer.ei_producer_id) {
             return eiProducer.ei_producer_id;
         }
         return '< No id>';
     }
 
     getEIProducerTypes(eiProducer: EIProducer): string[] {
-        if (eiProducer.ei_producer_types){
+        if (eiProducer.ei_producer_types) {
             return eiProducer.ei_producer_types;
         }
         return ['< No types >'];
     }
 
     getEIProducerStatus(eiProducer: EIProducer): string {
-        if (eiProducer.status){
+        if (eiProducer.status) {
             return eiProducer.status;
         }
         return '< No status >';

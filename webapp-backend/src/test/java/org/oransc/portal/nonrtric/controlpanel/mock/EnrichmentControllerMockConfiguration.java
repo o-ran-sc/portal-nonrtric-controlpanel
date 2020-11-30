@@ -33,10 +33,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.oransc.portal.nonrtric.controlpanel.eiproducerapi.EiProducerApi;
+import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -88,8 +88,8 @@ public class EnrichmentControllerMockConfiguration {
         @Override
         public ResponseEntity<String> getEiJobsForOneEiProducer(String eiProducerId) {
             EiJobs result = new EiJobs();
-            List<EiJob> inst = database.getEiJobsForOneEiProducer(Optional.of(eiProducerId));
-            result.addAll(inst);
+
+            result.addAll(database.getAllEiJobs());
             return new ResponseEntity<>(gson.toJson(result), HttpStatus.OK);
         }
 
@@ -122,7 +122,7 @@ public class EnrichmentControllerMockConfiguration {
 
             // Create EiJob instance
             schema = getStringFromFile("job-1.json");
-            putEiJobInstance("type1", "job1", schema, "prod-1", "http://example.com/");
+            putEiJobInstance("type1", "job1", schema, "owner", "http://example.com/");
         }
 
         private String getStringFromFile(String path) {
@@ -141,13 +141,12 @@ public class EnrichmentControllerMockConfiguration {
         }
 
         void putEiJobInstance(String typeId, String instanceId, Object instanceData, String owner, String targetUrl) {
-            EiJob i = ImmutableEiJob.builder() //
-                .ei_job_data(instanceData) //
-                .ei_job_identity(instanceId) //
+            JobInfo i = JobInfo.builder() //
+                .jobData(instanceData) //
+                .id(instanceId) //
                 .owner(owner) //
-                .ei_type_identity(typeId) //
-                .target_uri(targetUrl) //
-                .status("ENABLED") //
+                .typeId(typeId) //
+                .targetUri(targetUrl) //
                 .build(); //
             eiJobs.put(instanceId, i);
         }
@@ -196,26 +195,12 @@ public class EnrichmentControllerMockConfiguration {
             return eiProducers.values();
         }
 
-        public Collection<EiJob> getAllEiJobs() {
-            return eiJobs.values();
-        }
+        public List<JobInfo> getAllEiJobs() {
+            return new ArrayList<>(eiJobs.values());
 
-        public List<EiJob> getEiJobsForOneEiProducer(Optional<String> eiProducerId) {
-            List<EiJob> result = new ArrayList<>();
-            for (EiJob i : eiJobs.values()) {
-                if (eiProducerId.isPresent()) {
-                    if (i.owner().equals(eiProducerId.get())) {
-                        result.add(i);
-                    }
-
-                } else {
-                    result.add(i);
-                }
-            }
-            return result;
         }
 
         private Map<String, EiProducer> eiProducers = new HashMap<>();
-        private Map<String, EiJob> eiJobs = new HashMap<>();
+        private Map<String, JobInfo> eiJobs = new HashMap<>();
     }
 }

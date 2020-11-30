@@ -22,7 +22,9 @@ package org.oransc.portal.nonrtric.controlpanel.mock;
 
 import java.util.ArrayList;
 
-public class EiJobs extends ArrayList<EiJob> {
+import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
+
+public class EiJobs extends ArrayList<JobInfo> {
 
     private static final long serialVersionUID = -928428052502491021L;
 
