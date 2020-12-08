@@ -12,6 +12,8 @@ package-lock.json
 /node
 /node_modules
 
+### Eclipse ###
+/.pydevproject
 /.classpath
 /.project
 /.settings
