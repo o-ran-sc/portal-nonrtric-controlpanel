@@ -1,0 +1,12 @@
+[
+    {
+      "ei_job_identity": "job1",
+      "ei_type_identity": "type1",
+      "ei_job_data": {
+        "jobparam2": "value2_job1",
+        "jobparam3": "value3_job1",
+        "jobparam1": "value1_job1"
+      },
+      "target_uri": "https://ricsim_g3_1:8185/datadelivery"
+    }
+  ]
