@@ -32,7 +32,7 @@ To run the Control Panel locally for development with simulated services, follow
 
 - Now you can open URL:  `localhost:8080`_ in a browser to access the backend directly.
 
-.. _localhost:8080: localhost:8080
+.. _localhost:8080: http://localhost:8080
 
 Start the frontend:
 
@@ -42,7 +42,7 @@ Start the frontend:
 
 - Now you can open URL:  `localhost:4200`_ in a browser to access the Control Panel.
 
-.. _localhost:4200: localhost:4200
+.. _localhost:4200: http://localhost:4200
 
 From the main page, click on the "Policy Control" card. From here, it is possible to create or list instances for each
 existing policy type.
