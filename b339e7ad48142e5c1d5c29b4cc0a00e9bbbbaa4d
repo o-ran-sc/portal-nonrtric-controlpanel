@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2158ca40_3b796b1b",
+        "filename": "webapp-frontend/src/app/interceptor.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2020-12-11T15:49:05Z",
+      "side": 1,
+      "message": "Please remove trailing whitespace",
+      "range": {
+        "startLine": 9,
+        "startChar": 89,
+        "endLine": 9,
+        "endChar": 96
+      },
+      "revId": "b339e7ad48142e5c1d5c29b4cc0a00e9bbbbaa4d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
