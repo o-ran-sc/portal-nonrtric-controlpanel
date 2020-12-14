@@ -30,7 +30,7 @@ import {
   MatTabsModule, MatToolbarModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -59,7 +59,11 @@ import { CookieModule } from 'ngx-cookie';
 import { NodeModulesComponent } from './node-modules/node-modules.component';
 import { EICardComponent } from './ui/ei-card/ei-card.component';
 import { EICoordinatorComponent } from './ei-coordinator/ei-coordinator.component';
+import { HttpMockRequestInterceptor } from './interceptor.mock';
+import { environment } from 'src/environments/environment';
+import { HttpRequestInterceptor } from './interceptor';
 
+export const isMock = environment.mock;
 
 @NgModule({
   declarations: [
@@ -144,7 +148,12 @@ import { EICoordinatorComponent } from './ei-coordinator/ei-coordinator.componen
   providers: [
     ControlpanelService,
     ErrorDialogService,
-    UiService
+    UiService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: isMock ? HttpMockRequestInterceptor : HttpRequestInterceptor,
+      multi: true
+      }
   ],
   bootstrap: [ControlpanelComponent]
 })

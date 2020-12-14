@@ -66,6 +66,14 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "mock": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.mock.ts"
+                }
+              ]
             }
           }
         },
@@ -77,6 +85,9 @@
           "configurations": {
             "production": {
               "browserTarget": "controlpanelApp:build:production"
+            },
+            "mock": {
+              "browserTarget": "controlpanelApp:build:mock"
             }
           }
         },

@@ -18,5 +18,6 @@
  * ========================LICENSE_END===================================
  */
 export const environment = {
-  production: true
+  production: true,
+  mock: false
 };

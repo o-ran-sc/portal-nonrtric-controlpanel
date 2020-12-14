@@ -1,0 +1,9 @@
+[
+    {
+      "ei_producer_id": "1",
+      "ei_producer_types": [
+        "type1"
+      ],
+      "status": "ENABLED"
+    }
+  ]
