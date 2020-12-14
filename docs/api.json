@@ -1,0 +1,451 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Proxies access to Near-RT RIC.",
+    "version": "version not available",
+    "title": "Non-RT RIC Control Panel backend",
+    "termsOfService": "Terms of service",
+    "contact": {
+      "name": "Non-RT RIC Control Panel Dev Team",
+      "url": "http://no-docs-yet.org/",
+      "email": "noreply@O-RAN-SC.org"
+    },
+    "license": {
+      "name": "Apache 2.0 License",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "enrichment-controller",
+      "description": "Enrichment Controller"
+    },
+    {
+      "name": "html-5-paths-controller",
+      "description": "Html 5 Paths Controller"
+    },
+    {
+      "name": "policy-controller",
+      "description": "Policy Controller"
+    }
+  ],
+  "paths": {
+    "/api/enrichment/eijobs": {
+      "get": {
+        "tags": [
+          "enrichment-controller"
+        ],
+        "summary": "Get the EI job definitions for one EI producer",
+        "operationId": "getEiJobsUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ei_job_request"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/enrichment/eiproducers": {
+      "get": {
+        "tags": [
+          "enrichment-controller"
+        ],
+        "summary": "Get EI producers",
+        "operationId": "getEiProducersUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ei_producer"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/policy/policies": {
+      "get": {
+        "tags": [
+          "policy-controller"
+        ],
+        "summary": "Returns the policy instances for the given policy type.",
+        "operationId": "getPolicyInstancesUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "type",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/policy/policies/{policy_instance_id}": {
+      "get": {
+        "tags": [
+          "policy-controller"
+        ],
+        "summary": "Returns a policy instance of a type",
+        "operationId": "getPolicyInstanceUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "policy_instance_id",
+            "in": "path",
+            "description": "policy_instance_id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "type",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "put": {
+        "tags": [
+          "policy-controller"
+        ],
+        "summary": "Creates the policy instances for the given policy type.",
+        "operationId": "putPolicyInstanceUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "instance",
+            "description": "instance",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policy_instance_id",
+            "in": "path",
+            "description": "policy_instance_id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ric",
+            "in": "query",
+            "description": "ric",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "type",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "tags": [
+          "policy-controller"
+        ],
+        "summary": "Deletes the policy instances for the given policy type.",
+        "operationId": "deletePolicyInstanceUsingDELETE",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "policy_instance_id",
+            "in": "path",
+            "description": "policy_instance_id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "type",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/policy/policytypes": {
+      "get": {
+        "tags": [
+          "policy-controller"
+        ],
+        "summary": "Gets the policy types from Near-RT RIC",
+        "operationId": "getAllPolicyTypesUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/policy/rics": {
+      "get": {
+        "tags": [
+          "policy-controller"
+        ],
+        "summary": "Returns the rics supporting the given policy type.",
+        "operationId": "getRicsSupportingTypeUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "policyType",
+            "in": "query",
+            "description": "policyType",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/policy": {
+      "get": {
+        "tags": [
+          "html-5-paths-controller"
+        ],
+        "summary": "forwardAngularRoutes",
+        "operationId": "forwardAngularRoutesUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "ei_job_request": {
+      "type": "object",
+      "required": [
+        "ei_job_identity"
+      ],
+      "properties": {
+        "ei_job_data": {
+          "type": "object",
+          "description": "Json for the job data"
+        },
+        "ei_job_identity": {
+          "type": "string",
+          "description": "Identity of the EI job"
+        },
+        "ei_type_identity": {
+          "type": "string",
+          "description": "Type identity for the job"
+        },
+        "owner": {
+          "type": "string",
+          "description": "The owner of the job"
+        },
+        "target_uri": {
+          "type": "string",
+          "description": "URI for the target of the EI"
+        }
+      },
+      "title": "ei_job_request",
+      "description": "The EI job"
+    },
+    "ei_producer": {
+      "type": "object",
+      "required": [
+        "ei_producer_id",
+        "ei_producer_types",
+        "status"
+      ],
+      "properties": {
+        "ei_producer_id": {
+          "type": "string",
+          "description": "Idenitity of the EI producer"
+        },
+        "ei_producer_types": {
+          "type": "array",
+          "description": "Types provided by the EI producer",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the EI producer"
+        }
+      },
+      "title": "ei_producer",
+      "description": "The EI producer"
+    }
+  }
+}

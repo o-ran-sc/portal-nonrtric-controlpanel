@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
@@ -72,7 +72,8 @@ class RestApiTest {
         String url = "/v2/api-docs";
         ResponseEntity<String> resp = restClient().getForEntity(url).block();
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
-        JsonElement jsonElement = JsonParser.parseString(resp.getBody());
+        JsonObject jsonElement = JsonParser.parseString(resp.getBody()).getAsJsonObject();
+        jsonElement.remove("host");
         String indented = gson.toJson(jsonElement);
         try (PrintStream out = new PrintStream(new FileOutputStream("../docs/api.json"))) {
             out.println(indented);
