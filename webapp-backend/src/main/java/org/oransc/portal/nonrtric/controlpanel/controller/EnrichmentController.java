@@ -34,6 +34,9 @@ import org.oransc.portal.nonrtric.controlpanel.ControlPanelConstants;
 import org.oransc.portal.nonrtric.controlpanel.eiproducerapi.EiProducerApi;
 import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.ProducerInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerRegistrationInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerRegistrationInfo.ProducerEiTypeRegistrationInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerStatusInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,14 +98,9 @@ public class EnrichmentController {
     }
 
     private List<JobInfo> getJobs(JsonElement producerId) {
-        List<JobInfo> jobs = new ArrayList<>();
-        ResponseEntity<String> jobsResponse = this.eiProducerApi.getEiJobsForOneEiProducer(producerId.getAsString());
-        JsonArray jobsJson = JsonParser.parseString(jobsResponse.getBody()).getAsJsonArray();
-        for (JsonElement jobJson : jobsJson) {
-            JobInfo jobInfo = gson.fromJson(jobJson, JobInfo.class);
-            jobs.add(jobInfo);
-        }
-        return jobs;
+        ResponseEntity<List<JobInfo>> jobsResponse =
+            this.eiProducerApi.getEiJobsForOneEiProducer(producerId.getAsString());
+        return jobsResponse.getBody();
     }
 
     @ApiOperation(value = "Get EI producers")
@@ -125,19 +123,18 @@ public class EnrichmentController {
     }
 
     private String[] getSupportedTypes(JsonElement producerId) {
-        ResponseEntity<String> producerResponse = this.eiProducerApi.getEiProducer(producerId.getAsString());
-        JsonArray supportedTypesJson = JsonParser.parseString(producerResponse.getBody()).getAsJsonObject()
-            .get("supported_ei_types").getAsJsonArray();
+        ResponseEntity<ProducerRegistrationInfo> producerResponse =
+            this.eiProducerApi.getEiProducer(producerId.getAsString());
         List<String> supportedTypes = new ArrayList<>();
-        for (JsonElement typeJson : supportedTypesJson) {
-            supportedTypes.add(typeJson.getAsJsonObject().get("ei_type_identity").getAsString());
+        for (ProducerEiTypeRegistrationInfo type : producerResponse.getBody().types) {
+            supportedTypes.add(type.eiTypeId);
         }
         return supportedTypes.toArray(new String[0]);
     }
 
     private String getProducerStatus(JsonElement producerId) {
-        ResponseEntity<String> statusResponse = this.eiProducerApi.getEiProducerStatus(producerId.getAsString());
-        return JsonParser.parseString(statusResponse.getBody()).getAsJsonObject().get("operational_state")
-            .getAsString();
+        ResponseEntity<ProducerStatusInfo> statusResponse =
+            this.eiProducerApi.getEiProducerStatus(producerId.getAsString());
+        return statusResponse.getBody().opState.toString();
     }
 }
