@@ -19,16 +19,21 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.eiproducerapi;
 
+import java.util.List;
+
+import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerRegistrationInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerStatusInfo;
 import org.springframework.http.ResponseEntity;
 
 public interface EiProducerApi {
 
     public ResponseEntity<String> getAllEiProducerIds();
 
-    public ResponseEntity<String> getEiProducer(String eiProducerId);
+    public ResponseEntity<ProducerRegistrationInfo> getEiProducer(String eiProducerId);
 
-    public ResponseEntity<String> getEiJobsForOneEiProducer(String eiProducerId);
+    public ResponseEntity<List<JobInfo>> getEiJobsForOneEiProducer(String eiProducerId);
 
-    public ResponseEntity<String> getEiProducerStatus(String eiProducerId);
+    public ResponseEntity<ProducerStatusInfo> getEiProducerStatus(String eiProducerId);
 
 }
