@@ -46,6 +46,30 @@
       "revId": "e7141c4b5873dbf74ba45cb78bdb451e32131db0",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95c082d4_0edece27",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000247
+      },
+      "writtenOn": "2020-12-21T10:09:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f15c0bcb_005782c0",
+      "range": {
+        "startLine": 81,
+        "startChar": 5,
+        "endLine": 88,
+        "endChar": 9
+      },
+      "revId": "e7141c4b5873dbf74ba45cb78bdb451e32131db0",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
