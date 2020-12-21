@@ -37,7 +37,6 @@ import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInfo;
-import org.oransc.portal.nonrtric.controlpanel.model.PolicyInstances;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyType;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyTypes;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
@@ -72,23 +71,24 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<String> getAllPolicyTypes() {
-        final String TITLE = "title";
         try {
-            final String url = "/policy_schemas";
+            final String url = "/v2/policy-types";
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             if (!rsp.getStatusCode().is2xxSuccessful()) {
                 return rsp;
             }
 
             PolicyTypes result = new PolicyTypes();
-            JsonArray schemas = JsonParser.parseString(rsp.getBody()).getAsJsonArray();
-            for (JsonElement schema : schemas) {
-                JsonObject schemaObj = schema.getAsJsonObject();
-                String title = "";
-                if (schemaObj.get(TITLE) != null) {
-                    title = schemaObj.get(TITLE).getAsString();
-                }
-                PolicyType pt = new PolicyType(title, schemaObj.toString());
+            JsonArray policyTypeIds = JsonParser.parseString(rsp.getBody()).getAsJsonObject() //
+                .get("policytype_ids") //
+                .getAsJsonArray(); //
+
+            for (JsonElement policyTypeId : policyTypeIds) {
+
+                String typeId = policyTypeId.getAsString();
+
+                JsonObject schemaObj = getIndividualPolicySchema(typeId);
+                PolicyType pt = new PolicyType(typeId, schemaObj.toString());
                 result.add(pt);
             }
             return new ResponseEntity<>(gson.toJson(result), rsp.getStatusCode());
@@ -97,22 +97,40 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
         }
     }
 
+    public JsonObject getIndividualPolicySchema(String id) {
+        try {
+            final String url = "/v2/policy-types/" + id;
+            ResponseEntity<String> rsp = webClient.getForEntity(url).block();
+            if (!rsp.getStatusCode().is2xxSuccessful()) {
+                return null;
+            }
+
+            JsonObject policy_schema = JsonParser.parseString(rsp.getBody()).getAsJsonObject() //
+                .get("policy_schema") //
+                .getAsJsonObject(); //
+
+            return policy_schema;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     @Override
     public ResponseEntity<String> getPolicyInstancesForType(String type) {
         try {
-            String url = "/policies?type=" + type;
+            String url = "/v2/policies?policytype_id=" + type;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             if (!rsp.getStatusCode().is2xxSuccessful()) {
                 return rsp;
             }
+            JsonArray policyInstances = JsonParser.parseString(rsp.getBody()).getAsJsonObject() //
+                .get("policy_ids") //
+                .getAsJsonArray(); //
 
             Type listType = new TypeToken<List<ImmutablePolicyInfo>>() {}.getType();
-            List<PolicyInfo> rspParsed = gson.fromJson(rsp.getBody(), listType);
-            PolicyInstances result = new PolicyInstances();
-            for (PolicyInfo p : rspParsed) {
-                result.add(p);
-            }
-            return new ResponseEntity<>(gson.toJson(result), rsp.getStatusCode());
+            List<PolicyInfo> rspParsed = gson.fromJson(policyInstances, listType);
+
+            return new ResponseEntity<>(gson.toJson(rspParsed), rsp.getStatusCode());
         } catch (Exception e) {
             return ErrorResponseHandler.handleException(e);
         }
@@ -121,7 +139,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     @Override
     public ResponseEntity<Object> getPolicyInstance(String id) {
         try {
-            String url = "/policy?id=" + id;
+            String url = "/v2/policies/" + id;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             JsonObject obj = JsonParser.parseString(rsp.getBody()).getAsJsonObject();
             String str = obj.toString();
@@ -132,14 +150,26 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
         }
     }
 
+    private String getTimeStampUTC() {
+        return java.time.Instant.now().toString();
+    }
+
     @Override
     public ResponseEntity<String> putPolicy(String policyTypeIdString, String policyInstanceId, Object json,
         String ric) {
-        String url =
-            "/policy?type=" + policyTypeIdString + "&id=" + policyInstanceId + "&ric=" + ric + "&service=controlpanel";
+        String url = "/v2/policies/";
+
+        PolicyInfo i = ImmutablePolicyInfo.builder() //
+            .id(policyInstanceId) //
+            .type(policyTypeIdString) //
+            .ric(ric) //
+            .json(json) //
+            .service("controlpanel") //
+            .lastModified(getTimeStampUTC()) //
+            .build(); //
 
         try {
-            String jsonStr = json.toString();
+            String jsonStr = gson.toJson(i, PolicyInfo.class);
             webClient.putForEntity(url, jsonStr).block();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
@@ -149,7 +179,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<String> deletePolicy(String policyInstanceId) {
-        String url = "/policy?id=" + policyInstanceId;
+        String url = "/v2/policies/" + policyInstanceId;
         try {
             webClient.deleteForEntity(url).block();
             return new ResponseEntity<>(HttpStatus.OK);
@@ -171,11 +201,18 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     @Override
     public ResponseEntity<String> getRicsSupportingType(String typeName) {
         try {
-            String url = "/rics?policyType=" + typeName;
+            String url = "/v2/rics?policytype_id=" + typeName;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
+            if (!rsp.getStatusCode().is2xxSuccessful()) {
+                return rsp;
+            }
+
+            JsonArray rics = JsonParser.parseString(rsp.getBody()).getAsJsonObject() //
+                .get("rics") //
+                .getAsJsonArray(); //
 
             Type listType = new TypeToken<List<ImmutableRicInfo>>() {}.getType();
-            List<RicInfo> rspParsed = gson.fromJson(rsp.getBody(), listType);
+            List<RicInfo> rspParsed = gson.fromJson(rics, listType);
             Collection<String> result = new ArrayList<>(rspParsed.size());
             for (RicInfo ric : rspParsed) {
                 result.add(ric.ricName());
