@@ -22,6 +22,30 @@
       "revId": "e7141c4b5873dbf74ba45cb78bdb451e32131db0",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f15c0bcb_005782c0",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-12-21T09:50:41Z",
+      "side": 1,
+      "message": "The alternative could be to have to have an adapter that looks like the removed class EiJobs. \nI have not tried that. \n\npublic class EiJobs extends ArrayList\u003cJobInfo\u003e {\n}",
+      "parentUuid": "65fc0b6c_4380d54f",
+      "range": {
+        "startLine": 81,
+        "startChar": 5,
+        "endLine": 88,
+        "endChar": 9
+      },
+      "revId": "e7141c4b5873dbf74ba45cb78bdb451e32131db0",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
