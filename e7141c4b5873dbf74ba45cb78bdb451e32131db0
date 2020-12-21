@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65fc0b6c_4380d54f",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-12-21T09:45:16Z",
+      "side": 1,
+      "message": "This could be made to a generic function that can be used in all cases where an array of objects are retrieved. It should be put in a class that can be used by the other API implementation. \n    private static \u003cT\u003e List\u003cT\u003e parseJsonArray(String jsonString, Class\u003cT\u003e clazz) {\n        List\u003cT\u003e result \u003d new ArrayList\u003c\u003e();\n        JsonArray jsonArr \u003d JsonParser.parseString(jsonString).getAsJsonArray();\n        for (JsonElement jsonElement : jsonArr) {\n            T json \u003d gson.fromJson(jsonElement.toString(), clazz);\n            result.add(json);\n        }\n        return result;\n    }\n\n\nThis function would then look something like this: \n\n\n ResponseEntity\u003cString\u003e resp \u003d getResponseArray(EI_PRODUCERS + \"/\" + eiProducerId + EI_JOBS);\n List\u003cJobInfo\u003e jobs \u003d parseJsonArray(resp.getBody, JobInfo.class);\n return new ResponseEntity\u003c\u003e(jobs, resp.getHttpStatus());",
+      "range": {
+        "startLine": 81,
+        "startChar": 5,
+        "endLine": 88,
+        "endChar": 9
+      },
+      "revId": "e7141c4b5873dbf74ba45cb78bdb451e32131db0",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
