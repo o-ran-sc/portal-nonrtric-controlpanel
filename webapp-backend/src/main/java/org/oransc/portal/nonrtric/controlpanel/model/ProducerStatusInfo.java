@@ -18,14 +18,17 @@
  * ========================LICENSE_END===================================
  */
 
-package org.oransc.portal.nonrtric.controlpanel.mock;
+package org.oransc.portal.nonrtric.controlpanel.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
+import lombok.Builder;
+
 import org.immutables.gson.Gson;
 
 @Gson.TypeAdapters
+@Builder
 public class ProducerStatusInfo {
 
     @Gson.TypeAdapters
