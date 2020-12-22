@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3abfa8b9_5635ec3c",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-12-22T11:05:52Z",
+      "side": 1,
+      "message": "This should just be pretty transparent and just returns whatever it gets from the EI service.",
+      "parentUuid": "6d2f1a56_341675b8",
+      "range": {
+        "startLine": 70,
+        "startChar": 87,
+        "endLine": 70,
+        "endChar": 114
+      },
+      "revId": "ca2cd756cd5d230ba223fbea7edc349ad48a176d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c2d5fdb_b0ed88cc",
         "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/eiproducerapi/EiProducerApiImpl.java",
         "patchSetId": 2
