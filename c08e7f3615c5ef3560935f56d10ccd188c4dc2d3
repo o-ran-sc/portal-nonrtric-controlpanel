@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86e59005_caaee31d",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/policyagentapi/PolicyAgentApiImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-12-23T08:31:18Z",
+      "side": 1,
+      "message": "The java naming conventtions says that camel case should be used for variables (not underscores). \npolicyTypeIds",
+      "range": {
+        "startLine": 82,
+        "startChar": 22,
+        "endLine": 82,
+        "endChar": 37
+      },
+      "revId": "c08e7f3615c5ef3560935f56d10ccd188c4dc2d3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d07fe69_a24eb46c",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/policyagentapi/PolicyAgentApiImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-12-23T08:31:18Z",
+      "side": 1,
+      "message": "policyTypeId",
+      "range": {
+        "startLine": 86,
+        "startChar": 29,
+        "endLine": 86,
+        "endChar": 43
+      },
+      "revId": "c08e7f3615c5ef3560935f56d10ccd188c4dc2d3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad173596_a1e77163",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/policyagentapi/PolicyAgentApiImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-12-23T08:31:18Z",
+      "side": 1,
+      "message": "typeId",
+      "range": {
+        "startLine": 88,
+        "startChar": 23,
+        "endLine": 88,
+        "endChar": 31
+      },
+      "revId": "c08e7f3615c5ef3560935f56d10ccd188c4dc2d3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9db88ac9_a5567474",
+        "filename": "webapp-backend/src/main/java/org/oransc/portal/nonrtric/controlpanel/policyagentapi/PolicyAgentApiImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2020-12-23T08:31:18Z",
+      "side": 1,
+      "message": "Is there is a purpose that this is changed from \"controlpanel\" to \"ric-registration\"?",
+      "range": {
+        "startLine": 167,
+        "startChar": 22,
+        "endLine": 167,
+        "endChar": 38
+      },
+      "revId": "c08e7f3615c5ef3560935f56d10ccd188c4dc2d3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
