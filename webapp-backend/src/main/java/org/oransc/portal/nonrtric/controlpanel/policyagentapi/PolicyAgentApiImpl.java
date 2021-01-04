@@ -35,8 +35,8 @@ import java.util.List;
 
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
-import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.PolicyInstance;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyType;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyTypes;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
@@ -127,27 +127,36 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
                 .get("policy_ids") //
                 .getAsJsonArray(); //
 
-            Type listType = new TypeToken<List<ImmutablePolicyInfo>>() {}.getType();
-            List<PolicyInfo> rspParsed = gson.fromJson(policyInstances, listType);
+            List<Object> res = new ArrayList<>();
+            for (JsonElement p : policyInstances) {
+                ResponseEntity<Object> policyInstance = getIndividualPolicyInstance(p.getAsString());
+                res.add(policyInstance.getBody());
+            }
 
-            return new ResponseEntity<>(gson.toJson(rspParsed), rsp.getStatusCode());
+            return new ResponseEntity<>(gson.toJson(res), rsp.getStatusCode());
         } catch (Exception e) {
             return ErrorResponseHandler.handleException(e);
         }
     }
 
-    @Override
-    public ResponseEntity<Object> getPolicyInstance(String id) {
+    public ResponseEntity<Object> getIndividualPolicyInstance(String id) {
         try {
             String url = "/v2/policies/" + id;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             JsonObject obj = JsonParser.parseString(rsp.getBody()).getAsJsonObject();
-            String str = obj.toString();
-            return new ResponseEntity<>(str, rsp.getStatusCode());
+            PolicyInfo i = gson.fromJson(obj, PolicyInfo.class);
+            return new ResponseEntity<>(i, rsp.getStatusCode());
         } catch (Exception e) {
             ResponseEntity<String> rsp = ErrorResponseHandler.handleException(e);
             return new ResponseEntity<>(rsp.getBody(), rsp.getStatusCode());
         }
+    }
+
+    @Override
+    public ResponseEntity<Object> getPolicyInstance(String id) {
+        ResponseEntity<Object> rsp = getIndividualPolicyInstance(id);
+        PolicyInfo i = (PolicyInfo) rsp.getBody();
+        return new ResponseEntity<>(i.policyData, rsp.getStatusCode());
     }
 
     private String getTimeStampUTC() {
@@ -159,17 +168,20 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
         String ric) {
         String url = "/v2/policies/";
 
-        PolicyInfo i = ImmutablePolicyInfo.builder() //
-            .id(policyInstanceId) //
-            .type(policyTypeIdString) //
-            .ric(ric) //
-            .json(json) //
-            .service("controlpanel") //
+        JsonElement data = JsonParser.parseString(json.toString()).getAsJsonObject();
+
+        PolicyInstance i = PolicyInstance.builder() //
+            .policyId(policyInstanceId) //
+            .policyTypeId(policyTypeIdString) //
+            .ricId(ric) //
+            .policyData(data) //
+            .serviceId("controlpanel") //
             .lastModified(getTimeStampUTC()) //
             .build(); //
 
         try {
-            String jsonStr = gson.toJson(i, PolicyInfo.class);
+            String jsonStr = gson.toJson(i, PolicyInstance.class);
+            logger.debug("PolicyInstance: " + jsonStr);
             webClient.putForEntity(url, jsonStr).block();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
@@ -191,11 +203,11 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     @Value.Immutable
     @Gson.TypeAdapters
     interface RicInfo {
-        public String ricName();
+        public String ric_id();
 
-        public Collection<String> nodeNames();
+        public Collection<String> managed_element_ids();
 
-        public Collection<String> policyTypes();
+        public Collection<String> policytype_ids();
     }
 
     @Override
@@ -215,7 +227,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             List<RicInfo> rspParsed = gson.fromJson(rics, listType);
             Collection<String> result = new ArrayList<>(rspParsed.size());
             for (RicInfo ric : rspParsed) {
-                result.add(ric.ricName());
+                result.add(ric.ric_id());
             }
             String json = gson.toJson(result);
             return new ResponseEntity<>(json, HttpStatus.OK);

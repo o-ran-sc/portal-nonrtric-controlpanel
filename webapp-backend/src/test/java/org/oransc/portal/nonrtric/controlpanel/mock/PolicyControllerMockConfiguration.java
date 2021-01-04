@@ -35,7 +35,6 @@ import java.util.Optional;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
-import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInstances;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyType;
@@ -154,8 +153,14 @@ public class PolicyControllerMockConfiguration {
         }
 
         void putInstance(String typeId, String instanceId, Object instanceData, String ric) {
-            PolicyInfo i = ImmutablePolicyInfo.builder().json(instanceData).lastModified(getTimeStampUTC())
-                .id(instanceId).ric(ric).service("service").type(typeId).build();
+            PolicyInfo i = PolicyInfo.builder() //
+                .policyData(instanceData) //
+                .lastModified(getTimeStampUTC()) //
+                .policyId(instanceId) //
+                .ricId(ric) //
+                .serviceId("service") //
+                .policyTypeId(typeId) //
+                .build(); //
             instances.put(instanceId, i);
         }
 
@@ -168,7 +173,7 @@ public class PolicyControllerMockConfiguration {
             if (i == null) {
                 throw new RestClientException("Type not found: " + id);
             }
-            return i.json();
+            return i.policyData;
         }
 
         public Collection<PolicyType> getTypes() {
@@ -179,7 +184,7 @@ public class PolicyControllerMockConfiguration {
             ArrayList<PolicyInfo> result = new ArrayList<>();
             for (PolicyInfo i : instances.values()) {
                 if (typeId.isPresent()) {
-                    if (i.type().equals(typeId.get())) {
+                    if (i.policyTypeId.equals(typeId.get())) {
                         result.add(i);
                     }
 

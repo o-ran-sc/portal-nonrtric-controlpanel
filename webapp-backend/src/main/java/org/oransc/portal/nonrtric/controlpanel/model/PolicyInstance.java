@@ -29,29 +29,30 @@ import org.immutables.gson.Gson;
 
 @Gson.TypeAdapters
 @Builder
-public class PolicyInfo {
-    @SerializedName(value = "id", alternate = "policy_id")
+public class PolicyInstance {
+
+    @SerializedName(value = "policy_id")
     public String policyId;
 
-    @SerializedName(value = "type", alternate = "policytype_id")
+    @SerializedName(value = "policytype_id")
     public String policyTypeId;
 
-    @SerializedName(value = "ric", alternate = "ric_id")
+    @SerializedName(value = "ric_id")
     public String ricId;
 
-    @SerializedName(value = "json", alternate = "policy_data")
+    @SerializedName(value = "policy_data")
     public Object policyData;
 
-    @SerializedName(value = "service", alternate = "service_id")
+    @SerializedName(value = "service_id")
     public String serviceId;
 
-    @SerializedName("transient")
+    @SerializedName(value = "transient")
     public boolean isTransient = false;
 
-    @SerializedName(value = "statusNotificationUri", alternate = "status_notification_uri")
+    @SerializedName(value = "status_notification_uri")
     public String statusNotificationUri = "";
 
-    @SerializedName("lastModified")
+    @SerializedName(value = "lastModified")
     public String lastModified = "";
 
     public boolean validate() {

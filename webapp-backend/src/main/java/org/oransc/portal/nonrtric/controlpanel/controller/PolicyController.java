@@ -93,12 +93,10 @@ public class PolicyController {
         return this.policyAgentApi.getPolicyInstancesForType(policyTypeIdString);
     }
 
-    @ApiOperation(value = "Returns a policy instance of a type")
+    @ApiOperation(value = "Returns a policy instance")
     @GetMapping(POLICIES_NAME + "/{" + POLICY_INSTANCE_ID_NAME + "}")
-    public ResponseEntity<Object> getPolicyInstance(
-        @RequestParam(name = "type", required = true) String policyTypeIdString,
-        @PathVariable(POLICY_INSTANCE_ID_NAME) String policyInstanceId) {
-        logger.debug("getPolicyInstance {}:{}", policyTypeIdString, policyInstanceId);
+    public ResponseEntity<Object> getPolicyInstance(@PathVariable(POLICY_INSTANCE_ID_NAME) String policyInstanceId) {
+        logger.debug("getPolicyInstance {}", policyInstanceId);
         return this.policyAgentApi.getPolicyInstance(policyInstanceId);
     }
 
