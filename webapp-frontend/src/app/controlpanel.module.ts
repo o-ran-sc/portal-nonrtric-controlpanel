@@ -39,7 +39,6 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { ConfirmDialogComponent } from './ui/confirm-dialog/confirm-dialog.component';
-import { ControlpanelService } from './services/controlpanel/controlpanel.service';
 import { ErrorDialogComponent } from './ui/error-dialog/error-dialog.component';
 import { ErrorDialogService } from './services/ui/error-dialog.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -146,7 +145,6 @@ export const isMock = environment.mock;
     PolicyInstanceDialogComponent
   ],
   providers: [
-    ControlpanelService,
     ErrorDialogService,
     UiService,
     {
