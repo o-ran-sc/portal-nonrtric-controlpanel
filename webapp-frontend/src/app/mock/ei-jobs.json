@@ -2,6 +2,7 @@
     {
       "ei_job_identity": "job1",
       "ei_type_identity": "type1",
+      "owner": "owner1",
       "ei_job_data": {
         "jobparam2": "value2_job1",
         "jobparam3": "value3_job1",

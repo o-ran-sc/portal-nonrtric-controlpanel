@@ -25,34 +25,3 @@ export interface ControlpanelSuccessTransport {
   status: number;
   data: string;
 }
-
-export interface EcompRoleFunction {
-  name: string;
-  code: string;
-  type: string;
-  action: string;
-}
-
-export interface EcompRole {
-  id: number;
-  name: string;
-  [position: number]: EcompRoleFunction;
-}
-
-export interface EcompUser {
-  orgId?: number;
-  managerId?: string;
-  firstName?: string;
-  middleInitial?: string;
-  lastName?: string;
-  phone?: string;
-  email?: string;
-  hrid?: string;
-  orgUserId?: string;
-  orgCode?: string;
-  orgManagerUserId?: string;
-  jobTitle?: string;
-  loginId: string;
-  active: boolean;
-  [position: number]: EcompRole;
-}

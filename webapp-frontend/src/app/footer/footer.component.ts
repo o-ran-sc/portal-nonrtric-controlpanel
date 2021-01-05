@@ -20,8 +20,6 @@
  * ========================LICENSE_END===================================
  */
 import { Component, OnInit } from '@angular/core';
-import { ControlpanelSuccessTransport } from '../interfaces/controlpanel.types';
-import { ControlpanelService } from '../services/controlpanel/controlpanel.service';
 import { UiService } from '../services/ui/ui.service';
 
 @Component({
@@ -38,12 +36,10 @@ export class FooterComponent implements OnInit {
   controlpanelVersion: string;
 
   // Inject the service
-  constructor(private controlpanelService: ControlpanelService,
-    private ui: UiService) { }
+  constructor(private ui: UiService) { }
 
   ngOnInit() {
     this.controlpanelVersion = '0.0';
-    // this.controlpanelService.getVersion().subscribe((res: ControlpanelSuccessTransport) => this.controlpanelVersion = res.data);
     this.ui.darkModeState.subscribe((isDark) => {
       this.darkMode = isDark;
     });
