@@ -6,6 +6,7 @@ import * as policyinstances from './mock/policy-instance.json';
 import * as policyinstanceedit from './mock/policy-instance-edit.json';
 import * as eijobs from './mock/ei-jobs.json';
 import * as eiproducers from './mock/ei-producers.json';
+import * as rics from './mock/rics.json';
 
 const urls = [
     {
@@ -31,6 +32,10 @@ const urls = [
     {
         url: 'api/enrichment/eiproducers',
         json: eiproducers
+    },
+    {
+        url: 'api/policy/rics?policyType=1',
+        json: rics
     }
 ];
 
@@ -39,6 +44,10 @@ export class HttpMockRequestInterceptor implements HttpInterceptor {
     constructor(private injector: Injector) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (request.method === "PUT" && request.url.includes("policies")) {
+            console.log('Answered PUT policy ' + request.url);
+            return of(new HttpResponse({ status: 200 }));
+        }
         for (const element of urls) {
             if (request.url === element.url) {
                 console.log('Loaded from stub json : ' + request.url);

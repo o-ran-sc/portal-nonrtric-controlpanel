@@ -67,24 +67,26 @@ export const isMock = environment.mock;
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
+    ControlpanelComponent,
     EICardComponent,
     EICoordinatorComponent,
     ErrorDialogComponent,
     FooterComponent,
     MainComponent,
+    NodeModulesComponent,
     NoTypePolicyInstanceDialogComponent,
     PolicyCardComponent,
     PolicyControlComponent,
     PolicyInstanceComponent,
     PolicyInstanceDialogComponent,
-    ControlpanelComponent,
     SidenavListComponent,
-    NodeModulesComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     ChartsModule,
+    ControlpanelRoutingModule,
+    CookieModule.forRoot(),
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
@@ -115,10 +117,8 @@ export const isMock = environment.mock;
     MatToolbarModule,
     MatTooltipModule,
     MDBBootstrapModule.forRoot(),
-    ControlpanelRoutingModule,
     ReactiveFormsModule,
     ToastrModule.forRoot(),
-    CookieModule.forRoot()
   ],
   exports: [
     ErrorDialogComponent,
