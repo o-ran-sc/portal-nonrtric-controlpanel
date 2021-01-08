@@ -219,26 +219,6 @@ limitations under the License.
                     </archive>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/classes/resources/</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/webapp-frontend/dist/controlpanelApp/</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <!-- do not deploy a jar or pom file -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -281,7 +261,7 @@ limitations under the License.
                         <image>
                             <!-- Specify a tag to avoid default tag "latest" -->
                             <!-- Avoid maven artifact name here -->
-                            <name>o-ran-sc/nonrtric-controlpanel:${project.version}</name>
+                            <name>o-ran-sc/nonrtric-controlpanel-backend:${project.version}</name>
                             <build>
                                 <from>openjdk:11-jre-slim</from>
                                 <tags>
