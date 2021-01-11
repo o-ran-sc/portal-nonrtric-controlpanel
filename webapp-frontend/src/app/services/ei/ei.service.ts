@@ -43,7 +43,6 @@ export class EIService {
         args.forEach(part => {
             result = result + '/' + part;
         });
-        console.log("URL: "+result);
         return result;
     }
 

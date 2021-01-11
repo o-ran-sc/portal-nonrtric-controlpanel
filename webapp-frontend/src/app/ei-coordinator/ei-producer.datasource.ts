@@ -18,14 +18,14 @@
  * ========================LICENSE_END===================================
  */
 
-import { DataSource } from '@angular/cdk/collections';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSort } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { merge } from 'rxjs';
 import { of } from 'rxjs/observable/of';
-import { catchError, finalize, map } from 'rxjs/operators';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { EIProducer } from '../interfaces/ei.jobs';
 import { EIService } from '../services/ei/ei.service';
 import { NotificationService } from '../services/ui/notification.service';
@@ -62,6 +62,7 @@ export class EIProducerDataSource extends DataSource<EIProducer> {
                 this.rowCount = prods.length;
                 this.producerSubject.next(prods);
             });
+            this.connect();
     }
 
     connect(): Observable<EIProducer[]> {
@@ -87,10 +88,17 @@ export class EIProducerDataSource extends DataSource<EIProducer> {
         return data.sort((a, b) => {
             const isAsc = this.sort.direction === 'asc';
             switch (this.sort.active) {
-                case 'ei_producer_id': return compare(a.ei_producer_id, b.ei_producer_id, isAsc);
+                case 'id': return compare(a.ei_producer_id, b.ei_producer_id, isAsc);
+                case 'type': return compare(a.ei_producer_types[0], b.ei_producer_types[0], isAsc);
+                case 'status': return compare(a.status, b.status, isAsc);
                 default: return 0;
             }
         });
+    }
+
+    getProducers(): Observable<EIProducer[]> {
+        return this.eiSvc.getEIProducers()
+        .pipe(tap(console.log));
     }
 }
 

@@ -58,7 +58,6 @@ export class EIJobDataSource extends DataSource<EIJob> {
                 finalize(() => this.loadingSubject.next(false))
             )
             .subscribe((instances: EIJob[]) => {
-                console.log("Jobs: " + instances);
                 this.rowCount = instances.length;
                 this.eiJobSubject.next(instances);
             });
@@ -87,12 +86,9 @@ export class EIJobDataSource extends DataSource<EIJob> {
         return data.sort((a, b) => {
             const isAsc = this.sort.direction === 'asc';
             switch (this.sort.active) {
-                case 'id': return compare(a.ei_job_identity, b.ei_job_identity, isAsc);
-                //case 'eiTypeId': return compare(a.eiTypeId, b.eiTypeId, isAsc);
-                //case 'jobResultUri': return compare(a.jobResultUri, b.jobResultUri, isAsc);
-                //case 'jobOwner': return compare(a.jobOwner, b.jobOwner, isAsc);
-                //case 'jobStatusNotificationUri': return compare(a.jobStatusNotificationUri, b.jobStatusNotificationUri, isAsc);
-                //case 'jobDefinition': return compare(a.jobDefinition, b.jobDefinition, isAsc);
+                case 'ei_job_identity': return compare(a.ei_job_identity, b.ei_job_identity, isAsc);
+                case 'owner': return compare(a.owner, b.owner, isAsc);
+                case 'ei_type_identity': return compare(a.ei_type_identity, b.ei_type_identity, isAsc);
                 default: return 0;
             }
         });

@@ -5,5 +5,19 @@
         "type1"
       ],
       "status": "ENABLED"
+    },
+    {
+      "ei_producer_id": "prod-2",
+      "ei_producer_types": [
+        "type2"
+      ],
+      "status": "ENABLED"
+    },
+    {
+      "ei_producer_id": "3-prod",
+      "ei_producer_types": [
+        "type1"
+      ],
+      "status": "DISABLED"
     }
   ]
