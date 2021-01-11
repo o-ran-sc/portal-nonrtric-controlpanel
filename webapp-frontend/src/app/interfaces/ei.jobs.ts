@@ -20,14 +20,6 @@
 
 // Models of data used by the EI Coordinator
 
-export interface EIJobBis {
-  eiTypeId: string;
-  jobResultUri: string;
-  jobOwner: string;
-  jobStatusNotificationUri: string;
-  jobDefinition: any;
-}
-
 export interface EIJob {
   ei_job_identity: string;
   ei_job_data: any;

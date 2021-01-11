@@ -35,6 +35,10 @@
   background-color: transparent;
 }
 
+.table-dark {
+  background-color: #2d2d3d;
+}
+
 .action-cell {
   display: flex;
   justify-content: flex-end;
@@ -48,4 +52,14 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.table-container {
+  margin-top: 10px;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.filter-form {
+  width: 200px;
 }
