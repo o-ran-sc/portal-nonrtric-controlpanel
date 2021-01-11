@@ -17,17 +17,20 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Version } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material';
 
 import { EIService } from '../services/ei/ei.service';
 import { EIJob, EIProducer } from '../interfaces/ei.jobs';
 import { EIProducerDataSource } from './ei-producer.datasource';
 import { EIJobDataSource } from './ei-job.datasource';
 import { NotificationService } from '../services/ui/notification.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { defer, BehaviorSubject, Observable } from 'rxjs';
+import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
 import { UiService } from '../services/ui/ui.service';
 
 class EIJobInfo {
@@ -51,34 +54,54 @@ class EIJobInfo {
 })
 export class EICoordinatorComponent implements OnInit {
 
-
     eiJobsDataSource: EIJobDataSource;
     eiProducersDataSource: EIProducerDataSource;
+    producers$: Observable<EIProducer[]>;
+    filteredProducers$: Observable<EIProducer[]>;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     eiJobInfo = new Map<string, EIJobInfo>();
     darkMode: boolean;
+    searchString: string;
+    formGroup: FormGroup;
+    eiProducersData: MatTableDataSource<EIProducerDataSource>;
+
 
     constructor(
         private eiSvc: EIService,
         private dialog: MatDialog,
         private notificationService: NotificationService,
-        private ui: UiService) { }
+        private ui: UiService,
+        private formBuilder: FormBuilder) {
+            this.formGroup = formBuilder.group({ filter: [""] });
+        }
 
     ngOnInit() {
         this.eiJobsDataSource = new EIJobDataSource(this.eiSvc, this.sort, this.notificationService);
         this.eiProducersDataSource = new EIProducerDataSource(this.eiSvc, this.sort, this.notificationService);
         this.eiJobsDataSource.loadTable();
-        this.eiProducersDataSource.loadTable();
+        //this.eiProducersDataSource.loadTable();
+
+        this.producers$= this.eiProducersDataSource.getProducers();
+        this.filteredProducers$ = defer(() => this.formGroup.get("filter")
+        .valueChanges.pipe(
+            startWith(""),
+            withLatestFrom(this.producers$),
+            map(([val, producers]) =>
+            !val ? producers : producers.filter((x) =>
+            x.ei_producer_id.toLowerCase().includes(val))))
+        );
+
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
         });
     }
 
-    toggleListInstances(eiJob: EIJob): void {
-        const info = this.getEIJobInfo(eiJob);
-        info.isExpanded.next(!info.isExpanded.getValue());
-    }
+    ngAfterViewInit() {
+        this.eiJobsDataSource.sort = this.sort;
+        this.eiProducersDataSource.sort = this.sort;
+
+      }
 
     getEIJobInfo(eiJob: EIJob): EIJobInfo {
         let info: EIJobInfo = this.eiJobInfo.get(eiJob.ei_job_data);

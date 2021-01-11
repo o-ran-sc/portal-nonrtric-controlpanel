@@ -123,9 +123,18 @@ public class EnrichmentControllerMockConfiguration {
             putEiProducerInstance("prod-1", "http://example.com/", "http://example.com/", "http://example.com/",
                 supported_types, new ProducerStatusInfo(ProducerStatusInfo.OperationalState.ENABLED));
 
+            putEiProducerInstance("prod-2", "http://example.com/", "http://example.com/", "http://example.com/",
+                Arrays.asList(supported_types.get(0)), new ProducerStatusInfo(ProducerStatusInfo.OperationalState.DISABLED));
+
+            putEiProducerInstance("3-prod", "http://example.com/", "http://example.com/", "http://example.com/",
+                supported_types, new ProducerStatusInfo(ProducerStatusInfo.OperationalState.ENABLED));
+
             // Create EiJob instance
             schema = getStringFromFile("job-1.json");
             putEiJobInstance("type1", "job1", schema, "owner", "http://example.com/");
+
+            schema = getStringFromFile("job-1.json");
+            putEiJobInstance("type1", "job2", schema, "owner", "http://example.com/");
         }
 
         private String getStringFromFile(String path) {
