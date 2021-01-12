@@ -23,7 +23,6 @@ package org.oransc.portal.nonrtric.controlpanel.policyagentapi;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -65,7 +64,9 @@ class PolicyAgentApiImplTest {
     private static final String RIC_1_INFO_INVALID = "{\"ric_id\":\"ric1\",\"policytype_ids\":\"type1\"]}";
     private static final String CLIENT_ERROR_MESSAGE = "XXXXXXX";
     private static final String SERVICE_ID = "controlpanel";
-
+    private static final String TIMESTAMP = "2021-01-12T09:59:33.392470Z";
+    private static final String STATUS =
+        "{\"last_modified\": \"" + TIMESTAMP + "\",\"status\":{\"enforceStatus\": \"\",\"enforceReason\": \"\"}}";
     private static com.google.gson.Gson gson = new GsonBuilder() //
         .serializeNulls() //
         .create(); //
@@ -140,6 +141,7 @@ class PolicyAgentApiImplTest {
 
         whenGetReturnOK(urlPolicyInstances(POLICY_TYPE_1_ID), HttpStatus.OK, policyInstances);
         whenGetReturnOK(urlPolicyInstance(POLICY_1_ID), HttpStatus.OK, POLICY_1_VALID);
+        whenGetReturnOK(urlPolicyStatus(POLICY_1_ID), HttpStatus.OK, STATUS);
 
         ResponseEntity<String> returnedResp = apiUnderTest.getPolicyInstancesForType(POLICY_TYPE_1_ID);
         assertEquals(returnedResp.getBody(), policyInstancesJson);
@@ -162,9 +164,14 @@ class PolicyAgentApiImplTest {
         return "/v2/policies/" + id;
     }
 
+    private String urlPolicyStatus(String id) {
+        return "/v2/policies/" + id + "/status";
+    }
+
     @Test
     void testGetPolicyInstance() {
         whenGetReturnOK(urlPolicyInstance(POLICY_1_ID), HttpStatus.OK, POLICY_1_VALID);
+        whenGetReturnOK(urlPolicyStatus(POLICY_1_ID), HttpStatus.OK, STATUS);
 
         ResponseEntity<Object> returnedResp = apiUnderTest.getPolicyInstance(POLICY_1_ID);
 
@@ -178,28 +185,28 @@ class PolicyAgentApiImplTest {
 
     private void whenPutReturnOK(String url, String putBody, HttpStatus status, String body) {
         ResponseEntity<String> ret = new ResponseEntity<>(body, status);
-        when(restClient.putForEntity(eq(url), contains(SERVICE_ID))).thenReturn(Mono.just(ret));
+        when(restClient.putForEntity(eq(url), eq(putBody))).thenReturn(Mono.just(ret));
     }
 
     private void whenPutReturnFailure(String url, String putBody, HttpStatus status, String body) {
         HttpServerErrorException e =
             new HttpServerErrorException(status, body, body.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
-        when(restClient.putForEntity(eq(url), contains(SERVICE_ID))).thenReturn(Mono.error(e));
+        when(restClient.putForEntity(eq(url), eq(putBody))).thenReturn(Mono.error(e));
     }
 
     @Test
     void testPutPolicyFailure() {
         String url = urlPutPolicy();
-
+        JsonElement data = JsonParser.parseString(POLICY_DATA).getAsJsonObject();
         PolicyInstance i = PolicyInstance.builder() //
             .policyId(POLICY_1_ID) //
             .policyTypeId(POLICY_TYPE_1_ID) //
             .ricId(RIC_1_ID) //
-            .policyData(POLICY_DATA) //
+            .policyData(data) //
             .serviceId(SERVICE_ID) //
             .build(); //
 
-        String jsonStr = gson.toJson(i, PolicyInstance.class);
+        String jsonStr = gson.toJson(i);
         whenPutReturnFailure(url, jsonStr, HttpStatus.NOT_FOUND, CLIENT_ERROR_MESSAGE);
 
         ResponseEntity<String> returnedResp =
@@ -212,15 +219,15 @@ class PolicyAgentApiImplTest {
     @Test
     void testPutPolicySuccess() {
         String url = urlPutPolicy();
+        JsonElement data = JsonParser.parseString(POLICY_DATA).getAsJsonObject();
         PolicyInstance i = PolicyInstance.builder() //
             .policyId(POLICY_1_ID) //
             .policyTypeId(POLICY_TYPE_1_ID) //
             .ricId(RIC_1_ID) //
-            .policyData(POLICY_DATA) //
+            .policyData(data) //
             .serviceId(SERVICE_ID) //
             .build(); //
-        String jsonStr = gson.toJson(i, PolicyInstance.class);
-
+        String jsonStr = gson.toJson(i);
         whenPutReturnOK(url, jsonStr, HttpStatus.OK, POLICY_1_VALID);
 
         ResponseEntity<String> returnedResp =
@@ -301,6 +308,7 @@ class PolicyAgentApiImplTest {
                 .ricId(RIC_1_ID) //
                 .policyData(data) //
                 .serviceId(SERVICE_ID) //
+                .lastModified(TIMESTAMP) //
                 .build(); //
             res.add(i);
         }

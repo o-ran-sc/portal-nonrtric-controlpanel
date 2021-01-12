@@ -144,8 +144,27 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             String url = "/v2/policies/" + id;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             JsonObject obj = JsonParser.parseString(rsp.getBody()).getAsJsonObject();
+
+            // lastModified timestamp is fetched from PolicyStatus instead
+            ResponseEntity<String> status = getPolicyStatus(id);
+            String lastModified = JsonParser.parseString(status.getBody()).getAsJsonObject() //
+                .get("last_modified") //
+                .getAsString(); //
+            obj.addProperty("lastModified", lastModified);
+
             PolicyInfo i = gson.fromJson(obj, PolicyInfo.class);
             return new ResponseEntity<>(i, rsp.getStatusCode());
+        } catch (Exception e) {
+            ResponseEntity<String> rsp = ErrorResponseHandler.handleException(e);
+            return new ResponseEntity<>(rsp.getBody(), rsp.getStatusCode());
+        }
+    }
+
+    public ResponseEntity<String> getPolicyStatus(String id) {
+        try {
+            String url = "/v2/policies/" + id + "/status";
+            ResponseEntity<String> rsp = webClient.getForEntity(url).block();
+            return new ResponseEntity<>(rsp.getBody(), rsp.getStatusCode());
         } catch (Exception e) {
             ResponseEntity<String> rsp = ErrorResponseHandler.handleException(e);
             return new ResponseEntity<>(rsp.getBody(), rsp.getStatusCode());
@@ -157,10 +176,6 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
         ResponseEntity<Object> rsp = getIndividualPolicyInstance(id);
         PolicyInfo i = (PolicyInfo) rsp.getBody();
         return new ResponseEntity<>(i.policyData, rsp.getStatusCode());
-    }
-
-    private String getTimeStampUTC() {
-        return java.time.Instant.now().toString();
     }
 
     @Override
@@ -176,7 +191,6 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
             .ricId(ric) //
             .policyData(data) //
             .serviceId("controlpanel") //
-            .lastModified(getTimeStampUTC()) //
             .build(); //
 
         try {
