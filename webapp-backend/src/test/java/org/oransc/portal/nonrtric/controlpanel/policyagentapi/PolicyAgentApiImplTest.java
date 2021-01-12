@@ -23,22 +23,23 @@ package org.oransc.portal.nonrtric.controlpanel.policyagentapi;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.oransc.portal.nonrtric.controlpanel.model.ImmutablePolicyInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.PolicyInstance;
 import org.oransc.portal.nonrtric.controlpanel.model.PolicyInstances;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
 import org.springframework.http.HttpStatus;
@@ -53,12 +54,17 @@ class PolicyAgentApiImplTest {
     private static final String POLICY_TYPE_1_INVALID = "\"title\":\"type1\"}";
     private static final String POLICY_TYPE_2_VALID = "{\"title\":\"type2\"}";
     private static final String POLICY_1_ID = "policy1";
-    private static final String POLICY_1_VALID = "{\"policyId\":\"policy1\"}";
-    private static final String POLICY_1_INVALID = "\"policyId\":\"policy1\"}";
+    private static final String POLICY_DATA =
+        "{\"qosObjectives\":{\"priorityLevel\":22.0},\"scope\":{\"qosId\":\"22\",\"ueId\":\"22\"}}";
+    private static final String POLICY_1_VALID =
+        "{\"policy_id\":\"policy1\",\"policytype_id\":\"type1\",\"ric_id\":\"ric1\",\"policy_data\":" + POLICY_DATA
+            + ",\"service_id\":\"controlpanel\"}";
+    private static final String POLICY_1_INVALID = "\"policy_id\":\"policy1\"}";
     private static final String RIC_1_ID = "ric1";
-    private static final String RIC_1_INFO_VALID = "{\"ricName\":\"ric1\",\"policyTypes\":[\"type1\"]}";
-    private static final String RIC_1_INFO_INVALID = "{\"ricName\":\"ric1\",\"policyTypes\":\"type1\"]}";
+    private static final String RIC_1_INFO_VALID = "{\"ric_id\":\"ric1\",\"policytype_ids\":[\"type1\"]}";
+    private static final String RIC_1_INFO_INVALID = "{\"ric_id\":\"ric1\",\"policytype_ids\":\"type1\"]}";
     private static final String CLIENT_ERROR_MESSAGE = "XXXXXXX";
+    private static final String SERVICE_ID = "controlpanel";
 
     private static com.google.gson.Gson gson = new GsonBuilder() //
         .serializeNulls() //
@@ -129,10 +135,12 @@ class PolicyAgentApiImplTest {
 
     @Test
     void testGetPolicyInstancesForTypeSuccessValidJson() {
-        String policyInstances = "{\"policy_ids\":[{\"id\":\"policy1\"}]}";
-        String policyInstancesJson = parsePolicyInstancesJson("[{\"id\":\"policy1\"}]");
+        String policyInstances = "{\"policy_ids\":[\"policy1\"]}";
+        String policyInstancesJson = parsePolicyInstancesJson("[\"policy1\"]");
 
         whenGetReturnOK(urlPolicyInstances(POLICY_TYPE_1_ID), HttpStatus.OK, policyInstances);
+        whenGetReturnOK(urlPolicyInstance(POLICY_1_ID), HttpStatus.OK, POLICY_1_VALID);
+
         ResponseEntity<String> returnedResp = apiUnderTest.getPolicyInstancesForType(POLICY_TYPE_1_ID);
         assertEquals(returnedResp.getBody(), policyInstancesJson);
         assertEquals(HttpStatus.OK, returnedResp.getStatusCode());
@@ -161,8 +169,7 @@ class PolicyAgentApiImplTest {
         ResponseEntity<Object> returnedResp = apiUnderTest.getPolicyInstance(POLICY_1_ID);
 
         assertEquals(HttpStatus.OK, returnedResp.getStatusCode());
-        assertEquals(POLICY_1_VALID, returnedResp.getBody());
-
+        assertEquals(POLICY_DATA, gson.toJson(returnedResp.getBody()));
     }
 
     private String urlPutPolicy() {
@@ -171,33 +178,32 @@ class PolicyAgentApiImplTest {
 
     private void whenPutReturnOK(String url, String putBody, HttpStatus status, String body) {
         ResponseEntity<String> ret = new ResponseEntity<>(body, status);
-        when(restClient.putForEntity(eq(url), eq(putBody))).thenReturn(Mono.just(ret));
+        when(restClient.putForEntity(eq(url), contains(SERVICE_ID))).thenReturn(Mono.just(ret));
     }
 
     private void whenPutReturnFailure(String url, String putBody, HttpStatus status, String body) {
         HttpServerErrorException e =
             new HttpServerErrorException(status, body, body.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
-        when(restClient.putForEntity(eq(url), eq(putBody))).thenReturn(Mono.error(e));
+        when(restClient.putForEntity(eq(url), contains(SERVICE_ID))).thenReturn(Mono.error(e));
     }
 
     @Test
     void testPutPolicyFailure() {
         String url = urlPutPolicy();
 
-        PolicyInfo i = ImmutablePolicyInfo.builder() //
-            .id(POLICY_1_ID) //
-            .type(POLICY_TYPE_1_ID) //
-            .ric(RIC_1_ID) //
-            .json(POLICY_1_VALID) //
-            .service("") //
-            .lastModified("") //
+        PolicyInstance i = PolicyInstance.builder() //
+            .policyId(POLICY_1_ID) //
+            .policyTypeId(POLICY_TYPE_1_ID) //
+            .ricId(RIC_1_ID) //
+            .policyData(POLICY_DATA) //
+            .serviceId(SERVICE_ID) //
             .build(); //
 
-        String jsonStr = gson.toJson(i, PolicyInfo.class);
+        String jsonStr = gson.toJson(i, PolicyInstance.class);
         whenPutReturnFailure(url, jsonStr, HttpStatus.NOT_FOUND, CLIENT_ERROR_MESSAGE);
 
         ResponseEntity<String> returnedResp =
-            apiUnderTest.putPolicy(POLICY_TYPE_1_ID, POLICY_1_ID, POLICY_1_VALID, RIC_1_ID);
+            apiUnderTest.putPolicy(POLICY_TYPE_1_ID, POLICY_1_ID, POLICY_DATA, RIC_1_ID);
 
         assertTrue(returnedResp.getBody().contains(CLIENT_ERROR_MESSAGE));
         assertEquals(HttpStatus.NOT_FOUND, returnedResp.getStatusCode());
@@ -206,22 +212,19 @@ class PolicyAgentApiImplTest {
     @Test
     void testPutPolicySuccess() {
         String url = urlPutPolicy();
-        PolicyInfo i = ImmutablePolicyInfo.builder() //
-            .id(POLICY_1_ID) //
-            .type(POLICY_TYPE_1_ID) //
-            .ric(RIC_1_ID) //
-            .json(POLICY_1_VALID) //
-            .service("") //
-            .lastModified("") //
+        PolicyInstance i = PolicyInstance.builder() //
+            .policyId(POLICY_1_ID) //
+            .policyTypeId(POLICY_TYPE_1_ID) //
+            .ricId(RIC_1_ID) //
+            .policyData(POLICY_DATA) //
+            .serviceId(SERVICE_ID) //
             .build(); //
-
-        String jsonStr = gson.toJson(i, PolicyInfo.class);
+        String jsonStr = gson.toJson(i, PolicyInstance.class);
 
         whenPutReturnOK(url, jsonStr, HttpStatus.OK, POLICY_1_VALID);
 
         ResponseEntity<String> returnedResp =
-            apiUnderTest.putPolicy(POLICY_TYPE_1_ID, POLICY_1_ID, POLICY_1_VALID, RIC_1_ID);
-
+            apiUnderTest.putPolicy(POLICY_TYPE_1_ID, POLICY_1_ID, POLICY_DATA, RIC_1_ID);
         assertNull(returnedResp.getBody());
         assertEquals(HttpStatus.OK, returnedResp.getStatusCode());
     }
@@ -288,12 +291,19 @@ class PolicyAgentApiImplTest {
     }
 
     private String parsePolicyInstancesJson(String inputString) {
-        Type listType = new TypeToken<List<ImmutablePolicyInfo>>() {}.getType();
-        List<PolicyInfo> rspParsed = gson.fromJson(inputString, listType);
-        PolicyInstances policyInstances = new PolicyInstances();
-        for (PolicyInfo policy : rspParsed) {
-            policyInstances.add(policy);
+        JsonArray arr = JsonParser.parseString(inputString).getAsJsonArray();
+        PolicyInstances res = new PolicyInstances();
+        JsonElement data = JsonParser.parseString(POLICY_DATA).getAsJsonObject();
+        for (JsonElement id : arr) {
+            PolicyInfo i = PolicyInfo.builder() //
+                .policyId(id.getAsString()) //
+                .policyTypeId(POLICY_TYPE_1_ID) //
+                .ricId(RIC_1_ID) //
+                .policyData(data) //
+                .serviceId(SERVICE_ID) //
+                .build(); //
+            res.add(i);
         }
-        return gson.toJson(policyInstances);
+        return gson.toJson(res);
     }
 }

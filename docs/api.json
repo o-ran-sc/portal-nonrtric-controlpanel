@@ -141,7 +141,7 @@
         "tags": [
           "policy-controller"
         ],
-        "summary": "Returns a policy instance of a type",
+        "summary": "Returns a policy instance",
         "operationId": "getPolicyInstanceUsingGET",
         "produces": [
           "application/json"
@@ -151,13 +151,6 @@
             "name": "policy_instance_id",
             "in": "path",
             "description": "policy_instance_id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "description": "type",
             "required": true,
             "type": "string"
           }
