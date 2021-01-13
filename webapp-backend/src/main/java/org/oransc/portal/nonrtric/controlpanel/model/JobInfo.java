@@ -20,7 +20,6 @@
 
 package org.oransc.portal.nonrtric.controlpanel.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 import io.swagger.annotations.ApiModel;
@@ -36,27 +35,22 @@ public class JobInfo {
 
     @ApiModelProperty(value = "Identity of the EI job", required = true)
     @SerializedName("ei_job_identity")
-    @JsonProperty("ei_job_identity")
     public String id;
 
     @ApiModelProperty(value = "Type identity for the job")
     @SerializedName("ei_type_identity")
-    @JsonProperty("ei_type_identity")
     public String typeId;
 
     @ApiModelProperty(value = "Json for the job data")
     @SerializedName("ei_job_data")
-    @JsonProperty("ei_job_data")
     public Object jobData;
 
     @ApiModelProperty(value = "URI for the target of the EI")
     @SerializedName("target_uri")
-    @JsonProperty("target_uri")
     public String targetUri;
 
     @ApiModelProperty(value = "The owner of the job")
     @SerializedName("owner")
-    @JsonProperty("owner")
     public String owner;
 
 }

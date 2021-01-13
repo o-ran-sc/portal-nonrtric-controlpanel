@@ -20,7 +20,6 @@
 
 package org.oransc.portal.nonrtric.controlpanel.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 import io.swagger.annotations.ApiModel;
@@ -44,32 +43,26 @@ public class ProducerRegistrationInfo {
 
         @ApiModelProperty(value = "EI type identity", required = true)
         @SerializedName("ei_type_identity")
-        @JsonProperty(value = "ei_type_identity", required = true)
         public String eiTypeId;
 
         @ApiModelProperty(value = "Json schema for the job data")
         @SerializedName("ei_job_data_schema")
-        @JsonProperty("ei_job_data_schema")
         public Object jobDataSchema;
     }
 
     @ApiModelProperty(value = "Supported EI types", required = true)
     @SerializedName("supported_ei_types")
-    @JsonProperty(value = "supported_ei_types", required = true)
     public Collection<ProducerEiTypeRegistrationInfo> types;
 
     @ApiModelProperty(value = "callback for EI job", required = true)
     @SerializedName("ei_job_callback_url")
-    @JsonProperty(value = "ei_job_callback_url", required = true)
     public String jobCallbackUrl;
 
     @ApiModelProperty(value = "callback for producer supervision", required = true)
     @SerializedName("ei_producer_supervision_callback_url")
-    @JsonProperty(value = "ei_producer_supervision_callback_url", required = true)
     public String producerSupervisionCallbackUrl;
 
     @ApiModelProperty(value = "status", required = true)
     @SerializedName("status")
-    @JsonProperty(value = "status", required = true)
     public ProducerStatusInfo status;
 }

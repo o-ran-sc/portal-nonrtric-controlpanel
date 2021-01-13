@@ -19,6 +19,7 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.controller;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -73,6 +74,7 @@ public class EnrichmentController {
 
     // Populated by the autowired constructor
     private final EiProducerApi eiProducerApi;
+    public static com.google.gson.Gson gson = new GsonBuilder().create();
 
     @Autowired
     public EnrichmentController(final EiProducerApi eiProducerApi) {
@@ -83,7 +85,7 @@ public class EnrichmentController {
 
     @ApiOperation(value = "Get the EI job definitions for one EI producer")
     @GetMapping(EI_JOBS)
-    public ResponseEntity<List<JobInfo>> getEiJobs() {
+    public ResponseEntity<String> getEiJobs() {
         logger.debug("getEiJobs");
         ResponseEntity<String> response = this.eiProducerApi.getAllEiProducerIds();
         JsonArray bodyJson = JsonParser.parseString(response.getBody()).getAsJsonArray();
@@ -91,7 +93,7 @@ public class EnrichmentController {
         for (JsonElement producerId : bodyJson) {
             allJobs.addAll(getJobs(producerId));
         }
-        return new ResponseEntity<>(allJobs, HttpStatus.OK);
+        return new ResponseEntity<>(gson.toJson(allJobs), HttpStatus.OK);
     }
 
     private List<JobInfo> getJobs(JsonElement producerId) {
@@ -102,7 +104,7 @@ public class EnrichmentController {
 
     @ApiOperation(value = "Get EI producers")
     @GetMapping(EI_PRODUCERS)
-    public ResponseEntity<List<ProducerInfo>> getEiProducers() {
+    public ResponseEntity<String> getEiProducers() {
         logger.debug("getEiProducers");
         ResponseEntity<String> response = this.eiProducerApi.getAllEiProducerIds();
         JsonArray bodyJson = JsonParser.parseString(response.getBody()).getAsJsonArray();
@@ -116,7 +118,7 @@ public class EnrichmentController {
             producers.add(producerInfo);
         }
 
-        return new ResponseEntity<>(producers, HttpStatus.OK);
+        return new ResponseEntity<>(gson.toJson(producers), HttpStatus.OK);
     }
 
     private String[] getSupportedTypes(JsonElement producerId) {
