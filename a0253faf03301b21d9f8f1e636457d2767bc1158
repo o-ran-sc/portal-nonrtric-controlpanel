@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3749a5b6_fcb725d4",
+        "filename": "nonrtric-gateway/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-01-14T12:11:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05c44e05_35cad895",
+      "range": {
+        "startLine": 10,
+        "startChar": 11,
+        "endLine": 10,
+        "endChar": 20
+      },
+      "revId": "a0253faf03301b21d9f8f1e636457d2767bc1158",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "120ae5a3_992fa827",
         "filename": "nonrtric-gateway/pom.xml",
         "patchSetId": 1
