@@ -20,6 +20,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PolicyControlComponent } from './policy-control.component';
+import { MatIconModule, MatTableModule } from '@angular/material';
+import { PolicyType } from '../interfaces/policy.types';
 
 describe('PolicyControlComponent', () => {
   let component: PolicyControlComponent;
@@ -27,6 +29,7 @@ describe('PolicyControlComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ MatIconModule,MatTableModule ],
       declarations: [ PolicyControlComponent ]
     })
     .compileComponents();
@@ -38,7 +41,4 @@ describe('PolicyControlComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
 });

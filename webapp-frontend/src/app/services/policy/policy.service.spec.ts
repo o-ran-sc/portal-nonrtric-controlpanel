@@ -20,9 +20,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PolicyService } from './policy.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing'
 
 describe('PolicyService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  beforeEach(() => TestBed.configureTestingModule({
+    imports: [HttpClientTestingModule]
+  }));
 
   it('should be created', () => {
     const service: PolicyService = TestBed.get(PolicyService);

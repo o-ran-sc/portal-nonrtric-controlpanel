@@ -20,9 +20,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { EIService } from './ei.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing'
 
-describe('PolicyService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe('EIService', () => {
+  beforeEach(() => TestBed.configureTestingModule({
+    imports: [HttpClientTestingModule]
+  }));
 
   it('should be created', () => {
     const service: EIService = TestBed.get(EIService);

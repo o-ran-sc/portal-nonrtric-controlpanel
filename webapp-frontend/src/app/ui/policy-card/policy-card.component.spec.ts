@@ -20,14 +20,24 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {PolicyCardComponent} from './policy-card.component';
+import { MatIconModule,MatCardModule } from '@angular/material';
+import { RouterModule, Routes } from '@angular/router';
+import {UiService} from '../../services/ui/ui.service';
 
 describe('PolicyCardComponent', () => {
+  const routes: Routes = [
+    { path: 'policy', redirectTo: '../../policy', pathMatch: 'full'}
+  ];
   let component: PolicyCardComponent;
   let fixture: ComponentFixture<PolicyCardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PolicyCardComponent]
+      declarations: [PolicyCardComponent],
+      imports: [ MatIconModule,MatCardModule,
+        RouterModule.forRoot(routes)
+      ],
+      providers: [UiService]
     })
       .compileComponents();
   }));
