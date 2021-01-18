@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* ========================LICENSE_START=================================
+* O-RAN-SC
+* %%
+* Copyright (C) 2021 Nordix Foundation
+* %%
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* ========================LICENSE_END===================================
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+ <parent>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-parent</artifactId>
+  <version>2.4.1</version>
+  <relativePath /> <!-- lookup parent from repository -->
+ </parent>
+ <groupId>org.oransc.nonrtric</groupId>
+ <artifactId>nonrtric-gateway</artifactId>
+ <version>0.0.1-SNAPSHOT</version>
+ <name>Nonrtric Gateway</name>
+ <description>Nonrtric Gateway</description>
+
+ <properties>
+  <java.version>11</java.version>
+  <spring-cloud.version>2020.0.0</spring-cloud.version>
+  <formatter-maven-plugin.version>2.13.0</formatter-maven-plugin.version>
+  <spotless-maven-plugin.version>2.5.0</spotless-maven-plugin.version>
+  <docker-maven-plugin.version>0.30.0</docker-maven-plugin.version>
+ </properties>
+
+ <dependencies>
+  <dependency>
+   <groupId>org.springframework.cloud</groupId>
+   <artifactId>spring-cloud-starter-gateway</artifactId>
+  </dependency>
+
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-test</artifactId>
+   <scope>test</scope>
+  </dependency>
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-actuator</artifactId>
+   <scope>runtime</scope>
+  </dependency>
+ </dependencies>
+
+ <dependencyManagement>
+  <dependencies>
+   <dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-dependencies</artifactId>
+    <version>${spring-cloud.version}</version>
+    <type>pom</type>
+    <scope>import</scope>
+   </dependency>
+  </dependencies>
+ </dependencyManagement>
+
+ <build>
+  <plugins>
+   <plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+   </plugin>
+   <plugin>
+    <groupId>net.revelc.code.formatter</groupId>
+    <artifactId>formatter-maven-plugin</artifactId>
+    <version>${formatter-maven-plugin.version}</version>
+    <configuration>
+     <lineEnding>LF</lineEnding>
+     <configFile>${project.basedir}/eclipse-formatter.xml</configFile>
+    </configuration>
+    <!-- https://code.revelc.net/formatter-maven-plugin/ use mvn formatter:format 
+     spotless:apply process-sources -->
+   </plugin>
+   <plugin>
+    <groupId>com.diffplug.spotless</groupId>
+    <artifactId>spotless-maven-plugin</artifactId>
+    <version>${spotless-maven-plugin.version}</version>
+    <configuration>
+     <lineEndings>UNIX</lineEndings>
+     <java>
+      <removeUnusedImports />
+      <importOrder>
+       <order>com,java,javax,org</order>
+      </importOrder>
+     </java>
+    </configuration>
+    <!-- https://github.com/diffplug/spotless/tree/master/plugin-maven use 
+     mvn spotless:apply to rewrite source files use mvn spotless:check to validate 
+     source files -->
+   </plugin>
+  </plugins>
+ </build>
+ <profiles>
+  <profile>
+   <id>docker</id>
+   <build>
+    <plugins>
+     <plugin>
+      <groupId>io.fabric8</groupId>
+      <artifactId>docker-maven-plugin</artifactId>
+      <version>${docker-maven-plugin.version}</version>
+      <inherited>false</inherited>
+      <executions>
+       <execution>
+        <id>generate-nonrtric-gateway-image</id>
+        <phase>package</phase>
+        <goals>
+         <goal>build</goal>
+        </goals>
+        <configuration>
+         <pullRegistry>${env.CONTAINER_PULL_REGISTRY}</pullRegistry>
+         <images>
+          <image>
+           <name>o-ran-sc/nonrtric-gateway:${project.version}</name>
+           <build>
+            <cleanup>try</cleanup>
+            <contextDir>${basedir}</contextDir>
+            <dockerFile>Dockerfile</dockerFile>
+            <args>
+             <JAR>${project.build.finalName}.jar</JAR>
+            </args>
+            <tags>
+             <tag>${project.version}</tag>
+            </tags>
+           </build>
+          </image>
+         </images>
+        </configuration>
+       </execution>
+       <execution>
+        <id>push-nonrtric-gateway-image</id>
+        <goals>
+         <goal>build</goal>
+         <goal>push</goal>
+        </goals>
+        <configuration>
+         <pullRegistry>${env.CONTAINER_PULL_REGISTRY}</pullRegistry>
+         <pushRegistry>${env.CONTAINER_PUSH_REGISTRY}</pushRegistry>
+         <images>
+          <image>
+           <name>o-ran-sc/nonrtric-gateway:${project.version}</name>
+           <build>
+            <contextDir>${basedir}</contextDir>
+            <dockerFile>Dockerfile</dockerFile>
+            <args>
+             <JAR>${project.build.finalName}.jar</JAR>
+            </args>
+            <tags>
+             <tag>${project.version}</tag>
+             <tag>latest</tag>
+            </tags>
+           </build>
+          </image>
+         </images>
+        </configuration>
+       </execution>
+      </executions>
+     </plugin>
+    </plugins>
+   </build>
+  </profile>
+ </profiles>
+</project>
