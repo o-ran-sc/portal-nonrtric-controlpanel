@@ -21,9 +21,14 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ConfirmDialogService } from './confirm-dialog.service';
+import { MatDialogModule } from '@angular/material';
+import {UiService} from './ui.service';
 
 describe('ConfirmDialogService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  beforeEach(() => TestBed.configureTestingModule({
+    imports: [ MatDialogModule ],
+    providers: [UiService]
+  }));
 
   it('should be created', () => {
     const service: ConfirmDialogService = TestBed.get(ConfirmDialogService);
