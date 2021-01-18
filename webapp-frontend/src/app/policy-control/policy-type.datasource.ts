@@ -20,15 +20,19 @@
 
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatSort } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { merge } from 'rxjs';
 import { of } from 'rxjs/observable/of';
 import { catchError, finalize, map } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+
 import { PolicyType } from '../interfaces/policy.types';
 import { PolicyService } from '../services/policy/policy.service';
 import { NotificationService } from '../services/ui/notification.service';
+
+@Injectable({
+    providedIn: 'root'
+})
 
 export class PolicyTypeDataSource extends DataSource<PolicyType> {
 
@@ -41,7 +45,6 @@ export class PolicyTypeDataSource extends DataSource<PolicyType> {
     public rowCount = 1; // hide footer during intial load
 
     constructor(private policySvc: PolicyService,
-        private sort: MatSort,
         private notificationService: NotificationService) {
         super();
     }
@@ -72,35 +75,11 @@ export class PolicyTypeDataSource extends DataSource<PolicyType> {
     }
 
     connect(collectionViewer: CollectionViewer): Observable<PolicyType[]> {
-        const dataMutations = [
-            this.policyTypeSubject.asObservable(),
-            this.sort.sortChange
-        ];
-        return merge(...dataMutations).pipe(map(() => {
-            return this.getSortedData([...this.policyTypeSubject.getValue()]);
-        }));
+        return of(this.policyTypeSubject.getValue());
     }
 
     disconnect(collectionViewer: CollectionViewer): void {
         this.policyTypeSubject.complete();
         this.loadingSubject.complete();
     }
-
-    private getSortedData(data: PolicyType[]) {
-        if (!this.sort.active || this.sort.direction === '') {
-            return data;
-        }
-
-        return data.sort((a, b) => {
-            const isAsc = this.sort.direction === 'asc';
-            switch (this.sort.active) {
-                case 'name': return compare(a.name, b.name, isAsc);
-                default: return 0;
-            }
-        });
-    }
-}
-
-function compare(a: any, b: any, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

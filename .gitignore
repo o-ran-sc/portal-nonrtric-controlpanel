@@ -50,6 +50,7 @@ target
 
 # OSx cruft
 **/.DS_Store
+.history
 
 # documentation
 .tox

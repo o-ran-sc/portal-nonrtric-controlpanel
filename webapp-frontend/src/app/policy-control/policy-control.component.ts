@@ -19,10 +19,8 @@
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
-import { PolicyService } from '../services/policy/policy.service';
 import { PolicyType } from '../interfaces/policy.types';
 import { PolicyTypeDataSource } from './policy-type.datasource';
 import { getPolicyDialogProperties } from './policy-instance-dialog.component';
@@ -53,21 +51,16 @@ class PolicyTypeInfo {
 })
 export class PolicyControlComponent implements OnInit {
 
-
-    policyTypesDataSource: PolicyTypeDataSource;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
-
     policyTypeInfo = new Map<string, PolicyTypeInfo>();
     darkMode: boolean;
 
     constructor(
-        private policySvc: PolicyService,
+        private policyTypesDataSource: PolicyTypeDataSource,
         private dialog: MatDialog,
         private notificationService: NotificationService,
         private ui: UiService) { }
 
     ngOnInit() {
-        this.policyTypesDataSource = new PolicyTypeDataSource(this.policySvc, this.sort, this.notificationService);
         this.policyTypesDataSource.loadTable();
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
