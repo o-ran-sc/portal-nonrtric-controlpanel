@@ -18,19 +18,52 @@
  * ========================LICENSE_END===================================
  */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule, MatSort, MatTableModule } from '@angular/material';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { of } from 'rxjs';
 
+import { NotificationService } from '../services/ui/notification.service';
 import { PolicyControlComponent } from './policy-control.component';
-import { MatIconModule, MatTableModule } from '@angular/material';
-import { PolicyType } from '../interfaces/policy.types';
+import { PolicyTypeDataSource } from './policy-type.datasource';
+import { UiService } from '../services/ui/ui.service';
 
 describe('PolicyControlComponent', () => {
   let component: PolicyControlComponent;
   let fixture: ComponentFixture<PolicyControlComponent>;
 
   beforeEach(async(() => {
+    const policyTypeDataSourceSpy = jasmine.createSpyObj('PolicyTypeDataSource', [ 'connect', 'loadTable',  'disconnect' ]);
+    const policyType = {
+      name: "type1",
+      schema: "{}",
+      schemaObject: "{}"
+    }
+    policyTypeDataSourceSpy.connect.and.returnValue(of([ policyType]));
+    policyTypeDataSourceSpy.disconnect();
+
+    let matDialogStub: Partial<MatDialog>;
+    let notificationServiceStub: Partial<NotificationService>;
+
     TestBed.configureTestingModule({
-      imports: [ MatIconModule,MatTableModule ],
-      declarations: [ PolicyControlComponent ]
+      imports: [
+        MatIconModule,
+        MatTableModule,
+        BrowserAnimationsModule
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+      ],
+      declarations: [
+        PolicyControlComponent
+       ],
+      providers: [
+        { provide: PolicyTypeDataSource, useValue: policyTypeDataSourceSpy },
+        { provide: MatDialog, useValue: matDialogStub },
+        { provide: NotificationService, useValue: notificationServiceStub },
+        UiService
+       ]
     })
     .compileComponents();
   }));
@@ -41,4 +74,7 @@ describe('PolicyControlComponent', () => {
     fixture.detectChanges();
   });
 
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });
