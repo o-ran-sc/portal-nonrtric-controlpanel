@@ -94,8 +94,16 @@ class RestApiTest {
             .targetUri("http://example.com/") //
             .owner("owner") //
             .build();
-        assertThat(jobs).hasSize(1) //
-            .contains(gson.toJsonTree(wantedJobInfo));
+        JobInfo wantedJobInfo2 = JobInfo.builder() //
+            .id("job2") //
+            .typeId("type2") //
+            .jobData(getStringFromFile("job-2.json")) //
+            .targetUri("http://example.com/") //
+            .owner("owner") //
+            .build();
+        assertThat(jobs).hasSize(6) //
+            .contains(gson.toJsonTree(wantedJobInfo), //
+            gson.toJsonTree(wantedJobInfo2));
     }
 
     @Test
@@ -111,8 +119,20 @@ class RestApiTest {
             .types(new String[] {"type1", "type2"}) //
             .status("ENABLED") //
             .build();
-        assertThat(producers).hasSize(1) //
-            .contains(gson.toJsonTree(wantedProducerInfo));
+        ProducerInfo wantedProducerInfo2 = ProducerInfo.builder() //
+            .id("prod-2") //
+            .types(new String[] {"type1"}) //
+            .status("DISABLED") //
+            .build();
+        ProducerInfo wantedProducerInfo3 = ProducerInfo.builder() //
+            .id("3-prod") //
+            .types(new String[] {"type1", "type2"}) //
+            .status("ENABLED") //
+            .build();
+        assertThat(producers).hasSize(3) //
+            .contains(gson.toJsonTree(wantedProducerInfo), //
+            gson.toJsonTree(wantedProducerInfo2), //
+            gson.toJsonTree(wantedProducerInfo3));
     }
 
     private AsyncRestClient restClient() {

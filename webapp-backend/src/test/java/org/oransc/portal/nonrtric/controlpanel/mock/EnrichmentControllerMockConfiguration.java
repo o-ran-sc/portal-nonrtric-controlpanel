@@ -134,7 +134,7 @@ public class EnrichmentControllerMockConfiguration {
             putEiJobInstance("type1", "job1", schema, "owner", "http://example.com/");
 
             schema = getStringFromFile("job-1.json");
-            putEiJobInstance("type1", "job2", schema, "owner", "http://example.com/");
+            putEiJobInstance("type2", "job2", schema, "owner", "http://example.com/");
         }
 
         private String getStringFromFile(String path) {
