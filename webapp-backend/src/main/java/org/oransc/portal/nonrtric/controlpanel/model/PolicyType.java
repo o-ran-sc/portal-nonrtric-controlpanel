@@ -20,14 +20,10 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class PolicyType {
 
-    @JsonProperty("name")
     String name;
 
-    @JsonProperty("schema")
     Object schema;
 
     public PolicyType(String name, Object schema) {

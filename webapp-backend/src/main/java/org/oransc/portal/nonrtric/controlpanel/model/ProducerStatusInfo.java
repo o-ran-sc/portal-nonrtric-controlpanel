@@ -20,7 +20,6 @@
 
 package org.oransc.portal.nonrtric.controlpanel.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Builder;
@@ -37,7 +36,6 @@ public class ProducerStatusInfo {
     }
 
     @SerializedName("operational_state")
-    @JsonProperty(value = "operational_state", required = true)
     public final OperationalState opState;
 
     public ProducerStatusInfo(OperationalState state) {

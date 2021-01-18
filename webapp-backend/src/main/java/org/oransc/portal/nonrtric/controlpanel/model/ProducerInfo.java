@@ -18,7 +18,6 @@
 
 package org.oransc.portal.nonrtric.controlpanel.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 import io.swagger.annotations.ApiModel;
@@ -34,17 +33,14 @@ public class ProducerInfo {
 
     @ApiModelProperty(value = "Idenitity of the EI producer", required = true)
     @SerializedName("ei_producer_id")
-    @JsonProperty("ei_producer_id")
     public String id;
 
     @ApiModelProperty(value = "Types provided by the EI producer", required = true)
     @SerializedName("ei_producer_types")
-    @JsonProperty("ei_producer_types")
     public String[] types;
 
     @ApiModelProperty(value = "Status of the EI producer", required = true)
     @SerializedName("status")
-    @JsonProperty("status")
     public String status;
 
 }

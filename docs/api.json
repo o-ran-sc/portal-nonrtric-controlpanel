@@ -45,10 +45,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/ei_job_request"
-              }
+              "type": "string"
             }
           },
           "401": {
@@ -78,10 +75,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/ei_producer"
-              }
+              "type": "string"
             }
           },
           "401": {
@@ -380,65 +374,6 @@
         },
         "deprecated": false
       }
-    }
-  },
-  "definitions": {
-    "ei_job_request": {
-      "type": "object",
-      "required": [
-        "ei_job_identity"
-      ],
-      "properties": {
-        "ei_job_data": {
-          "type": "object",
-          "description": "Json for the job data"
-        },
-        "ei_job_identity": {
-          "type": "string",
-          "description": "Identity of the EI job"
-        },
-        "ei_type_identity": {
-          "type": "string",
-          "description": "Type identity for the job"
-        },
-        "owner": {
-          "type": "string",
-          "description": "The owner of the job"
-        },
-        "target_uri": {
-          "type": "string",
-          "description": "URI for the target of the EI"
-        }
-      },
-      "title": "ei_job_request",
-      "description": "The EI job"
-    },
-    "ei_producer": {
-      "type": "object",
-      "required": [
-        "ei_producer_id",
-        "ei_producer_types",
-        "status"
-      ],
-      "properties": {
-        "ei_producer_id": {
-          "type": "string",
-          "description": "Idenitity of the EI producer"
-        },
-        "ei_producer_types": {
-          "type": "array",
-          "description": "Types provided by the EI producer",
-          "items": {
-            "type": "string"
-          }
-        },
-        "status": {
-          "type": "string",
-          "description": "Status of the EI producer"
-        }
-      },
-      "title": "ei_producer",
-      "description": "The EI producer"
     }
   }
 }
