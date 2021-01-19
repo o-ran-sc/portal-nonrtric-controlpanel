@@ -18,7 +18,6 @@
  * ========================LICENSE_END===================================
  */
 import { Component, OnInit, ViewChild, Version } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -66,10 +65,11 @@ export class EICoordinatorComponent implements OnInit {
     formGroup: FormGroup;
     eiProducersData: MatTableDataSource<EIProducerDataSource>;
 
+    displayedColumns: string[] = ['id', 'typeId', 'owner', 'targetUri'];
+
 
     constructor(
         private eiSvc: EIService,
-        private dialog: MatDialog,
         private notificationService: NotificationService,
         private ui: UiService,
         private formBuilder: FormBuilder) {
@@ -96,12 +96,6 @@ export class EICoordinatorComponent implements OnInit {
             this.darkMode = isDark;
         });
     }
-
-    ngAfterViewInit() {
-        this.eiJobsDataSource.sort = this.sort;
-        this.eiProducersDataSource.sort = this.sort;
-
-      }
 
     getEIJobInfo(eiJob: EIJob): EIJobInfo {
         let info: EIJobInfo = this.eiJobInfo.get(eiJob.ei_job_data);
