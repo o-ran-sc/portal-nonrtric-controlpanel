@@ -3,6 +3,7 @@
  * O-RAN-SC
  * %%
  * Copyright (C) 2019 AT&T Intellectual Property
+ * Modifications Copyright (C) 2021 Nordix Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +19,16 @@
  * ========================LICENSE_END===================================
  */
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class UiService {
 
   darkModeState: BehaviorSubject<boolean>;
+  expanded: Observable<boolean>;
 
   constructor() {
-    // TODO: if the user is signed in get the default value from Firebase
     this.darkModeState = new BehaviorSubject<boolean>(true);
+    this.expanded = new Observable<boolean>();
   }
 }
