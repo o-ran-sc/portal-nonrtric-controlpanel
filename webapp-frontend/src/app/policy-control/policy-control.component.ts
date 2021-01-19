@@ -17,18 +17,18 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
+import { BehaviorSubject, Observable } from 'rxjs';
+
+import { NoTypePolicyInstanceDialogComponent } from './no-type-policy-instance-dialog.component';
 import { PolicyType } from '../interfaces/policy.types';
 import { PolicyTypeDataSource } from './policy-type.datasource';
 import { getPolicyDialogProperties } from './policy-instance-dialog.component';
 import { PolicyInstanceDialogComponent } from './policy-instance-dialog.component';
-import { NotificationService } from '../services/ui/notification.service';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { UiService } from '../services/ui/ui.service';
-import { NoTypePolicyInstanceDialogComponent } from './no-type-policy-instance-dialog.component';
 
 class PolicyTypeInfo {
     constructor(public type: PolicyType) { }
@@ -57,7 +57,6 @@ export class PolicyControlComponent implements OnInit {
     constructor(
         private policyTypesDataSource: PolicyTypeDataSource,
         private dialog: MatDialog,
-        private notificationService: NotificationService,
         private ui: UiService) { }
 
     ngOnInit() {

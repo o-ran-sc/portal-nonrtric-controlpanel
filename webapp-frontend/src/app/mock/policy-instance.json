@@ -14,5 +14,21 @@
       },
       "service": "service1",
       "lastModified": "2020-12-08T21:12:43.719084Z"
+    },
+    {
+      "id": "3000",
+      "type": "1",
+      "ric": "ric2",
+      "json": {
+        "scope": {
+          "ueId": "ue3300",
+          "qosId": "qos3300"
+        },
+        "qosObjectives": {
+          "priorityLevel": 3300
+        }
+      },
+      "service": "service1",
+      "lastModified": "2020-12-08T21:12:43.719084Z"
     }
   ]

@@ -18,19 +18,19 @@
  * ========================LICENSE_END===================================
  */
 import { Component, OnInit, ViewChild, Version } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
+
+import { defer, BehaviorSubject, Observable } from 'rxjs';
+import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
 
 import { EIService } from '../services/ei/ei.service';
 import { EIJob, EIProducer } from '../interfaces/ei.jobs';
 import { EIProducerDataSource } from './ei-producer.datasource';
 import { EIJobDataSource } from './ei-job.datasource';
 import { NotificationService } from '../services/ui/notification.service';
-import { defer, BehaviorSubject, Observable } from 'rxjs';
-import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
 import { UiService } from '../services/ui/ui.service';
 
 class EIJobInfo {
@@ -66,10 +66,8 @@ export class EICoordinatorComponent implements OnInit {
     formGroup: FormGroup;
     eiProducersData: MatTableDataSource<EIProducerDataSource>;
 
-
     constructor(
         private eiSvc: EIService,
-        private dialog: MatDialog,
         private notificationService: NotificationService,
         private ui: UiService,
         private formBuilder: FormBuilder) {
@@ -96,12 +94,6 @@ export class EICoordinatorComponent implements OnInit {
             this.darkMode = isDark;
         });
     }
-
-    ngAfterViewInit() {
-        this.eiJobsDataSource.sort = this.sort;
-        this.eiProducersDataSource.sort = this.sort;
-
-      }
 
     getEIJobInfo(eiJob: EIJob): EIJobInfo {
         let info: EIJobInfo = this.eiJobInfo.get(eiJob.ei_job_data);

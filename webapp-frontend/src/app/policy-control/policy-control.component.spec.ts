@@ -20,7 +20,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule, MatSort, MatTableModule } from '@angular/material';
+import { MatIconModule, MatTableModule } from '@angular/material';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 

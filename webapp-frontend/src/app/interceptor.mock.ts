@@ -1,11 +1,13 @@
-import { Injectable, Injector } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import * as policytypes from './mock/policytypes.json';
-import * as policyinstances from './mock/policy-instance.json';
-import * as policyinstanceedit from './mock/policy-instance-edit.json';
+
 import * as eijobs from './mock/ei-jobs.json';
 import * as eiproducers from './mock/ei-producers.json';
+import * as nopolicyinstances from './mock/nopolicyinstances.json';
+import * as policytypes from './mock/policytypes.json';
+import * as policyinstanceedit from './mock/policy-instance-edit.json';
+import * as policyinstances from './mock/policy-instance.json';
 import * as rics from './mock/rics.json';
 
 const urls = [
@@ -16,6 +18,10 @@ const urls = [
     {
         url: 'api/policy/policies?type=1',
         json: policyinstances
+    },
+    {
+        url: 'api/policy/policies?type=2',
+        json: nopolicyinstances
     },
     {
         url: 'api/policy/policies/2000?type=1',
@@ -35,6 +41,10 @@ const urls = [
     },
     {
         url: 'api/policy/rics?policyType=1',
+        json: rics
+    },
+    {
+        url: 'api/policy/rics?policyType=2',
         json: rics
     }
 ];
