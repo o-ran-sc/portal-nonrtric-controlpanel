@@ -34,8 +34,8 @@ import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.type
 export class PolicyService {
 
     private basePath = 'api/policy';
-    private policyTypePath = 'policytypes';
-    private policyPath = 'policies';
+    policyTypePath = 'policytypes';
+    policyPath = 'policies';
 
     private buildPath(...args: any[]) {
         let result = this.basePath;

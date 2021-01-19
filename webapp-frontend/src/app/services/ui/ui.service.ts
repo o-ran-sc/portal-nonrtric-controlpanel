@@ -18,15 +18,17 @@
  * ========================LICENSE_END===================================
  */
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class UiService {
 
   darkModeState: BehaviorSubject<boolean>;
+  expanded: Observable<boolean>;
 
   constructor() {
     // TODO: if the user is signed in get the default value from Firebase
     this.darkModeState = new BehaviorSubject<boolean>(true);
+    this.expanded = new Observable<boolean>();
   }
 }
