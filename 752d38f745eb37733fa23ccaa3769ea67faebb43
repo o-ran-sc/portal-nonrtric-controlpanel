@@ -22,6 +22,30 @@
       "revId": "752d38f745eb37733fa23ccaa3769ea67faebb43",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3ef12ae_5613d3fa",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-01-20T08:40:03Z",
+      "side": 1,
+      "message": "It seems to be the standard way fo doing this, see https://material.angular.io/components/table/overview#sorting. I can agree that putting this definition in another file might seem bad. But on the other hand, the HTML file and the typescript file are already very tightly coupled as it is, so adding another thing is not a big deal. The advantage, as I see it, is that the dispalyed columns are only defined once. In the original solution there were two arrays to update, even if they were close to each other.\nSo there are pros and cons to both solutions, as usual. But I think it is an advantage to follow the Angular style of doing things, so I chose that.",
+      "parentUuid": "fb5d9181_b743880f",
+      "range": {
+        "startLine": 84,
+        "startChar": 45,
+        "endLine": 84,
+        "endChar": 61
+      },
+      "revId": "752d38f745eb37733fa23ccaa3769ea67faebb43",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
