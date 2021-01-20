@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb5d9181_b743880f",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2021-01-20T07:48:13Z",
+      "side": 1,
+      "message": "This listed the columns defined above \u0027typeId\u0027 etc. Is it really an improvement to move this to another file?\nIf you rename, add or remove a column you will have to update displayedColumns definition too.",
+      "range": {
+        "startLine": 84,
+        "startChar": 45,
+        "endLine": 84,
+        "endChar": 61
+      },
+      "revId": "752d38f745eb37733fa23ccaa3769ea67faebb43",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
