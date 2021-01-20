@@ -46,6 +46,30 @@
       "revId": "752d38f745eb37733fa23ccaa3769ea67faebb43",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed000ba6_960c54a9",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2021-01-20T09:13:54Z",
+      "side": 1,
+      "message": "The reason for doing that is then you can re-order and include/exclude columns dynamically (which we do no support).",
+      "parentUuid": "b3ef12ae_5613d3fa",
+      "range": {
+        "startLine": 84,
+        "startChar": 45,
+        "endLine": 84,
+        "endChar": 61
+      },
+      "revId": "752d38f745eb37733fa23ccaa3769ea67faebb43",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
