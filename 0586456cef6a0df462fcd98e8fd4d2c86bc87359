@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adae8fb9_a21b2988",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2021-01-21T15:20:11Z",
+      "side": 1,
+      "message": "I really do not understand any of this, but that is OK.\nThis looks like testcode that mixedin the production code. \nEven the class name indicates production code. \nMust it be like that?",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 3
+      },
+      "revId": "0586456cef6a0df462fcd98e8fd4d2c86bc87359",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
