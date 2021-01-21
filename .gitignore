@@ -7,6 +7,7 @@
 /tmp
 /out-tsc
 package-lock.json
+coverage
 
 # dependencies
 /node

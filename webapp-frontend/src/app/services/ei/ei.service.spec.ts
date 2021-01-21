@@ -17,18 +17,82 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing';
 
+import { EIJob, EIProducer } from '../../interfaces/ei.types';
 import { EIService } from './ei.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing'
 
 describe('EIService', () => {
+  let basePath = 'api/enrichment';
+  let service: EIService;
+  let httpTestingController: HttpTestingController;
+
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientTestingModule]
+    imports: [
+      HttpClientTestingModule
+    ],
+    providers: [
+      EIService
+    ]
   }));
 
   it('should be created', () => {
-    const service: EIService = TestBed.get(EIService);
+    service = TestBed.get(EIService);
     expect(service).toBeTruthy();
+  });
+
+  describe('#getEIProducers', () => {
+    let expectedEIProducers: EIProducer[];
+
+    beforeEach(() => {
+      service = TestBed.get(EIService);
+      httpTestingController = TestBed.get(HttpTestingController);
+      expectedEIProducers = [
+        { ei_producer_id: '1', ei_producer_types: ['EI Type 1'], status: 'ENABLED' },
+        { ei_producer_id: '1', ei_producer_types: ['EI Type 1'], status: 'ENABLED' }
+      ] as EIProducer[];
+    });
+
+    it('should return all producers', () => {
+      service.getEIProducers().subscribe(
+        producers => expect(producers).toEqual(expectedEIProducers, 'should return expected EIProducers'),
+        fail
+      );
+
+      const req = httpTestingController.expectOne(basePath + '/' + service.eiProducerPath);
+      expect(req.request.method).toEqual('GET');
+
+      req.flush(expectedEIProducers); //Return expectedEITypes
+
+      httpTestingController.verify();
+    });
+  });
+
+  describe('#EIJobs', () => {
+    let expectedEIJobs: EIJob[];
+
+    beforeEach(() => {
+      service = TestBed.get(EIService);
+      httpTestingController = TestBed.get(HttpTestingController);
+      expectedEIJobs = [
+        { ei_job_identity: '1', ei_job_data: 'data', ei_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'},
+        { ei_job_identity: '2', ei_job_data: 'EI Job 2', ei_type_identity: 'Type ID 2',  target_uri: 'hhtp://url', owner: 'owner'}
+      ] as EIJob[];
+    });
+
+    it('should return all jobs', () => {
+      service.getEIJobs().subscribe(
+        jobs => expect(jobs).toEqual(expectedEIJobs, 'should return expected Jobs'),
+        fail
+      );
+
+      const req = httpTestingController.expectOne(basePath + '/' + service.eiJobPath);
+      expect(req.request.method).toEqual('GET');
+
+      req.flush(expectedEIJobs); //Return expectedEIJobs
+
+      httpTestingController.verify();
+     });
   });
 });

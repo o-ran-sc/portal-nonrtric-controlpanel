@@ -28,11 +28,6 @@ export interface EIJob {
   owner: string;
 }
 
-export interface EIType {
-  id: string;
-  description: string;
-}
-
 export interface EIProducer {
   ei_producer_id: string;
   ei_producer_types: string[];

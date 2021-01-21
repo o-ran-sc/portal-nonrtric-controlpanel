@@ -22,7 +22,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { EIJob, EIType, EIProducer } from '../../interfaces/ei.jobs';
+import { EIJob, EIProducer } from '../../interfaces/ei.types';
 import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.types';
 
 /**
@@ -34,9 +34,8 @@ import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.type
 export class EIService {
 
     private basePath = 'api/enrichment';
-    private eiTypePath = 'eitypes';
-    private eiJobPath = 'eijobs';
-    private eiProducerPath = 'eiproducers';
+    eiJobPath = 'eijobs';
+    eiProducerPath = 'eiproducers';
 
     private buildPath(...args: any[]) {
         let result = this.basePath;
@@ -48,23 +47,6 @@ export class EIService {
 
     constructor(private httpClient: HttpClient) {
         // injects to variable httpClient
-    }
-
-    /**
-     * Gets version details
-     * @returns Observable that should yield a String
-     */
-    getVersion(): Observable<string> {
-        const url = this.buildPath('version');
-        return this.httpClient.get<ControlpanelSuccessTransport>(url).pipe(
-            // Extract the string here
-            map(res => res['data'])
-        );
-    }
-
-    getEITypes(): Observable<EIType[]> {
-        const url = this.buildPath(this.eiTypePath);
-        return this.httpClient.get<EIType[]>(url);
     }
 
     getEIJobs(): Observable<EIJob[]> {
