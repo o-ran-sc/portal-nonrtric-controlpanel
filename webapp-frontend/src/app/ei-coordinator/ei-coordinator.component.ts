@@ -17,20 +17,18 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { Component, OnInit, ViewChild, Version } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 
 import { defer, BehaviorSubject, Observable } from 'rxjs';
-import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
+import { map, withLatestFrom, startWith } from 'rxjs/operators';
 
-import { EIService } from '../services/ei/ei.service';
 import { EIJob, EIProducer } from '../interfaces/ei.jobs';
-import { EIProducerDataSource } from './ei-producer.datasource';
 import { EIJobDataSource } from './ei-job.datasource';
-import { NotificationService } from '../services/ui/notification.service';
+import { EIProducerDataSource } from './ei-producer.datasource';
 import { UiService } from '../services/ui/ui.service';
 
 class EIJobInfo {
@@ -54,8 +52,6 @@ class EIJobInfo {
 })
 export class EICoordinatorComponent implements OnInit {
 
-    eiJobsDataSource: EIJobDataSource;
-    eiProducersDataSource: EIProducerDataSource;
     producers$: Observable<EIProducer[]>;
     filteredProducers$: Observable<EIProducer[]>;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -67,18 +63,15 @@ export class EICoordinatorComponent implements OnInit {
     eiProducersData: MatTableDataSource<EIProducerDataSource>;
 
     constructor(
-        private eiSvc: EIService,
-        private notificationService: NotificationService,
+        private eiJobsDataSource: EIJobDataSource,
+        private eiProducersDataSource: EIProducerDataSource,
         private ui: UiService,
         private formBuilder: FormBuilder) {
             this.formGroup = formBuilder.group({ filter: [""] });
         }
 
     ngOnInit() {
-        this.eiJobsDataSource = new EIJobDataSource(this.eiSvc, this.sort, this.notificationService);
-        this.eiProducersDataSource = new EIProducerDataSource(this.eiSvc, this.sort, this.notificationService);
         this.eiJobsDataSource.loadTable();
-        //this.eiProducersDataSource.loadTable();
 
         this.producers$= this.eiProducersDataSource.getProducers();
         this.filteredProducers$ = defer(() => this.formGroup.get("filter")

@@ -18,19 +18,24 @@
  * ========================LICENSE_END===================================
  */
 
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatSort } from '@angular/material';
+import { Injectable } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { merge } from 'rxjs';
 import { of } from 'rxjs/observable/of';
-import { catchError, finalize, map, tap } from 'rxjs/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
+
 import { EIProducer } from '../interfaces/ei.jobs';
 import { EIService } from '../services/ei/ei.service';
 import { NotificationService } from '../services/ui/notification.service';
 
-export class EIProducerDataSource extends DataSource<EIProducer> {
+@Injectable({
+    providedIn: 'root'
+})
+
+export class EIProducerDataSource extends MatTableDataSource<EIProducer> {
 
     private producerSubject = new BehaviorSubject<EIProducer[]>([]);
 
@@ -42,7 +47,6 @@ export class EIProducerDataSource extends DataSource<EIProducer> {
 
     constructor(
         private eiSvc: EIService,
-        public sort: MatSort,
         private notificationService: NotificationService) {
         super();
     }
@@ -65,14 +69,8 @@ export class EIProducerDataSource extends DataSource<EIProducer> {
             this.connect();
     }
 
-    connect(): Observable<EIProducer[]> {
-        const dataMutations = [
-            this.producerSubject.asObservable(),
-            this.sort.sortChange
-        ];
-        return merge(...dataMutations).pipe(map(() => {
-            return this.getSortedData([...this.producerSubject.getValue()]);
-        }));
+    connect(): BehaviorSubject<EIProducer[]> {
+        return this.producerSubject;
     }
 
     disconnect(): void {
@@ -80,28 +78,8 @@ export class EIProducerDataSource extends DataSource<EIProducer> {
         this.loadingSubject.complete();
     }
 
-    private getSortedData(data: EIProducer[]) {
-        if (!this.sort || !this.sort.active || this.sort.direction === '') {
-            return data;
-        }
-
-        return data.sort((a, b) => {
-            const isAsc = this.sort.direction === 'asc';
-            switch (this.sort.active) {
-                case 'id': return compare(a.ei_producer_id, b.ei_producer_id, isAsc);
-                case 'type': return compare(a.ei_producer_types[0], b.ei_producer_types[0], isAsc);
-                case 'status': return compare(a.status, b.status, isAsc);
-                default: return 0;
-            }
-        });
-    }
-
     getProducers(): Observable<EIProducer[]> {
         return this.eiSvc.getEIProducers()
         .pipe(tap(console.log));
     }
-}
-
-function compare(a: string, b: string, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

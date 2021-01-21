@@ -18,16 +18,50 @@
  * ========================LICENSE_END===================================
  */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule, MatTableModule } from '@angular/material';
 
 import { EICoordinatorComponent } from './ei-coordinator.component';
+import { EIJobDataSource } from './ei-job.datasource';
+import { EIProducerDataSource } from './ei-producer.datasource';
+import { UiService } from '../services/ui/ui.service';
+import { of } from 'rxjs';
 
 describe('EICoordinatorComponent', () => {
   let component: EICoordinatorComponent;
   let fixture: ComponentFixture<EICoordinatorComponent>;
 
   beforeEach(async(() => {
+    const jobDataSourceSpy = jasmine.createSpyObj('EIJobDataSource', [ 'connect', 'loadTable', 'disconnect' ]);
+    const producerDataSourceSpy = jasmine.createSpyObj('EIProducerDataSource', [ 'connect', 'loadTable', 'getProducers',  'disconnect' ]);
+
+    jobDataSourceSpy.connect.and.returnValue(of([]));
+    jobDataSourceSpy.disconnect();
+    producerDataSourceSpy.connect.and.returnValue(of([]));
+    producerDataSourceSpy.getProducers.and.returnValue(of([]));
+    producerDataSourceSpy.disconnect();
+
     TestBed.configureTestingModule({
-      declarations: [ EICoordinatorComponent ]
+      imports: [
+        MatIconModule,
+        MatTableModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+      ],
+      declarations: [
+        EICoordinatorComponent
+      ],
+      providers: [
+        { provide: EIJobDataSource, useValue: jobDataSourceSpy },
+        { provide: EIProducerDataSource, useValue: producerDataSourceSpy },
+        UiService,
+        FormBuilder,
+      ]
     })
     .compileComponents();
   }));
@@ -36,5 +70,9 @@ describe('EICoordinatorComponent', () => {
     fixture = TestBed.createComponent(EICoordinatorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });
