@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "244251e2_20553841",
+        "filename": "webapp-frontend/src/app/services/policy/policy.service.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2021-01-21T15:32:15Z",
+      "side": 1,
+      "message": "When the V2 of the PMS API will be used, then the schema will be a json object (not a stringified one). Then we can make this to an instance of a TS class (with these fields) instead.",
+      "parentUuid": "70dcfb8b_10480db2",
+      "range": {
+        "startLine": 48,
+        "startChar": 522,
+        "endLine": 49,
+        "endChar": 334
+      },
+      "revId": "f2ffa2af2de02a82a99ce28302b7e9852a7dadc2",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5973afc8_52f7e0ed",
         "filename": "webapp-frontend/src/app/services/ui/ui.service.ts",
         "patchSetId": 1
