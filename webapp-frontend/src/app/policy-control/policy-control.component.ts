@@ -24,14 +24,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { NoTypePolicyInstanceDialogComponent } from './no-type-policy-instance-dialog.component';
-import { PolicyType } from '../interfaces/policy.types';
+import { PolicyTypeSchema } from '../interfaces/policy.types';
 import { PolicyTypeDataSource } from './policy-type.datasource';
 import { getPolicyDialogProperties } from './policy-instance-dialog.component';
 import { PolicyInstanceDialogComponent } from './policy-instance-dialog.component';
 import { UiService } from '../services/ui/ui.service';
 
 class PolicyTypeInfo {
-    constructor(public type: PolicyType) { }
+    constructor(public type: PolicyTypeSchema) { }
 
     isExpanded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 }
@@ -60,22 +60,22 @@ export class PolicyControlComponent implements OnInit {
         private ui: UiService) { }
 
     ngOnInit() {
-        this.policyTypesDataSource.loadTable();
+        this.policyTypesDataSource.getPolicyTypes();
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
         });
     }
 
-    createPolicyInstance(policyType: PolicyType): void {
+    createPolicyInstance(policyTypeSchema: PolicyTypeSchema): void {
         let dialogRef;
-        if (this.isSchemaEmpty(policyType)) {
+        if (this.isSchemaEmpty(policyTypeSchema)) {
             dialogRef = this.dialog.open(NoTypePolicyInstanceDialogComponent,
-                getPolicyDialogProperties(policyType, null, this.darkMode));
+                getPolicyDialogProperties(policyTypeSchema, null, this.darkMode));
         } else {
             dialogRef = this.dialog.open(PolicyInstanceDialogComponent,
-                getPolicyDialogProperties(policyType, null, this.darkMode));
+                getPolicyDialogProperties(policyTypeSchema, null, this.darkMode));
         }
-        const info: PolicyTypeInfo = this.getPolicyTypeInfo(policyType);
+        const info: PolicyTypeInfo = this.getPolicyTypeInfo(policyTypeSchema);
         dialogRef.afterClosed().subscribe(
             (_) => {
                 info.isExpanded.next(info.isExpanded.getValue());
@@ -83,40 +83,40 @@ export class PolicyControlComponent implements OnInit {
         );
     }
 
-    toggleListInstances(policyType: PolicyType): void {
-        const info = this.getPolicyTypeInfo(policyType);
+    toggleListInstances(policyTypeSchema: PolicyTypeSchema): void {
+        const info = this.getPolicyTypeInfo(policyTypeSchema);
         info.isExpanded.next(!info.isExpanded.getValue());
     }
 
-    private isSchemaEmpty(policyType: PolicyType): boolean {
-        return Object.keys(policyType.schemaObject).length === 0;
+    private isSchemaEmpty(policyTypeSchema: PolicyTypeSchema): boolean {
+        return Object.keys(policyTypeSchema.schemaObject).length === 0;
     }
 
-    getPolicyTypeInfo(policyType: PolicyType): PolicyTypeInfo {
-        let info: PolicyTypeInfo = this.policyTypeInfo.get(policyType.name);
+    getPolicyTypeInfo(policyTypeSchema: PolicyTypeSchema): PolicyTypeInfo {
+        let info: PolicyTypeInfo = this.policyTypeInfo.get(policyTypeSchema.name);
         if (!info) {
-            info = new PolicyTypeInfo(policyType);
-            this.policyTypeInfo.set(policyType.name, info);
+            info = new PolicyTypeInfo(policyTypeSchema);
+            this.policyTypeInfo.set(policyTypeSchema.name, info);
         }
         return info;
     }
 
-    getDisplayName(policyType: PolicyType): string {
-        if (policyType.schemaObject.title) {
-            return policyType.schemaObject.title;
+    getDisplayName(policyTypeSchema: PolicyTypeSchema): string {
+        if (policyTypeSchema.schemaObject.title) {
+            return policyTypeSchema.schemaObject.title;
         }
         return '< No type >';
     }
 
-    isInstancesShown(policyType: PolicyType): boolean {
-        return this.getPolicyTypeInfo(policyType).isExpanded.getValue();
+    isInstancesShown(policyTypeSchema: PolicyTypeSchema): boolean {
+        return this.getPolicyTypeInfo(policyTypeSchema).isExpanded.getValue();
     }
 
-    getExpandedObserver(policyType: PolicyType): Observable<boolean> {
-        return this.getPolicyTypeInfo(policyType).isExpanded.asObservable();
+    getExpandedObserver(policyTypeSchema: PolicyTypeSchema): Observable<boolean> {
+        return this.getPolicyTypeInfo(policyTypeSchema).isExpanded.asObservable();
     }
 
     refreshTables() {
-        this.policyTypesDataSource.loadTable();
+        this.policyTypesDataSource.getPolicyTypes();
     }
 }
