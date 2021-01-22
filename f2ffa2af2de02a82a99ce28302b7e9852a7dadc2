@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a6d7a307_71cbfd3a",
+        "filename": "webapp-frontend/src/app/services/policy/policy.service.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-01-22T11:44:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c7fe99b5_3445022c",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 22
+      },
+      "revId": "f2ffa2af2de02a82a99ce28302b7e9852a7dadc2",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70dcfb8b_10480db2",
         "filename": "webapp-frontend/src/app/services/policy/policy.service.spec.ts",
         "patchSetId": 1
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "382e4210_919d71df",
+        "filename": "webapp-frontend/src/app/services/policy/policy.service.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-01-22T11:44:48Z",
+      "side": 1,
+      "message": "@John: Yes this should be hardcoded. This is the test file so no problem.\n@Patrik: I\u0027m moving the backend logic to frontend in another commit. This gerrit review is a sample test for others to follow so they get an idea about how to do it.\nI will refactor this in another review. Thanks!",
+      "parentUuid": "244251e2_20553841",
+      "range": {
+        "startLine": 48,
+        "startChar": 522,
+        "endLine": 49,
+        "endChar": 334
+      },
+      "revId": "f2ffa2af2de02a82a99ce28302b7e9852a7dadc2",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5973afc8_52f7e0ed",
         "filename": "webapp-frontend/src/app/services/ui/ui.service.ts",
         "patchSetId": 1
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "48f1eed2_0b5d30a0",
+        "filename": "webapp-frontend/src/app/services/ui/ui.service.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-01-22T11:44:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5973afc8_52f7e0ed",
+      "range": {
+        "startLine": 5,
+        "startChar": 16,
+        "endLine": 5,
+        "endChar": 24
+      },
+      "revId": "f2ffa2af2de02a82a99ce28302b7e9852a7dadc2",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45b94420_a8a71111",
         "filename": "webapp-frontend/src/app/services/ui/ui.service.ts",
         "patchSetId": 1
@@ -115,6 +187,30 @@
       "revId": "f2ffa2af2de02a82a99ce28302b7e9852a7dadc2",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af78ccd9_8d12bdb7",
+        "filename": "webapp-frontend/src/app/services/ui/ui.service.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-01-22T11:44:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "45b94420_a8a71111",
+      "range": {
+        "startLine": 30,
+        "startChar": 6,
+        "endLine": 30,
+        "endChar": 14
+      },
+      "revId": "f2ffa2af2de02a82a99ce28302b7e9852a7dadc2",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
