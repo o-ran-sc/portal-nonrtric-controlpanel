@@ -1,13 +1,33 @@
+/*-
+ * ========================LICENSE_START=================================
+ * O-RAN-SC
+ * %%
+ * Copyright (C) 2021 Nordix Foundation
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================LICENSE_END===================================
+ */
+
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Observable, of } from 'rxjs';
-
+import * as policyinstances1 from './mock/policy-instance-1.json';
+import * as policyinstances2 from './mock/policy-instance-2.json';
 import * as eijobs from './mock/ei-jobs.json';
 import * as eiproducers from './mock/ei-producers.json';
 import * as nopolicyinstances from './mock/nopolicyinstances.json';
 import * as policytypes from './mock/policytypes.json';
 import * as policyinstanceedit from './mock/policy-instance-edit.json';
-import * as policyinstances from './mock/policy-instance.json';
 import * as rics from './mock/rics.json';
 
 const urls = [
@@ -17,7 +37,11 @@ const urls = [
     },
     {
         url: 'api/policy/policies?type=1',
-        json: policyinstances
+        json: policyinstances1
+    },
+    {
+        url: 'api/policy/policies?type=2',
+        json: policyinstances2
     },
     {
         url: 'api/policy/policies?type=2',
@@ -25,6 +49,10 @@ const urls = [
     },
     {
         url: 'api/policy/policies/2000?type=1',
+        json: policyinstanceedit
+    },
+    {
+        url: 'api/policy/policies/2001?type=2',
         json: policyinstanceedit
     },
     {
