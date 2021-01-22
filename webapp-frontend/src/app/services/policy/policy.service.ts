@@ -22,7 +22,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PolicyType, PolicyInstance, PolicyInstanceAck } from '../../interfaces/policy.types';
+import { PolicyType, PolicyInstance, PolicyInstanceAck, PolicyTypes, PolicyTypeFromService } from '../../interfaces/policy.types';
 import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.types';
 
 /**
@@ -33,12 +33,13 @@ import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.type
 })
 export class PolicyService {
 
-    private basePath = 'api/policy';
-    private policyTypePath = 'policytypes';
+    private apiVersion2 = 'v2'
+    private basePath = '';
+    private policyTypePath = 'policy-types';
     private policyPath = 'policies';
 
     private buildPath(...args: any[]) {
-        let result = this.basePath;
+        let result = this.basePath + this.apiVersion2;
         args.forEach(part => {
             result = result + '/' + part;
         });
@@ -49,21 +50,14 @@ export class PolicyService {
         // injects to variable httpClient
     }
 
-    /**
-     * Gets version details
-     * @returns Observable that should yield a String
-     */
-    getVersion(): Observable<string> {
-        const url = this.buildPath('version');
-        return this.httpClient.get<ControlpanelSuccessTransport>(url).pipe(
-            // Extract the string here
-            map(res => res['data'])
-        );
+    getPolicyTypes(): Observable<PolicyTypes> {
+        const url = this.buildPath(this.policyTypePath);
+        return this.httpClient.get<PolicyTypes>(url);
     }
 
-    getPolicyTypes(): Observable<PolicyType[]> {
-        const url = this.buildPath(this.policyTypePath);
-        return this.httpClient.get<PolicyType[]>(url);
+    getPolicyType(policyTypeId: string): Observable<PolicyTypeFromService> {
+        const url = this.buildPath(this.policyTypePath + '/' + policyTypeId);
+        return this.httpClient.get<PolicyTypeFromService>(url);
     }
 
     getPolicyInstances(policyTypeId: string): Observable<PolicyInstance[]> {

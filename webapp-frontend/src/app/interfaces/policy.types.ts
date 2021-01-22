@@ -26,6 +26,14 @@ export interface PolicyType {
   schemaObject: any;
 }
 
+export interface PolicyTypeFromService {
+  policy_schema: any;
+}
+
+export interface PolicyTypes {
+  policytype_ids: any[];
+}
+
 export interface PolicyInstance {
   id: string;
   json: string;

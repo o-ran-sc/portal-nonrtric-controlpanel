@@ -5,12 +5,26 @@ import { Observable, of } from 'rxjs';
 import * as eijobs from './mock/ei-jobs.json';
 import * as eiproducers from './mock/ei-producers.json';
 import * as nopolicyinstances from './mock/nopolicyinstances.json';
+import * as policytypesList from './mock/policy-types.json';
+import * as policytypes1 from './mock/policy-type1.json';
 import * as policytypes from './mock/policytypes.json';
 import * as policyinstanceedit from './mock/policy-instance-edit.json';
 import * as policyinstances from './mock/policy-instance.json';
 import * as rics from './mock/rics.json';
 
 const urls = [
+    {
+        url: 'v2/policy-types',
+        json: policytypesList
+    },
+    {
+        url: 'v2/policy-types/',
+        json: policytypes1
+    },
+    {
+        url: 'v2/policy-types/1',
+        json: policytypes1
+    },
     {
         url: 'api/policy/policytypes',
         json: policytypes
