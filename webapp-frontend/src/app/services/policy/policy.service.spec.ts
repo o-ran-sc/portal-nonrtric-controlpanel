@@ -21,10 +21,11 @@ import { TestBed } from '@angular/core/testing';
 
 import { PolicyService } from './policy.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
-import { PolicyInstance, PolicyType } from '../../interfaces/policy.types';
+import { PolicyInstance, PolicyTypes } from '../../interfaces/policy.types';
 
 describe('PolicyService', () => {
-  let basePath = 'api/policy';
+  let apiVersion2 = 'v2'
+  let basePath = '';
   let policyService: PolicyService;
   let httpTestingController: HttpTestingController;
   beforeEach(() => TestBed.configureTestingModule({
@@ -39,15 +40,18 @@ describe('PolicyService', () => {
   });
 
   describe('#getPolicyTypes', () => {
-    let expectedPolicytypes: PolicyType[];
+    let expectedPolicytypes: PolicyTypes;
+    let emptyPolicyType: PolicyTypes;
 
     beforeEach(() => {
       policyService = TestBed.get(PolicyService);
       httpTestingController = TestBed.get(HttpTestingController);
-      expectedPolicytypes = [
-        { name: '1', schema: '{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"description\":\"Type 2 policy type\",\"additionalProperties\":false,\"title\":\"2\",\"type\":\"object\",\"properties\":{\"qosObjectives\":{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"priorityLevel\":{\"type\":\"number\"}},\"required\":[\"priorityLevel\"]},\"scope\":{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"qosId\":{\"type\":\"string\"},\"ueId\":{\"type\":\"string\"}},\"required\":[\"ueId\",\"qosId\"]}},\"required\":[\"scope\",\"qosObjectives\"]}' },
-        { name: '2', schema: '{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"description\":\"Type 1 policy type\",\"additionalProperties\":false,\"title\":\"1\",\"type\":\"object\",\"properties\":{\"qosObjectives\":{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"priorityLevel\":{\"type\":\"number\"}},\"required\":[\"priorityLevel\"]},\"scope\":{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"qosId\":{\"type\":\"string\"},\"ueId\":{\"type\":\"string\"}},\"required\":[\"ueId\",\"qosId\"]}},\"required\":[\"scope\",\"qosObjectives\"]}' },
-      ] as PolicyType[];
+      expectedPolicytypes = {
+        "policytype_ids": [
+          "",
+          "1"
+        ]
+      } as PolicyTypes;
     });
     //Policy Type Test Case 1:
     it('should return all policy types', () => {
@@ -55,22 +59,26 @@ describe('PolicyService', () => {
         policytypes => expect(policytypes).toEqual(expectedPolicytypes, 'should return expected PolicyTypes'),
         fail
       );
-
-      const req = httpTestingController.expectOne(basePath + '/' + policyService.policyTypePath);
+      
+      const req = httpTestingController.expectOne(basePath + apiVersion2 + '/' + policyService.policyTypesPath);
       expect(req.request.method).toEqual('GET');
 
-      req.flush(expectedPolicytypes); //Return expectedEmps
+      req.flush(expectedPolicytypes);
     });
 
     //Policy Type Test Case 2:
+    emptyPolicyType = {
+      "policytype_ids": [
+      ]
+    } as PolicyTypes;
     it('should return no policy types', () => {
       policyService.getPolicyTypes().subscribe(
-        policytypes => expect(policytypes.length).toEqual(0, 'should return empty array of Policy Types'),
+        policytypes => expect(policytypes).toEqual(emptyPolicyType, 'should return empty array of Policy Types'),
         fail
       );
 
-      const req = httpTestingController.expectOne(basePath + '/' + policyService.policyTypePath);
-      req.flush([]); //Return empty data
+      const req = httpTestingController.expectOne(basePath + apiVersion2 + '/' + policyService.policyTypesPath);
+      req.flush(emptyPolicyType); //Return empty data
     });
   });
   describe('#getPolicyInstance', () => {
@@ -90,18 +98,18 @@ describe('PolicyService', () => {
         policyinstances => expect(policyinstances).toEqual(expectedPolicyInstances, 'should return expected Policy Instances'),
         fail
       );
-      const req = httpTestingController.expectOne(basePath + '/' + policyService.policyPath + '?type=' + policyTypeId);
+      const req = httpTestingController.expectOne(basePath + apiVersion2 + '/' + policyService.policyPath + '?type=' + policyTypeId);
       expect(req.request.method).toEqual('GET');
-      req.flush(expectedPolicyInstances); //Return expectedEmps
+      req.flush(expectedPolicyInstances);
     });
 
     //Policy Instances Test Case 2:
     it('should return no policy instances', () => {
       policyService.getPolicyInstances(policyTypeId).subscribe(
-        policyinstances => expect(policyinstances.length).toEqual(0, 'should return empty array of Policy Isntances'),
+        policyinstances => expect(policyinstances.length).toEqual(0, 'should return empty array of Policy Instances'),
         fail
       );
-      const req = httpTestingController.expectOne(basePath + '/' + policyService.policyPath + '?type=' + policyTypeId);
+      const req = httpTestingController.expectOne(basePath + apiVersion2 + '/' + policyService.policyPath + '?type=' + policyTypeId);
       req.flush([]); //Return empty data
     });
   });

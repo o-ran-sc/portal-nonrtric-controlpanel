@@ -18,7 +18,7 @@
   ========================LICENSE_END===================================
   -->
 
-<div fxLayout="row">
+  <div fxLayout="row">
     <div class="rd-global-page-title">Policy Control</div>
     <div class="refresh-button">
         <button mat-icon-button color="primary" aria-label="Button with a refresh icon" (click)="refreshTables()">
@@ -32,23 +32,23 @@
 
     <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>Policy Type</mat-header-cell>
-        <mat-cell *matCellDef="let policyType">
-            <mat-icon matTooltip="Properties">{{isInstancesShown(policyType)  ? 'expand_less' : 'expand_more'}}
+        <mat-cell *matCellDef="let policyTypeSchema">
+            <mat-icon matTooltip="Properties">{{isInstancesShown(policyTypeSchema)  ? 'expand_less' : 'expand_more'}}
             </mat-icon>
-            {{this.getDisplayName(policyType)}}
+            {{this.getDisplayName(policyTypeSchema)}}
         </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="description">
         <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-        <mat-cell *matCellDef="let policyType"> {{policyType.schemaObject.description}}
+        <mat-cell *matCellDef="let policyTypeSchema"> {{policyTypeSchema.schemaObject.description}}
         </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="action">
         <mat-header-cell class="action-cell" *matHeaderCellDef>Action </mat-header-cell>
-        <mat-cell class="action-cell" *matCellDef="let policyType" (click)="$event.stopPropagation()">
-            <button mat-icon-button (click)="createPolicyInstance(policyType)">
+        <mat-cell class="action-cell" *matCellDef="let policyTypeSchema" (click)="$event.stopPropagation()">
+            <button mat-icon-button (click)="createPolicyInstance(policyTypeSchema)">
                 <mat-icon matTooltip="Create instance">add_box</mat-icon>
             </button>
         </mat-cell>
@@ -56,8 +56,8 @@
 
     <!-- =================== Policy instances for one type ======================== -->
     <ng-container matColumnDef="instanceTableContainer">
-        <mat-cell *matCellDef="let policyType">
-            <rd-policy-instance [policyType]=policyType [expanded]=this.getExpandedObserver(policyType)>
+        <mat-cell *matCellDef="let policyTypeSchema">
+            <rd-policy-instance [policyTypeSchema]=policyTypeSchema [expanded]=this.getExpandedObserver(policyTypeSchema)>
             </rd-policy-instance>
         </mat-cell>
     </ng-container>
@@ -68,12 +68,12 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="['name', 'description', 'action']"></mat-header-row>
-    <mat-row *matRowDef="let policyType; columns: ['name', 'description', 'action']"
-        (click)="toggleListInstances(policyType)">
+    <mat-row *matRowDef="let policyTypeSchema; columns: ['name', 'description', 'action']"
+        (click)="toggleListInstances(policyTypeSchema)">
     </mat-row>
 
-    <mat-row *matRowDef="let policyType; columns: ['instanceTableContainer'];"
-        [@detailExpand]="isInstancesShown(policyType) ? 'expanded' : 'collapsed'" style="overflow: hidden">
+    <mat-row *matRowDef="let policyTypeSchema; columns: ['instanceTableContainer'];"
+        [@detailExpand]="isInstancesShown(policyTypeSchema) ? 'expanded' : 'collapsed'" style="overflow: hidden">
     </mat-row>
 
     <mat-footer-row *matFooterRowDef="['noRecordsFound']"

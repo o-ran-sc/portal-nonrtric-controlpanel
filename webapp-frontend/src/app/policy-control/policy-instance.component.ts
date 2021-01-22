@@ -21,7 +21,7 @@
 import { MatSort } from '@angular/material';
 import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PolicyType } from '../interfaces/policy.types';
+import { PolicyTypeSchema } from '../interfaces/policy.types';
 import { PolicyInstanceDataSource } from './policy-instance.datasource';
 import { ErrorDialogService } from '../services/ui/error-dialog.service';
 import { NotificationService } from '../services/ui/notification.service';
@@ -44,7 +44,7 @@ import { UiService } from '../services/ui/ui.service';
 
 export class PolicyInstanceComponent implements OnInit, AfterViewInit {
     instanceDataSource: PolicyInstanceDataSource;
-    @Input() policyType: PolicyType;
+    @Input() policyTypeSchema: PolicyTypeSchema;
     @Input() expanded: Observable<boolean>;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     darkMode: boolean;
@@ -59,7 +59,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.instanceDataSource = new PolicyInstanceDataSource(this.policySvc, this.sort, this.notificationService, this.policyType);
+        this.instanceDataSource = new PolicyInstanceDataSource(this.policySvc, this.sort, this.notificationService, this.policyTypeSchema);
         this.expanded.subscribe((isExpanded: boolean) => this.onExpand(isExpanded));
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
@@ -77,17 +77,17 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
     }
 
     private isSchemaEmpty(): boolean {
-        return Object.keys(this.policyType.schemaObject).length === 0;
+        return Object.keys(this.policyTypeSchema.schemaObject).length === 0;
     }
 
     modifyInstance(instance: PolicyInstance): void {
-        this.policySvc.getPolicy(this.policyType.name, instance.id).subscribe(
+        this.policySvc.getPolicy(this.policyTypeSchema.name, instance.id).subscribe(
             (refreshedJson: any) => {
                 instance.json = JSON.stringify(refreshedJson);
                 if (this.isSchemaEmpty()) {
                     this.dialog.open(
                         NoTypePolicyInstanceDialogComponent,
-                        getPolicyDialogProperties(this.policyType, instance, this.darkMode)).afterClosed().subscribe(
+                        getPolicyDialogProperties(this.policyTypeSchema, instance, this.darkMode)).afterClosed().subscribe(
                            (_: any) => {
                                 this.instanceDataSource.loadTable();
                            }
@@ -95,7 +95,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
                 } else {
                     this.dialog.open(
                         PolicyInstanceDialogComponent,
-                        getPolicyDialogProperties(this.policyType, instance, this.darkMode)).afterClosed().subscribe(
+                        getPolicyDialogProperties(this.policyTypeSchema, instance, this.darkMode)).afterClosed().subscribe(
                            (_: any) => {
                                 this.instanceDataSource.loadTable();
                            }
@@ -126,7 +126,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
             .afterClosed().subscribe(
                 (res: any) => {
                     if (res) {
-                        this.policySvc.deletePolicy(this.policyType.name, instance.id)
+                        this.policySvc.deletePolicy(this.policyTypeSchema.name, instance.id)
                             .subscribe(
                                 (response: HttpResponse<Object>) => {
                                     switch (response.status) {
@@ -144,7 +144,4 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
                     }
                 });
     }
-
-
-
 }
