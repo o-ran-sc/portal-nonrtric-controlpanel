@@ -23,7 +23,7 @@ import { MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatMenuTrigger } from '@angular/material/menu';
 import { JsonPointer } from 'angular6-json-schema-form';
 import * as uuid from 'uuid';
-import { PolicyInstance, PolicyType } from '../interfaces/policy.types';
+import { PolicyInstance, PolicyTypeSchema } from '../interfaces/policy.types';
 import { PolicyService } from '../services/policy/policy.service';
 import { ErrorDialogService } from '../services/ui/error-dialog.service';
 import { NotificationService } from './../services/ui/notification.service';
@@ -223,11 +223,11 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     }
 }
 
-export function getPolicyDialogProperties(policyType: PolicyType, instance: PolicyInstance, darkMode: boolean): MatDialogConfig {
-    const createSchema = policyType.schemaObject;
+export function getPolicyDialogProperties(policyTypeSchema: PolicyTypeSchema, instance: PolicyInstance, darkMode: boolean): MatDialogConfig {
+    const createSchema = policyTypeSchema.schemaObject;
     const instanceId = instance ? instance.id : null;
     const instanceJson = instance ? instance.json : null;
-    const name = policyType.name;
+    const name = policyTypeSchema.name;
     const ric = instance ? instance.ric : null;
     return {
         maxWidth: '1200px',
