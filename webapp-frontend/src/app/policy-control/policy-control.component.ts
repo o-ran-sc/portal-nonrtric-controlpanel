@@ -60,7 +60,7 @@ export class PolicyControlComponent implements OnInit {
         private ui: UiService) { }
 
     ngOnInit() {
-        this.policyTypesDataSource.loadTable();
+        this.policyTypesDataSource.getPolicyTypes();
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
         });
@@ -117,6 +117,6 @@ export class PolicyControlComponent implements OnInit {
     }
 
     refreshTables() {
-        this.policyTypesDataSource.loadTable();
+        this.policyTypesDataSource.getPolicyTypes();
     }
 }

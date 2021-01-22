@@ -65,7 +65,7 @@ describe('PolicyService', () => {
     //Policy Type Test Case 2:
     it('should return no policy types', () => {
       policyService.getPolicyTypes().subscribe(
-        policytypes => expect(policytypes.length).toEqual(0, 'should return empty array of Policy Types'),
+        policytypes => expect(policytypes.policytype_ids.length).toEqual(0, 'should return empty array of Policy Types'),
         fail
       );
 
