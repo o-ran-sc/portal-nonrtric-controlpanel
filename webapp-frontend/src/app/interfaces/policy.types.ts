@@ -20,10 +20,17 @@
 
 // Models of data used by the Policy Control
 
-export interface PolicyType {
+export interface PolicyTypeSchema {
   name: string;
-  schema: string;
   schemaObject: any;
+}
+
+export interface PolicyType {
+  policy_schema: any;
+}
+
+export interface PolicyTypes {
+  policytype_ids: any[];
 }
 
 export interface PolicyInstance {

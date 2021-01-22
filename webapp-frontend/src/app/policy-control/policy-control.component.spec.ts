@@ -19,28 +19,27 @@
  */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule, MatTableModule } from '@angular/material';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 
 import { NotificationService } from '../services/ui/notification.service';
 import { PolicyControlComponent } from './policy-control.component';
 import { PolicyTypeDataSource } from './policy-type.datasource';
 import { UiService } from '../services/ui/ui.service';
+import { PolicyTypeSchema } from '../interfaces/policy.types';
 
 describe('PolicyControlComponent', () => {
   let component: PolicyControlComponent;
   let fixture: ComponentFixture<PolicyControlComponent>;
 
   beforeEach(async(() => {
-    const policyTypeDataSourceSpy = jasmine.createSpyObj('PolicyTypeDataSource', [ 'connect', 'loadTable',  'disconnect' ]);
-    const policyType = {
-      name: "type1",
-      schema: "{}",
-      schemaObject: "{}"
-    }
-    policyTypeDataSourceSpy.connect.and.returnValue(of([ policyType]));
+    const policyTypeDataSourceSpy = jasmine.createSpyObj('PolicyTypeDataSource', [ 'connect', 'getPolicyTypes',  'disconnect' ]);
+    var policyTypeSchema = {} as PolicyTypeSchema;
+    policyTypeSchema.name = '';
+    policyTypeSchema.schemaObject = '';
+    policyTypeDataSourceSpy.connect.and.returnValue(of([ policyTypeSchema]));
     policyTypeDataSourceSpy.disconnect();
 
     let matDialogStub: Partial<MatDialog>;
