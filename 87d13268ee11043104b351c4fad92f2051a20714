@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "43140c1a_9f02c2c1",
+        "filename": "webapp-frontend/src/app/interfaces/policy.types.ts",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-01-25T15:50:45Z",
+      "side": 1,
+      "message": "I\u0027m afraid not.\npolicytypes response is,\n{\n  \"policytype_ids\": [\n    \"\",\n    \"1\"\n  ]\n}",
+      "parentUuid": "c41428b3_d8788db1",
+      "range": {
+        "startLine": 33,
+        "startChar": 18,
+        "endLine": 33,
+        "endChar": 23
+      },
+      "revId": "87d13268ee11043104b351c4fad92f2051a20714",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "658f626f_113e6e1e",
         "filename": "webapp-frontend/src/app/policy-control/policy-control.component.spec.ts",
         "patchSetId": 5
