@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "658f626f_113e6e1e",
+        "filename": "webapp-frontend/src/app/policy-control/policy-control.component.spec.ts",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-01-25T15:44:33Z",
+      "side": 1,
+      "message": "Please remove trailing white spaces",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 3
+      },
+      "revId": "87d13268ee11043104b351c4fad92f2051a20714",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34c33889_b9ac2c16",
+        "filename": "webapp-frontend/src/app/policy-control/policy-type.datasource.ts",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-01-25T15:44:33Z",
+      "side": 1,
+      "message": "Please remove this commented out line.",
+      "range": {
+        "startLine": 49,
+        "startChar": 7,
+        "endLine": 49,
+        "endChar": 41
+      },
+      "revId": "87d13268ee11043104b351c4fad92f2051a20714",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
