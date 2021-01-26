@@ -39,8 +39,6 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
-import org.oransc.portal.nonrtric.controlpanel.model.ProducerInfo;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,15 +84,10 @@ class RestApiTest {
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         JsonArray jobs = JsonParser.parseString(resp.getBody()).getAsJsonArray();
-        JobInfo wantedJobInfo = JobInfo.builder() //
-            .id("job1") //
-            .typeId("type1") //
-            .jobData(getStringFromFile("job-1.json")) //
-            .targetUri("http://example.com/") //
-            .owner("owner") //
-            .build();
-        assertThat(jobs).hasSize(1) //
-            .contains(gson.toJsonTree(wantedJobInfo));
+
+        assertThat(jobs).hasSize(6);
+        assertThat(resp.getBody()).contains("job2");
+        assertThat(resp.getBody()).contains("job1");
     }
 
     @Test
@@ -105,13 +98,7 @@ class RestApiTest {
 
         JsonArray producers = JsonParser.parseString(resp.getBody()).getAsJsonArray();
 
-        ProducerInfo wantedProducerInfo = ProducerInfo.builder() //
-            .id("prod-1") //
-            .types(new String[] {"type1", "type2"}) //
-            .status("ENABLED") //
-            .build();
-        assertThat(producers).hasSize(1) //
-            .contains(gson.toJsonTree(wantedProducerInfo));
+        assertThat(producers).hasSize(3);
     }
 
     private AsyncRestClient restClient() {
