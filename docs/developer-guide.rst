@@ -19,7 +19,7 @@ To run the Control Panel locally for development with simulated services, follow
 
 - Fetch the latest code from `gerrit`_
 
-.. _gerrit: https://gerrit.o-ran-sc.org/r/admin/repos/nonrtric-controlpanel
+.. _gerrit: https://gerrit.o-ran-sc.org/r/admin/repos/portal/nonrtric-controlpanel
 
 - Start the backend:
 
