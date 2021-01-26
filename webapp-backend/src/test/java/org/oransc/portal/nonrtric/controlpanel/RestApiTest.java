@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
 import org.oransc.portal.nonrtric.controlpanel.model.ProducerInfo;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
 import org.slf4j.Logger;
@@ -86,15 +85,10 @@ class RestApiTest {
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         JsonArray jobs = JsonParser.parseString(resp.getBody()).getAsJsonArray();
-        JobInfo wantedJobInfo = JobInfo.builder() //
-            .id("job1") //
-            .typeId("type1") //
-            .jobData(getStringFromFile("job-1.json")) //
-            .targetUri("http://example.com/") //
-            .owner("owner") //
-            .build();
-        assertThat(jobs).hasSize(1) //
-            .contains(gson.toJsonTree(wantedJobInfo));
+
+        assertThat(jobs).hasSize(6);
+        assertThat(resp.getBody()).contains("job2");
+        assertThat(resp.getBody()).contains("job1");
     }
 
     @Test
@@ -110,8 +104,20 @@ class RestApiTest {
             .types(new String[] {"type1", "type2"}) //
             .status("ENABLED") //
             .build();
-        assertThat(producers).hasSize(1) //
-            .contains(gson.toJsonTree(wantedProducerInfo));
+        ProducerInfo wantedProducerInfo2 = ProducerInfo.builder() //
+            .id("prod-2") //
+            .types(new String[] {"type1"}) //
+            .status("DISABLED") //
+            .build();
+        ProducerInfo wantedProducerInfo3 = ProducerInfo.builder() //
+            .id("3-prod") //
+            .types(new String[] {"type1", "type2"}) //
+            .status("ENABLED") //
+            .build();
+        assertThat(producers).hasSize(3) //
+            .contains(gson.toJsonTree(wantedProducerInfo), //
+                gson.toJsonTree(wantedProducerInfo2), //
+                gson.toJsonTree(wantedProducerInfo3));
     }
 
     private AsyncRestClient restClient() {

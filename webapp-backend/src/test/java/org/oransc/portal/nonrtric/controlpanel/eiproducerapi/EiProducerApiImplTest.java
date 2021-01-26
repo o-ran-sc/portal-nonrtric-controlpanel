@@ -19,15 +19,23 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.eiproducerapi;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerRegistrationInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerStatusInfo;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +61,7 @@ class EiProducerApiImplTest {
 
     AsyncRestClient restClientMock = mock(AsyncRestClient.class);
     EiProducerApiImpl apiUnderTest = new EiProducerApiImpl(restClientMock);
+    private static com.google.gson.Gson gson = new GsonBuilder().create();
 
     private void whenGetReturnOK(String url, HttpStatus status, String body) {
         ResponseEntity<String> ret = new ResponseEntity<>(body, status);
@@ -86,27 +95,34 @@ class EiProducerApiImplTest {
     void testGetEiProducerValidJson() {
         whenGetReturnOK(URL_EI_PRODUCERS + "/" + EI_PRODUCER_1, HttpStatus.OK, EI_PRODUCER_1_INFO_VALID);
 
-        ResponseEntity<String> returnedResp = apiUnderTest.getEiProducer(EI_PRODUCER_1);
+        ResponseEntity<ProducerRegistrationInfo> returnedResp = apiUnderTest.getEiProducer(EI_PRODUCER_1);
 
         assertEquals(HttpStatus.OK, returnedResp.getStatusCode());
-        assertEquals(EI_PRODUCER_1_INFO_VALID, returnedResp.getBody());
+        assertEquals(EI_PRODUCER_1_INFO_VALID, gson.toJson(returnedResp.getBody()));
     }
 
     @Test
-    void testGetEiProducerInvalidJson() {
+    public void whenGetEiProducerExceptionThrown_thenAssertionSucceeds() {
         whenGetReturnOK(URL_EI_PRODUCERS + "/" + EI_PRODUCER_1, HttpStatus.OK, EI_PRODUCER_1_INFO_INVALID);
+        Exception exception = assertThrows(JsonSyntaxException.class, () -> {
+            apiUnderTest.getEiProducer(EI_PRODUCER_1);
+        });
 
-        ResponseEntity<String> returnedResp = apiUnderTest.getEiProducer(EI_PRODUCER_1);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, returnedResp.getStatusCode());
-        assertTrue(returnedResp.getBody().contains("JSONException"));
+        String expectedMessage = "Expected BEGIN_OBJECT but was STRING";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
-    void testGetEiJobsForOneEiProducerFailure() {
+    void whenGetEiJobsForOneEiProducerExceptionThrown_thenAssertionSucceeds() {
         whenGetReturnFailure(URL_EI_PRODUCERS + "/" + EI_PRODUCER_1 + URL_EI_JOBS, HttpStatus.NOT_FOUND, "");
-        ResponseEntity<String> returnedResp = apiUnderTest.getEiJobsForOneEiProducer(EI_PRODUCER_1);
-        assertEquals(HttpStatus.NOT_FOUND, returnedResp.getStatusCode());
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
+            apiUnderTest.getEiJobsForOneEiProducer(EI_PRODUCER_1);
+        });
+
+        String expectedMessage = "Not a JSON Array: null";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
@@ -115,9 +131,9 @@ class EiProducerApiImplTest {
 
         whenGetReturnOK(URL_EI_PRODUCERS + "/" + EI_PRODUCER_1 + URL_EI_JOBS, HttpStatus.OK, eiJobs);
 
-        ResponseEntity<String> returnedResp = apiUnderTest.getEiJobsForOneEiProducer(EI_PRODUCER_1);
-        assertTrue(returnedResp.getBody().contains("\"ei_job_identity\":\"eijob1\""));
-        assertTrue(returnedResp.getBody().contains("\"ei_job_identity\":\"eijob2\""));
+        ResponseEntity<List<JobInfo>> returnedResp = apiUnderTest.getEiJobsForOneEiProducer(EI_PRODUCER_1);
+        assertTrue(gson.toJson(returnedResp.getBody()).contains("\"ei_job_identity\":\"eijob1\""));
+        assertTrue(gson.toJson(returnedResp.getBody()).contains("\"ei_job_identity\":\"eijob2\""));
         assertEquals(HttpStatus.OK, returnedResp.getStatusCode());
     }
 
@@ -125,20 +141,22 @@ class EiProducerApiImplTest {
     void testGetEiProducerStatusValidJson() {
         whenGetReturnOK(URL_EI_PRODUCERS + "/" + EI_PRODUCER_1 + URL_STATUS, HttpStatus.OK, EI_PRODUCER_1_STATUS_VALID);
 
-        ResponseEntity<String> returnedResp = apiUnderTest.getEiProducerStatus(EI_PRODUCER_1);
+        ResponseEntity<ProducerStatusInfo> returnedResp = apiUnderTest.getEiProducerStatus(EI_PRODUCER_1);
 
         assertEquals(HttpStatus.OK, returnedResp.getStatusCode());
-        assertEquals(EI_PRODUCER_1_STATUS_VALID, returnedResp.getBody());
+        assertEquals(EI_PRODUCER_1_STATUS_VALID, gson.toJson(returnedResp.getBody()));
     }
 
     @Test
-    void testGetEiProducerStatusInvalidJson() {
+    public void whenGetEiProducerStatusExceptionThrown_thenAssertionSucceeds() {
         whenGetReturnOK(URL_EI_PRODUCERS + "/" + EI_PRODUCER_1 + URL_STATUS, HttpStatus.OK,
             EI_PRODUCER_1_STATUS_INVALID);
+        Exception exception = assertThrows(JsonSyntaxException.class, () -> {
+            apiUnderTest.getEiProducerStatus(EI_PRODUCER_1);
+        });
 
-        ResponseEntity<String> returnedResp = apiUnderTest.getEiProducerStatus(EI_PRODUCER_1);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, returnedResp.getStatusCode());
-        assertTrue(returnedResp.getBody().contains("JSONException"));
+        String expectedMessage = "Expected BEGIN_OBJECT but was STRING";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 }

@@ -19,12 +19,20 @@
  */
 package org.oransc.portal.nonrtric.controlpanel.eiproducerapi;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerRegistrationInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerStatusInfo;
 import org.oransc.portal.nonrtric.controlpanel.util.AsyncRestClient;
 import org.oransc.portal.nonrtric.controlpanel.util.ErrorResponseHandler;
+import org.oransc.portal.nonrtric.controlpanel.util.JsonArrayHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +48,7 @@ public class EiProducerApiImpl implements EiProducerApi {
     private static final String STATUS = "/status";
 
     private final AsyncRestClient webClient;
+    private static com.google.gson.Gson gson = new GsonBuilder().create();
 
     @Autowired
     public EiProducerApiImpl(
@@ -58,18 +67,25 @@ public class EiProducerApiImpl implements EiProducerApi {
     }
 
     @Override
-    public ResponseEntity<String> getEiProducer(String eiProducerId) {
-        return getResponseObject(EI_PRODUCERS + "/" + eiProducerId);
+    public ResponseEntity<ProducerRegistrationInfo> getEiProducer(String eiProducerId) throws JsonSyntaxException {
+        ResponseEntity<String> resp = getResponseObject(EI_PRODUCERS + "/" + eiProducerId);
+        ProducerRegistrationInfo info = gson.fromJson(resp.getBody(), ProducerRegistrationInfo.class);
+        return new ResponseEntity<>(info, resp.getStatusCode());
     }
 
     @Override
-    public ResponseEntity<String> getEiJobsForOneEiProducer(String eiProducerId) {
-        return getResponseArray(EI_PRODUCERS + "/" + eiProducerId + EI_JOBS);
+    public ResponseEntity<List<JobInfo>> getEiJobsForOneEiProducer(String eiProducerId)
+        throws JsonSyntaxException, IllegalStateException {
+        ResponseEntity<String> resp = getResponseArray(EI_PRODUCERS + "/" + eiProducerId + EI_JOBS);
+        List<JobInfo> jobs = JsonArrayHandler.parseJsonArray(resp.getBody(), JobInfo.class);
+        return new ResponseEntity<>(jobs, resp.getStatusCode());
     }
 
     @Override
-    public ResponseEntity<String> getEiProducerStatus(String eiProducerId) {
-        return getResponseObject(EI_PRODUCERS + "/" + eiProducerId + STATUS);
+    public ResponseEntity<ProducerStatusInfo> getEiProducerStatus(String eiProducerId) throws JsonSyntaxException {
+        ResponseEntity<String> resp = getResponseObject(EI_PRODUCERS + "/" + eiProducerId + STATUS);
+        ProducerStatusInfo status = gson.fromJson(resp.getBody(), ProducerStatusInfo.class);
+        return new ResponseEntity<>(status, resp.getStatusCode());
     }
 
     private ResponseEntity<String> getResponseArray(String url) {

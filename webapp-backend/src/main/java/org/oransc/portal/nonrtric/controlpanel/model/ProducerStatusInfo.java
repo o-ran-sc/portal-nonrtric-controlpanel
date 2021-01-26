@@ -2,7 +2,7 @@
  * ========================LICENSE_START=================================
  * O-RAN-SC
  * %%
- * Copyright (C) 2020 Nordix Foundation
+ * Copyright (C) 2019 Nordix Foundation
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,29 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-package org.oransc.portal.nonrtric.controlpanel.eiproducerapi;
 
-import java.util.List;
+package org.oransc.portal.nonrtric.controlpanel.model;
 
-import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
-import org.oransc.portal.nonrtric.controlpanel.model.ProducerRegistrationInfo;
-import org.oransc.portal.nonrtric.controlpanel.model.ProducerStatusInfo;
-import org.springframework.http.ResponseEntity;
+import com.google.gson.annotations.SerializedName;
 
-public interface EiProducerApi {
+import lombok.Builder;
 
-    public ResponseEntity<String> getAllEiProducerIds();
+import org.immutables.gson.Gson;
 
-    public ResponseEntity<ProducerRegistrationInfo> getEiProducer(String eiProducerId);
+@Gson.TypeAdapters
+@Builder
+public class ProducerStatusInfo {
 
-    public ResponseEntity<List<JobInfo>> getEiJobsForOneEiProducer(String eiProducerId);
+    @Gson.TypeAdapters
+    public enum OperationalState {
+        ENABLED, DISABLED
+    }
 
-    public ResponseEntity<ProducerStatusInfo> getEiProducerStatus(String eiProducerId);
+    @SerializedName("operational_state")
+    public final OperationalState opState;
+
+    public ProducerStatusInfo(OperationalState state) {
+        this.opState = state;
+    }
 
 }
