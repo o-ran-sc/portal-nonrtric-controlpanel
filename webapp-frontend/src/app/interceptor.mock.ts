@@ -22,10 +22,13 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } fr
 import { Injectable, Injector } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import * as policyinstances1 from './mock/policy-instance-1.json';
-import * as policyinstancesNoType from './mock/policy-instance-notype.json';
+import * as policies from './mock/policies.json';
+import * as policyinstances2 from './mock/policy-instance-2.json';
+import * as policyinstances1Status from './mock/policy-instance-1-status.json';
+import * as policyinstances2Status from './mock/policy-instance-2-status.json';
 import * as eijobs from './mock/ei-jobs.json';
 import * as eiproducers from './mock/ei-producers.json';
-import * as nopolicyinstances from './mock/nopolicyinstances.json';
+import * as policyinstanceNoType from './mock/policy-instance-notype.json';
 import * as policytypesList from './mock/policy-types.json';
 import * as policytypes1 from './mock/policy-type1.json';
 import * as policyinstanceedit from './mock/policy-instance-edit.json';
@@ -45,27 +48,39 @@ const urls = [
         json: policytypes1
     },
     {
-        url: 'v2/policies?type=1',
+        url: 'v2/policies',
+        json: policies
+    },
+    {
+        url: 'v2/policies/2000',
         json: policyinstances1
     },
     {
-        url: 'v2/policies?type=',
-        json: policyinstancesNoType
+        url: 'v2/policies/2100',
+        json: policyinstances2
     },
     {
-        url: 'v2/policies?type=2',
-        json: nopolicyinstances
+        url: 'v2/policies/2000/status',
+        json: policyinstances1Status
+    },
+    {
+        url: 'v2/policies/2100/status',
+        json: policyinstances2Status
+    },
+    {
+        url: 'v2/policies/2000?type=',
+        json: policyinstanceedit
+    },
+    {
+        url: 'v2/policies/2100?type=',
+        json: policyinstanceedit
     },
     {
         url: 'v2/policies/2000?type=1',
         json: policyinstanceedit
     },
     {
-        url: 'v2/policies/3000?type=1',
-        json: policyinstanceedit
-    },
-    {
-        url: 'v2/policies/2001?type=',
+        url: 'v2/policies/2100?type=1',
         json: policyinstanceedit
     },
     {
