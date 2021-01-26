@@ -47,17 +47,19 @@ export class PolicyTypeDataSource extends DataSource<PolicyTypeSchema> {
 
     public getPolicyTypes() {
         this.policyTypes = [] as PolicyTypeSchema[];
-        this.policySvc.getPolicyTypes().subscribe(data => {
-            if (data.policytype_ids.length != 0) {
-                data.policytype_ids.forEach(policyId => {
+        this.policySvc.getPolicyTypes().subscribe(policyType => {
+            if (policyType.policytype_ids.length != 0) {
+                policyType.policytype_ids.forEach(policyTypeId => {
                     var policyTypeSchema = {} as PolicyTypeSchema
-                    if (policyId === "") {
+                    if (policyTypeId === "") {
+                        policyTypeSchema.id = '';
                         policyTypeSchema.name = '';
                         policyTypeSchema.schemaObject = '{}';
                         this.policyTypes.push(policyTypeSchema);
                     }
                     else {
-                        this.policySvc.getPolicyType(policyId).subscribe(policyType => {
+                        this.policySvc.getPolicyType(policyTypeId).subscribe(policyType => {
+                            policyTypeSchema.id = policyTypeId;
                             policyTypeSchema.schemaObject = policyType.policy_schema;
                             policyTypeSchema.name = policyType.policy_schema.title;
                             this.policyTypes.push(policyTypeSchema);

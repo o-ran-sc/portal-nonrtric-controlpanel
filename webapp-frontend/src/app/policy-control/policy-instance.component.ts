@@ -59,7 +59,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.instanceDataSource = new PolicyInstanceDataSource(this.policySvc, this.sort, this.notificationService, this.policyTypeSchema);
+        this.instanceDataSource = new PolicyInstanceDataSource(this.policySvc, this.sort, this.notificationService,this.policyTypeSchema);
         this.expanded.subscribe((isExpanded: boolean) => this.onExpand(isExpanded));
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
@@ -72,7 +72,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
 
     private onExpand(isExpanded: boolean) {
         if (isExpanded) {
-            this.instanceDataSource.loadTable();
+            this.instanceDataSource.getPolicyInstances();
         }
     }
 
@@ -81,15 +81,15 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
     }
 
     modifyInstance(instance: PolicyInstance): void {
-        this.policySvc.getPolicy(this.policyTypeSchema.name, instance.id).subscribe(
+        this.policySvc.getPolicy(this.policyTypeSchema.name, instance.policy_id).subscribe(
             (refreshedJson: any) => {
-                instance.json = JSON.stringify(refreshedJson);
+                instance.policy_data = JSON.stringify(refreshedJson);
                 if (this.isSchemaEmpty()) {
                     this.dialog.open(
                         NoTypePolicyInstanceDialogComponent,
                         getPolicyDialogProperties(this.policyTypeSchema, instance, this.darkMode)).afterClosed().subscribe(
                            (_: any) => {
-                                this.instanceDataSource.loadTable();
+                                this.instanceDataSource.getPolicyInstances();
                            }
                         );
                 } else {
@@ -97,7 +97,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
                         PolicyInstanceDialogComponent,
                         getPolicyDialogProperties(this.policyTypeSchema, instance, this.darkMode)).afterClosed().subscribe(
                            (_: any) => {
-                                this.instanceDataSource.loadTable();
+                                this.instanceDataSource.getPolicyInstances();
                            }
                         );
 
@@ -126,13 +126,13 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
             .afterClosed().subscribe(
                 (res: any) => {
                     if (res) {
-                        this.policySvc.deletePolicy(this.policyTypeSchema.name, instance.id)
+                        this.policySvc.deletePolicy(this.policyTypeSchema.name, instance.policy_id)
                             .subscribe(
                                 (response: HttpResponse<Object>) => {
                                     switch (response.status) {
                                         case 200:
                                             this.notificationService.success('Delete succeeded!');
-                                            this.instanceDataSource.loadTable();
+                                            this.instanceDataSource.getPolicyInstances();
                                             break;
                                         default:
                                             this.notificationService.warn('Delete failed ' + response.status + ' ' + response.body);

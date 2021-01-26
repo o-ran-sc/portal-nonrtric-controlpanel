@@ -32,6 +32,8 @@ import { NotificationService } from '../services/ui/notification.service';
 
 export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
 
+    policyInstances: PolicyInstance[] = [];
+
     private policyInstanceSubject = new BehaviorSubject<PolicyInstance[]>([]);
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
@@ -48,20 +50,22 @@ export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
         super();
     }
 
-    loadTable() {
-        this.loadingSubject.next(true);
-        this.policySvc.getPolicyInstances(this.policyTypeSchema.name)
-            .pipe(
-                catchError((her: HttpErrorResponse) => {
-                    this.notificationService.error('Failed to get policy instances: ' + her.error);
-                    return of([]);
-                }),
-                finalize(() => this.loadingSubject.next(false))
-            )
-            .subscribe((instances: PolicyInstance[]) => {
-                this.rowCount = instances.length;
-                this.policyInstanceSubject.next(instances);
-            });
+    public getPolicyInstances() {
+        this.policyInstances = [] as PolicyInstance[];
+        this.policySvc.getPolicyInstancesByType(this.policyTypeSchema.id).subscribe(policies => {
+            if (policies.policy_ids.length != 0) {
+                policies.policy_ids.forEach(policyId => {
+                    var policyInstance = {} as PolicyInstance
+                    this.policySvc.getPolicyInstance(policyId).subscribe(policyInstance => {
+                        this.policySvc.getPolicyStatus(policyId).subscribe(policyStatus => {
+                            policyInstance.lastModified = policyStatus.last_modified;
+                        })
+                        this.policyInstances.push(policyInstance);
+                    })
+                    this.policyInstanceSubject.next(this.policyInstances);
+                })
+            }
+        })
     }
 
     connect(): Observable<PolicyInstance[]> {
@@ -87,9 +91,9 @@ export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
         return data.sort((a, b) => {
             const isAsc = this.sort.direction === 'asc';
             switch (this.sort.active) {
-                case 'instanceId': return compare(a.id, b.id, isAsc);
-                case 'ric': return compare(a.ric, b.ric, isAsc);
-                case 'service': return compare(a.service, b.service, isAsc);
+                case 'instanceId': return compare(a.policy_id, b.policy_id, isAsc);
+                case 'ric': return compare(a.ric_id, b.ric_id, isAsc);
+                case 'service': return compare(a.service_id, b.service_id, isAsc);
                 case 'lastModified': return compare(a.lastModified, b.lastModified, isAsc);
                 default: return 0;
             }
