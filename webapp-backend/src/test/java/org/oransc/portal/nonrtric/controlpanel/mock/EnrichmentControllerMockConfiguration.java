@@ -37,6 +37,9 @@ import java.util.stream.Collectors;
 
 import org.oransc.portal.nonrtric.controlpanel.eiproducerapi.EiProducerApi;
 import org.oransc.portal.nonrtric.controlpanel.model.JobInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerRegistrationInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerRegistrationInfo.ProducerEiTypeRegistrationInfo;
+import org.oransc.portal.nonrtric.controlpanel.model.ProducerStatusInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -74,29 +77,29 @@ public class EnrichmentControllerMockConfiguration {
         }
 
         public ResponseEntity<String> getAllEiProducers() {
-            EiProducers result = new EiProducers();
+            List<ProducerRegistrationInfo> result = new ArrayList<>();
             result.addAll(database.getAllEiProducers());
             return new ResponseEntity<>(gson.toJson(result), HttpStatus.OK);
         }
 
         @Override
-        public ResponseEntity<String> getEiProducer(String eiProducerId) {
-            EiProducer result = database.getEiProducerInstance(eiProducerId);
-            return new ResponseEntity<>(gson.toJson(result), HttpStatus.OK);
+        public ResponseEntity<ProducerRegistrationInfo> getEiProducer(String eiProducerId) {
+            ProducerRegistrationInfo result = database.getEiProducerInstance(eiProducerId);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
 
         @Override
-        public ResponseEntity<String> getEiJobsForOneEiProducer(String eiProducerId) {
-            EiJobs result = new EiJobs();
+        public ResponseEntity<List<JobInfo>> getEiJobsForOneEiProducer(String eiProducerId) {
+            List<JobInfo> result = new ArrayList<>();
 
             result.addAll(database.getAllEiJobs());
-            return new ResponseEntity<>(gson.toJson(result), HttpStatus.OK);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
 
         @Override
-        public ResponseEntity<String> getEiProducerStatus(String eiProducerId) {
-            EiProducer result = database.getEiProducerInstance(eiProducerId);
-            return new ResponseEntity<>(gson.toJson(result.status()), HttpStatus.OK);
+        public ResponseEntity<ProducerStatusInfo> getEiProducerStatus(String eiProducerId) {
+            ProducerStatusInfo status = new ProducerStatusInfo(ProducerStatusInfo.OperationalState.ENABLED);
+            return new ResponseEntity<>(status, HttpStatus.OK);
         }
     }
 
@@ -104,25 +107,35 @@ public class EnrichmentControllerMockConfiguration {
 
         Database() {
 
-            List<EiType> supported_types = new ArrayList<EiType>();
+            List<ProducerEiTypeRegistrationInfo> supported_types = new ArrayList<ProducerEiTypeRegistrationInfo>();
 
-            // Create EiType instance
+            // Create ProducerEiTypeRegistrationInfo instance
             String schema = getStringFromFile("ei-type-1.json");
-            EiType eiType1 = getEiTypeInstance("type1", schema, Arrays.asList("prod-1"));
+            ProducerEiTypeRegistrationInfo eiType1 = getEiTypeInstance("type1", schema, Arrays.asList("prod-1"));
             supported_types.add(eiType1);
 
-            // Create EiType instance
+            // Create ProducerEiTypeRegistrationInfo instance
             schema = getStringFromFile("ei-type-2.json");
-            EiType eiType2 = getEiTypeInstance("type2", schema, Arrays.asList("prod-1"));
+            ProducerEiTypeRegistrationInfo eiType2 = getEiTypeInstance("type2", schema, Arrays.asList("prod-1"));
             supported_types.add(eiType2);
 
-            // Create EiProducer instance
+            // Create ProducerRegistrationInfo instance
             putEiProducerInstance("prod-1", "http://example.com/", "http://example.com/", "http://example.com/",
+                supported_types, new ProducerStatusInfo(ProducerStatusInfo.OperationalState.ENABLED));
+
+            putEiProducerInstance("prod-2", "http://example.com/", "http://example.com/", "http://example.com/",
+                Arrays.asList(supported_types.get(0)),
+                new ProducerStatusInfo(ProducerStatusInfo.OperationalState.DISABLED));
+
+            putEiProducerInstance("3-prod", "http://example.com/", "http://example.com/", "http://example.com/",
                 supported_types, new ProducerStatusInfo(ProducerStatusInfo.OperationalState.ENABLED));
 
             // Create EiJob instance
             schema = getStringFromFile("job-1.json");
             putEiJobInstance("type1", "job1", schema, "owner", "http://example.com/");
+
+            schema = getStringFromFile("job-1.json");
+            putEiJobInstance("type2", "job2", schema, "owner", "http://example.com/");
         }
 
         private String getStringFromFile(String path) {
@@ -152,22 +165,23 @@ public class EnrichmentControllerMockConfiguration {
         }
 
         void putEiProducerInstance(String id, String creation_url, String deletion_url, String callback_url,
-            List<EiType> supported_types, ProducerStatusInfo status) {
-            EiProducer eiProducer = ImmutableEiProducer.builder() //
-                .ei_producer_id(id) //
-                .ei_job_creation_callback_url(creation_url) //
-                .ei_job_deletion_callback_url(deletion_url) //
-                .ei_producer_supervision_callback_url(callback_url) //
-                .supported_ei_types(supported_types) //
-                .status(status).build(); //
+            List<ProducerEiTypeRegistrationInfo> supported_types, ProducerStatusInfo status) {
+            Collection<String> supportedTypeIds = new ArrayList<>();
+            for (ProducerEiTypeRegistrationInfo i : supported_types) {
+                supportedTypeIds.add(i.eiTypeId);
+            }
+            ProducerRegistrationInfo eiProducer = ProducerRegistrationInfo.builder() //
+                .jobCallbackUrl(creation_url) //
+                .producerSupervisionCallbackUrl(callback_url) //
+                .supportedTypeIds(supportedTypeIds) //
+                .build(); //
             eiProducers.put(id, eiProducer);
         }
 
-        EiType getEiTypeInstance(String id, Object data, List<String> producer_ids) {
-            return ImmutableEiType.builder() //
-                .ei_type_identity(id) //
-                .ei_job_data_schema(data) //
-                .ei_producer_ids(producer_ids) //
+        ProducerEiTypeRegistrationInfo getEiTypeInstance(String id, Object data, List<String> producer_ids) {
+            return ProducerEiTypeRegistrationInfo.builder() //
+                .eiTypeId(id) //
+                .jobDataSchema(data) //
                 .build(); //
         }
 
@@ -179,8 +193,8 @@ public class EnrichmentControllerMockConfiguration {
             eiJobs.remove(id);
         }
 
-        EiProducer getEiProducerInstance(String id) throws RestClientException {
-            EiProducer i = eiProducers.get(id);
+        ProducerRegistrationInfo getEiProducerInstance(String id) throws RestClientException {
+            ProducerRegistrationInfo i = eiProducers.get(id);
             if (i == null) {
                 throw new RestClientException("Producer not found: " + id);
             }
@@ -191,16 +205,15 @@ public class EnrichmentControllerMockConfiguration {
             return Collections.unmodifiableCollection(eiProducers.keySet());
         }
 
-        public Collection<EiProducer> getAllEiProducers() {
+        public Collection<ProducerRegistrationInfo> getAllEiProducers() {
             return eiProducers.values();
         }
 
         public List<JobInfo> getAllEiJobs() {
             return new ArrayList<>(eiJobs.values());
-
         }
 
-        private Map<String, EiProducer> eiProducers = new HashMap<>();
+        private Map<String, ProducerRegistrationInfo> eiProducers = new HashMap<>();
         private Map<String, JobInfo> eiJobs = new HashMap<>();
     }
 }
