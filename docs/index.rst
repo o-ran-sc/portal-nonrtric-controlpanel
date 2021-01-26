@@ -1,6 +1,6 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. SPDX-License-Identifier: CC-BY-4.0
-.. Copyright (C) 2020 Nordix
+.. Copyright (C) 2021 Nordix
 
 Non-RT RIC Control Panel
 ========================
@@ -9,12 +9,9 @@ Non-RT RIC Control Panel
    :maxdepth: 2
    :caption: Contents:
 
-   ./developer-guide.rst
-   ./installation-guide.rst
    ./overview.rst
+   ./developer-guide.rst
    ./release-notes.rst
 
 
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
