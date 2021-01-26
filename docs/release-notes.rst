@@ -30,6 +30,9 @@ Version history
 | 2020-12-03 | 2.1.0    | Henrik Andersson | Cherry Release |
 |            |          |                  |                |
 +------------+----------+------------------+----------------+
+| 2021-01-26 | 2.1.1    | Patrik Buhr      | Cherry Release |
+|            |          |                  | maintenance    |
++------------+----------+------------------+----------------+
 
 Release Data
 ============
