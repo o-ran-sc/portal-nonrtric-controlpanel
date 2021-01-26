@@ -1,7 +1,7 @@
 {
-  "policy_id": "2000",
-  "policytype_id": "1",
-  "ric_id": "ric1",
+  "policy_id": "2100",
+  "policytype_id": "",
+  "ric_id": "ric2",
   "policy_data": {
     "scope": {
       "ueId": "ue3100",

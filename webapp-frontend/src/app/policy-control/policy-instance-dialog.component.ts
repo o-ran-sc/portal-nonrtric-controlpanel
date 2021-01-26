@@ -225,10 +225,10 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
 
 export function getPolicyDialogProperties(policyTypeSchema: PolicyTypeSchema, instance: PolicyInstance, darkMode: boolean): MatDialogConfig {
     const createSchema = policyTypeSchema.schemaObject;
-    const instanceId = instance ? instance.id : null;
-    const instanceJson = instance ? instance.json : null;
+    const instanceId = instance ? instance.policy_id : null;
+    const instanceJson = instance ? instance.policy_data : null;
     const name = policyTypeSchema.name;
-    const ric = instance ? instance.ric : null;
+    const ric = instance ? instance.ric_id : null;
     return {
         maxWidth: '1200px',
         maxHeight: '900px',

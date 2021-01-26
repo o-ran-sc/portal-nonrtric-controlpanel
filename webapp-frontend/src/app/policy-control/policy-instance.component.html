@@ -24,7 +24,7 @@
         <mat-header-cell mat-sort-header *matHeaderCellDef matTooltip="The ID of the policy instance">
             Instance
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" (click)="modifyInstance(element)">{{element.id}}
+        <mat-cell *matCellDef="let element" (click)="modifyInstance(element)">{{element.policy_id}}
         </mat-cell>
     </ng-container>
 
@@ -33,7 +33,7 @@
             matTooltip="Element where the policy instance resides, e.g. a gNodeB or Near-RT RIC">
             Target
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" (click)="modifyInstance(element)">{{element.ric}}
+        <mat-cell *matCellDef="let element" (click)="modifyInstance(element)">{{element.ric_id}}
         </mat-cell>
     </ng-container>
 
@@ -42,7 +42,7 @@
             matTooltip="The service that created the policy instance, and is responsible for its lifecycle">
             Owner
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" (click)="modifyInstance(element)">{{element.service}}
+        <mat-cell *matCellDef="let element" (click)="modifyInstance(element)">{{element.service_id}}
         </mat-cell>
     </ng-container>
 

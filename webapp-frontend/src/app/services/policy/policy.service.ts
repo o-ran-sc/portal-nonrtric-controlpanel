@@ -22,7 +22,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PolicyInstance, PolicyInstanceAck, PolicyType, PolicyTypes } from '../../interfaces/policy.types';
+import { PolicyInstance, PolicyInstanceAck, PolicyInstances, PolicyStatus, PolicyType, PolicyTypes } from '../../interfaces/policy.types';
 import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.types';
 
 /**
@@ -60,9 +60,19 @@ export class PolicyService {
         return this.httpClient.get<PolicyType>(url);
     }
 
-    getPolicyInstances(policyTypeId: string): Observable<PolicyInstance[]> {
-        const url = this.buildPath(this.policyPath) + '?type=' + policyTypeId;
-        return this.httpClient.get<PolicyInstance[]>(url);
+    getPolicyInstances(): Observable<PolicyInstances> {
+        const url = this.buildPath(this.policyPath);
+        return this.httpClient.get<PolicyInstances>(url);
+    }
+
+    getPolicyInstance(policyId: string): Observable<PolicyInstance> {
+        const url = this.buildPath(this.policyPath) + '/' + policyId;
+        return this.httpClient.get<PolicyInstance>(url);
+    }
+
+    getPolicyStatus(policyId: string): Observable<PolicyStatus> {
+        const url = this.buildPath(this.policyPath) + '/' + policyId + '/status';
+        return this.httpClient.get<PolicyStatus>(url);
     }
 
     /**

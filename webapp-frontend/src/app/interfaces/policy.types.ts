@@ -33,12 +33,19 @@ export interface PolicyTypes {
   policytype_ids: any[];
 }
 
+export interface PolicyInstances {
+  policy_ids: any[];
+}
+
 export interface PolicyInstance {
-  id: string;
-  json: string;
-  ric: string;
-  service: string;
+  policy_id: string;
+  policy_data: string;
+  ric_id: string;
+  service_id: string;
   lastModified: string;
+}
+export interface PolicyStatus {
+  last_modified: string;
 }
 
 export interface PolicyInstanceAck {
