@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1800fa92_3aebe38d",
+        "filename": "webapp-frontend/src/app/mock/policy-types.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2021-01-27T08:46:20Z",
+      "side": 1,
+      "message": "Maybe an idea would be to get rid of all these json textfiles but instead express the same thing as instantiated .ts classes. I think that could be more maintainable. \nI think most classes already exists (I guess all except the policy type schema exists).",
+      "revId": "e409ac955e6f0654f1721c69e1885bda23e1cf99",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
