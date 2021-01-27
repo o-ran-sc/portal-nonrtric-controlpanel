@@ -16,6 +16,24 @@
       "revId": "e409ac955e6f0654f1721c69e1885bda23e1cf99",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e8657b0_1c307b34",
+        "filename": "webapp-frontend/src/app/mock/policy-types.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-01-27T12:34:07Z",
+      "side": 1,
+      "message": "Ack. That\u0027t a good idea.",
+      "parentUuid": "1800fa92_3aebe38d",
+      "revId": "e409ac955e6f0654f1721c69e1885bda23e1cf99",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
