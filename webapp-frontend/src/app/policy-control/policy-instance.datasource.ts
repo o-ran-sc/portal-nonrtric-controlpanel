@@ -26,10 +26,9 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { merge } from 'rxjs';
 import { of } from 'rxjs/observable/of';
 import { catchError, finalize, map } from 'rxjs/operators';
-import { PolicyInstance } from '../interfaces/policy.types';
+import { PolicyInstance, PolicyTypeSchema } from '../interfaces/policy.types';
 import { PolicyService } from '../services/policy/policy.service';
 import { NotificationService } from '../services/ui/notification.service';
-import { PolicyType } from '../interfaces/policy.types';
 
 export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
 
@@ -45,13 +44,13 @@ export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
         private policySvc: PolicyService,
         public sort: MatSort,
         private notificationService: NotificationService,
-        private policyType: PolicyType) {
+        private policyTypeSchema: PolicyTypeSchema) {
         super();
     }
 
     loadTable() {
         this.loadingSubject.next(true);
-        this.policySvc.getPolicyInstances(this.policyType.name)
+        this.policySvc.getPolicyInstances(this.policyTypeSchema.name)
             .pipe(
                 catchError((her: HttpErrorResponse) => {
                     this.notificationService.error('Failed to get policy instances: ' + her.error);

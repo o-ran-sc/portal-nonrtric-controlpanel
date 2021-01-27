@@ -19,14 +19,12 @@
  */
 
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { of } from 'rxjs/observable/of';
-import { catchError, finalize, map } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 
-import { PolicyType } from '../interfaces/policy.types';
+import { PolicyTypeSchema } from '../interfaces/policy.types';
 import { PolicyService } from '../services/policy/policy.service';
 import { NotificationService } from '../services/ui/notification.service';
 
@@ -34,13 +32,11 @@ import { NotificationService } from '../services/ui/notification.service';
     providedIn: 'root'
 })
 
-export class PolicyTypeDataSource extends DataSource<PolicyType> {
+export class PolicyTypeDataSource extends DataSource<PolicyTypeSchema> {
 
-    private policyTypeSubject = new BehaviorSubject<PolicyType[]>([]);
+    policyTypes: PolicyTypeSchema[] = [];
 
-    private loadingSubject = new BehaviorSubject<boolean>(false);
-
-    public loading$ = this.loadingSubject.asObservable();
+    private policyTypeSubject = new BehaviorSubject<PolicyTypeSchema[]>([]);
 
     public rowCount = 1; // hide footer during intial load
 
@@ -49,37 +45,35 @@ export class PolicyTypeDataSource extends DataSource<PolicyType> {
         super();
     }
 
-    loadTable() {
-        this.loadingSubject.next(true);
-        this.policySvc.getPolicyTypes()
-            .pipe(
-                catchError((her: HttpErrorResponse) => {
-                    this.notificationService.error('Failed to get policy types: ' + her.statusText + ', ' + her.error);
-                    return of([]);
-                }),
-                finalize(() => this.loadingSubject.next(false))
-            )
-            .subscribe((types: PolicyType[]) => {
-                this.rowCount = types.length;
-                for (let i = 0; i < types.length; i++) {
-                    const policyType = types[i];
-                    try {
-                        policyType.schemaObject = JSON.parse(policyType.schema);
-                    } catch (jsonError) {
-                        console.error('Could not parse schema: ' + policyType.schema);
-                        policyType.schemaObject = { description: 'Incorrect schema: ' + jsonError };
+    public getPolicyTypes() {
+        this.policyTypes = [] as PolicyTypeSchema[];
+        this.policySvc.getPolicyTypes().subscribe(data => {
+            if (data.policytype_ids.length != 0) {
+                data.policytype_ids.forEach(policyId => {
+                    var policyTypeSchema = {} as PolicyTypeSchema
+                    if (policyId === "") {
+                        policyTypeSchema.name = '';
+                        policyTypeSchema.schemaObject = '{}';
+                        this.policyTypes.push(policyTypeSchema);
                     }
-                }
-                this.policyTypeSubject.next(types);
-            });
+                    else {
+                        this.policySvc.getPolicyType(policyId).subscribe(policyType => {
+                            policyTypeSchema.schemaObject = policyType.policy_schema;
+                            policyTypeSchema.name = policyType.policy_schema.title;
+                            this.policyTypes.push(policyTypeSchema);
+                        })
+                    }
+                    this.policyTypeSubject.next(this.policyTypes);
+                })
+            }
+        })
     }
 
-    connect(collectionViewer: CollectionViewer): Observable<PolicyType[]> {
+    connect(collectionViewer: CollectionViewer): Observable<PolicyTypeSchema[]> {
         return of(this.policyTypeSubject.getValue());
     }
 
     disconnect(collectionViewer: CollectionViewer): void {
         this.policyTypeSubject.complete();
-        this.loadingSubject.complete();
     }
 }
