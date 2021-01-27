@@ -1,0 +1,9 @@
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Code-Review+2: Patrik Buhr <patrik.buhr@est.tech>
+Code-Review+1: Chengkai Yan <martin.c.yan@est.tech>
+Code-Review+1: Sonia Sangari <sonia.sangari@est.tech>
+Submitted-by: Patrik Buhr <patrik.buhr@est.tech>
+Submitted-at: Wed, 27 Jan 2021 08:48:09 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/portal/nonrtric-controlpanel/+/5512
+Project: portal/nonrtric-controlpanel
+Branch: refs/heads/cherry
