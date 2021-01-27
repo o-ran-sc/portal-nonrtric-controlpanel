@@ -20,7 +20,7 @@ To run the Control Panel locally for development with simulated services, follow
 Fetch the code
 --------------
 
-Fetch the latest code from `gerrit (nonrtric-controlpanel) <https://gerrit.o-ran-sc.org/r/admin/repos/nonrtric-controlpanel>`_
+Fetch the latest code from `gerrit (nonrtric-controlpanel) <https://gerrit.o-ran-sc.org/r/admin/repos/portal/nonrtric-controlpanel>`_
 
 Start the backend
 -----------------
@@ -29,7 +29,7 @@ Start the backend
 
     cd webapp-backend
     mvn clean install
-    mvn -Dorg.oransc.portal.nonrtric.controlpanel=mock -Dtest=ControlPanelTestServer -DfailIfNoTests=false test
+    mvn -Dorg.oransc.portal.nonrtric.controlpanel=mock -Dtest=MockControlPanelBackEnd -DfailIfNoTests=false test
 
 
 Now you can open URL:  `localhost:8080`_ in a browser to access the backend directly.
