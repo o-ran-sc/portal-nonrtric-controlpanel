@@ -25,7 +25,7 @@ import { PolicyInstance, PolicyInstances, PolicyTypes } from '../../interfaces/p
 
 describe('PolicyService', () => {
   let apiVersion2 = 'v2'
-  let basePath = '';
+  let basePath = '/a1-policy/';
   let policyService: PolicyService;
   let httpTestingController: HttpTestingController;
   beforeEach(() => TestBed.configureTestingModule({

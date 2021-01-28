@@ -29,11 +29,11 @@ spring:
       - id: policytypes
         uri: https://localhost:8433
         predicates:
-        - Path=/v2/policy-types/**
+        - Path=/a1-policy/v2/policy-types/**
       - id: policies
         uri: https://localhost:8433
         predicates:
-        - Path=/v2/policies
+        - Path=/a1-policy/v2/policies
 management:
   endpoint:
     gateway:

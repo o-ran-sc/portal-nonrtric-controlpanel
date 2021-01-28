@@ -36,59 +36,59 @@ import * as rics from './mock/rics.json';
 
 const urls = [
     {
-        url: 'v2/policy-types',
+        url: 'a1-policy/v2/policy-types',
         json: policytypesList
     },
     {
-        url: 'v2/policy-types/',
+        url: 'a1-policy/v2/policy-types/',
         json: policytypes1
     },
     {
-        url: 'v2/policy-types/1',
+        url: 'a1-policy/v2/policy-types/1',
         json: policytypes1
     },
     {
-        url: 'v2/policies?policytype_id=',
+        url: 'a1-policy/v2/policies?policytype_id=',
         json: policies
     },
     {
-        url: 'v2/policies?policytype_id=1',
+        url: 'a1-policy/v2/policies?policytype_id=1',
         json: policies
     },
     {
-        url: 'v2/policies/2000',
+        url: 'a1-policy/v2/policies/2000',
         json: policyinstances1
     },
     {
-        url: 'v2/policies/2100',
+        url: 'a1-policy/v2/policies/2100',
         json: policyinstances2
     },
     {
-        url: 'v2/policies/2000/status',
+        url: 'a1-policy/v2/policies/2000/status',
         json: policyinstances1Status
     },
     {
-        url: 'v2/policies/2100/status',
+        url: 'a1-policy/v2/policies/2100/status',
         json: policyinstances2Status
     },
     {
-        url: 'v2/policies/2000?type=',
+        url: 'a1-policy/v2/policies/2000?type=',
         json: policyinstanceedit
     },
     {
-        url: 'v2/policies/2100?type=',
+        url: 'a1-policy/v2/policies/2100?type=',
         json: policyinstanceedit
     },
     {
-        url: 'v2/policies/2000?type=1',
+        url: 'a1-policy/v2/policies/2000?type=1',
         json: policyinstanceedit
     },
     {
-        url: 'v2/policies/2100?type=1',
+        url: 'a1-policy/v2/policies/2100?type=1',
         json: policyinstanceedit
     },
     {
-        url: 'v2/policies/2000?ric=ric1&type=1',
+        url: 'a1-policy/v2/policies/2000?ric=ric1&type=1',
         json: ''
     },
     {
