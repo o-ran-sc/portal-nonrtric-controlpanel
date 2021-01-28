@@ -15,7 +15,7 @@
 /.settings
 /target/
 /.mvn/wrapper/maven-wrapper.jar
-**/.vscode
+
 
 ### STS ###
 .apt_generated

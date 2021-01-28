@@ -59,7 +59,6 @@ describe('PolicyService', () => {
         policytypes => expect(policytypes).toEqual(expectedPolicytypes, 'should return expected PolicyTypes'),
         fail
       );
-
       const req = httpTestingController.expectOne(basePath + apiVersion2 + '/' + policyService.policyTypesPath);
       expect(req.request.method).toEqual('GET');
 

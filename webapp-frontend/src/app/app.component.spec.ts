@@ -1,23 +1,17 @@
 import { TestBed, async } from '@angular/core/testing';
-import { APP_BASE_HREF } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  const routes: Routes = [
-    { path: '', redirectTo: '/policy', pathMatch: 'full'}
-  ];
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent
       ],
       imports: [
-        RouterModule.forRoot(routes)
+        RouterTestingModule
       ],
-      providers: [
-        { provide: APP_BASE_HREF, useValue: '/' }
-      ]
+      providers: []
     }).compileComponents();
   }));
 

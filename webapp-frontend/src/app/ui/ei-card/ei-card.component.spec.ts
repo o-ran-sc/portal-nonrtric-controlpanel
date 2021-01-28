@@ -21,13 +21,10 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {EICardComponent} from './ei-card.component';
 import { MatIconModule } from '@angular/material';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import {UiService} from '../../services/ui/ui.service';
 
 describe('EICardComponent', () => {
-  const routes: Routes = [
-    { path: 'ei-coordinator', redirectTo: '../../ei-coordinator', pathMatch: 'full'}
-  ];
   let component: EICardComponent;
   let fixture: ComponentFixture<EICardComponent>;
 
@@ -35,7 +32,7 @@ describe('EICardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [EICardComponent],
       imports: [ MatIconModule,
-        RouterModule.forRoot(routes)
+        RouterTestingModule
       ],
       providers: [UiService]
     })
