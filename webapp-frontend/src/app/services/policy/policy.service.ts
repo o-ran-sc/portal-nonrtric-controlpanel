@@ -34,7 +34,7 @@ import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.type
 export class PolicyService {
 
     private apiVersion2 = 'v2'
-    private basePath = '';
+    private basePath = '/a1-policy/';
     policyTypesPath = 'policy-types';
     policyPath = 'policies';
 

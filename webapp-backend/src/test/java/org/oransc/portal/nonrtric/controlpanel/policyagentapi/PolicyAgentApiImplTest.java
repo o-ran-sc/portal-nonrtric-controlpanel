@@ -47,7 +47,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Mono;
 
 class PolicyAgentApiImplTest {
-    private static final String URL_POLICY_SCHEMAS = "/v2/policy-types";
+    private static final String URL_POLICY_SCHEMAS = "/a1-policy/v2/policy-types";
     private static final String POLICY_TYPE_1_ID = "type1";
     private static final String POLICY_TYPE_1_VALID = "{\"title\":\"type1\"}";
     private static final String POLICY_TYPE_1_INVALID = "\"title\":\"type1\"}";
@@ -122,7 +122,7 @@ class PolicyAgentApiImplTest {
     }
 
     private String urlPolicyInstances(String type) {
-        return "/v2/policies?policytype_id=" + type;
+        return "/a1-policy/v2/policies?policytype_id=" + type;
     }
 
     @Test
@@ -161,11 +161,11 @@ class PolicyAgentApiImplTest {
     }
 
     private String urlPolicyInstance(String id) {
-        return "/v2/policies/" + id;
+        return "/a1-policy/v2/policies/" + id;
     }
 
     private String urlPolicyStatus(String id) {
-        return "/v2/policies/" + id + "/status";
+        return "/a1-policy/v2/policies/" + id + "/status";
     }
 
     @Test
@@ -180,7 +180,7 @@ class PolicyAgentApiImplTest {
     }
 
     private String urlPutPolicy() {
-        return "/v2/policies/";
+        return "/a1-policy/v2/policies/";
     }
 
     private void whenPutReturnOK(String url, String putBody, HttpStatus status, String body) {
@@ -248,7 +248,7 @@ class PolicyAgentApiImplTest {
     }
 
     private String deletePolicyUrl(String id) {
-        return "/v2/policies/" + id;
+        return "/a1-policy/v2/policies/" + id;
     }
 
     @Test
@@ -270,7 +270,7 @@ class PolicyAgentApiImplTest {
     }
 
     private String urlRicInfo(String typeName) {
-        return "/v2/rics?policytype_id=" + typeName;
+        return "/a1-policy/v2/rics?policytype_id=" + typeName;
     }
 
     @Test

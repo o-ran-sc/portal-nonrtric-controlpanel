@@ -72,7 +72,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     @Override
     public ResponseEntity<String> getAllPolicyTypes() {
         try {
-            final String url = "/v2/policy-types";
+            final String url = "/a1-policy/v2/policy-types";
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             if (!rsp.getStatusCode().is2xxSuccessful()) {
                 return rsp;
@@ -99,7 +99,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     public JsonObject getIndividualPolicySchema(String id) {
         try {
-            final String url = "/v2/policy-types/" + id;
+            final String url = "/a1-policy/v2/policy-types/" + id;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             if (!rsp.getStatusCode().is2xxSuccessful()) {
                 return null;
@@ -118,7 +118,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     @Override
     public ResponseEntity<String> getPolicyInstancesForType(String type) {
         try {
-            String url = "/v2/policies?policytype_id=" + type;
+            String url = "/a1-policy/v2/policies?policytype_id=" + type;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             if (!rsp.getStatusCode().is2xxSuccessful()) {
                 return rsp;
@@ -141,7 +141,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     public ResponseEntity<Object> getIndividualPolicyInstance(String id) {
         try {
-            String url = "/v2/policies/" + id;
+            String url = "/a1-policy/v2/policies/" + id;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             JsonObject obj = JsonParser.parseString(rsp.getBody()).getAsJsonObject();
 
@@ -162,7 +162,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     public ResponseEntity<String> getPolicyStatus(String id) {
         try {
-            String url = "/v2/policies/" + id + "/status";
+            String url = "/a1-policy/v2/policies/" + id + "/status";
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             return new ResponseEntity<>(rsp.getBody(), rsp.getStatusCode());
         } catch (Exception e) {
@@ -181,7 +181,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     @Override
     public ResponseEntity<String> putPolicy(String policyTypeIdString, String policyInstanceId, Object json,
         String ric) {
-        String url = "/v2/policies/";
+        String url = "/a1-policy/v2/policies/";
 
         JsonElement data = JsonParser.parseString(json.toString()).getAsJsonObject();
 
@@ -205,7 +205,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
 
     @Override
     public ResponseEntity<String> deletePolicy(String policyInstanceId) {
-        String url = "/v2/policies/" + policyInstanceId;
+        String url = "/a1-policy/v2/policies/" + policyInstanceId;
         try {
             webClient.deleteForEntity(url).block();
             return new ResponseEntity<>(HttpStatus.OK);
@@ -227,7 +227,7 @@ public class PolicyAgentApiImpl implements PolicyAgentApi {
     @Override
     public ResponseEntity<String> getRicsSupportingType(String typeName) {
         try {
-            String url = "/v2/rics?policytype_id=" + typeName;
+            String url = "/a1-policy/v2/rics?policytype_id=" + typeName;
             ResponseEntity<String> rsp = webClient.getForEntity(url).block();
             if (!rsp.getStatusCode().is2xxSuccessful()) {
                 return rsp;
