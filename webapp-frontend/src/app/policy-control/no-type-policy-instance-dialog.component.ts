@@ -76,7 +76,7 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
 
   onSubmit() {
     if (this.policyInstanceId == null) {
-        this.policyInstanceId = uuid.v4();
+      this.policyInstanceId = uuid.v4();
     }
     const self: NoTypePolicyInstanceDialogComponent = this;
     this.policySvc.putPolicy('', this.policyInstanceId, this.policyJsonTextArea.value, this.ric).subscribe(
@@ -106,13 +106,13 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
       });
   }
 
- private formatJsonString(jsonToFormat: string) {
-   return JSON.stringify(JSON.parse(jsonToFormat), null, 2);
- }
+  private formatJsonString(jsonToFormat: any) {
+    return JSON.stringify(jsonToFormat, null, 2);
+  }
 
- formatJsonInput() {
-   this.policyJson = this.formatJsonString(this.policyJsonTextArea.value);
- }
+  formatJsonInput() {
+    this.policyJson = this.formatJsonString(JSON.parse(this.policyJsonTextArea.value));
+  }
 }
 
 export function jsonValidator(): ValidatorFn {

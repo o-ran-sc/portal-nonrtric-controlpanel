@@ -33,7 +33,7 @@ spring:
       - id: policies
         uri: https://localhost:8433
         predicates:
-        - Path=/a1-policy/v2/policies
+        - Path=/a1-policy/v2/policies/**
 management:
   endpoint:
     gateway:

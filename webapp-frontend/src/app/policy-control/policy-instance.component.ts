@@ -59,7 +59,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.instanceDataSource = new PolicyInstanceDataSource(this.policySvc, this.sort, this.notificationService,this.policyTypeSchema);
+        this.instanceDataSource = new PolicyInstanceDataSource(this.policySvc, this.sort, this.notificationService, this.policyTypeSchema);
         this.expanded.subscribe((isExpanded: boolean) => this.onExpand(isExpanded));
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
@@ -77,28 +77,28 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
     }
 
     private isSchemaEmpty(): boolean {
-        return Object.keys(this.policyTypeSchema.schemaObject).length === 0;
+        return this.policyTypeSchema.schemaObject === '{}';
     }
 
     modifyInstance(instance: PolicyInstance): void {
-        this.policySvc.getPolicy(this.policyTypeSchema.name, instance.policy_id).subscribe(
+        this.policySvc.getPolicyInstance(instance.policy_id).subscribe(
             (refreshedJson: any) => {
-                instance.policy_data = JSON.stringify(refreshedJson);
+                instance = refreshedJson;
                 if (this.isSchemaEmpty()) {
                     this.dialog.open(
                         NoTypePolicyInstanceDialogComponent,
                         getPolicyDialogProperties(this.policyTypeSchema, instance, this.darkMode)).afterClosed().subscribe(
-                           (_: any) => {
+                            (_: any) => {
                                 this.instanceDataSource.getPolicyInstances();
-                           }
+                            }
                         );
                 } else {
                     this.dialog.open(
                         PolicyInstanceDialogComponent,
                         getPolicyDialogProperties(this.policyTypeSchema, instance, this.darkMode)).afterClosed().subscribe(
-                           (_: any) => {
+                            (_: any) => {
                                 this.instanceDataSource.getPolicyInstances();
-                           }
+                            }
                         );
 
                 }

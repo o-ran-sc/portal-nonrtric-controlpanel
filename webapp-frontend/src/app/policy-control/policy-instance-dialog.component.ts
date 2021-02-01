@@ -30,6 +30,7 @@ import { NotificationService } from './../services/ui/notification.service';
 import { UiService } from '../services/ui/ui.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 @Component({
@@ -103,6 +104,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     }
 
     constructor(
+        private cdr: ChangeDetectorRef,
         private dataService: PolicyService,
         private errorService: ErrorDialogService,
         private notificationService: NotificationService,
@@ -113,7 +115,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         this.policyInstanceId = data.instanceId;
         this.policyTypeName = data.name;
         this.jsonSchemaObject = data.createSchema;
-        this.jsonObject = this.parseJson(data.instanceJson);
+        this.jsonObject = data.instanceJson;
         this.ric = data.ric;
     }
 
@@ -134,6 +136,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        this.cdr.detectChanges();
     }
 
     get ricSelector() { return this.instanceForm.get('ricSelector'); }
@@ -148,7 +151,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
             {
                 next(_) {
                     self.notificationService.success('Policy ' + self.policyTypeName + ':' + self.policyInstanceId +
-                    ' submitted');
+                        ' submitted');
                 },
                 error(error: HttpErrorResponse) {
                     self.errorService.displayError('Submit failed: ' + error.error);
