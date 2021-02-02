@@ -71,7 +71,7 @@ export class EICoordinatorComponent implements OnInit {
         }
 
     ngOnInit() {
-        this.eiJobsDataSource.loadTable();
+        this.eiJobsDataSource.getJobs();
 
         this.producers$= this.eiProducersDataSource.getProducers();
         this.filteredProducers$ = defer(() => this.formGroup.get("filter")
@@ -148,7 +148,7 @@ export class EICoordinatorComponent implements OnInit {
     }
 
     refreshTables() {
-        this.eiJobsDataSource.loadTable();
+        this.eiJobsDataSource.getJobs();
         this.eiProducersDataSource.loadTable();
     }
 }

@@ -20,11 +20,11 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing';
 
-import { EIJob, EIProducer } from '../../interfaces/ei.types';
+import { EIJob } from '../../interfaces/ei.types';
 import { EIService } from './ei.service';
 
 describe('EIService', () => {
-  let basePath = 'api/enrichment';
+  let basePath = '/ei-producer/v1';
   let service: EIService;
   let httpTestingController: HttpTestingController;
 
@@ -43,27 +43,24 @@ describe('EIService', () => {
   });
 
   describe('#getEIProducers', () => {
-    let expectedEIProducers: EIProducer[];
+    let expectedEIProducerIds: String[];
 
     beforeEach(() => {
       service = TestBed.get(EIService);
       httpTestingController = TestBed.get(HttpTestingController);
-      expectedEIProducers = [
-        { ei_producer_id: '1', ei_producer_types: ['EI Type 1'], status: 'ENABLED' },
-        { ei_producer_id: '1', ei_producer_types: ['EI Type 1'], status: 'ENABLED' }
-      ] as EIProducer[];
+      expectedEIProducerIds = [ 'producer1', 'producer2' ] as String[];
     });
 
-    it('should return all producers', () => {
-      service.getEIProducers().subscribe(
-        producers => expect(producers).toEqual(expectedEIProducers, 'should return expected EIProducers'),
+  it('should return all producer IDs', () => {
+      service.getProducerIds().subscribe(
+        producers => expect(producers).toEqual(expectedEIProducerIds, 'should return expected EIProducer IDs'),
         fail
       );
 
-      const req = httpTestingController.expectOne(basePath + '/' + service.eiProducerPath);
+      const req = httpTestingController.expectOne(basePath + '/' + service.eiProducersPath);
       expect(req.request.method).toEqual('GET');
 
-      req.flush(expectedEIProducers); //Return expectedEITypes
+      req.flush(expectedEIProducerIds); //Return expected producer IDs
 
       httpTestingController.verify();
     });
@@ -82,12 +79,12 @@ describe('EIService', () => {
     });
 
     it('should return all jobs', () => {
-      service.getEIJobs().subscribe(
+      service.getJobsForProducer('producer1').subscribe(
         jobs => expect(jobs).toEqual(expectedEIJobs, 'should return expected Jobs'),
         fail
       );
 
-      const req = httpTestingController.expectOne(basePath + '/' + service.eiJobPath);
+      const req = httpTestingController.expectOne(basePath + '/' + service.eiProducersPath + '/producer1/' + service.eiJobsPath);
       expect(req.request.method).toEqual('GET');
 
       req.flush(expectedEIJobs); //Return expectedEIJobs
