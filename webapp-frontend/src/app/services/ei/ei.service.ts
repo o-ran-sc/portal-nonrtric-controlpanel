@@ -20,10 +20,8 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { EIJob, EIProducer } from '../../interfaces/ei.types';
-import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.types';
 
 /**
  * Services for calling the EI endpoints.
@@ -33,9 +31,9 @@ import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.type
 })
 export class EIService {
 
-    private basePath = 'api/enrichment';
-    eiJobPath = 'eijobs';
-    eiProducerPath = 'eiproducers';
+    private basePath = '/ei-producer/v1';
+    eiJobsPath = 'eijobs';
+    eiProducersPath = 'eiproducers';
 
     private buildPath(...args: any[]) {
         let result = this.basePath;
@@ -49,13 +47,18 @@ export class EIService {
         // injects to variable httpClient
     }
 
-    getEIJobs(): Observable<EIJob[]> {
-        const url = this.buildPath(this.eiJobPath);
+    getProducerIds(): Observable<String[]> {
+        const url = this.buildPath(this.eiProducersPath);
+        return this.httpClient.get<String[]>(url);
+    }
+
+    getJobsForProducer(producerId: String): Observable<EIJob[]> {
+        const url = this.buildPath(this.eiProducersPath, producerId, this.eiJobsPath);
         return this.httpClient.get<EIJob[]>(url);
     }
 
     getEIProducers(): Observable<EIProducer[]> {
-        const url = this.buildPath(this.eiProducerPath);
+        const url = this.buildPath(this.eiProducersPath);
         return this.httpClient.get<EIProducer[]>(url);
     }
 }

@@ -35,7 +35,7 @@ describe('EICoordinatorComponent', () => {
   let fixture: ComponentFixture<EICoordinatorComponent>;
 
   beforeEach(async(() => {
-    const jobDataSourceSpy = jasmine.createSpyObj('EIJobDataSource', [ 'connect', 'loadTable', 'disconnect' ]);
+    const jobDataSourceSpy = jasmine.createSpyObj('EIJobDataSource', [ 'connect', 'getJobs', 'disconnect' ]);
     const producerDataSourceSpy = jasmine.createSpyObj('EIProducerDataSource', [ 'connect', 'loadTable', 'getProducers',  'disconnect' ]);
 
     jobDataSourceSpy.connect.and.returnValue(of([]));

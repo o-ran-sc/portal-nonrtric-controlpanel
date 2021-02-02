@@ -36,7 +36,7 @@ import { NotificationService } from '../services/ui/notification.service';
 
 export class EIJobDataSource extends MatTableDataSource<EIJob> {
 
-    private eiJobSubject = new BehaviorSubject<EIJob[]>([]);
+    eiJobSubject = new BehaviorSubject<EIJob[]>([]);
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
 
@@ -50,9 +50,9 @@ export class EIJobDataSource extends MatTableDataSource<EIJob> {
         super();
     }
 
-    loadTable() {
+    getJobs() {
         this.loadingSubject.next(true);
-        this.eiSvc.getEIJobs()
+        this.eiSvc.getProducerIds()
             .pipe(
                 catchError((her: HttpErrorResponse) => {
                     this.notificationService.error('Failed to get EI jobs: ' + her.error);
@@ -60,9 +60,16 @@ export class EIJobDataSource extends MatTableDataSource<EIJob> {
                 }),
                 finalize(() => this.loadingSubject.next(false))
             )
-            .subscribe((instances: EIJob[]) => {
-                this.rowCount = instances.length;
-                this.eiJobSubject.next(instances);
+            .subscribe((producerIds: String[]) => {
+                producerIds.forEach(id => {
+                    console.log('Getting jobs for producer ID: ', id);
+                    this.eiSvc.getJobsForProducer(id).subscribe(jobs => {
+                        const currentValue = this.eiJobSubject.value;
+                        const updatedValue = [...currentValue, ...jobs];
+                        this.eiJobSubject.next(updatedValue);
+                        this.rowCount += jobs.length;
+                    });
+                });
             });
     }
 
