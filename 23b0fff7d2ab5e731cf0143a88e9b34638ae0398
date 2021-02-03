@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "309738a8_4afe0281",
+        "filename": "webapp-frontend/src/app/policy-control/policy-type.datasource.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-02-03T14:08:17Z",
+      "side": 1,
+      "message": "Maybe an empty type can be defined at class level, and used here?",
+      "revId": "23b0fff7d2ab5e731cf0143a88e9b34638ae0398",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a0913d5_ba0e2e68",
+        "filename": "webapp-frontend/src/app/policy-control/policy-type.datasource.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-02-03T14:08:17Z",
+      "side": 1,
+      "message": "The content of this else clause can be refactored to a method.",
+      "revId": "23b0fff7d2ab5e731cf0143a88e9b34638ae0398",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
