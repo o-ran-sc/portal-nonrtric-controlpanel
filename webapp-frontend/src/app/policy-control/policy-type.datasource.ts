@@ -18,13 +18,15 @@
  * ========================LICENSE_END===================================
  */
 
+import { HttpErrorResponse } from '@angular/common/http';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { of } from 'rxjs/observable/of';
 import { Observable } from 'rxjs/Observable';
+import { catchError, finalize, map } from 'rxjs/operators';
 
-import { PolicyTypeSchema } from '../interfaces/policy.types';
+import { PolicyType, PolicyTypes, PolicyTypeSchema } from '../interfaces/policy.types';
 import { PolicyService } from '../services/policy/policy.service';
 import { NotificationService } from '../services/ui/notification.service';
 
@@ -36,39 +38,58 @@ export class PolicyTypeDataSource extends DataSource<PolicyTypeSchema> {
 
     policyTypes: PolicyTypeSchema[] = [];
 
-    private policyTypeSubject = new BehaviorSubject<PolicyTypeSchema[]>([]);
+    policyTypeSubject = new BehaviorSubject<PolicyTypeSchema[]>([]);
+
+    private loadingSubject = new BehaviorSubject<boolean>(false);
 
     public rowCount = 1; // hide footer during intial load
 
-    constructor(private policySvc: PolicyService,
+    constructor(public policySvc: PolicyService,
         private notificationService: NotificationService) {
         super();
     }
 
     public getPolicyTypes() {
         this.policyTypes = [] as PolicyTypeSchema[];
-        this.policySvc.getPolicyTypes().subscribe(policyType => {
-            if (policyType.policytype_ids.length != 0) {
-                policyType.policytype_ids.forEach(policyTypeId => {
-                    var policyTypeSchema = {} as PolicyTypeSchema
-                    if (policyTypeId === "") {
-                        policyTypeSchema.id = '';
-                        policyTypeSchema.name = '';
-                        policyTypeSchema.schemaObject = '{}';
-                        this.policyTypes.push(policyTypeSchema);
-                    }
-                    else {
-                        this.policySvc.getPolicyType(policyTypeId).subscribe(policyType => {
-                            policyTypeSchema.id = policyTypeId;
-                            policyTypeSchema.schemaObject = policyType.policy_schema;
-                            policyTypeSchema.name = policyType.policy_schema.title;
+        this.policySvc.getPolicyTypes()
+            .pipe(
+                catchError((httpError: HttpErrorResponse) => {
+                    this.notificationService.error('Failed to get policy types: ' + httpError.error);
+                    return of([]);
+                }),
+                finalize(() => this.loadingSubject.next(false))
+            )
+            .subscribe((policyType: PolicyTypes) => {
+                this.rowCount = policyType.policytype_ids.length;
+                if (policyType.policytype_ids.length != 0) {
+                    policyType.policytype_ids.forEach(policyTypeId => {
+                        var policyTypeSchema = {} as PolicyTypeSchema
+                        if (policyTypeId === "") {
+                            policyTypeSchema.id = '';
+                            policyTypeSchema.name = '';
+                            policyTypeSchema.schemaObject = '{}';
                             this.policyTypes.push(policyTypeSchema);
-                        })
-                    }
-                    this.policyTypeSubject.next(this.policyTypes);
-                })
-            }
-        })
+                        }
+                        else {
+                            this.policySvc.getPolicyType(policyTypeId)
+                                .pipe(
+                                    catchError((httpError: HttpErrorResponse) => {
+                                        this.notificationService.error('Failed to get policy type: ' + httpError.error);
+                                        return of([]);
+                                    }),
+                                    finalize(() => this.loadingSubject.next(false))
+                                )
+                                .subscribe((policyType: PolicyType) => {
+                                    policyTypeSchema.id = policyTypeId;
+                                    policyTypeSchema.schemaObject = policyType.policy_schema;
+                                    policyTypeSchema.name = policyType.policy_schema.title;
+                                    this.policyTypes.push(policyTypeSchema);
+                                })
+                        }
+                        this.policyTypeSubject.next(this.policyTypes);
+                    })
+                }
+            })
     }
 
     connect(collectionViewer: CollectionViewer): Observable<PolicyTypeSchema[]> {
