@@ -41,8 +41,8 @@
             <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric"
                 placeholder="Target"
                 matTooltip="Element where the policy instance resides, e.g. a gNodeB or Near-RT RIC">
-                <mat-option *ngFor="let ric of this.allRics" [value]="ric">
-                    {{ric}}
+                <mat-option *ngFor="let ric of this.allRics.rics" [value]="ric">
+                    {{ric.ric_id}}
                 </mat-option>
             </mat-select>
             <div *ngIf="ricSelector.invalid && (ricSelector.dirty || ricSelector.touched)" class="alert mat-error"

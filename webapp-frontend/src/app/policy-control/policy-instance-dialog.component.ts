@@ -31,6 +31,7 @@ import { UiService } from '../services/ui/ui.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
+import { Ric } from '../interfaces/ric';
 
 
 @Component({
@@ -85,14 +86,14 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     policyTypeName: string;
     darkMode: boolean;
     ric: string;
-    allRics: string[];
+    allRics: Ric[];
 
     private fetchRics() {
         console.log('fetchRics ' + this.policyTypeName);
         const self: PolicyInstanceDialogComponent = this;
         this.dataService.getRics(this.policyTypeName).subscribe(
             {
-                next(value) {
+                next(value:Ric[]) {
                     self.allRics = value;
                     console.log(value);
                 },

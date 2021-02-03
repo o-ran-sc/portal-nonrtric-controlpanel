@@ -24,6 +24,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolicyInstance, PolicyInstanceAck, PolicyInstances, PolicyStatus, PolicyType, PolicyTypes } from '../../interfaces/policy.types';
 import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.types';
+import { Ric } from 'src/app/interfaces/ric';
 
 /**
  * Services for calling the policy endpoints.
@@ -108,8 +109,8 @@ export class PolicyService {
     }
 
 
-    getRics(policyTypeId: string): Observable<string[]> {
-        const url = this.buildPath('rics') + '?policyType=' + policyTypeId;
+    getRics(policyTypeId: string): Observable<Ric[]> {
+        const url = this.buildPath('rics') + '?policytype_id=' + policyTypeId;
         return this.httpClient.get<any>(url);
     }
 }
