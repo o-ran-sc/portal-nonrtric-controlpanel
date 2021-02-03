@@ -89,7 +89,7 @@ export class PolicyControlComponent implements OnInit {
     }
 
     private isSchemaEmpty(policyTypeSchema: PolicyTypeSchema): boolean {
-        return Object.keys(policyTypeSchema.schemaObject).length === 0;
+        return policyTypeSchema.schemaObject === '{}';
     }
 
     getPolicyTypeInfo(policyTypeSchema: PolicyTypeSchema): PolicyTypeInfo {

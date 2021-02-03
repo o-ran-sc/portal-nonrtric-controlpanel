@@ -33,6 +33,8 @@ import * as policytypesList from './mock/policy-types.json';
 import * as policytypes1 from './mock/policy-type1.json';
 import * as policyinstanceedit from './mock/policy-instance-edit.json';
 import * as rics from './mock/rics.json';
+import * as ric1 from './mock/ric1.json';
+import * as ric2 from './mock/ric2.json';
 
 const urls = [
     {
@@ -90,6 +92,14 @@ const urls = [
     {
         url: '/a1-policy/v2/policies/2000?ric=ric1&type=1',
         json: ''
+    },
+    {
+        url: '/a1-policy/v2/rics?policytype_id=1',
+        json: ric1
+    },
+    {
+        url: '/a1-policy/v2/rics?policytype_id=',
+        json: ric2
     },
     {
         url: 'api/enrichment/eijobs',

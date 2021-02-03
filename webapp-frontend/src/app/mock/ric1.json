@@ -1,0 +1,15 @@
+{
+    "rics": [
+        {
+            "ric_id": "ric1",
+            "managed_element_ids": [
+                "kista_1",
+                "kista_2"
+            ],
+            "policytype_ids": [
+                "1"
+            ],
+            "state": "AVAILABLE"
+        }
+    ]
+}

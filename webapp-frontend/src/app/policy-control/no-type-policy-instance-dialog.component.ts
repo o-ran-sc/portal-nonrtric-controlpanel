@@ -26,6 +26,7 @@ import { UiService } from '../services/ui/ui.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorDialogService } from '../services/ui/error-dialog.service';
 import * as uuid from 'uuid';
+import { Ric } from '../interfaces/ric';
 
 @Component({
   selector: 'rd-no-type-policy-instance-dialog',
@@ -39,7 +40,7 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
   policyJson: string;
   darkMode: boolean;
   ric: string;
-  allRics: string[];
+  allRics: Ric[];
 
   constructor(
     private policySvc: PolicyService,
@@ -95,7 +96,7 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
     const self: NoTypePolicyInstanceDialogComponent = this;
     this.policySvc.getRics('').subscribe(
       {
-        next(value) {
+        next(value:Ric[]) {
           self.allRics = value;
           console.log(value);
         },
