@@ -33,3 +33,15 @@ export interface EIProducer {
   ei_producer_types: string[];
   status: string;
 }
+
+export interface ProducerRegistrationInfo {
+  supported_ei_types: String[]
+}
+
+export enum OperationalState {
+  ENABLED,
+  DISABLED
+}
+export interface ProducerStatus {
+  opState: OperationalState
+}
