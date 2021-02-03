@@ -20,7 +20,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing';
 
-import { EIJob } from '../../interfaces/ei.types';
+import { EIJob, ProducerStatus, OperationalState, ProducerRegistrationInfo } from '../../interfaces/ei.types';
 import { EIService } from './ei.service';
 
 describe('EIService', () => {
@@ -42,7 +42,7 @@ describe('EIService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('#getEIProducers', () => {
+  describe('#getProducerIds', () => {
     let expectedEIProducerIds: String[];
 
     beforeEach(() => {
@@ -66,7 +66,7 @@ describe('EIService', () => {
     });
   });
 
-  describe('#EIJobs', () => {
+  describe('#getJobsForProducer', () => {
     let expectedEIJobs: EIJob[];
 
     beforeEach(() => {
@@ -88,6 +88,58 @@ describe('EIService', () => {
       expect(req.request.method).toEqual('GET');
 
       req.flush(expectedEIJobs); //Return expectedEIJobs
+
+      httpTestingController.verify();
+     });
+  });
+
+  describe('#getProducer', () => {
+    let expectedProducer: ProducerRegistrationInfo;
+
+    beforeEach(() => {
+      service = TestBed.get(EIService);
+      httpTestingController = TestBed.get(HttpTestingController);
+      expectedProducer = {
+        supported_ei_types: [ 'type1', 'type2' ]
+      } as ProducerRegistrationInfo;
+    });
+
+    it('should return producer', () => {
+      service.getProducer('producer1').subscribe(
+        producer => expect(producer).toEqual(expectedProducer, 'should return expected producer'),
+        fail
+      );
+
+      const req = httpTestingController.expectOne(basePath + '/' + service.eiProducersPath + '/producer1');
+      expect(req.request.method).toEqual('GET');
+
+      req.flush(expectedProducer); //Return expected producer
+
+      httpTestingController.verify();
+     });
+  });
+
+  describe('#getProducerStatus', () => {
+    let expectedProducerStatus: ProducerStatus;
+
+    beforeEach(() => {
+      service = TestBed.get(EIService);
+      httpTestingController = TestBed.get(HttpTestingController);
+      expectedProducerStatus = {
+        opState: OperationalState.ENABLED
+      } as ProducerStatus;
+    });
+
+    it('should return producer status', () => {
+      service.getProducerStatus('producer1').subscribe(
+        producerStatus => expect(producerStatus).toEqual(expectedProducerStatus, 'should return expected producer'),
+        fail
+      );
+
+      const req = httpTestingController.expectOne(basePath + '/' + service.eiProducersPath + '/producer1/status');
+      expect(req.request.method).toEqual('GET');
+
+      req.flush(expectedProducerStatus); //Return expected status
 
       httpTestingController.verify();
      });
