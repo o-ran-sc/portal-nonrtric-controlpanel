@@ -23,7 +23,7 @@ import { MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatMenuTrigger } from '@angular/material/menu';
 import { JsonPointer } from 'angular6-json-schema-form';
 import * as uuid from 'uuid';
-import { PolicyInstance, PolicyTypeSchema } from '../interfaces/policy.types';
+import { CreatePolicyInstance, PolicyInstance, PolicyTypeSchema } from '../interfaces/policy.types';
 import { PolicyService } from '../services/policy/policy.service';
 import { ErrorDialogService } from '../services/ui/error-dialog.service';
 import { NotificationService } from './../services/ui/notification.service';
@@ -93,7 +93,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         const self: PolicyInstanceDialogComponent = this;
         this.dataService.getRics(this.policyTypeName).subscribe(
             {
-                next(value:Ric[]) {
+                next(value: Ric[]) {
                     self.allRics = value;
                     console.log(value);
                 },
@@ -148,7 +148,8 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         }
         const policyJson: string = this.prettyLiveFormData;
         const self: PolicyInstanceDialogComponent = this;
-        this.dataService.putPolicy(this.policyTypeName, this.policyInstanceId, policyJson, this.ric).subscribe(
+        let createPolicyInstance = this.createPolicyInstance(policyJson);
+        this.dataService.putPolicy(createPolicyInstance).subscribe(
             {
                 next(_) {
                     self.notificationService.success('Policy ' + self.policyTypeName + ':' + self.policyInstanceId +
@@ -159,6 +160,16 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
                 },
                 complete() { }
             });
+    }
+
+    private createPolicyInstance(policyJson: string) {
+        let createPolicyInstance = {} as CreatePolicyInstance;
+        createPolicyInstance.policy_data = JSON.parse(policyJson);
+        createPolicyInstance.policy_id = this.policyInstanceId;
+        createPolicyInstance.policytype_id = this.policyTypeName;
+        createPolicyInstance.ric_id = (!this.ricSelector.value.ric_id) ? this.ric : this.ricSelector.value.ric_id;
+        createPolicyInstance.service_id = 'controlpanel';
+        return createPolicyInstance;
     }
 
     onClose() {

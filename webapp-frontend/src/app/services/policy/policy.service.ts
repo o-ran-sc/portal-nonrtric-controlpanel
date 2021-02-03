@@ -22,7 +22,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PolicyInstance, PolicyInstanceAck, PolicyInstances, PolicyStatus, PolicyType, PolicyTypes } from '../../interfaces/policy.types';
+import { CreatePolicyInstance, PolicyInstance, PolicyInstanceAck, PolicyInstances, PolicyStatus, PolicyType, PolicyTypes } from '../../interfaces/policy.types';
 import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.types';
 import { Ric } from 'src/app/interfaces/ric';
 
@@ -92,9 +92,9 @@ export class PolicyService {
      * @param policyJson Json with the policy content
      * @returns Observable that should yield a response code, no data
      */
-    putPolicy(policyTypeId: string, policyInstanceId: string, policyJson: string, ric: string): Observable<any> {
-        const url = this.buildPath(this.policyPath, policyInstanceId) + '?ric=' + ric + '&type=' + policyTypeId;
-        return this.httpClient.put<PolicyInstanceAck>(url, policyJson, { observe: 'response' });
+    putPolicy(createPolicyInstance: CreatePolicyInstance): Observable<any> {
+        const url = this.buildPath(this.policyPath);
+        return this.httpClient.put<PolicyInstanceAck>(url, createPolicyInstance, { observe: 'response' });
     }
 
     /**
@@ -103,8 +103,8 @@ export class PolicyService {
      * @param policyInstanceId ID of the instance
      * @returns Observable that should yield a response code, no data
      */
-    deletePolicy(policyTypeId: string, policyInstanceId: string): Observable<any> {
-        const url = this.buildPath(this.policyPath, policyInstanceId) + '?type=' + policyTypeId;
+    deletePolicy(policyInstanceId: string): Observable<any> {
+        const url = this.buildPath(this.policyPath, policyInstanceId);
         return this.httpClient.delete(url, { observe: 'response' });
     }
 

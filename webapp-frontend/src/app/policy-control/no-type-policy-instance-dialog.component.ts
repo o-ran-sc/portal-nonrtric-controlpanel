@@ -27,6 +27,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorDialogService } from '../services/ui/error-dialog.service';
 import * as uuid from 'uuid';
 import { Ric } from '../interfaces/ric';
+import { CreatePolicyInstance } from '../interfaces/policy.types';
 
 @Component({
   selector: 'rd-no-type-policy-instance-dialog',
@@ -80,7 +81,8 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
       this.policyInstanceId = uuid.v4();
     }
     const self: NoTypePolicyInstanceDialogComponent = this;
-    this.policySvc.putPolicy('', this.policyInstanceId, this.policyJsonTextArea.value, this.ric).subscribe(
+    let createPolicyInstance = this.createPolicyInstance(this.policyJsonTextArea.value);
+    this.policySvc.putPolicy(createPolicyInstance).subscribe(
       {
         next(_) {
           self.notificationService.success('Policy without type:' + self.policyInstanceId + ' submitted');
@@ -92,11 +94,21 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
       });
   }
 
+  private createPolicyInstance(policyJson: string) {
+    let createPolicyInstance = {} as CreatePolicyInstance;
+    createPolicyInstance.policy_data = JSON.parse(policyJson);
+    createPolicyInstance.policy_id = this.policyInstanceId;
+    createPolicyInstance.policytype_id = '';
+    createPolicyInstance.ric_id = (!this.ricSelector.value.ric_id) ? this.ric : this.ricSelector.value.ric_id;
+    createPolicyInstance.service_id = 'controlpanel';
+    return createPolicyInstance;
+  }
+
   private fetchRics() {
     const self: NoTypePolicyInstanceDialogComponent = this;
     this.policySvc.getRics('').subscribe(
       {
-        next(value:Ric[]) {
+        next(value: Ric[]) {
           self.allRics = value;
           console.log(value);
         },
