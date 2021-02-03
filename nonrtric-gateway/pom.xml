@@ -28,7 +28,7 @@
   <version>2.4.1</version>
   <relativePath /> <!-- lookup parent from repository -->
  </parent>
- <groupId>org.oransc.nonrtric</groupId>
+ <groupId>org.o-ran-sc.nonrtric</groupId>
  <artifactId>nonrtric-gateway</artifactId>
  <version>0.0.1-SNAPSHOT</version>
  <name>Nonrtric Gateway</name>
