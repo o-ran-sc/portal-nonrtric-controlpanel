@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef941c05_546ce2f7",
+        "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-02-04T08:27:35Z",
+      "side": 1,
+      "message": "Maybe it would be better for consistency to call it policySvc like in no-type-policy-instance-dialog.component.ts",
+      "range": {
+        "startLine": 152,
+        "startChar": 13,
+        "endLine": 152,
+        "endChar": 24
+      },
+      "revId": "7da7bf67c433c02f72be2aad4c44fb358e493756",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
