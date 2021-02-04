@@ -22,6 +22,30 @@
       "revId": "7da7bf67c433c02f72be2aad4c44fb358e493756",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b01c255_aee530c9",
+        "filename": "webapp-frontend/src/app/policy-control/policy-instance-dialog.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-02-04T09:54:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ef941c05_546ce2f7",
+      "range": {
+        "startLine": 152,
+        "startChar": 13,
+        "endLine": 152,
+        "endChar": 24
+      },
+      "revId": "7da7bf67c433c02f72be2aad4c44fb358e493756",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
