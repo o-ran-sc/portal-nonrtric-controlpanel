@@ -20,23 +20,46 @@
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject, of } from 'rxjs';
 
-import { EIJobDataSource } from './ei-job.datasource';
 import { EIService } from '../services/ei/ei.service';
 import { NotificationService } from '../services/ui/notification.service';
 import { ToastrModule } from 'ngx-toastr';
-import { EIJob } from '../interfaces/ei.types';
+import { EIJob, EIProducer, OperationalState, ProducerRegistrationInfo, ProducerStatus } from '../interfaces/ei.types';
+import { EIProducerDataSource } from './ei-producer.datasource';
 
-describe('EIJobDataSource', () => {
-    let dataSource: EIJobDataSource;
+describe('EIProducerDataSource', () => {
+    let dataSource: EIProducerDataSource;
     let eiServiceSpy: any;
 
-    let job = { ei_job_identity: '1', ei_job_data: 'data', ei_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'};
+    let producer1 = {
+        supported_ei_types: [ 'type1', 'type2' ]
+    } as ProducerRegistrationInfo;
+    let producer2 = {
+        supported_ei_types: [ 'type3', 'type4' ]
+    } as ProducerRegistrationInfo;
+    let producerStatus1 = {
+        opState: OperationalState.ENABLED
+    } as ProducerStatus;
+    let producerStatus2 = {
+        opState: OperationalState.DISABLED
+    } as ProducerStatus;
+
+    let expectedProducer1 = {
+        ei_producer_id: 'producer1',
+        ei_producer_types: [ 'type1', 'type2' ],
+        status: 'ENABLED'
+    } as EIProducer;
+    let expectedProducer2 = {
+        ei_producer_id: 'producer2',
+        ei_producer_types: [ 'type3', 'type4' ],
+        status: 'DISABLED'
+    } as EIProducer;
 
     beforeEach(() => {
-        eiServiceSpy = jasmine.createSpyObj('EIService', ['getProducerIds', 'getJobsForProducer']);
+        eiServiceSpy = jasmine.createSpyObj('EIService', ['getProducerIds', 'getProducer', 'getProducerStatus']);
 
         eiServiceSpy.getProducerIds.and.returnValue(of([ 'producer1', 'producer2']));
-        eiServiceSpy.getJobsForProducer.and.returnValue(of([job]));
+        eiServiceSpy.getProducer.and.returnValues(of(producer1), of(producer2));
+        eiServiceSpy.getProducerStatus.and.returnValues(of(producerStatus1), of(producerStatus2));
         TestBed.configureTestingModule({
             imports: [ToastrModule.forRoot()],
             providers: [
@@ -47,15 +70,15 @@ describe('EIJobDataSource', () => {
     });
 
     it('should create', () => {
-        dataSource = TestBed.get(EIJobDataSource);
+        dataSource = TestBed.get(EIProducerDataSource);
         expect(dataSource).toBeTruthy();
     });
 
-    it('#getJobs', () => {
-        dataSource.getJobs();
-        const jobsSubject: BehaviorSubject<EIJob[]> = dataSource.eiJobsSubject;
+    it('#loadProducers', () => {
+        dataSource.loadProducers();
+        const jobsSubject: BehaviorSubject<EIProducer[]> = dataSource.producerSubject;
         const value = jobsSubject.getValue();
-        expect(value).toEqual([ job, job ]);
+        expect(value).toEqual([ expectedProducer1, expectedProducer2 ]);
         expect(dataSource.rowCount).toEqual(2);
     });
 });

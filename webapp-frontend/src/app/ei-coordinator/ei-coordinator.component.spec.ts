@@ -36,12 +36,12 @@ describe('EICoordinatorComponent', () => {
 
   beforeEach(async(() => {
     const jobDataSourceSpy = jasmine.createSpyObj('EIJobDataSource', [ 'connect', 'getJobs', 'disconnect' ]);
-    const producerDataSourceSpy = jasmine.createSpyObj('EIProducerDataSource', [ 'connect', 'loadTable', 'getProducers',  'disconnect' ]);
+    const producerDataSourceSpy = jasmine.createSpyObj('EIProducerDataSource', [ 'connect', 'loadTable', 'loadProducers',  'disconnect' ]);
 
     jobDataSourceSpy.connect.and.returnValue(of([]));
     jobDataSourceSpy.disconnect();
     producerDataSourceSpy.connect.and.returnValue(of([]));
-    producerDataSourceSpy.getProducers.and.returnValue(of([]));
+    producerDataSourceSpy.loadProducers.and.returnValue(of([]));
     producerDataSourceSpy.disconnect();
 
     TestBed.configureTestingModule({

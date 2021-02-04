@@ -60,14 +60,14 @@ export class EIJobDataSource extends MatTableDataSource<EIJob> {
                 }),
                 finalize(() => this.loadingSubject.next(false))
             )
-            .subscribe((producerIds: String[]) => {
+            .subscribe((producerIds: string[]) => {
                 producerIds.forEach(id => {
                     this.getJobsForProducer(id);
                 });
             });
     }
 
-    private getJobsForProducer(id: String) {
+    private getJobsForProducer(id: string) {
         console.log('Getting jobs for producer ID: ', id);
         this.eiSvc.getJobsForProducer(id).subscribe(jobs => {
             this.addJobsToSubject(jobs);
