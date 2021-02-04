@@ -53,3 +53,11 @@ export interface PolicyInstanceAck {
   status: string;
   message: string;
 }
+
+export interface CreatePolicyInstance {
+  policy_data: any,
+  policy_id: string,
+  policytype_id: string,
+  ric_id: string,
+  service_id: string
+}

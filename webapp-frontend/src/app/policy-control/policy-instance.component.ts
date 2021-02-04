@@ -126,11 +126,11 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
             .afterClosed().subscribe(
                 (res: any) => {
                     if (res) {
-                        this.policySvc.deletePolicy(this.policyTypeSchema.name, instance.policy_id)
+                        this.policySvc.deletePolicy(instance.policy_id)
                             .subscribe(
                                 (response: HttpResponse<Object>) => {
                                     switch (response.status) {
-                                        case 200:
+                                        case 204:
                                             this.notificationService.success('Delete succeeded!');
                                             this.instanceDataSource.getPolicyInstances();
                                             break;

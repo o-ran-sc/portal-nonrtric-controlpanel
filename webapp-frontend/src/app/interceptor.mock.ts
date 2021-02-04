@@ -130,7 +130,7 @@ const urls = [
 
 @Injectable()
 export class HttpMockRequestInterceptor implements HttpInterceptor {
-    constructor(private injector: Injector) {}
+    constructor(private injector: Injector) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (request.method === "PUT" && request.url.includes("policies")) {
@@ -140,6 +140,9 @@ export class HttpMockRequestInterceptor implements HttpInterceptor {
         for (const element of urls) {
             if (request.url === element.url) {
                 console.log('Loaded from stub json : ' + request.url);
+                if (request.method === 'DELETE') {
+                    return of(new HttpResponse({ status: 204 }));
+                }
                 return of(new HttpResponse({ status: 200, body: ((element.json) as any).default }));
             }
         }
