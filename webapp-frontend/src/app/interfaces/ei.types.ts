@@ -35,12 +35,12 @@ export interface EIProducer {
 }
 
 export interface ProducerRegistrationInfo {
-  supported_ei_types: String[]
+  supported_ei_types: string[]
 }
 
 export enum OperationalState {
-  ENABLED,
-  DISABLED
+  ENABLED = 'ENABLED',
+  DISABLED = 'DISABLED'
 }
 export interface ProducerStatus {
   opState: OperationalState

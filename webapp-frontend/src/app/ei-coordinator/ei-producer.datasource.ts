@@ -37,7 +37,7 @@ import { NotificationService } from '../services/ui/notification.service';
 
 export class EIProducerDataSource extends MatTableDataSource<EIProducer> {
 
-    private producerSubject = new BehaviorSubject<EIProducer[]>([]);
+    producerSubject = new BehaviorSubject<EIProducer[]>([]);
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
 
@@ -51,9 +51,10 @@ export class EIProducerDataSource extends MatTableDataSource<EIProducer> {
         super();
     }
 
-    loadTable() {
+    loadProducers(): Observable<EIProducer[]> {
         this.loadingSubject.next(true);
-        this.eiSvc.getEIProducers()
+        let producers: Array<EIProducer> = [];
+        this.eiSvc.getProducerIds()
             .pipe(
                 catchError((her: HttpErrorResponse) => {
                     this.notificationService.error('Failed to get producers: ' + her.error);
@@ -61,12 +62,29 @@ export class EIProducerDataSource extends MatTableDataSource<EIProducer> {
                 }),
                 finalize(() => this.loadingSubject.next(false))
             )
-            .subscribe((prods: EIProducer[]) => {
-                console.log("Producers: " + prods);
-                this.rowCount = prods.length;
-                this.producerSubject.next(prods);
+            .subscribe((prodIds: string[]) => {
+                console.log("ProducerIds: " + prodIds);
+                prodIds.forEach(id => {
+                    let eiProducer = <EIProducer>{};
+                    eiProducer.ei_producer_id = id;
+                    this.eiSvc.getProducer(id).subscribe(producer => {
+                        eiProducer.ei_producer_types = producer.supported_ei_types;
+                    });
+                    this.eiSvc.getProducerStatus(id).subscribe(prodStatus => {
+                        eiProducer.status = prodStatus.opState.toString();
+                    });
+                    this.addProducerToSubject(eiProducer);
+                    producers.push(eiProducer);
+                });
+                this.rowCount = this.producerSubject.value.length;
             });
-            this.connect();
+        return of(producers);
+    }
+
+    private addProducerToSubject(producer: EIProducer) {
+        const currentValue = this.producerSubject.value;
+        const updatedValue = [...currentValue, producer];
+        this.producerSubject.next(updatedValue);
     }
 
     connect(): BehaviorSubject<EIProducer[]> {
@@ -76,10 +94,5 @@ export class EIProducerDataSource extends MatTableDataSource<EIProducer> {
     disconnect(): void {
         this.producerSubject.complete();
         this.loadingSubject.complete();
-    }
-
-    getProducers(): Observable<EIProducer[]> {
-        return this.eiSvc.getEIProducers()
-        .pipe(tap(console.log));
     }
 }

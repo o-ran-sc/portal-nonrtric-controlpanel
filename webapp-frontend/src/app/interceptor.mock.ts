@@ -29,7 +29,10 @@ import * as policyinstances2Status from './mock/policy-instance-2-status.json';
 import * as eijobsProd1 from './mock/ei-jobs-producer1.json';
 import * as eijobsProd2 from './mock/ei-jobs-producer2.json';
 import * as eiProducerIds from './mock/ei-producerids.json';
-import * as eiproducers from './mock/ei-producers.json';
+import * as eiproducer1 from './mock/ei-producer1.json';
+import * as eiproducer2 from './mock/ei-producer2.json';
+import * as eiproducerstatus1 from './mock/ei-producer-status1.json';
+import * as eiproducerstatus2 from './mock/ei-producer-status2.json';
 import * as policytypesList from './mock/policy-types.json';
 import * as policytypes1 from './mock/policy-type1.json';
 import * as policyinstanceedit from './mock/policy-instance-edit.json';
@@ -103,10 +106,6 @@ const urls = [
         json: ric2
     },
     {
-        url: 'api/enrichment/eiproducers',
-        json: eiproducers
-    },
-    {
         url: 'api/policy/rics?policyType=1',
         json: rics
     },
@@ -117,6 +116,22 @@ const urls = [
     {
         url: '/ei-producer/v1/eiproducers',
         json: eiProducerIds
+    },
+    {
+        url: '/ei-producer/v1/eiproducers/producer1',
+        json: eiproducer1
+    },
+    {
+        url: '/ei-producer/v1/eiproducers/producer2',
+        json: eiproducer2
+    },
+    {
+        url: '/ei-producer/v1/eiproducers/producer1/status',
+        json: eiproducerstatus1
+    },
+    {
+        url: '/ei-producer/v1/eiproducers/producer2/status',
+        json: eiproducerstatus2
     },
     {
         url: '/ei-producer/v1/eiproducers/producer1/eijobs',

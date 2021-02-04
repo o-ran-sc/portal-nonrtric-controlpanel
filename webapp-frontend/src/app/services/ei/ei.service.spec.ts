@@ -43,12 +43,12 @@ describe('EIService', () => {
   });
 
   describe('#getProducerIds', () => {
-    let expectedEIProducerIds: String[];
+    let expectedEIProducerIds: string[];
 
     beforeEach(() => {
       service = TestBed.get(EIService);
       httpTestingController = TestBed.get(HttpTestingController);
-      expectedEIProducerIds = [ 'producer1', 'producer2' ] as String[];
+      expectedEIProducerIds = [ 'producer1', 'producer2' ] as string[];
     });
 
   it('should return all producer IDs', () => {

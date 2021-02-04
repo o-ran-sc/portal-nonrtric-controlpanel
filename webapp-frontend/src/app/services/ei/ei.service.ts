@@ -48,22 +48,22 @@ export class EIService {
         // injects to variable httpClient
     }
 
-    getProducerIds(): Observable<String[]> {
+    getProducerIds(): Observable<string[]> {
         const url = this.buildPath(this.eiProducersPath);
-        return this.httpClient.get<String[]>(url);
+        return this.httpClient.get<string[]>(url);
     }
 
-    getJobsForProducer(producerId: String): Observable<EIJob[]> {
+    getJobsForProducer(producerId: string): Observable<EIJob[]> {
         const url = this.buildPath(this.eiProducersPath, producerId, this.eiJobsPath);
         return this.httpClient.get<EIJob[]>(url);
     }
 
-    getProducer(producerId: String): Observable<ProducerRegistrationInfo> {
+    getProducer(producerId: string): Observable<ProducerRegistrationInfo> {
         const url = this.buildPath(this.eiProducersPath, producerId);
         return this.httpClient.get<ProducerRegistrationInfo>(url);
     }
 
-    getProducerStatus(producerId: String): Observable<ProducerStatus> {
+    getProducerStatus(producerId: string): Observable<ProducerStatus> {
         const url = this.buildPath(this.eiProducersPath, producerId, this.eiProducerStatusPath);
         return this.httpClient.get<ProducerStatus>(url);
     }
