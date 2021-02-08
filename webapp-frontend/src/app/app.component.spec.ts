@@ -18,13 +18,15 @@
  * ========================LICENSE_END===================================
  */
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CookieService } from 'ngx-cookie';
 import { AppComponent } from './app.component';
 import { UiService } from './services/ui/ui.service';
 
 describe('AppComponent', () => {
+  let fixture: ComponentFixture<AppComponent>;
+
   beforeEach(async(() => {
     const cookieSpy = jasmine.createSpyObj('CookieService', [ 'get' ]);
     TestBed.configureTestingModule({
@@ -44,9 +46,35 @@ describe('AppComponent', () => {
     }).compileComponents();
   }));
 
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+  });
+
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
+    const app = fixture.componentInstance;
     expect(app).toBeTruthy();
+  });
+
+  describe('#content', () => {
+    it('should contain oran logo', async(() => {
+      const ele = fixture.debugElement.nativeElement.querySelector('img');
+      expect(ele.src).toContain('assets/oran-logo.png');
+    }));
+
+    it('should contain heading', async(() => {
+      const ele = fixture.debugElement.nativeElement.querySelector('tspan');
+      expect(ele.textContent.trim()).toBe('Non-RT RIC Control Panel');
+    }));
+
+    it('should contain router-outlet', async(() => {
+      const ele = fixture.debugElement.nativeElement.querySelector('router-outlet');
+      expect(ele).toBeTruthy();
+    }));
+
+    it('should contain nrcp-footer', async(() => {
+      const ele = fixture.debugElement.nativeElement.querySelector('nrcp-footer');
+      expect(ele).toBeTruthy();
+    }));
   });
 });
