@@ -39,11 +39,6 @@
   background-color: #2d2d3d;
 }
 
-.action-cell {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .display-none {
   display: none;
 }
@@ -62,4 +57,9 @@
 
 .filter-form {
   width: 200px;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
 }

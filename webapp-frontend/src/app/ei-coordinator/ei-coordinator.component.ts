@@ -17,10 +17,9 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
+import { Component, OnInit} from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 
 import { defer, BehaviorSubject, Observable } from 'rxjs';
@@ -54,24 +53,45 @@ export class EICoordinatorComponent implements OnInit {
 
     producers$: Observable<EIProducer[]>;
     filteredProducers$: Observable<EIProducer[]>;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     eiJobInfo = new Map<string, EIJobInfo>();
     darkMode: boolean;
     searchString: string;
     formGroup: FormGroup;
-    eiProducersData: MatTableDataSource<EIProducerDataSource>;
+    jobsDataSource: MatTableDataSource<EIJob>;
+
+    readonly jobsFormControl: AbstractControl;
 
     constructor(
         private eiJobsDataSource: EIJobDataSource,
         private eiProducersDataSource: EIProducerDataSource,
         private ui: UiService,
         private formBuilder: FormBuilder) {
-            this.formGroup = formBuilder.group({ filter: [""] });
-        }
+
+        this.formGroup = formBuilder.group({ filter: [""] });
+        this.jobsFormControl = formBuilder.group({
+            id: '',
+            typeId: '',
+            owner: '',
+            targetUri:'',
+        })
+    }
 
     ngOnInit() {
         this.eiJobsDataSource.getJobs();
+        this.jobsDataSource = new MatTableDataSource(this.eiJobsDataSource.eiJobsSubject.value);
+
+        this.jobsFormControl.valueChanges.subscribe(value => {
+            const filter = {...value, id: value.id.trim().toLowerCase()} as string;
+            this.jobsDataSource.filter = filter;
+        });
+
+        this.jobsDataSource.filterPredicate = ((data, filter) => {
+            return this.isDataIncluding(data.ei_job_identity, filter.id) 
+                && this.isDataIncluding(data.target_uri, filter.target_uri)
+                && this.isDataIncluding(data.owner, filter.owner)
+                && this.isDataIncluding(data.ei_type_identity, filter.typeId);
+          }) as (EIJob, string) => boolean;
 
         this.producers$= this.eiProducersDataSource.loadProducers();
         this.filteredProducers$ = defer(() => this.formGroup.get("filter")
@@ -86,6 +106,10 @@ export class EICoordinatorComponent implements OnInit {
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
         });
+    }
+
+    isDataIncluding(data: string, filter: string) : boolean {
+        return !filter || data.toLowerCase().includes(filter);
     }
 
     getEIJobInfo(eiJob: EIJob): EIJobInfo {
