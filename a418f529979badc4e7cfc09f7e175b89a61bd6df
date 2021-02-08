@@ -22,6 +22,30 @@
       "revId": "a418f529979badc4e7cfc09f7e175b89a61bd6df",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd463dac_43ddd846",
+        "filename": "webapp-frontend/nginx.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-02-08T13:27:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e01094e_942b36a3",
+      "range": {
+        "startLine": 18,
+        "startChar": 29,
+        "endLine": 18,
+        "endChar": 33
+      },
+      "revId": "a418f529979badc4e7cfc09f7e175b89a61bd6df",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
