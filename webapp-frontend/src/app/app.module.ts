@@ -50,8 +50,8 @@ import { PolicyCardComponent } from './ui/policy-card/policy-card.component';
 import { PolicyControlComponent } from './policy-control/policy-control.component';
 import { PolicyInstanceComponent } from './policy-control/policy-instance.component';
 import { PolicyInstanceDialogComponent } from './policy-control/policy-instance-dialog.component';
-import { ControlpanelComponent } from './controlpanel.component';
-import { ControlpanelRoutingModule } from './controlpanel-routing.module';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import { UiService } from './services/ui/ui.service';
 import { CookieModule } from 'ngx-cookie';
@@ -66,8 +66,8 @@ export const isMock = environment.mock;
 
 @NgModule({
   declarations: [
+    AppComponent,
     ConfirmDialogComponent,
-    ControlpanelComponent,
     EICardComponent,
     EICoordinatorComponent,
     ErrorDialogComponent,
@@ -82,10 +82,10 @@ export const isMock = environment.mock;
     SidenavListComponent,
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     ChartsModule,
-    ControlpanelRoutingModule,
     CookieModule.forRoot(),
     FlexLayoutModule,
     FormsModule,
@@ -153,6 +153,6 @@ export const isMock = environment.mock;
       multi: true
       }
   ],
-  bootstrap: [ControlpanelComponent]
+  bootstrap: [AppComponent]
 })
-export class ControlpanelModule { }
+export class AppModule { }

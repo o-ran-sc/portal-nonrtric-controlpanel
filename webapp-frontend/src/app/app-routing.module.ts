@@ -42,4 +42,4 @@ const routes: Routes = [
     declarations: []
 })
 
-export class ControlpanelRoutingModule { }
+export class AppRoutingModule { }
