@@ -22,7 +22,7 @@ import { UiService } from './services/ui/ui.service';
 import { CookieService } from 'ngx-cookie';
 
 @Component({
-  selector: 'rd-root',
+  selector: 'nrcp-root',
   templateUrl: './controlpanel.component.html',
   styleUrls: ['./controlpanel.component.scss']
 })

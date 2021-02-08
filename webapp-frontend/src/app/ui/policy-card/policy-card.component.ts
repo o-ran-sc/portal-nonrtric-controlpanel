@@ -22,7 +22,7 @@ import { Router } from '@angular/router';
 import { UiService } from '../../services/ui/ui.service';
 
 @Component({
-  selector: 'rd-policy-card',
+  selector: 'nrcp-policy-card',
   templateUrl: './policy-card.component.html',
   styleUrls: ['./policy-card.component.scss']
 })

@@ -23,7 +23,7 @@ import { Component, OnInit } from '@angular/core';
 import { UiService } from '../services/ui/ui.service';
 
 @Component({
-  selector: 'rd-footer',
+  selector: 'nrcp-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })

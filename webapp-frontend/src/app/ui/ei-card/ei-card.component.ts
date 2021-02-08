@@ -22,7 +22,7 @@ import { Router } from '@angular/router';
 import { UiService } from '../../services/ui/ui.service';
 
 @Component({
-  selector: 'rd-ei-card',
+  selector: 'nrcp-ei-card',
   templateUrl: './ei-card.component.html',
   styleUrls: ['./ei-card.component.scss']
 })

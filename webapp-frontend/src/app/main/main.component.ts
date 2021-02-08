@@ -20,7 +20,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'rd-main',
+  selector: 'nrcp-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })

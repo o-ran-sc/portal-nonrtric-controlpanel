@@ -25,7 +25,7 @@ export interface ErrorData {
 }
 
 @Component({
-  selector: 'rd-error-dialog',
+  selector: 'nrcp-error-dialog',
   templateUrl: './error-dialog.component.html',
   styleUrls: ['./error-dialog.component.scss']
 })

@@ -38,7 +38,7 @@ class EIJobInfo {
 }
 
 @Component({
-    selector: 'rd-ei-coordinator',
+    selector: 'nrcp-ei-coordinator',
     templateUrl: './ei-coordinator.component.html',
     styleUrls: ['./ei-coordinator.component.scss'],
     animations: [

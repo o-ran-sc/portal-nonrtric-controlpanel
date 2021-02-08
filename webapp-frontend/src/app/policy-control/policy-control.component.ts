@@ -37,7 +37,7 @@ class PolicyTypeInfo {
 }
 
 @Component({
-    selector: 'rd-policy-control',
+    selector: 'nrcp-policy-control',
     templateUrl: './policy-control.component.html',
     styleUrls: ['./policy-control.component.scss'],
     animations: [

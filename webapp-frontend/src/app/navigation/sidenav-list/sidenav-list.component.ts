@@ -21,7 +21,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { UiService } from '../../services/ui/ui.service';
 
 @Component({
-  selector: 'rd-sidenav-list',
+  selector: 'nrcp-sidenav-list',
   templateUrl: './sidenav-list.component.html',
   styleUrls: ['./sidenav-list.component.scss']
 })
