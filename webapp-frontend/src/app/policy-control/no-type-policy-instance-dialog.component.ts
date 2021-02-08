@@ -30,7 +30,7 @@ import { Ric } from '../interfaces/ric';
 import { CreatePolicyInstance } from '../interfaces/policy.types';
 
 @Component({
-  selector: 'rd-no-type-policy-instance-dialog',
+  selector: 'nrcp-no-type-policy-instance-dialog',
   templateUrl: './no-type-policy-instance-dialog.component.html',
   styleUrls: ['./no-type-policy-instance-dialog.component.scss']
 })

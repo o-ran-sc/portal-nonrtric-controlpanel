@@ -23,7 +23,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { EIService } from '../services/ei/ei.service';
 import { NotificationService } from '../services/ui/notification.service';
 import { ToastrModule } from 'ngx-toastr';
-import { EIJob, EIProducer, OperationalState, ProducerRegistrationInfo, ProducerStatus } from '../interfaces/ei.types';
+import { EIProducer, OperationalState, ProducerRegistrationInfo, ProducerStatus } from '../interfaces/ei.types';
 import { EIProducerDataSource } from './ei-producer.datasource';
 
 describe('EIProducerDataSource', () => {

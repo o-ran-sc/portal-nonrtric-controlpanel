@@ -36,7 +36,7 @@ import { Observable } from 'rxjs';
 import { UiService } from '../services/ui/ui.service';
 
 @Component({
-    selector: 'rd-policy-instance',
+    selector: 'nrcp-policy-instance',
     templateUrl: './policy-instance.component.html',
     styleUrls: ['./policy-instance.component.scss']
 })

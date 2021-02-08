@@ -19,7 +19,7 @@
   -->
 
   <div fxLayout="row">
-    <div class="rd-global-page-title">Policy Control</div>
+    <div class="nrcp-global-page-title">Policy Control</div>
     <div class="refresh-button">
         <button mat-icon-button color="primary" aria-label="Button with a refresh icon" (click)="refreshTables()">
             <mat-icon>refresh</mat-icon>
@@ -57,8 +57,8 @@
     <!-- =================== Policy instances for one type ======================== -->
     <ng-container matColumnDef="instanceTableContainer">
         <mat-cell *matCellDef="let policyTypeSchema">
-            <rd-policy-instance [policyTypeSchema]=policyTypeSchema [expanded]=this.getExpandedObserver(policyTypeSchema)>
-            </rd-policy-instance>
+            <nrcp-policy-instance [policyTypeSchema]=policyTypeSchema [expanded]=this.getExpandedObserver(policyTypeSchema)>
+            </nrcp-policy-instance>
         </mat-cell>
     </ng-container>
     <!-- ======= -->

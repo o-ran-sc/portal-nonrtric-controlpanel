@@ -35,7 +35,7 @@ import { Ric } from '../interfaces/ric';
 
 
 @Component({
-    selector: 'rd-policy-instance-dialog',
+    selector: 'nrcp-policy-instance-dialog',
     templateUrl: './policy-instance-dialog.component.html',
     styleUrls: ['./policy-instance-dialog.component.scss'],
     animations: [

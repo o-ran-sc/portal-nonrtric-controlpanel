@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'rd-node-modules',
+  selector: 'nrcp-node-modules',
   templateUrl: './node-modules.component.html',
   styleUrls: ['./node-modules.component.scss']
 })
