@@ -18,9 +18,12 @@
  * ========================LICENSE_END===================================
  */
 
+:host{
+  min-width: 100%;
+}
+
 .instances-table {
-  width: 90%;
-  min-width: 1200px;
+  width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: grayscale($color: #eeeaea);
@@ -40,7 +43,7 @@
 
 .action-cell {
   display: flex;
-  justify-content: flex-end;
+  padding-left: 2px;
 }
 
 .display-none {
