@@ -26,14 +26,14 @@ spring:
       httpserver:
         wiretap: true
       routes:
-      - id: policytypes
+      - id: A1-Policy
         uri: https://localhost:8433
         predicates:
-        - Path=/a1-policy/v2/policy-types/**
-      - id: policies
+        - Path=/a1-policy/**
+      - id: A1-EI
         uri: https://localhost:8433
         predicates:
-        - Path=/a1-policy/v2/policies/**
+        - Path=/ei-producer/**
 management:
   endpoint:
     gateway:
