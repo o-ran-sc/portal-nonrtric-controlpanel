@@ -19,12 +19,10 @@
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
+import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
+import { MatTableDataSource, MatTable } from '@angular/material';
 
-import { defer, BehaviorSubject, Observable } from 'rxjs';
-import { map, withLatestFrom, startWith } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { EIJob, EIProducer } from '../interfaces/ei.types';
 import { EIJobDataSource } from './ei-job.datasource';
@@ -40,27 +38,21 @@ class EIJobInfo {
 @Component({
     selector: 'nrcp-ei-coordinator',
     templateUrl: './ei-coordinator.component.html',
-    styleUrls: ['./ei-coordinator.component.scss'],
-    animations: [
-        trigger('detailExpand', [
-            state('collapsed, void', style({ height: '0px', minHeight: '0', display: 'none' })),
-            state('expanded', style({ height: '*' })),
-            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-            transition('expanded <=> void', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
-        ]),
-    ],
+    styleUrls: ['./ei-coordinator.component.scss']
 })
 export class EICoordinatorComponent implements OnInit {
 
     producers$: Observable<EIProducer[]>;
     filteredProducers$: Observable<EIProducer[]>;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild('producersTable', { static: true }) table: MatTable<Element>;
 
     eiJobInfo = new Map<string, EIJobInfo>();
     darkMode: boolean;
     searchString: string;
     formGroup: FormGroup;
-    eiProducersData: MatTableDataSource<EIProducerDataSource>;
+    producersDataSource: MatTableDataSource<EIProducer>;
+    readonly producersFormControl: AbstractControl;
 
     constructor(
         private eiJobsDataSource: EIJobDataSource,
@@ -68,20 +60,31 @@ export class EICoordinatorComponent implements OnInit {
         private ui: UiService,
         private formBuilder: FormBuilder) {
             this.formGroup = formBuilder.group({ filter: [""] });
+
+            this.producersFormControl = formBuilder.group({
+                ei_producer_id: '',
+                ei_producer_types: '',
+                status: ''
+            })
         }
 
     ngOnInit() {
         this.eiJobsDataSource.getJobs();
+        this.filteredProducers$ = this.eiProducersDataSource.loadProducers();
 
-        this.producers$= this.eiProducersDataSource.loadProducers();
-        this.filteredProducers$ = defer(() => this.formGroup.get("filter")
-        .valueChanges.pipe(
-            startWith(""),
-            withLatestFrom(this.producers$),
-            map(([val, producers]) =>
-            !val ? producers : producers.filter((x) =>
-            x.ei_producer_id.toLowerCase().includes(val))))
-        );
+        this.producersDataSource = new MatTableDataSource(this.eiProducersDataSource.producerSubject.value);
+
+        this.producersFormControl.valueChanges.subscribe(value => {
+            const filter = {...value, ei_producer_id: value.ei_producer_id.trim().toLowerCase()} as string;
+            this.producersDataSource.filter = filter;
+          });
+
+        this.producersDataSource.filterPredicate = ((data, filter) => {
+            const a = !filter.ei_producer_id || data.ei_producer_id.toLowerCase().includes(filter.ei_producer_id);
+            const b = !filter.ei_producer_types || data.ei_producer_types.join(',').toLowerCase().includes(filter.ei_producer_types);
+            const c = !filter.status || data.status.toLowerCase().includes(filter.status);
+            return a && b && c;
+          }) as (EIProducer, string) => boolean;
 
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
