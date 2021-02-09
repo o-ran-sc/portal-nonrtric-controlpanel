@@ -18,18 +18,15 @@
  * ========================LICENSE_END===================================
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { of } from 'rxjs/observable/of';
-import { catchError, finalize, tap } from 'rxjs/operators';
 
 import { EIProducer } from '../interfaces/ei.types';
 import { EIService } from '../services/ei/ei.service';
-import { NotificationService } from '../services/ui/notification.service';
 
 @Injectable({
     providedIn: 'root'
@@ -46,8 +43,7 @@ export class EIProducerDataSource extends MatTableDataSource<EIProducer> {
     public rowCount = 1; // hide footer during intial load
 
     constructor(
-        private eiSvc: EIService,
-        private notificationService: NotificationService) {
+        private eiSvc: EIService) {
         super();
     }
 
@@ -55,13 +51,6 @@ export class EIProducerDataSource extends MatTableDataSource<EIProducer> {
         this.loadingSubject.next(true);
         let producers: Array<EIProducer> = [];
         this.eiSvc.getProducerIds()
-            .pipe(
-                catchError((her: HttpErrorResponse) => {
-                    this.notificationService.error('Failed to get producers: ' + her.error);
-                    return of([]);
-                }),
-                finalize(() => this.loadingSubject.next(false))
-            )
             .subscribe((prodIds: string[]) => {
                 console.log("ProducerIds: " + prodIds);
                 prodIds.forEach(id => {

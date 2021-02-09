@@ -18,16 +18,27 @@
  * ========================LICENSE_END===================================
  */
 
-import { Injectable, Injector } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { NotificationService } from './services/ui/notification.service';
 
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {
-    constructor(private injector: Injector) {}
+    constructor(private notificationService: NotificationService) {}
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {       
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         console.log('Interceptor Invoked' + request.url);
-        return next.handle(request);
+        return next.handle(request).pipe(
+            catchError((error: HttpErrorResponse) => {
+              console.error("Error from error interceptor", error);
+
+              // show dialog for error message
+              this.notificationService.error(error.message);
+              return throwError(error);
+            })
+        ) as Observable<HttpEvent<any>>;
     }
 }

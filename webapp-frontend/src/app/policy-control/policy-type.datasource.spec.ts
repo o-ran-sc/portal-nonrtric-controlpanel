@@ -20,7 +20,6 @@
 
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject, of } from 'rxjs';
-import { NotificationService } from '../services/ui/notification.service';
 import { ToastrModule } from 'ngx-toastr';
 import { PolicyTypeDataSource } from './policy-type.datasource';
 import { PolicyService } from '../services/policy/policy.service';
@@ -48,8 +47,7 @@ describe('PolicyTypeDataSource', () => {
     TestBed.configureTestingModule({
       imports: [ToastrModule.forRoot()],
       providers: [
-        { provide: PolicyService, useValue: policyServiceSpy },
-        NotificationService
+        { provide: PolicyService, useValue: policyServiceSpy }
       ]
     });
   });

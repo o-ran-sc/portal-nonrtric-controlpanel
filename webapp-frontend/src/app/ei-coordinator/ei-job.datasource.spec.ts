@@ -22,7 +22,6 @@ import { BehaviorSubject, of } from 'rxjs';
 
 import { EIJobDataSource } from './ei-job.datasource';
 import { EIService } from '../services/ei/ei.service';
-import { NotificationService } from '../services/ui/notification.service';
 import { ToastrModule } from 'ngx-toastr';
 import { EIJob } from '../interfaces/ei.types';
 
@@ -30,7 +29,7 @@ describe('EIJobDataSource', () => {
     let dataSource: EIJobDataSource;
     let eiServiceSpy: any;
 
-    let job = { ei_job_identity: '1', ei_job_data: 'data', ei_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'};
+    const job = { ei_job_identity: '1', ei_job_data: 'data', ei_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'};
 
     beforeEach(() => {
         eiServiceSpy = jasmine.createSpyObj('EIService', ['getProducerIds', 'getJobsForProducer']);
@@ -40,8 +39,7 @@ describe('EIJobDataSource', () => {
         TestBed.configureTestingModule({
             imports: [ToastrModule.forRoot()],
             providers: [
-                { provide: EIService, useValue: eiServiceSpy },
-                NotificationService
+                { provide: EIService, useValue: eiServiceSpy }
             ]
         });
     });
