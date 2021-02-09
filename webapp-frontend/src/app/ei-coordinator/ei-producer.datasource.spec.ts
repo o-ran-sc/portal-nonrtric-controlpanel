@@ -21,7 +21,6 @@ import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject, of } from 'rxjs';
 
 import { EIService } from '../services/ei/ei.service';
-import { NotificationService } from '../services/ui/notification.service';
 import { ToastrModule } from 'ngx-toastr';
 import { EIProducer, OperationalState, ProducerRegistrationInfo, ProducerStatus } from '../interfaces/ei.types';
 import { EIProducerDataSource } from './ei-producer.datasource';
@@ -63,8 +62,7 @@ describe('EIProducerDataSource', () => {
         TestBed.configureTestingModule({
             imports: [ToastrModule.forRoot()],
             providers: [
-                { provide: EIService, useValue: eiServiceSpy },
-                NotificationService
+                { provide: EIService, useValue: eiServiceSpy }
             ]
         });
     });

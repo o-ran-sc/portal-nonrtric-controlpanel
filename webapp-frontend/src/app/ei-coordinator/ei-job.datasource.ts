@@ -18,17 +18,13 @@
  * ========================LICENSE_END===================================
  */
 
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { of } from 'rxjs/observable/of';
-import { catchError, finalize, map } from 'rxjs/operators';
 
 import { EIJob } from '../interfaces/ei.types';
 import { EIService } from '../services/ei/ei.service';
-import { NotificationService } from '../services/ui/notification.service';
 
 @Injectable({
     providedIn: 'root'
@@ -45,21 +41,13 @@ export class EIJobDataSource extends MatTableDataSource<EIJob> {
     public rowCount = 1; // hide footer during intial load
 
     constructor(
-        private eiSvc: EIService,
-        private notificationService: NotificationService) {
+        private eiSvc: EIService) {
         super();
     }
 
     getJobs() {
         this.loadingSubject.next(true);
         this.eiSvc.getProducerIds()
-            .pipe(
-                catchError((her: HttpErrorResponse) => {
-                    this.notificationService.error('Failed to get EI jobs: ' + her.error);
-                    return of([]);
-                }),
-                finalize(() => this.loadingSubject.next(false))
-            )
             .subscribe((producerIds: string[]) => {
                 producerIds.forEach(id => {
                     this.getJobsForProducer(id);
