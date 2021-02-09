@@ -24,7 +24,7 @@ ARG JAR
 WORKDIR /opt/app/nonrtric-gateway
 RUN mkdir -p /var/log/nonrtric-gateway
 
-EXPOSE 8081 8433
+EXPOSE 9090
 
 ADD /config/application.yaml /opt/app/nonrtric-gateway/config/application.yaml
 ADD target/${JAR} /opt/app/nonrtric-gateway/nonrtric-gateway.jar
