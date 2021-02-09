@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b5c9a8bf_7401149b",
+        "filename": "webapp-frontend/src/app/interceptor.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-02-09T13:49:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a4f7879_a5124fa5",
+      "range": {
+        "startLine": 1,
+        "startChar": 6,
+        "endLine": 1,
+        "endChar": 31
+      },
+      "revId": "2e624bf7dae914c025d3333dedcb49a90b70dad8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78ba0ca2_e4cfd3b0",
         "filename": "webapp-frontend/src/app/interceptor.spec.ts",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2021-02-09T12:33:06Z",
       "side": 1,
       "message": "My wondering when I see this is that the interceptor basically does this: \n this.notificationService.error(error.message);\n\nI really all this needed to test that?",
+      "revId": "2e624bf7dae914c025d3333dedcb49a90b70dad8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c71dbde2_13bb14ed",
+        "filename": "webapp-frontend/src/app/interceptor.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-02-09T13:49:37Z",
+      "side": 1,
+      "message": "Maybe when we have some kind of integration or end to end test this can be removed, simplified.",
+      "parentUuid": "78ba0ca2_e4cfd3b0",
       "revId": "2e624bf7dae914c025d3333dedcb49a90b70dad8",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
