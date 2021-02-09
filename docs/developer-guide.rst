@@ -21,24 +21,23 @@ To run the Control Panel locally for development with simulated services, follow
 
 .. _gerrit: https://gerrit.o-ran-sc.org/r/admin/repos/portal/nonrtric-controlpanel
 
-- Start the backend:
-
-    cd webapp-backend
-
-    mvn clean install
-
-    mvn -Dorg.oransc.portal.nonrtric.controlpanel=mock -Dtest=MockControlPanelBackEnd -DfailIfNoTests=false test
-
-
-- Now you can open URL:  `localhost:8080`_ in a browser to access the backend directly.
-
-.. _localhost:8080: http://localhost:8080
-
 Start the frontend:
 
     cd webapp-frontend
-
-    ./ng serve --proxy-config proxy.conf.json
+    
+    To start the frontend with Mock data:
+    
+    npm run start:mock
+    
+    To start the UI:
+    
+    You need to start the ControlPanel API Gateway, Policy Management Service & EI Service for the UI to list policy & EI information
+    
+    ./ng serve --proxy-config proxy.conf.json 
+    
+    OR
+    
+    npm start
 
 - Now you can open URL:  `localhost:4200`_ in a browser to access the Control Panel.
 
