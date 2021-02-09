@@ -29,7 +29,73 @@ limitations under the License.
 
 <br>
 <h4>Producers</h4>
-<form [formGroup]="formGroup" class="filter-form">
+
+<!--form style="display: flex" [formGroup]="producersFormControl">
+  <mat-form-field>
+    <input matInput formControlName="ei_producer_id">
+    <mat-placeholder>Producer ID</mat-placeholder>
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput formControlName="ei_producer_types">
+      <mat-placeholder>Producer types</mat-placeholder>
+    </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="status">
+    <mat-placeholder>Producer status</mat-placeholder>
+  </mat-form-field>
+</form-->
+
+<div class="table-container">
+  <mat-table #producersTable [dataSource]="producersDataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>
+        <form style="display: flex" [formGroup]="producersFormControl">
+          <mat-form-field>
+            <input matInput formControlName="ei_producer_id">
+            <mat-placeholder>Producer ID</mat-placeholder>
+          </mat-form-field>
+        </form>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let eiProducer"> {{eiProducer.ei_producer_id}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="types">
+      <mat-header-cell *matHeaderCellDef>
+        <br>
+        <form style="display: flex" [formGroup]="producersFormControl">
+          <mat-form-field>
+            <input matInput formControlName="ei_producer_types">
+            <mat-placeholder>Producer types</mat-placeholder>
+          </mat-form-field>
+        </form>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let eiProducer"> {{this.getEIProducerTypes(eiProducer)}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef>
+        <br>
+        <form style="display: flex" [formGroup]="producersFormControl">
+          <mat-form-field>
+            <input matInput formControlName="status">
+            <mat-placeholder>Producer status</mat-placeholder>
+          </mat-form-field>
+        </form>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let eiProducer"> {{this.getEIProducerStatus(eiProducer)}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="['id', 'types', 'status']"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['id', 'types', 'status'];"></mat-row>
+
+     <!-- Row shown when there is no matching data. -->
+    <mat-row *matNoDataRow>
+      <mat-cell colspan="3">No data matching the filter "{{input.value}}"</mat-cell>
+    </mat-row>
+  </mat-table>
+</div>
+<!--form [formGroup]="formGroup" class="filter-form">
     <input
       type="text"
       class="form-control"
@@ -37,7 +103,12 @@ limitations under the License.
       placeholder="Search Producer"
       formControlName="filter"
     />
-</form>
+</form-->
+
+<!--mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+</mat-form-field>
 <div class="table-container">
     <table [ngClass]="{'table-dark': darkMode}" matSort
     class="ei-coordinator-table mat-elevation-z8">
@@ -58,7 +129,7 @@ limitations under the License.
             </td>
         </tr>
     </table>
-</div>
+</div-->
 
 <br>
 <h4>Jobs</h4>
