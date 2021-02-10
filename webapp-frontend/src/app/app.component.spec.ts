@@ -26,9 +26,12 @@ import { UiService } from './services/ui/ui.service';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
+  let app: AppComponent;
+  let cookieServiceSpy: any;
+  let uiService: UiService;
 
   beforeEach(async(() => {
-    const cookieSpy = jasmine.createSpyObj('CookieService', [ 'get' ]);
+    cookieServiceSpy = jasmine.createSpyObj('CookieService', [ 'get', 'put' ]);
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
@@ -40,7 +43,7 @@ describe('AppComponent', () => {
         AppComponent
       ],
       providers: [
-        { provide: CookieService, useValue: cookieSpy },
+        { provide: CookieService, useValue: cookieServiceSpy },
         UiService
       ]
     }).compileComponents();
@@ -48,11 +51,12 @@ describe('AppComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
+    app = fixture.componentInstance;
+    uiService = TestBed.get(UiService);
     fixture.detectChanges();
   });
 
   it('should create the app', () => {
-    const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
@@ -60,6 +64,16 @@ describe('AppComponent', () => {
     it('should contain oran logo', async(() => {
       const ele = fixture.debugElement.nativeElement.querySelector('img');
       expect(ele.src).toContain('assets/oran-logo.png');
+    }));
+
+    it('should contain navigation menu', async(() => {
+      const ele = fixture.debugElement.nativeElement.querySelector('nrcp-sidenav-list');
+      expect(ele).toBeTruthy();
+    }));
+
+    it('should contain dark mode selector', async(() => {
+      const ele = fixture.debugElement.nativeElement.querySelector('#darkModeSwitch');
+      expect(ele).toBeTruthy();
     }));
 
     it('should contain heading', async(() => {
@@ -76,5 +90,34 @@ describe('AppComponent', () => {
       const ele = fixture.debugElement.nativeElement.querySelector('nrcp-footer');
       expect(ele).toBeTruthy();
     }));
+  });
+
+  describe('#darkMode', () => {
+    it('when dark mode value yes from cookie at start should set mode to dark', () => {
+      uiService.darkModeState.next(false); // Set internal state to light mode.
+      cookieServiceSpy.get.and.returnValue('yes'); // Cookie shall return dark mode used.
+
+      app.ngOnInit();
+
+      uiService.darkModeState.subscribe((state) => {
+        expect(state).toBeTruthy();
+      });
+      expect(app.darkMode).toBeTruthy();
+    });
+
+    it('should toggle dark mode when selector is clicked', () => {
+      const darkModeSelector = fixture.debugElement.nativeElement.querySelector('#darkModeSwitch');
+
+      // Toggle to light mode
+      darkModeSelector.click();
+      expect(uiService.getDarkMode()).toBeFalsy();
+      expect(cookieServiceSpy.put).toHaveBeenCalledWith('darkMode', 'no');
+
+
+      // Toggle to dark mode
+      darkModeSelector.click();
+      expect(uiService.getDarkMode()).toBeTruthy();
+      expect(cookieServiceSpy.put).toHaveBeenCalledWith('darkMode', 'yes');
+    });
   });
 });
