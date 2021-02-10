@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a7dfd73_29e73af6",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001106
+      },
+      "writtenOn": "2021-02-10T09:24:18Z",
+      "side": 1,
+      "message": "we can remove this",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 9
+      },
+      "revId": "72f22e0d3127eb70a9f3273dcdb802ad6dff0a7b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc60466b_f47e4bac",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001106
+      },
+      "writtenOn": "2021-02-10T09:24:18Z",
+      "side": 1,
+      "message": "this can be removed as well",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 8
+      },
+      "revId": "72f22e0d3127eb70a9f3273dcdb802ad6dff0a7b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30d9a17a_0853d250",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001106
+      },
+      "writtenOn": "2021-02-10T09:24:18Z",
+      "side": 1,
+      "message": "sorting is not being used, shall we clean up sort related parts?",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 97,
+        "endChar": 7
+      },
+      "revId": "72f22e0d3127eb70a9f3273dcdb802ad6dff0a7b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
