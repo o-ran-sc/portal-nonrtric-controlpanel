@@ -17,13 +17,13 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatTable } from '@angular/material';
 
-import { defer, BehaviorSubject, Observable } from 'rxjs';
-import { map, withLatestFrom, startWith } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { EIJob, EIProducer } from '../interfaces/ei.types';
 import { EIJobDataSource } from './ei-job.datasource';
@@ -52,56 +52,66 @@ class EIJobInfo {
 export class EICoordinatorComponent implements OnInit {
 
     producers$: Observable<EIProducer[]>;
-    filteredProducers$: Observable<EIProducer[]>;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild('producersTable', { static: true }) table: MatTable<Element>;
 
     eiJobInfo = new Map<string, EIJobInfo>();
     darkMode: boolean;
     searchString: string;
     formGroup: FormGroup;
     jobsDataSource: MatTableDataSource<EIJob>;
+    producersDataSource: MatTableDataSource<EIProducer>;
 
     readonly jobsFormControl: AbstractControl;
+    readonly producersFormControl: AbstractControl;
 
     constructor(
         private eiJobsDataSource: EIJobDataSource,
         private eiProducersDataSource: EIProducerDataSource,
         private ui: UiService,
         private formBuilder: FormBuilder) {
+            this.formGroup = formBuilder.group({ filter: [""] });
 
-        this.formGroup = formBuilder.group({ filter: [""] });
-        this.jobsFormControl = formBuilder.group({
-            id: '',
-            typeId: '',
-            owner: '',
-            targetUri:'',
-        })
+            this.jobsFormControl = formBuilder.group({
+                id: '',
+                typeId: '',
+                owner: '',
+                targetUri:''
+            });
+            this.producersFormControl = formBuilder.group({
+                ei_producer_id: '',
+                ei_producer_types: '',
+                status: ''
+            });
     }
 
     ngOnInit() {
         this.eiJobsDataSource.getJobs();
+        this.producers$ = this.eiProducersDataSource.loadProducers();
         this.jobsDataSource = new MatTableDataSource(this.eiJobsDataSource.eiJobsSubject.value);
+        this.producersDataSource = new MatTableDataSource(this.eiProducersDataSource.producerSubject.value)
 
         this.jobsFormControl.valueChanges.subscribe(value => {
             const filter = {...value, id: value.id.trim().toLowerCase()} as string;
             this.jobsDataSource.filter = filter;
         });
+        this.producersFormControl.valueChanges.subscribe(value => {
+            const filter = {...value, ei_producer_id: value.ei_producer_id.trim().toLowerCase()} as string;
+            this.producersDataSource.filter = filter;
+        });
 
         this.jobsDataSource.filterPredicate = ((data, filter) => {
-            return this.isDataIncluding(data.ei_job_identity, filter.id) 
+            return this.isDataIncluding(data.ei_job_identity, filter.id)
                 && this.isDataIncluding(data.target_uri, filter.target_uri)
                 && this.isDataIncluding(data.owner, filter.owner)
                 && this.isDataIncluding(data.ei_type_identity, filter.typeId);
           }) as (EIJob, string) => boolean;
 
-        this.producers$= this.eiProducersDataSource.loadProducers();
-        this.filteredProducers$ = defer(() => this.formGroup.get("filter")
-        .valueChanges.pipe(
-            startWith(""),
-            withLatestFrom(this.producers$),
-            map(([val, producers]) =>
-            !val ? producers : producers.filter((x) =>
-            x.ei_producer_id.toLowerCase().includes(val))))
-        );
+        this.producersDataSource.filterPredicate = ((data, filter) => {
+            return this.isDataIncluding(data.ei_producer_id, filter.ei_producer_id)
+                && this.isDataIncluding(data.ei_producer_types.join(','), filter.ei_producer_types)
+                && this.isDataIncluding(data.status, filter.status);
+          }) as (EIProducer, string) => boolean;
 
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
