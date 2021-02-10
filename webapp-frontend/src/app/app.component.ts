@@ -27,7 +27,6 @@ import { CookieService } from 'ngx-cookie';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  private showMenu = false;
   darkMode: boolean;
   private 'DARK_MODE_COOKIE' = 'darkMode';
 
@@ -45,13 +44,8 @@ export class AppComponent implements OnInit {
     });
   }
 
-  toggleMenu() {
-    this.showMenu = !this.showMenu;
-  }
-
   modeToggleSwitch() {
     this.ui.darkModeState.next(!this.darkMode);
     this.cookieService.put(this.DARK_MODE_COOKIE, this.darkMode ? 'yes' : 'no');
   }
-
 }

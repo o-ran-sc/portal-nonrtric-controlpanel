@@ -31,4 +31,8 @@ export class UiService {
     this.darkModeState = new BehaviorSubject<boolean>(true);
     this.expanded = new Observable<boolean>();
   }
+
+  getDarkMode(): boolean {
+    return this.darkModeState.getValue();
+  }
 }
