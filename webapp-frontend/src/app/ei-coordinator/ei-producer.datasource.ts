@@ -19,11 +19,8 @@
  */
 
 import { Injectable } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
 
-import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { of } from 'rxjs/observable/of';
 
 import { EIProducer } from '../interfaces/ei.types';
 import { EIService } from '../services/ei/ei.service';
@@ -32,9 +29,13 @@ import { EIService } from '../services/ei/ei.service';
     providedIn: 'root'
 })
 
-export class EIProducerDataSource extends MatTableDataSource<EIProducer> {
+export class EIProducerDataSource {
 
-    producerSubject = new BehaviorSubject<EIProducer[]>([]);
+    private producerSubject = new BehaviorSubject<EIProducer[]>([]);
+
+    public eiProducers(): EIProducer[] {
+        return this.producerSubject.value;
+    }
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
 
@@ -44,10 +45,9 @@ export class EIProducerDataSource extends MatTableDataSource<EIProducer> {
 
     constructor(
         private eiSvc: EIService) {
-        super();
     }
 
-    loadProducers(): Observable<EIProducer[]> {
+    loadProducers() {
         this.loadingSubject.next(true);
         let producers: Array<EIProducer> = [];
         this.eiSvc.getProducerIds()
@@ -67,21 +67,11 @@ export class EIProducerDataSource extends MatTableDataSource<EIProducer> {
                 });
                 this.rowCount = this.producerSubject.value.length;
             });
-        return of(producers);
     }
 
     private addProducerToSubject(producer: EIProducer) {
         const currentValue = this.producerSubject.value;
         const updatedValue = [...currentValue, producer];
         this.producerSubject.next(updatedValue);
-    }
-
-    connect(): BehaviorSubject<EIProducer[]> {
-        return this.producerSubject;
-    }
-
-    disconnect(): void {
-        this.producerSubject.complete();
-        this.loadingSubject.complete();
     }
 }

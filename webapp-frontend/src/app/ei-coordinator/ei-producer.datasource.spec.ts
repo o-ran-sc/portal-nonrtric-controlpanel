@@ -18,7 +18,7 @@
  * ========================LICENSE_END===================================
  */
 import { TestBed } from '@angular/core/testing';
-import { BehaviorSubject, of } from 'rxjs';
+import { of } from 'rxjs';
 
 import { EIService } from '../services/ei/ei.service';
 import { ToastrModule } from 'ngx-toastr';
@@ -74,9 +74,8 @@ describe('EIProducerDataSource', () => {
 
     it('#loadProducers', () => {
         dataSource.loadProducers();
-        const jobsSubject: BehaviorSubject<EIProducer[]> = dataSource.producerSubject;
-        const value = jobsSubject.getValue();
-        expect(value).toEqual([ expectedProducer1, expectedProducer2 ]);
+        const actualProducers: EIProducer[] = dataSource.eiProducers();
+        expect(actualProducers).toEqual([ expectedProducer1, expectedProducer2 ]);
         expect(dataSource.rowCount).toEqual(2);
     });
 });

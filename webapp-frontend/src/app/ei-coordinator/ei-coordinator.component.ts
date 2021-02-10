@@ -51,7 +51,6 @@ class EIJobInfo {
 })
 export class EICoordinatorComponent implements OnInit {
 
-    producers$: Observable<EIProducer[]>;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     @ViewChild('producersTable', { static: true }) table: MatTable<Element>;
 
@@ -86,10 +85,10 @@ export class EICoordinatorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.eiJobsDataSource.getJobs();
-        this.producers$ = this.eiProducersDataSource.loadProducers();
-        this.jobsDataSource = new MatTableDataSource(this.eiJobsDataSource.eiJobsSubject.value);
-        this.producersDataSource = new MatTableDataSource(this.eiProducersDataSource.producerSubject.value)
+        this.eiJobsDataSource.loadJobs();
+        this.eiProducersDataSource.loadProducers();
+        this.jobsDataSource = new MatTableDataSource(this.eiJobsDataSource.eiJobs());
+        this.producersDataSource = new MatTableDataSource(this.eiProducersDataSource.eiProducers());
 
         this.jobsFormControl.valueChanges.subscribe(value => {
             const filter = {...value, id: value.id.trim().toLowerCase()} as string;
@@ -182,7 +181,7 @@ export class EICoordinatorComponent implements OnInit {
     }
 
     refreshTables() {
-        this.eiJobsDataSource.getJobs();
+        this.eiJobsDataSource.loadJobs();
         this.eiProducersDataSource.loadProducers();
     }
 }

@@ -19,7 +19,6 @@
  */
 
 import { Injectable } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -30,9 +29,13 @@ import { EIService } from '../services/ei/ei.service';
     providedIn: 'root'
 })
 
-export class EIJobDataSource extends MatTableDataSource<EIJob> {
+export class EIJobDataSource {
 
-    eiJobsSubject = new BehaviorSubject<EIJob[]>([]);
+    private eiJobsSubject = new BehaviorSubject<EIJob[]>([]);
+
+    public eiJobs(): EIJob[] {
+        return this.eiJobsSubject.value;
+    }
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
 
@@ -42,10 +45,9 @@ export class EIJobDataSource extends MatTableDataSource<EIJob> {
 
     constructor(
         private eiSvc: EIService) {
-        super();
     }
 
-    getJobs() {
+    loadJobs() {
         this.loadingSubject.next(true);
         this.eiSvc.getProducerIds()
             .subscribe((producerIds: string[]) => {
@@ -67,14 +69,5 @@ export class EIJobDataSource extends MatTableDataSource<EIJob> {
         const currentValue = this.eiJobsSubject.value;
         const updatedValue = [...currentValue, ...jobs];
         this.eiJobsSubject.next(updatedValue);
-    }
-
-    connect(): BehaviorSubject<EIJob[]> {
-        return this.eiJobsSubject;
-    }
-
-    disconnect(): void {
-        this.eiJobsSubject.complete();
-        this.loadingSubject.complete();
     }
 }

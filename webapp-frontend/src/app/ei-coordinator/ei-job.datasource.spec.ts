@@ -18,7 +18,7 @@
  * ========================LICENSE_END===================================
  */
 import { TestBed } from '@angular/core/testing';
-import { BehaviorSubject, of } from 'rxjs';
+import { of } from 'rxjs';
 
 import { EIJobDataSource } from './ei-job.datasource';
 import { EIService } from '../services/ei/ei.service';
@@ -50,10 +50,9 @@ describe('EIJobDataSource', () => {
     });
 
     it('#getJobs', () => {
-        dataSource.getJobs();
-        const jobsSubject: BehaviorSubject<EIJob[]> = dataSource.eiJobsSubject;
-        const value = jobsSubject.getValue();
-        expect(value).toEqual([ job, job ]);
+        dataSource.loadJobs();
+        const actualJobs: EIJob[] = dataSource.eiJobs();
+        expect(actualJobs).toEqual([ job, job ]);
         expect(dataSource.rowCount).toEqual(2);
     });
 });

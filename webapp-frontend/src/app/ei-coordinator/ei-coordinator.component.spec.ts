@@ -23,8 +23,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule, MatTableModule } from '@angular/material';
 
-import { of } from 'rxjs';
-
 import { EICoordinatorComponent } from './ei-coordinator.component';
 import { EIJobDataSource } from './ei-job.datasource';
 import { EIProducerDataSource } from './ei-producer.datasource';
@@ -35,14 +33,12 @@ describe('EICoordinatorComponent', () => {
   let fixture: ComponentFixture<EICoordinatorComponent>;
 
   beforeEach(async(() => {
-    const jobDataSourceSpy = jasmine.createSpyObj('EIJobDataSource', [ 'connect', 'getJobs', 'disconnect' ]);
-    const producerDataSourceSpy = jasmine.createSpyObj('EIProducerDataSource', [ 'connect', 'loadTable', 'loadProducers',  'disconnect' ]);
+    const jobDataSourceSpy = jasmine.createSpyObj('EIJobDataSource', [ 'loadJobs', 'eiJobs' ]);
+    const producerDataSourceSpy = jasmine.createSpyObj('EIProducerDataSource', [ 'loadProducers', 'eiProducers' ]);
 
-    jobDataSourceSpy.connect.and.returnValue(of([]));
-    jobDataSourceSpy.disconnect();
-    producerDataSourceSpy.connect.and.returnValue(of([]));
-    producerDataSourceSpy.loadProducers.and.returnValue(of([]));
-    producerDataSourceSpy.disconnect();
+    jobDataSourceSpy.eiJobs.and.returnValue([]);
+
+    producerDataSourceSpy.eiProducers.and.returnValue([]);
 
     TestBed.configureTestingModule({
       imports: [
