@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a7ebda1_f63f1953",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001106
+      },
+      "writtenOn": "2021-02-10T10:12:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70dd6669_02547a97",
+      "revId": "f352f8d7a8f52de01480ea160fc10e160db24be1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6aee3cc0_cf8e18ea",
         "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2021-02-10T09:44:18Z",
       "side": 1,
       "message": "Maybe this could be more readable using a function. \n\nisDataIncluding(data : string, filter : string) : boolean {\n    return filter \u0026\u0026 data.toLowerCase().includes(filter);\n}\n\n\nThen this would look something like this (and you would not need variables a, b etc.): \n\nreturn isDataIncluding(data.ei_job_identity, filter.id) \n      \u0026\u0026 isDataIncluding() ...",
+      "revId": "f352f8d7a8f52de01480ea160fc10e160db24be1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58fd357a_c75b3971",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001106
+      },
+      "writtenOn": "2021-02-10T10:12:19Z",
+      "side": 1,
+      "message": "good thanks! I will do that!",
+      "parentUuid": "6aee3cc0_cf8e18ea",
       "revId": "f352f8d7a8f52de01480ea160fc10e160db24be1",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
