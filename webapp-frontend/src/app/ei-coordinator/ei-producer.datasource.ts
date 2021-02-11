@@ -31,10 +31,10 @@ import { EIService } from '../services/ei/ei.service';
 
 export class EIProducerDataSource {
 
-    private producerSubject = new BehaviorSubject<EIProducer[]>([]);
+    private producers: Array<EIProducer> = [];
 
     public eiProducers(): EIProducer[] {
-        return this.producerSubject.value;
+        return this.producers;
     }
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
@@ -49,7 +49,7 @@ export class EIProducerDataSource {
 
     loadProducers() {
         this.loadingSubject.next(true);
-        let producers: Array<EIProducer> = [];
+        this.producers = [];
         this.eiSvc.getProducerIds()
             .subscribe((prodIds: string[]) => {
                 console.log("ProducerIds: " + prodIds);
@@ -62,16 +62,9 @@ export class EIProducerDataSource {
                     this.eiSvc.getProducerStatus(id).subscribe(prodStatus => {
                         eiProducer.status = prodStatus.opState.toString();
                     });
-                    this.addProducerToSubject(eiProducer);
-                    producers.push(eiProducer);
+                    this.producers.push(eiProducer);
                 });
-                this.rowCount = this.producerSubject.value.length;
+                this.rowCount = this.producers.length;
             });
-    }
-
-    private addProducerToSubject(producer: EIProducer) {
-        const currentValue = this.producerSubject.value;
-        const updatedValue = [...currentValue, producer];
-        this.producerSubject.next(updatedValue);
     }
 }

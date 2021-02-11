@@ -31,10 +31,10 @@ import { EIService } from '../services/ei/ei.service';
 
 export class EIJobDataSource {
 
-    private eiJobsSubject = new BehaviorSubject<EIJob[]>([]);
+    private jobs: Array<EIJob> = [];
 
     public eiJobs(): EIJob[] {
-        return this.eiJobsSubject.value;
+        return this.jobs;
     }
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
@@ -49,25 +49,20 @@ export class EIJobDataSource {
 
     loadJobs() {
         this.loadingSubject.next(true);
+        this.jobs = [];
         this.eiSvc.getProducerIds()
             .subscribe((producerIds: string[]) => {
                 producerIds.forEach(id => {
                     this.getJobsForProducer(id);
                 });
             });
+        this.rowCount = this.jobs.length;
     }
 
     private getJobsForProducer(id: string) {
         console.log('Getting jobs for producer ID: ', id);
-        this.eiSvc.getJobsForProducer(id).subscribe(jobs => {
-            this.addJobsToSubject(jobs);
-            this.rowCount = this.eiJobsSubject.getValue().length;
+        this.eiSvc.getJobsForProducer(id).subscribe(producerJobs => {
+            this.jobs = this.jobs.concat(producerJobs);
         });
-    }
-
-    private addJobsToSubject(jobs: EIJob[]) {
-        const currentValue = this.eiJobsSubject.value;
-        const updatedValue = [...currentValue, ...jobs];
-        this.eiJobsSubject.next(updatedValue);
     }
 }
