@@ -182,6 +182,8 @@ export class EICoordinatorComponent implements OnInit {
 
     refreshTables() {
         this.eiJobsDataSource.loadJobs();
+        this.jobsDataSource.data = this.eiJobsDataSource.eiJobs();
         this.eiProducersDataSource.loadProducers();
+        this.producersDataSource.data = this.eiProducersDataSource.eiProducers();
     }
 }
