@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "c22b7716_4c92ac1e",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-02-12T08:31:24Z",
+      "side": 1,
+      "message": "I think you should have something similar with the #jobsTable you added.",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 76
+      },
+      "revId": "9258650ca1dbe5dafb0618bb928b3a6843916009",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d8d1a00_12ed9bdf",
         "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
         "patchSetId": 1
