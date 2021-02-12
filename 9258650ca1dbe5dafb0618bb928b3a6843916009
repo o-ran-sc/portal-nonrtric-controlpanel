@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3e19c7dd_0961a0e2",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1001106
+      },
+      "writtenOn": "2021-02-12T10:27:26Z",
+      "side": 1,
+      "message": "Yes true, I forgot to add it in the EI coodinator component as Maxime also mentioned, that it\u0027s supposed to be use for the sorting that it\u0027s not currently working.",
+      "parentUuid": "48d299b9_10e3aeca",
+      "range": {
+        "startLine": 88,
+        "startChar": 15,
+        "endLine": 88,
+        "endChar": 26
+      },
+      "revId": "9258650ca1dbe5dafb0618bb928b3a6843916009",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c22b7716_4c92ac1e",
         "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "cecd6636_5971b094",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001106
+      },
+      "writtenOn": "2021-02-12T10:27:26Z",
+      "side": 1,
+      "message": "yes I will add it! thanks",
+      "parentUuid": "c22b7716_4c92ac1e",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 76
+      },
+      "revId": "9258650ca1dbe5dafb0618bb928b3a6843916009",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d8d1a00_12ed9bdf",
         "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
         "patchSetId": 1
@@ -59,6 +107,24 @@
       "writtenOn": "2021-02-12T08:30:29Z",
       "side": 1,
       "message": "Does this really work? \nloadJobs jobs is asynchronous, and that means that the function will just initiate loading of jobs and return. The function eiJobs() will then then return only the jobs loaded so far (which \nin the normal case should be none, in my way of thinking). \nPreviously BehaviorSubject was used so that the table was an observer of the data, but that is removed now. \n\nI might be wrong here. If this works, it works. But I cannot se how.",
+      "revId": "9258650ca1dbe5dafb0618bb928b3a6843916009",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7abbc38c_e6993c88",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1001106
+      },
+      "writtenOn": "2021-02-12T10:27:26Z",
+      "side": 1,
+      "message": "I understand, I thought about it as well. However in line 91 we are using this function already and it does return values, but I\u0027m not sure if now it does return the values because we only have few jobs and producer to show, and in case that there are more it will not return everything. \nI can try to refactor the code so it could be inside an asynchronous function that wait until all jobs are load.",
+      "parentUuid": "7d8d1a00_12ed9bdf",
       "revId": "9258650ca1dbe5dafb0618bb928b3a6843916009",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
