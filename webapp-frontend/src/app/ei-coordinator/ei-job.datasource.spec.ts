@@ -45,7 +45,7 @@ describe('EIJobDataSource', () => {
     });
 
     it('should create', () => {
-        dataSource = TestBed.get(EIJobDataSource);
+        dataSource = TestBed.inject(EIJobDataSource);
         expect(dataSource).toBeTruthy();
     });
 

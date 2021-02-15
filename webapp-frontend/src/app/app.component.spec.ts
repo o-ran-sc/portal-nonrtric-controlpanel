@@ -52,7 +52,7 @@ describe('AppComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.componentInstance;
-    uiService = TestBed.get(UiService);
+    uiService = TestBed.inject(UiService);
     fixture.detectChanges();
   });
 

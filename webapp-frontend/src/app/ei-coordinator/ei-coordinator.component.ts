@@ -21,7 +21,7 @@ import { Component, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
