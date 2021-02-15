@@ -21,7 +21,7 @@
   <div fxLayout="row">
     <div class="nrcp-global-page-title">Policy Control</div>
     <div class="refresh-button">
-        <button mat-icon-button color="primary" aria-label="Button with a refresh icon" (click)="refreshTables()">
+        <button mat-icon-button color="primary" (click)="refreshTables()">
             <mat-icon>refresh</mat-icon>
         </button>
     </div>
@@ -81,7 +81,3 @@
     </mat-footer-row>
 
 </table>
-
-<div class="spinner-container" *ngIf="policyTypesDataSource.loading$ | async">
-    <mat-spinner diameter="50"></mat-spinner>
-</div>

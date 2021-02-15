@@ -38,7 +38,7 @@ describe('EIService', () => {
   }));
 
   it('should be created', () => {
-    service = TestBed.get(EIService);
+    service = TestBed.inject(EIService);
     expect(service).toBeTruthy();
   });
 
@@ -46,8 +46,8 @@ describe('EIService', () => {
     let expectedEIProducerIds: string[];
 
     beforeEach(() => {
-      service = TestBed.get(EIService);
-      httpTestingController = TestBed.get(HttpTestingController);
+      service = TestBed.inject(EIService);
+      httpTestingController = TestBed.inject(HttpTestingController);
       expectedEIProducerIds = [ 'producer1', 'producer2' ] as string[];
     });
 
@@ -70,8 +70,8 @@ describe('EIService', () => {
     let expectedEIJobs: EIJob[];
 
     beforeEach(() => {
-      service = TestBed.get(EIService);
-      httpTestingController = TestBed.get(HttpTestingController);
+      service = TestBed.inject(EIService);
+      httpTestingController = TestBed.inject(HttpTestingController);
       expectedEIJobs = [
         { ei_job_identity: '1', ei_job_data: 'data', ei_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'},
         { ei_job_identity: '2', ei_job_data: 'EI Job 2', ei_type_identity: 'Type ID 2',  target_uri: 'hhtp://url', owner: 'owner'}
@@ -97,8 +97,8 @@ describe('EIService', () => {
     let expectedProducer: ProducerRegistrationInfo;
 
     beforeEach(() => {
-      service = TestBed.get(EIService);
-      httpTestingController = TestBed.get(HttpTestingController);
+      service = TestBed.inject(EIService);
+      httpTestingController = TestBed.inject(HttpTestingController);
       expectedProducer = {
         supported_ei_types: [ 'type1', 'type2' ]
       } as ProducerRegistrationInfo;
@@ -123,8 +123,8 @@ describe('EIService', () => {
     let expectedProducerStatus: ProducerStatus;
 
     beforeEach(() => {
-      service = TestBed.get(EIService);
-      httpTestingController = TestBed.get(HttpTestingController);
+      service = TestBed.inject(EIService);
+      httpTestingController = TestBed.inject(HttpTestingController);
       expectedProducerStatus = {
         opState: OperationalState.ENABLED
       } as ProducerStatus;

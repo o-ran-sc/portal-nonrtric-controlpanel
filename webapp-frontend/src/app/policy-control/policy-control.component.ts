@@ -55,7 +55,7 @@ export class PolicyControlComponent implements OnInit {
     darkMode: boolean;
 
     constructor(
-        private policyTypesDataSource: PolicyTypeDataSource,
+        public policyTypesDataSource: PolicyTypeDataSource,
         private dialog: MatDialog,
         private ui: UiService) { }
 

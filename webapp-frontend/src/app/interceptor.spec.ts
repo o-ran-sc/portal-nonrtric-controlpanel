@@ -51,12 +51,12 @@ describe(`HttpRequestInterceptor`, () => {
             ]
         });
 
-        httpMock = TestBed.get(HttpTestingController);
-        service = TestBed.get(EIService);
+        httpMock = TestBed.inject(HttpTestingController);
+        service = TestBed.inject(EIService);
     });
 
     it('should create', () => {
-        const interceptors = TestBed.get(HTTP_INTERCEPTORS);
+        const interceptors = TestBed.inject(HTTP_INTERCEPTORS);
         let found = false;
         interceptors.forEach(interceptor => {
             if (interceptor instanceof HttpRequestInterceptor) {
