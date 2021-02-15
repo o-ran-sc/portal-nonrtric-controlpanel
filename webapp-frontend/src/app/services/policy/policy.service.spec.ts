@@ -44,8 +44,8 @@ describe('PolicyService', () => {
     let emptyPolicyType: PolicyTypes;
 
     beforeEach(() => {
-      policyService = TestBed.get(PolicyService);
-      httpTestingController = TestBed.get(HttpTestingController);
+      policyService = TestBed.inject(PolicyService);
+      httpTestingController = TestBed.inject(HttpTestingController);
       expectedPolicytypes = {
         "policytype_ids": [
           "",
@@ -85,8 +85,8 @@ describe('PolicyService', () => {
     let emptyPolicyInstances: PolicyInstances;
     let policyTypeId = '1';
     beforeEach(() => {
-      policyService = TestBed.get(PolicyService);
-      httpTestingController = TestBed.get(HttpTestingController);
+      policyService = TestBed.inject(PolicyService);
+      httpTestingController = TestBed.inject(HttpTestingController);
       expectedPolicyInstances = {
         "policy_ids": [
           "2100",
@@ -125,8 +125,8 @@ describe('PolicyService', () => {
     let emptyPolicyInstances: PolicyInstances;
     let policyId = "2000";
     beforeEach(() => {
-      policyService = TestBed.get(PolicyService);
-      httpTestingController = TestBed.get(HttpTestingController);
+      policyService = TestBed.inject(PolicyService);
+      httpTestingController = TestBed.inject(HttpTestingController);
       expectedPolicyInstance = {
         "policy_id": "2000",
         "policytype_id": "1",

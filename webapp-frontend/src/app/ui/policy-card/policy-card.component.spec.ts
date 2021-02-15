@@ -20,7 +20,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {PolicyCardComponent} from './policy-card.component';
-import { MatIconModule,MatCardModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 import { RouterTestingModule} from '@angular/router/testing';
 import {UiService} from '../../services/ui/ui.service';
 
