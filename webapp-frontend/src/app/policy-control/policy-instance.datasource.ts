@@ -20,7 +20,7 @@
 
 import { DataSource } from '@angular/cdk/collections';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatSort } from '@angular/material';
+import { MatSort } from '@angular/material/sort';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { merge } from 'rxjs';

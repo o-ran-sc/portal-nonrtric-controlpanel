@@ -70,7 +70,7 @@ describe('PolicyTypeDataSource', () => {
     });
 
     it('should create', () => {
-      policyTypeDataSource = TestBed.get(PolicyTypeDataSource);
+      policyTypeDataSource = TestBed.inject(PolicyTypeDataSource);
       expect(policyTypeDataSource).toBeTruthy();
     });
 

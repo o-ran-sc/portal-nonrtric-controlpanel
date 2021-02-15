@@ -18,7 +18,7 @@
  * ========================LICENSE_END===================================
  */
 
-import { MatSort } from '@angular/material';
+import { MatSort } from '@angular/material/sort';
 import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PolicyTypeSchema } from '../interfaces/policy.types';

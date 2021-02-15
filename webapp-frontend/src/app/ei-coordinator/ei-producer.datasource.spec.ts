@@ -68,7 +68,7 @@ describe('EIProducerDataSource', () => {
     });
 
     it('should create', () => {
-        dataSource = TestBed.get(EIProducerDataSource);
+        dataSource = TestBed.inject(EIProducerDataSource);
         expect(dataSource).toBeTruthy();
     });
 
