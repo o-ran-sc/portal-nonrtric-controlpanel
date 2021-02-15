@@ -21,7 +21,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule, MatTableModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 
 import { EICoordinatorComponent } from './ei-coordinator.component';
 import { EIJobDataSource } from './ei-job.datasource';

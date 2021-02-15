@@ -21,7 +21,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ConfirmDialogService } from './confirm-dialog.service';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
 import {UiService} from './ui.service';
 
 describe('ConfirmDialogService', () => {
