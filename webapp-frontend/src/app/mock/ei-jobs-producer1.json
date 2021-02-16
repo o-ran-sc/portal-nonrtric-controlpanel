@@ -8,7 +8,7 @@
         "jobparam3": "value3_job1",
         "jobparam1": "value1_job1"
       },
-      "target_uri": "https://ricsim_g3_1:8185/datadelivery"
+      "target_uri": "https://ricsim_g1_1:8185/datadelivery"
     },
     {
       "ei_job_identity": "job2",
@@ -19,7 +19,7 @@
         "jobparam3": "value3_job2",
         "jobparam1": "value1_job2"
       },
-      "target_uri": "https://ricsim_g3_1:8185/datadelivery"
+      "target_uri": "https://ricsim_g2_1:8185/datadelivery"
     },
     {
       "ei_job_identity": "job4",

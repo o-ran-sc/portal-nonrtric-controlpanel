@@ -31,13 +31,13 @@ limitations under the License.
 <h4>Producers</h4>
 
 <div class="table-container">
-  <mat-table #producersTable [dataSource]="producersDataSource"
+  <mat-table id="producersTable" [dataSource]="producersDataSource"
     matSort class="ei-coordinator-table mat-elevation-z8">
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef>
         <form style="display: flex" [formGroup]="producersFormControl">
           <mat-form-field>
-            <input matInput formControlName="ei_producer_id">
+            <input id="producerIdFilter" matInput formControlName="ei_producer_id">
             <mat-placeholder>Producer ID</mat-placeholder>
           </mat-form-field>
         </form>
@@ -50,12 +50,12 @@ limitations under the License.
         <br>
         <form style="display: flex" [formGroup]="producersFormControl">
           <mat-form-field>
-            <input matInput formControlName="ei_producer_types">
+            <input id="producerTypesFilter" matInput formControlName="ei_producer_types">
             <mat-placeholder>Producer types</mat-placeholder>
           </mat-form-field>
         </form>
       </mat-header-cell>
-      <mat-cell *matCellDef="let eiProducer"> {{this.getEIProducerTypes(eiProducer)}} </mat-cell>
+      <mat-cell *matCellDef="let eiProducer"> {{this.getProducerTypes(eiProducer)}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="status">
@@ -63,21 +63,16 @@ limitations under the License.
         <br>
         <form style="display: flex" [formGroup]="producersFormControl">
           <mat-form-field>
-            <input matInput formControlName="status">
+            <input id="producerStatusFilter" matInput formControlName="status">
             <mat-placeholder>Producer status</mat-placeholder>
           </mat-form-field>
         </form>
       </mat-header-cell>
-      <mat-cell *matCellDef="let eiProducer"> {{this.getEIProducerStatus(eiProducer)}} </mat-cell>
+      <mat-cell *matCellDef="let eiProducer"> {{this.getProducerStatus(eiProducer)}} </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="['id', 'types', 'status']"></mat-header-row>
     <mat-row *matRowDef="let row; columns: ['id', 'types', 'status'];"></mat-row>
-
-     <!-- Row shown when there is no matching data. -->
-    <mat-row *matNoDataRow>
-      <mat-cell colspan="3">No data matching the filter "{{input.value}}"</mat-cell>
-    </mat-row>
   </mat-table>
 </div>
 
@@ -85,55 +80,55 @@ limitations under the License.
 <h4>Jobs</h4>
 
 <div class="table-container">
-    <mat-table #jobsTable [dataSource]="jobsDataSource"
+    <mat-table id="jobsTable" [dataSource]="jobsDataSource"
         matSort class="ei-coordinator-table mat-elevation-z8">
         <ng-container matColumnDef="id">
             <mat-header-cell *matHeaderCellDef>
                 <br>
                 <form style="display: flex" [formGroup]="jobsFormControl">
                     <mat-form-field>
-                        <input matInput formControlName="id">
+                        <input id="jobIdFilter" matInput formControlName="id">
                         <mat-placeholder>Job ID</mat-placeholder>
                     </mat-form-field>
                 </form>
             </mat-header-cell>
-            <mat-cell *matCellDef="let eiJob"> {{this.getDisplayName(eiJob)}} </mat-cell>
+            <mat-cell *matCellDef="let eiJob"> {{eiJob.ei_job_identity}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="typeId">
             <mat-header-cell *matHeaderCellDef>
                 <br>
                 <form style="display: flex" [formGroup]="jobsFormControl">
                     <mat-form-field>
-                        <input matInput formControlName="typeId">
+                        <input id="jobTypeIdFilter" matInput formControlName="typeId">
                         <mat-placeholder>Type ID</mat-placeholder>
                     </mat-form-field>
                 </form>
             </mat-header-cell>
-            <mat-cell *matCellDef="let eiJob">{{this.getEITypeId(eiJob)}} </mat-cell>
+            <mat-cell *matCellDef="let eiJob">{{this.getJobTypeId(eiJob)}} </mat-cell>
             </ng-container>
         <ng-container matColumnDef="owner">
             <mat-header-cell *matHeaderCellDef>
                 <br>
                 <form style="display: flex" [formGroup]="jobsFormControl">
                     <mat-form-field>
-                        <input matInput formControlName="owner">
+                        <input id="jobOwnerFilter" matInput formControlName="owner">
                         <mat-placeholder>Owner</mat-placeholder>
                     </mat-form-field>
                 </form>
             </mat-header-cell>
-            <mat-cell *matCellDef="let eiJob">{{eiJob.owner}} </mat-cell>
+            <mat-cell *matCellDef="let eiJob">{{this.getJobOwner(eiJob)}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="targetUri">
             <mat-header-cell *matHeaderCellDef>
                 <br>
                 <form style="display: flex" [formGroup]="jobsFormControl">
                     <mat-form-field>
-                        <input matInput formControlName="targetUri">
+                        <input id="jobTargetUriFilter" matInput formControlName="targetUri">
                         <mat-placeholder>Target URI</mat-placeholder>
                     </mat-form-field>
                 </form>
             </mat-header-cell>
-            <mat-cell *matCellDef="let eiJob"> {{this.getTargetUri(eiJob)}}  </mat-cell>
+            <mat-cell *matCellDef="let eiJob"> {{eiJob.target_uri}}  </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="['id', 'typeId', 'owner', 'targetUri']"></mat-header-row>
         <mat-row *matRowDef="let row; columns: ['id', 'typeId', 'owner', 'targetUri'];"></mat-row>
