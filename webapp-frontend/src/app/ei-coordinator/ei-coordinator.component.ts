@@ -30,12 +30,6 @@ import { EIJobDataSource } from './ei-job.datasource';
 import { EIProducerDataSource } from './ei-producer.datasource';
 import { UiService } from '../services/ui/ui.service';
 
-class EIJobInfo {
-    constructor(public eiJob: EIJob) { }
-
-    isExpanded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-}
-
 @Component({
     selector: 'nrcp-ei-coordinator',
     templateUrl: './ei-coordinator.component.html',
@@ -54,7 +48,6 @@ export class EICoordinatorComponent implements OnInit {
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     @ViewChild('producersTable', { static: true }) table: MatTable<Element>;
 
-    eiJobInfo = new Map<string, EIJobInfo>();
     darkMode: boolean;
     searchString: string;
     formGroup: FormGroup;
@@ -88,7 +81,8 @@ export class EICoordinatorComponent implements OnInit {
         this.eiJobsDataSource.loadJobs();
         this.eiProducersDataSource.loadProducers();
         this.jobsDataSource = new MatTableDataSource(this.eiJobsDataSource.eiJobs());
-        this.producersDataSource = new MatTableDataSource(this.eiProducersDataSource.eiProducers());
+        const prods = this.eiProducersDataSource.eiProducers();
+        this.producersDataSource = new MatTableDataSource(prods);
 
         this.jobsFormControl.valueChanges.subscribe(value => {
             const filter = {...value, id: value.id.trim().toLowerCase()} as string;
@@ -101,16 +95,16 @@ export class EICoordinatorComponent implements OnInit {
 
         this.jobsDataSource.filterPredicate = ((data, filter) => {
             return this.isDataIncluding(data.ei_job_identity, filter.id)
-                && this.isDataIncluding(data.target_uri, filter.target_uri)
+                && this.isDataIncluding(data.target_uri, filter.targetUri)
                 && this.isDataIncluding(data.owner, filter.owner)
                 && this.isDataIncluding(data.ei_type_identity, filter.typeId);
-          }) as (EIJob, string) => boolean;
+          }) as (data: EIJob, filter: any) => boolean;
 
         this.producersDataSource.filterPredicate = ((data, filter) => {
             return this.isDataIncluding(data.ei_producer_id, filter.ei_producer_id)
                 && this.isDataIncluding(data.ei_producer_types.join(','), filter.ei_producer_types)
                 && this.isDataIncluding(data.status, filter.status);
-          }) as (EIProducer, string) => boolean;
+          }) as (data: EIProducer, filter: any) => boolean;
 
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
@@ -121,59 +115,28 @@ export class EICoordinatorComponent implements OnInit {
         return !filter || data.toLowerCase().includes(filter);
     }
 
-    getEIJobInfo(eiJob: EIJob): EIJobInfo {
-        let info: EIJobInfo = this.eiJobInfo.get(eiJob.ei_job_data);
-        if (!info) {
-            info = new EIJobInfo(eiJob);
-            this.eiJobInfo.set(eiJob.ei_job_data, info);
-        }
-        return info;
-    }
-
-    getDisplayName(eiJob: EIJob): string {
-        if (eiJob.ei_job_identity) {
-            return eiJob.ei_job_identity;
-        }
-        return '< No id >';
-    }
-
-    getEITypeId(eiJob: EIJob): string {
+    getJobTypeId(eiJob: EIJob): string {
         if (eiJob.ei_type_identity) {
             return eiJob.ei_type_identity;
         }
         return '< No type >';
     }
 
-    getTargetUri(eiJob: EIJob): string {
-        if (eiJob.target_uri) {
-            return eiJob.target_uri;
+    getJobOwner(eiJob: EIJob): string {
+        if (eiJob.owner) {
+            return eiJob.owner;
         }
-        return '< No target URI >';
+        return '< No owner >';
     }
 
-    isInstancesShown(eiJob: EIJob): boolean {
-        return this.getEIJobInfo(eiJob).isExpanded.getValue();
-    }
-
-    getExpandedObserver(eiJob: EIJob): Observable<boolean> {
-        return this.getEIJobInfo(eiJob).isExpanded.asObservable();
-    }
-
-    getEIProducerId(eiProducer: EIProducer): string {
-        if (eiProducer.ei_producer_id) {
-            return eiProducer.ei_producer_id;
-        }
-        return '< No id>';
-    }
-
-    getEIProducerTypes(eiProducer: EIProducer): string[] {
+    getProducerTypes(eiProducer: EIProducer): string[] {
         if (eiProducer.ei_producer_types) {
             return eiProducer.ei_producer_types;
         }
         return ['< No types >'];
     }
 
-    getEIProducerStatus(eiProducer: EIProducer): string {
+    getProducerStatus(eiProducer: EIProducer): string {
         if (eiProducer.status) {
             return eiProducer.status;
         }
