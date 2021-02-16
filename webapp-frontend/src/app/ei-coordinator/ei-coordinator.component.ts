@@ -17,11 +17,11 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
+import { Component, OnInit } from '@angular/core';
+import { Sort } from '@angular/material/sort';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
-import { MatTableDataSource, MatTable } from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -50,9 +50,6 @@ class EIJobInfo {
     ],
 })
 export class EICoordinatorComponent implements OnInit {
-
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
-    @ViewChild('producersTable', { static: true }) table: MatTable<Element>;
 
     eiJobInfo = new Map<string, EIJobInfo>();
     darkMode: boolean;
@@ -87,7 +84,7 @@ export class EICoordinatorComponent implements OnInit {
     ngOnInit() {
         this.eiJobsDataSource.loadJobs();
         this.eiProducersDataSource.loadProducers();
-        this.jobsDataSource = new MatTableDataSource(this.eiJobsDataSource.eiJobs());
+        this.jobsDataSource = this.eiJobsDataSource.jobsDataSource();
         this.producersDataSource = new MatTableDataSource(this.eiProducersDataSource.eiProducers());
 
         this.jobsFormControl.valueChanges.subscribe(value => {
@@ -99,7 +96,7 @@ export class EICoordinatorComponent implements OnInit {
             this.producersDataSource.filter = filter;
         });
 
-        this.jobsDataSource.filterPredicate = ((data, filter) => {
+        this.jobsDataSource.filterPredicate = ((data: EIJob, filter) => {
             return this.isDataIncluding(data.ei_job_identity, filter.id)
                 && this.isDataIncluding(data.target_uri, filter.target_uri)
                 && this.isDataIncluding(data.owner, filter.owner)
@@ -115,6 +112,44 @@ export class EICoordinatorComponent implements OnInit {
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
         });
+    }
+
+    sortJobs(sort: Sort){
+        console.log('Jobs new sort: ', sort);
+        const data = this.jobsDataSource.data
+        data.sort((a: EIJob, b: EIJob) => {
+            const isAsc = sort.direction === 'asc';
+            switch (sort.active) {
+              case 'id': return this.compare(a.ei_job_identity, b.ei_job_identity, isAsc);
+              case 'typeId': return this.compare(a.ei_type_identity, b.ei_type_identity, isAsc);
+              case 'owner': return this.compare(a.owner, b.owner, isAsc);
+              case 'targetUri': return this.compare(a.target_uri, b.owner, isAsc);
+              default: return 0;
+            }
+          });
+          this.jobsDataSource.data = data;
+    }
+
+    sortProducers(sort: Sort){
+        const data = this.producersDataSource.data
+        data.sort((a: EIProducer, b: EIProducer) => {
+            const isAsc = sort.direction === 'asc';
+            switch (sort.active) {
+              case 'id': return this.compare(a.ei_producer_id, b.ei_producer_id, isAsc);
+              case 'types': return this.compare(a.ei_producer_types, b.ei_producer_types, isAsc);
+              case 'status': return this.compare(a.status, b.status, isAsc);
+              default: return 0;
+            }
+          });
+          this.producersDataSource.data = data;
+    }
+    
+    compare(a: any, b: any, isAsc: boolean) {
+      return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+    }
+
+    stopSort(event: any){
+        event.stopPropagation();
     }
 
     isDataIncluding(data: string, filter: string) : boolean {
@@ -182,7 +217,7 @@ export class EICoordinatorComponent implements OnInit {
 
     refreshTables() {
         this.eiJobsDataSource.loadJobs();
-        this.jobsDataSource.data = this.eiJobsDataSource.eiJobs();
+        this.jobsDataSource = this.eiJobsDataSource.jobsDataSource();
         this.eiProducersDataSource.loadProducers();
         this.producersDataSource.data = this.eiProducersDataSource.eiProducers();
     }
