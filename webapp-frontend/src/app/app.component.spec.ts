@@ -101,6 +101,7 @@ describe('AppComponent', () => {
 
       expect(uiService.getDarkMode()).toBeTruthy();
       expect(app.darkMode).toBeTruthy();
+      expect(cookieServiceSpy.get).toHaveBeenCalled();
     });
 
     it('should toggle dark mode when selector is clicked', () => {

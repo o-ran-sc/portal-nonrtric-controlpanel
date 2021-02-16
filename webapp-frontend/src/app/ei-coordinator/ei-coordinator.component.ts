@@ -88,7 +88,8 @@ export class EICoordinatorComponent implements OnInit {
         this.eiJobsDataSource.loadJobs();
         this.eiProducersDataSource.loadProducers();
         this.jobsDataSource = new MatTableDataSource(this.eiJobsDataSource.eiJobs());
-        this.producersDataSource = new MatTableDataSource(this.eiProducersDataSource.eiProducers());
+        const prods = this.eiProducersDataSource.eiProducers();
+        this.producersDataSource = new MatTableDataSource(prods);
 
         this.jobsFormControl.valueChanges.subscribe(value => {
             const filter = {...value, id: value.id.trim().toLowerCase()} as string;
@@ -101,16 +102,16 @@ export class EICoordinatorComponent implements OnInit {
 
         this.jobsDataSource.filterPredicate = ((data, filter) => {
             return this.isDataIncluding(data.ei_job_identity, filter.id)
-                && this.isDataIncluding(data.target_uri, filter.target_uri)
+                && this.isDataIncluding(data.target_uri, filter.targetUri)
                 && this.isDataIncluding(data.owner, filter.owner)
                 && this.isDataIncluding(data.ei_type_identity, filter.typeId);
-          }) as (EIJob, string) => boolean;
+          }) as (data: EIJob, filter: any) => boolean;
 
         this.producersDataSource.filterPredicate = ((data, filter) => {
             return this.isDataIncluding(data.ei_producer_id, filter.ei_producer_id)
                 && this.isDataIncluding(data.ei_producer_types.join(','), filter.ei_producer_types)
                 && this.isDataIncluding(data.status, filter.status);
-          }) as (EIProducer, string) => boolean;
+          }) as (data: EIProducer, filter: any) => boolean;
 
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
