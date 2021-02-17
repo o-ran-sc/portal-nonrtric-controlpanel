@@ -22,6 +22,30 @@
       "revId": "f2587701497fa10dc8139897ae2739c4cb812b12",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72692498_36075437",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-coordinator.component.ts",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-02-17T13:37:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab4b798e_31505e15",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 6
+      },
+      "revId": "f2587701497fa10dc8139897ae2739c4cb812b12",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
