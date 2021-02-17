@@ -16,6 +16,24 @@
       "revId": "8be716d8d81153c199134c7edcd8eadfd2fa8d75",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3086814_0b181762",
+        "filename": "webapp-frontend/src/app/policy-control/policy-control.component.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-02-17T11:58:46Z",
+      "side": 1,
+      "message": "The functionality of the spinner was broken in an earlier commit. So to not have unused code it is removed here. There will have to be a new task to add the functionality again.",
+      "parentUuid": "6b883506_ae18a9a7",
+      "revId": "8be716d8d81153c199134c7edcd8eadfd2fa8d75",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
