@@ -24,10 +24,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { EIJob } from '../interfaces/ei.types';
 import { EIService } from '../services/ei/ei.service';
-import { MatTableDataSource } from '@angular/material';
-import { ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { delay } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -36,12 +32,9 @@ import { delay } from 'rxjs/operators';
 export class EIJobDataSource {
 
     private jobs: Array<EIJob> = [];
-    private dataSource: MatTableDataSource<any> = new MatTableDataSource();
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-
-    public jobsDataSource(): MatTableDataSource<any> {
-        return this.dataSource;
+    public eiJobs(): EIJob[] {
+        return this.jobs;
     }
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
@@ -62,21 +55,15 @@ export class EIJobDataSource {
                 producerIds.forEach(id => {
                     this.getJobsForProducer(id);
                 });
-                //this.dataSource = new MatTableDataSource();  
-                this.dataSource.data = this.jobs;
-                this.dataSource.sort = this.sort;
-                console.log("datasource: "+this.dataSource.data);  
             });
         this.rowCount = this.jobs.length;
     }
 
     private getJobsForProducer(id: string) {
         console.log('Getting jobs for producer ID: ', id);
-        this.eiSvc.getJobsForProducer(id)//.pipe(delay(5000))
+        this.eiSvc.getJobsForProducer(id)
         .subscribe(producerJobs => {
-            this.jobs = this.jobs.concat(producerJobs);    
-            console.log("producerJobs: "+producerJobs);  
-            
+            this.jobs = this.jobs.concat(producerJobs);
         });
     }
 }

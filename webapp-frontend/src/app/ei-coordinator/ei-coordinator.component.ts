@@ -84,7 +84,7 @@ export class EICoordinatorComponent implements OnInit {
     ngOnInit() {
         this.eiJobsDataSource.loadJobs();
         this.eiProducersDataSource.loadProducers();
-        this.jobsDataSource = this.eiJobsDataSource.jobsDataSource();
+        this.jobsDataSource = new MatTableDataSource(this.eiJobsDataSource.eiJobs());
         this.producersDataSource = new MatTableDataSource(this.eiProducersDataSource.eiProducers());
 
         this.jobsFormControl.valueChanges.subscribe(value => {
@@ -217,7 +217,7 @@ export class EICoordinatorComponent implements OnInit {
 
     refreshTables() {
         this.eiJobsDataSource.loadJobs();
-        this.jobsDataSource = this.eiJobsDataSource.jobsDataSource();
+        this.jobsDataSource.data = this.eiJobsDataSource.eiJobs();
         this.eiProducersDataSource.loadProducers();
         this.producersDataSource.data = this.eiProducersDataSource.eiProducers();
     }
