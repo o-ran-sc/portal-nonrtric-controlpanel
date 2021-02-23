@@ -20,7 +20,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { CookieService } from 'ngx-cookie';
+import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
 import { UiService } from './services/ui/ui.service';
 
@@ -31,7 +31,7 @@ describe('AppComponent', () => {
   let uiService: UiService;
 
   beforeEach(async(() => {
-    cookieServiceSpy = jasmine.createSpyObj('CookieService', [ 'get', 'put' ]);
+    cookieServiceSpy = jasmine.createSpyObj('CookieService', [ 'get', 'set' ]);
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
@@ -110,13 +110,13 @@ describe('AppComponent', () => {
       // Toggle to light mode
       darkModeSelector.click();
       expect(uiService.getDarkMode()).toBeFalsy();
-      expect(cookieServiceSpy.put).toHaveBeenCalledWith('darkMode', 'no');
+      expect(cookieServiceSpy.set).toHaveBeenCalledWith('darkMode', 'no');
 
 
       // Toggle to dark mode
       darkModeSelector.click();
       expect(uiService.getDarkMode()).toBeTruthy();
-      expect(cookieServiceSpy.put).toHaveBeenCalledWith('darkMode', 'yes');
+      expect(cookieServiceSpy.set).toHaveBeenCalledWith('darkMode', 'yes');
     });
   });
 });
