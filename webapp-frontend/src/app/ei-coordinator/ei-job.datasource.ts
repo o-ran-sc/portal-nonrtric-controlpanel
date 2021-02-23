@@ -21,9 +21,12 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { mergeMap, finalize } from 'rxjs/operators';
+import { Observable, forkJoin } from 'rxjs';
 
 import { EIJob } from '../interfaces/ei.types';
 import { EIService } from '../services/ei/ei.service';
+
 
 @Injectable({
     providedIn: 'root'
@@ -37,7 +40,12 @@ export class EIJobDataSource {
         return this.jobs;
     }
 
+    public eiJobsSubject(): Observable<EIJob[]> {
+        return this.jobsSubject.asObservable() as Observable<EIJob[]>;
+    }
+
     private loadingSubject = new BehaviorSubject<boolean>(false);
+    private jobsSubject = new BehaviorSubject<EIJob[]>([]);
 
     public loading$ = this.loadingSubject.asObservable();
 
@@ -50,20 +58,17 @@ export class EIJobDataSource {
     loadJobs() {
         this.loadingSubject.next(true);
         this.jobs = [];
-        this.eiSvc.getProducerIds()
-            .subscribe((producerIds: string[]) => {
-                producerIds.forEach(id => {
-                    this.getJobsForProducer(id);
-                });
-            });
+        this.eiSvc.getProducerIds().pipe(
+            mergeMap(prodIds => 
+                forkJoin(prodIds.map(id => this.eiSvc.getJobsForProducer(id)))),
+            mergeMap(result => result),
+            finalize(() => this.loadingSubject.next(false))
+        ).subscribe(result => {
+            this.jobs = this.jobs.concat(result);
+            this.jobsSubject.next(this.jobs);
+        } );       
         this.rowCount = this.jobs.length;
     }
 
-    private getJobsForProducer(id: string) {
-        console.log('Getting jobs for producer ID: ', id);
-        this.eiSvc.getJobsForProducer(id)
-        .subscribe(producerJobs => {
-            this.jobs = this.jobs.concat(producerJobs);
-        });
-    }
+ 
 }

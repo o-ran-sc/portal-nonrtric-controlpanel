@@ -36,10 +36,10 @@ describe('EIProducerDataSource', () => {
         supported_ei_types: [ 'type3', 'type4' ]
     } as ProducerRegistrationInfo;
     let producerStatus1 = {
-        opState: OperationalState.ENABLED
+        operational_state: OperationalState.ENABLED
     } as ProducerStatus;
     let producerStatus2 = {
-        opState: OperationalState.DISABLED
+        operational_state: OperationalState.DISABLED
     } as ProducerStatus;
 
     let expectedProducer1 = {

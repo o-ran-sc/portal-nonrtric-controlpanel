@@ -126,7 +126,7 @@ describe('EIService', () => {
       service = TestBed.inject(EIService);
       httpTestingController = TestBed.inject(HttpTestingController);
       expectedProducerStatus = {
-        opState: OperationalState.ENABLED
+        operational_state: OperationalState.ENABLED
       } as ProducerStatus;
     });
 

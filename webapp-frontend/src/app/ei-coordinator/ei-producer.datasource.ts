@@ -21,6 +21,8 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { mergeMap, finalize } from 'rxjs/operators';
+import { Observable, forkJoin, of } from 'rxjs';
 
 import { EIProducer } from '../interfaces/ei.types';
 import { EIService } from '../services/ei/ei.service';
@@ -37,7 +39,12 @@ export class EIProducerDataSource {
         return this.producers;
     }
 
+    public eiProducersSubject(): Observable<EIProducer[]> {
+        return this.producersSubject.asObservable() as Observable<EIProducer[]>;
+    }
+
     private loadingSubject = new BehaviorSubject<boolean>(false);
+    private producersSubject = new BehaviorSubject<EIProducer[]>([]);
 
     public loading$ = this.loadingSubject.asObservable();
 
@@ -50,21 +57,28 @@ export class EIProducerDataSource {
     loadProducers() {
         this.loadingSubject.next(true);
         this.producers = [];
-        this.eiSvc.getProducerIds()
-            .subscribe((prodIds: string[]) => {
-                console.log("ProducerIds: " + prodIds);
-                prodIds.forEach(id => {
-                    let eiProducer = <EIProducer>{};
-                    eiProducer.ei_producer_id = id;
-                    this.eiSvc.getProducer(id).subscribe(producer => {
-                        eiProducer.ei_producer_types = producer.supported_ei_types;
-                    });
-                    this.eiSvc.getProducerStatus(id).subscribe(prodStatus => {
-                        eiProducer.status = prodStatus.opState.toString();
-                    });
-                    this.producers.push(eiProducer);
-                });
-                this.rowCount = this.producers.length;
+
+        this.eiSvc.getProducerIds().pipe(
+            mergeMap(prodIds => 
+                forkJoin(prodIds.map(id => {
+                    return forkJoin([
+                        of(id),
+                        this.eiSvc.getProducer(id),
+                        this.eiSvc.getProducerStatus(id)
+                    ])
+                })
+            )),
+            finalize(() => this.loadingSubject.next(false))
+        ).subscribe(result => {
+            this.producers = result.map(producer => {
+                let eiProducer = <EIProducer>{};
+                eiProducer.ei_producer_id = producer[0];
+                eiProducer.ei_producer_types = producer[1].supported_ei_types;
+                eiProducer.status = producer[2].operational_state.toString();
+                return eiProducer;
             });
+            this.producersSubject.next(this.producers);
+        });
+        this.rowCount = this.producers.length;
     }
 }

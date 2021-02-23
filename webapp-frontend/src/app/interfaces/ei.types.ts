@@ -43,5 +43,5 @@ export enum OperationalState {
   DISABLED = 'DISABLED'
 }
 export interface ProducerStatus {
-  opState: OperationalState
+  operational_state: OperationalState
 }

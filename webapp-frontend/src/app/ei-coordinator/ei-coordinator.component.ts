@@ -20,12 +20,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 
 import { EIJob, EIProducer } from '../interfaces/ei.types';
 import { EIJobDataSource } from './ei-job.datasource';
 import { EIProducerDataSource } from './ei-producer.datasource';
 import { UiService } from '../services/ui/ui.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'nrcp-ei-coordinator',
@@ -37,8 +38,8 @@ export class EICoordinatorComponent implements OnInit {
     darkMode: boolean;
     searchString: string;
     formGroup: FormGroup;
-    jobsDataSource: MatTableDataSource<EIJob>;
-    producersDataSource: MatTableDataSource<EIProducer>;
+    jobsDataSource: MatTableDataSource<EIJob> = new MatTableDataSource<EIJob>();
+    producersDataSource: MatTableDataSource<EIProducer>= new MatTableDataSource<EIProducer>();
 
     readonly jobsFormControl: AbstractControl;
     readonly producersFormControl: AbstractControl;
@@ -66,9 +67,13 @@ export class EICoordinatorComponent implements OnInit {
     ngOnInit() {
         this.eiJobsDataSource.loadJobs();
         this.eiProducersDataSource.loadProducers();
-        this.jobsDataSource = new MatTableDataSource(this.eiJobsDataSource.eiJobs());
-        const prods = this.eiProducersDataSource.eiProducers();
-        this.producersDataSource = new MatTableDataSource(prods);
+
+        this.eiJobsDataSource.eiJobsSubject().subscribe((data) => {
+            this.jobsDataSource.data = data;
+        });
+        this.eiProducersDataSource.eiProducersSubject().subscribe((data) => {
+            this.producersDataSource.data = data;
+        });
 
         this.jobsFormControl.valueChanges.subscribe(value => {
             const filter = {...value, id: value.id.trim().toLowerCase()} as string;
@@ -98,7 +103,6 @@ export class EICoordinatorComponent implements OnInit {
     }
 
     sortJobs(sort: Sort){
-        console.log('Jobs new sort: ', sort);
         const data = this.jobsDataSource.data
         data.sort((a: EIJob, b: EIJob) => {
             const isAsc = sort.direction === 'asc';
@@ -169,8 +173,13 @@ export class EICoordinatorComponent implements OnInit {
 
     refreshTables() {
         this.eiJobsDataSource.loadJobs();
-        this.jobsDataSource.data = this.eiJobsDataSource.eiJobs();
         this.eiProducersDataSource.loadProducers();
-        this.producersDataSource.data = this.eiProducersDataSource.eiProducers();
+        
+        this.eiJobsDataSource.eiJobsSubject().subscribe((data) => {
+            this.jobsDataSource.data = data;
+        });
+        this.eiProducersDataSource.eiProducersSubject().subscribe((data) => {
+            this.producersDataSource.data = data;
+        });
     }
 }

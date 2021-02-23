@@ -27,6 +27,7 @@ import { MatInputHarness } from '@angular/material/input/testing'
 import { MatTableModule } from '@angular/material/table';
 import { MatTableHarness } from '@angular/material/table/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
+import { of } from 'rxjs';
 
 import { EICoordinatorComponent } from './ei-coordinator.component';
 import { EIJobDataSource } from './ei-job.datasource';
@@ -66,8 +67,11 @@ describe('EICoordinatorComponent', () => {
   } as EIJob;
 
   beforeEach(async () => {
-    producerDataSourceSpy = jasmine.createSpyObj('EIProducerDataSource', [ 'loadProducers', 'eiProducers' ]);
-    jobDataSourceSpy = jasmine.createSpyObj('EIJobDataSource', [ 'loadJobs', 'eiJobs' ]);
+    producerDataSourceSpy = jasmine.createSpyObj('EIProducerDataSource', [ 'loadProducers', 'eiProducers', 'eiProducersSubject' ]);
+    jobDataSourceSpy = jasmine.createSpyObj('EIJobDataSource', [ 'loadJobs', 'eiJobs', 'eiJobsSubject' ]);
+    
+    producerDataSourceSpy.eiProducersSubject.and.returnValue(of({ producers: [producer1, producer2] }));
+    jobDataSourceSpy.eiJobsSubject.and.returnValue(of({ jobs: [job1, job2] }));
 
     await TestBed.configureTestingModule({
       imports: [
@@ -102,7 +106,7 @@ describe('EICoordinatorComponent', () => {
   });
 
   describe('#content', () => {
-    it('should contain refresh button with coorect icon', () => {
+    it('should contain refresh button with correct icon', () => {
       const button = fixture.debugElement.nativeElement.querySelector('#refreshButton');
       expect(button).toBeTruthy();
       expect(button.innerHTML).toContain('refresh');
@@ -139,7 +143,7 @@ describe('EICoordinatorComponent', () => {
     const expectedProducer1Row = { id: 'producer1', types: 'type1,type2', status: 'ENABLED' };
     beforeEach(() => {
       const producers: EIProducer[] =[ producer1, producer2 ];
-      producerDataSourceSpy.eiProducers.and.returnValue(producers);
+      producerDataSourceSpy.eiProducersSubject.and.returnValue(of(producers));
     });
 
     it('should contain data after initialization', async () => {
@@ -164,7 +168,7 @@ describe('EICoordinatorComponent', () => {
           ei_producer_id: 'producer1'
         } as EIProducer;
         const producers: EIProducer[] =[ producerMissingProperties ];
-        producerDataSourceSpy.eiProducers.and.returnValue(producers);
+        producerDataSourceSpy.eiProducersSubject.and.returnValue(of(producers));
         component.ngOnInit();
 
         const expectedProducerRow = { id: 'producer1', types: '< No types >', status: '< No status >' };
@@ -179,7 +183,7 @@ describe('EICoordinatorComponent', () => {
           target_uri: 'http://one'
         } as EIJob;
         const jobs: EIJob[] =[ jobMissingProperties ];
-        jobDataSourceSpy.eiJobs.and.returnValue(jobs);
+        jobDataSourceSpy.eiJobsSubject.and.returnValue(of(jobs));
         component.ngOnInit();
 
         const expectedJobRow = { id: 'job1', typeId: '< No type >', owner: '< No owner >', targetUri: 'http://one' };
@@ -222,7 +226,7 @@ describe('EICoordinatorComponent', () => {
     const expectedJob1Row = { id: 'job1', typeId: 'type1', owner: 'owner1', targetUri: 'http://one' };
     beforeEach(() => {
       const jobs: EIJob[] =[ job1, job2 ];
-      jobDataSourceSpy.eiJobs.and.returnValue(jobs);
+      jobDataSourceSpy.eiJobsSubject.and.returnValue(of(jobs));
     });
 
     it('should contain data after initialization', async () => {
