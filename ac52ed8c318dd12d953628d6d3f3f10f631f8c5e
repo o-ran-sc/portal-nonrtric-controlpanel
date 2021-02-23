@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8915aac5_af4ba6ed",
+        "filename": "webapp-frontend/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2021-02-23T15:17:25Z",
+      "side": 1,
+      "message": "Is there anyway to add this as a conditional? \nAdding chromium to the docker image probably bloats it quite alot?\n(Of course there is alot of other bloat-ey stuff already :-) .... )",
+      "revId": "ac52ed8c318dd12d953628d6d3f3f10f631f8c5e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
