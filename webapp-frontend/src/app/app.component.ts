@@ -19,7 +19,7 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { UiService } from './services/ui/ui.service';
-import { CookieService } from 'ngx-cookie';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'nrcp-root',
@@ -46,6 +46,6 @@ export class AppComponent implements OnInit {
 
   modeToggleSwitch() {
     this.ui.darkModeState.next(!this.darkMode);
-    this.cookieService.put(this.DARK_MODE_COOKIE, this.darkMode ? 'yes' : 'no');
+    this.cookieService.set(this.DARK_MODE_COOKIE, this.darkMode ? 'yes' : 'no');
   }
 }

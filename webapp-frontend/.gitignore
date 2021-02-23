@@ -9,6 +9,7 @@
 /node
 /node_modules
 
+### Eclipse ###
 /.classpath
 /.externalToolBuilders
 /.project
@@ -16,6 +17,8 @@
 /target/
 /.mvn/wrapper/maven-wrapper.jar
 
+### Angular ###
+package-lock.json
 
 ### STS ###
 .apt_generated
