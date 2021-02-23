@@ -16,6 +16,24 @@
       "revId": "ac52ed8c318dd12d953628d6d3f3f10f631f8c5e",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37ea75d6_399cfede",
+        "filename": "webapp-frontend/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000247
+      },
+      "writtenOn": "2021-02-23T15:27:09Z",
+      "side": 1,
+      "message": "Adding chrome will not bloat the images size, because this is in the stage1, the released image is in next stage which is only around 90MB.",
+      "parentUuid": "8915aac5_af4ba6ed",
+      "revId": "ac52ed8c318dd12d953628d6d3f3f10f631f8c5e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
