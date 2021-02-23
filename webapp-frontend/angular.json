@@ -165,5 +165,8 @@
       }
     }
   },
-  "defaultProject": "controlpanelApp"
+  "defaultProject": "controlpanelApp",
+  "cli": {
+    "analytics": false
+  }
 }
