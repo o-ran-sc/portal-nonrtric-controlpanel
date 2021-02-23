@@ -31,7 +31,7 @@ import { UiService } from '../services/ui/ui.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
-import { Ric } from '../interfaces/ric';
+import { Ric, Rics } from '../interfaces/ric';
 
 
 @Component({
@@ -93,14 +93,10 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         const self: PolicyInstanceDialogComponent = this;
         this.dataService.getRics(this.policyTypeName).subscribe(
             {
-                next(value: Ric[]) {
-                    self.allRics = value;
+                next(value: Rics) {
+                    self.allRics = value.rics;
                     console.log(value);
-                },
-                error(error: HttpErrorResponse) {
-                    self.errorService.displayError('Fetching of rics failed: ' + error.message);
-                },
-                complete() { }
+                }
             });
     }
 
@@ -148,12 +144,13 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         }
         const policyJson: string = this.prettyLiveFormData;
         const self: PolicyInstanceDialogComponent = this;
-        let createPolicyInstance = this.createPolicyInstance(policyJson);
+        let createPolicyInstance: CreatePolicyInstance = this.createPolicyInstance(policyJson);
         this.dataService.putPolicy(createPolicyInstance).subscribe(
             {
                 next(_) {
                     self.notificationService.success('Policy ' + self.policyTypeName + ':' + self.policyInstanceId +
                         ' submitted');
+                    self.dialogRef.close();
                 },
                 error(error: HttpErrorResponse) {
                     self.errorService.displayError('Submit failed: ' + error.error);
