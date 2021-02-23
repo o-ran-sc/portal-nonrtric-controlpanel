@@ -65,7 +65,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import { UiService } from './services/ui/ui.service';
-import { CookieModule } from 'ngx-cookie';
+import { CookieService } from 'ngx-cookie-service';
 import { NodeModulesComponent } from './node-modules/node-modules.component';
 import { EICardComponent } from './ui/ei-card/ei-card.component';
 import { EICoordinatorComponent } from './ei-coordinator/ei-coordinator.component';
@@ -97,7 +97,6 @@ export const isMock = environment.mock;
     BrowserModule,
     BrowserAnimationsModule,
     ChartsModule,
-    CookieModule.forRoot(),
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
@@ -153,6 +152,7 @@ export const isMock = environment.mock;
     PolicyInstanceDialogComponent
   ],
   providers: [
+    CookieService,
     ErrorDialogService,
     UiService,
     {
