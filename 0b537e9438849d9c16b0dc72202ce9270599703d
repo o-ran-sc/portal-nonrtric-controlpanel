@@ -16,6 +16,47 @@
       "revId": "0b537e9438849d9c16b0dc72202ce9270599703d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89feb2f7_0a02efc7",
+        "filename": "webapp-frontend/.gitignore",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2021-02-23T17:06:03Z",
+      "side": 1,
+      "message": "Please ignore the comment. \nI was confused :-)",
+      "range": {
+        "startLine": 20,
+        "startChar": 1,
+        "endLine": 20,
+        "endChar": 15
+      },
+      "revId": "0b537e9438849d9c16b0dc72202ce9270599703d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cef340b9_3e3815c0",
+        "filename": "webapp-frontend/.gitignore",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2021-02-23T17:06:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "09caba9b_331db61c",
+      "revId": "0b537e9438849d9c16b0dc72202ce9270599703d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
