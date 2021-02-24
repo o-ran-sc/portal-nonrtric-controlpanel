@@ -19,7 +19,7 @@
   -->
 
 <div class="text-muted logo" fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="space-around center">
-    <div *ngIf="policyInstanceId">[{{this.ric}}] Instance ID: {{policyInstanceId}}</div>
+    <div id="instanceInfo" *ngIf="policyInstanceId">[{{this.ric}}] Instance ID: {{policyInstanceId}}</div>
 </div>
 <div class="mat-elevation-z8 header row" [ngClass]="{'header-dark': darkMode}">
     <div class="logo">
@@ -27,8 +27,7 @@
         <svg class="logo__icon" viewBox="150.3 22.2 1000 50">
             <text class="logo__text" [ngClass]="{'logo__text-dark': darkMode}" font-size="30" font-weight="600"
                 letter-spacing=".1em" transform="translate(149 56)">
-                <tspan *ngIf="!this.policyInstanceId">Create new policy instance of </tspan>
-                <tspan>< No type></tspan>
+                <tspan *ngIf="!this.policyInstanceId">Create new policy instance of &lt; No type &gt;</tspan>
             </text>
         </svg>
     </div>
@@ -39,11 +38,11 @@
 
     <mat-card class="card" [ngClass]="{'card-dark': darkMode}">
         <mat-form-field *ngIf="!this.policyInstanceId" appearance="fill">
-            <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="this.ric"
+            <mat-select id="ricSelector" formControlName="ricSelector" matInput required [value]="this.ric"
                 placeholder="Target"
                 matTooltip="Element where the policy instance resides, e.g. a gNodeB or Near-RT RIC">
-                <mat-option *ngFor="let ric of this.allRics.rics" [value]="ric">
-                    {{ric.ric_id}}
+                <mat-option *ngFor="let ric of this.allRicIds" [value]="ric">
+                    {{ric}}
                 </mat-option>
             </mat-select>
             <div *ngIf="ricSelector.invalid && (ricSelector.dirty || ricSelector.touched)" class="alert mat-error"
@@ -77,11 +76,11 @@
             </div>
         </mat-form-field>
         <div mat-dialog-actions>
-            <button (click)="formatJsonInput();" class="mat-raised-button" [disabled]="!policyJsonTextArea.valid">
+            <button id="formatButton" (click)="formatJsonInput();" mat-raised-button [disabled]="!policyJsonTextArea.valid">
                 Format JSON
             </button>
-            <button mat-raised-button class="mat-raised-button" [mat-dialog-close]="false">Close</button>
-            <button mat-raised-button (click)="this.onSubmit()" class="submitBtn" [disabled]="!instanceForm.valid">
+            <button id="closeButton"  mat-raised-button [mat-dialog-close]="false">Close</button>
+            <button id="submitButton" mat-raised-button (click)="this.onSubmit()" class="submitBtn" [disabled]="!instanceForm.valid">
                 Submit
             </button>
         </div>

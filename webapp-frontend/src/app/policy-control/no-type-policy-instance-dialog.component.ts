@@ -19,14 +19,14 @@
  */
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PolicyService } from '../services/policy/policy.service';
 import { NotificationService } from '../services/ui/notification.service';
 import { UiService } from '../services/ui/ui.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorDialogService } from '../services/ui/error-dialog.service';
 import * as uuid from 'uuid';
-import { Ric } from '../interfaces/ric';
+import { Rics } from '../interfaces/ric';
 import { CreatePolicyInstance } from '../interfaces/policy.types';
 
 @Component({
@@ -41,9 +41,10 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
   policyJson: string;
   darkMode: boolean;
   ric: string;
-  allRics: Ric[];
+  allRicIds: string[] = [];
 
   constructor(
+    public dialogRef: MatDialogRef<NoTypePolicyInstanceDialogComponent>,
     private policySvc: PolicyService,
     private errorService: ErrorDialogService,
     private notificationService: NotificationService,
@@ -68,7 +69,7 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
       ])
     });
     if (!this.policyInstanceId) {
-      this.fetchRics();
+      this.getRicIds();
     }
   }
 
@@ -81,11 +82,12 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
       this.policyInstanceId = uuid.v4();
     }
     const self: NoTypePolicyInstanceDialogComponent = this;
-    let createPolicyInstance = this.createPolicyInstance(this.policyJsonTextArea.value);
+    let createPolicyInstance: CreatePolicyInstance = this.createPolicyInstance(this.policyJsonTextArea.value);
     this.policySvc.putPolicy(createPolicyInstance).subscribe(
       {
         next(_) {
           self.notificationService.success('Policy without type:' + self.policyInstanceId + ' submitted');
+          self.dialogRef.close();
         },
         error(error: HttpErrorResponse) {
           self.errorService.displayError('Submit failed: ' + error.error);
@@ -94,7 +96,7 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
       });
   }
 
-  private createPolicyInstance(policyJson: string) {
+  private createPolicyInstance(policyJson: string): CreatePolicyInstance {
     let createPolicyInstance = {} as CreatePolicyInstance;
     createPolicyInstance.policy_data = JSON.parse(policyJson);
     createPolicyInstance.policy_id = this.policyInstanceId;
@@ -104,22 +106,19 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
     return createPolicyInstance;
   }
 
-  private fetchRics() {
+  getRicIds() {
     const self: NoTypePolicyInstanceDialogComponent = this;
     this.policySvc.getRics('').subscribe(
       {
-        next(value: Ric[]) {
-          self.allRics = value;
-          console.log(value);
-        },
-        error(error: HttpErrorResponse) {
-          self.errorService.displayError('Fetching of rics failed: ' + error.message);
-        },
-        complete() { }
+        next(value: Rics) {
+          value.rics.forEach(ric => {
+            self.allRicIds.push(ric.ric_id);
+          });
+        }
       });
   }
 
-  private formatJsonString(jsonToFormat: any) {
+  private formatJsonString(jsonToFormat: any): string {
     return JSON.stringify(jsonToFormat, null, 2);
   }
 
@@ -135,11 +134,13 @@ export function jsonValidator(): ValidatorFn {
   };
 }
 
-export function isJsonValid(json: string) {
+export function isJsonValid(json: string): boolean {
   try {
     if (json != null) {
       JSON.parse(json);
       return true;
+    } else {
+      return false;
     }
   } catch (jsonError) {
     return false;

@@ -20,6 +20,10 @@
 
 // Models of data used by the Policy Control
 
+export interface Rics {
+  rics: Ric[]
+}
+
 export interface Ric {
   ric_id: string;
   managed_element_ids: any[];

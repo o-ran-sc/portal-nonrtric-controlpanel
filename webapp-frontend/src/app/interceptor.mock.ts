@@ -36,7 +36,6 @@ import * as eiproducerstatus2 from './mock/ei-producer-status2.json';
 import * as policytypesList from './mock/policy-types.json';
 import * as policytypes1 from './mock/policy-type1.json';
 import * as policyinstanceedit from './mock/policy-instance-edit.json';
-import * as rics from './mock/rics.json';
 import * as ric1 from './mock/ric1.json';
 import * as ric2 from './mock/ric2.json';
 
@@ -104,14 +103,6 @@ const urls = [
     {
         url: '/a1-policy/v2/rics?policytype_id=',
         json: ric2
-    },
-    {
-        url: 'api/policy/rics?policyType=1',
-        json: rics
-    },
-    {
-        url: 'api/policy/rics?policyType=2',
-        json: rics
     },
     {
         url: '/ei-producer/v1/eiproducers',

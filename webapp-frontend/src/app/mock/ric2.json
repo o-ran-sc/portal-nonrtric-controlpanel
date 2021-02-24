@@ -10,6 +10,17 @@
                 ""
             ],
             "state": "AVAILABLE"
+        },
+        {
+            "ric_id": "ric3",
+            "managed_element_ids": [
+                "kista_1",
+                "kista_2"
+            ],
+            "policytype_ids": [
+                ""
+            ],
+            "state": "AVAILABLE"
         }
     ]
 }
