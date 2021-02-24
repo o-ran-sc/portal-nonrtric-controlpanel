@@ -23,15 +23,15 @@ import { MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatMenuTrigger } from '@angular/material/menu';
 import { JsonPointer } from 'angular6-json-schema-form';
 import * as uuid from 'uuid';
-import { CreatePolicyInstance, PolicyInstance, PolicyTypeSchema } from '../interfaces/policy.types';
-import { PolicyService } from '../services/policy/policy.service';
-import { ErrorDialogService } from '../services/ui/error-dialog.service';
-import { NotificationService } from './../services/ui/notification.service';
-import { UiService } from '../services/ui/ui.service';
+import { CreatePolicyInstance, PolicyInstance, PolicyTypeSchema } from '../../interfaces/policy.types';
+import { PolicyService } from '../../services/policy/policy.service';
+import { ErrorDialogService } from '../../services/ui/error-dialog.service';
+import { NotificationService } from './../../services/ui/notification.service';
+import { UiService } from '../../services/ui/ui.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
-import { Ric, Rics } from '../interfaces/ric';
+import { Ric, Rics } from '../../interfaces/ric';
 
 
 @Component({

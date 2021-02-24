@@ -20,14 +20,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PolicyService } from '../services/policy/policy.service';
-import { NotificationService } from '../services/ui/notification.service';
-import { UiService } from '../services/ui/ui.service';
+import { PolicyService } from '../../services/policy/policy.service';
+import { NotificationService } from '../../services/ui/notification.service';
+import { UiService } from '../../services/ui/ui.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ErrorDialogService } from '../services/ui/error-dialog.service';
+import { ErrorDialogService } from '../../services/ui/error-dialog.service';
 import * as uuid from 'uuid';
-import { Rics } from '../interfaces/ric';
-import { CreatePolicyInstance } from '../interfaces/policy.types';
+import { Rics } from '../../interfaces/ric';
+import { CreatePolicyInstance } from '../../interfaces/policy.types';
 
 @Component({
   selector: 'nrcp-no-type-policy-instance-dialog',

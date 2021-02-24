@@ -38,9 +38,4 @@ export class PolicyCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() { }
-
-  openDetails() {
-    this.router.navigateByUrl('../../policy');
-  }
-
 }

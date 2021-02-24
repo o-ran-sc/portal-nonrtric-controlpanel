@@ -56,11 +56,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FooterComponent } from './footer/footer.component';
 import { MainComponent } from './main/main.component';
 import { MaterialDesignFrameworkModule } from 'angular6-json-schema-form';
-import { NoTypePolicyInstanceDialogComponent } from './policy-control/no-type-policy-instance-dialog.component';
-import { PolicyCardComponent } from './ui/policy-card/policy-card.component';
-import { PolicyControlComponent } from './policy-control/policy-control.component';
-import { PolicyInstanceComponent } from './policy-control/policy-instance.component';
-import { PolicyInstanceDialogComponent } from './policy-control/policy-instance-dialog.component';
+import { PolicyModule } from './policy/policy.module'
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
@@ -85,11 +81,6 @@ export const isMock = environment.mock;
     FooterComponent,
     MainComponent,
     NodeModulesComponent,
-    NoTypePolicyInstanceDialogComponent,
-    PolicyCardComponent,
-    PolicyControlComponent,
-    PolicyInstanceComponent,
-    PolicyInstanceDialogComponent,
     SidenavListComponent,
   ],
   imports: [
@@ -124,6 +115,7 @@ export const isMock = environment.mock;
     MatToolbarModule,
     MaterialDesignFrameworkModule,
     MDBBootstrapModule.forRoot(),
+    PolicyModule,
     ReactiveFormsModule,
     ToastrModule.forRoot(),
   ],
@@ -148,8 +140,6 @@ export const isMock = environment.mock;
   entryComponents: [
     ConfirmDialogComponent,
     ErrorDialogComponent,
-    NoTypePolicyInstanceDialogComponent,
-    PolicyInstanceDialogComponent
   ],
   providers: [
     CookieService,

@@ -38,9 +38,4 @@ export class EICardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() { }
-
-  openDetails() {
-    this.router.navigateByUrl('../../ei-coordinator');
-  }
-
 }
