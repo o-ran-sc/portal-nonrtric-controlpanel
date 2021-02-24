@@ -23,11 +23,11 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { NoTypePolicyInstanceDialogComponent } from './no-type-policy-instance-dialog.component';
+import { NoTypePolicyInstanceDialogComponent } from './no-type-policy-instance-dialog/no-type-policy-instance-dialog.component';
 import { PolicyTypeSchema } from '../interfaces/policy.types';
-import { PolicyTypeDataSource } from './policy-type.datasource';
-import { getPolicyDialogProperties } from './policy-instance-dialog.component';
-import { PolicyInstanceDialogComponent } from './policy-instance-dialog.component';
+import { PolicyTypeDataSource } from './policy-type/policy-type.datasource';
+import { getPolicyDialogProperties } from './policy-instance-dialog/policy-instance-dialog.component';
+import { PolicyInstanceDialogComponent } from './policy-instance-dialog/policy-instance-dialog.component';
 import { UiService } from '../services/ui/ui.service';
 
 class PolicyTypeInfo {

@@ -27,7 +27,7 @@ import { of } from 'rxjs';
 
 import { NotificationService } from '../services/ui/notification.service';
 import { PolicyControlComponent } from './policy-control.component';
-import { PolicyTypeDataSource } from './policy-type.datasource';
+import { PolicyTypeDataSource } from './policy-type/policy-type.datasource';
 import { UiService } from '../services/ui/ui.service';
 import { PolicyTypeSchema } from '../interfaces/policy.types';
 

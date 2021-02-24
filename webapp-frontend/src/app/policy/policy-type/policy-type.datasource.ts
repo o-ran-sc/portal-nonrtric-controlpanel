@@ -24,8 +24,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { of } from 'rxjs/observable/of';
 import { Observable } from 'rxjs/Observable';
 
-import { PolicyType, PolicyTypes, PolicyTypeSchema } from '../interfaces/policy.types';
-import { PolicyService } from '../services/policy/policy.service';
+import { PolicyType, PolicyTypes, PolicyTypeSchema } from '../../interfaces/policy.types';
+import { PolicyService } from '../../services/policy/policy.service';
 
 @Injectable({
     providedIn: 'root'
