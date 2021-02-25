@@ -22,36 +22,27 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HarnessLoader } from '@angular/cdk/testing';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputHarness } from '@angular/material/input/testing'
 import { MatTableModule } from '@angular/material/table';
 import { MatTableHarness } from '@angular/material/table/testing';
-import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { of } from 'rxjs';
 
 import { EICoordinatorComponent } from './ei-coordinator.component';
 import { EIJobDataSource } from './ei-job.datasource';
-import { EIProducerDataSource } from './ei-producer.datasource';
 import { UiService } from '../services/ui/ui.service';
-import { EIJob, EIProducer } from '../interfaces/ei.types';
+import { EIJob } from '../interfaces/ei.types';
+import { ProducersListComponent } from './producers-list/producers-list.component';
 
 describe('EICoordinatorComponent', () => {
   let component: EICoordinatorComponent;
   let fixture: ComponentFixture<EICoordinatorComponent>;
   let loader: HarnessLoader;
-  let producerDataSourceSpy: jasmine.SpyObj<EIProducerDataSource>;
+  let producersListSpy: jasmine.SpyObj<ProducersListComponent>;
   let jobDataSourceSpy: jasmine.SpyObj<EIJobDataSource>;
-
-  const producer1 = {
-    ei_producer_id: 'producer1',
-    ei_producer_types: [ 'type1', 'type2' ],
-    status: 'ENABLED'
-  } as EIProducer;
-  const producer2 = {
-      ei_producer_id: 'producer2',
-      ei_producer_types: [ 'type2', 'type3' ],
-      status: 'DISABLED'
-  } as EIProducer;
 
   const job1 = {
     ei_job_identity: 'job1',
@@ -67,14 +58,14 @@ describe('EICoordinatorComponent', () => {
   } as EIJob;
 
   beforeEach(async () => {
-    producerDataSourceSpy = jasmine.createSpyObj('EIProducerDataSource', [ 'loadProducers', 'eiProducers', 'eiProducersSubject' ]);
+    producersListSpy = jasmine.createSpyObj('producersListSpy', ['refresh']);
     jobDataSourceSpy = jasmine.createSpyObj('EIJobDataSource', [ 'loadJobs', 'eiJobs', 'eiJobsSubject' ]);
-    
-    producerDataSourceSpy.eiProducersSubject.and.returnValue(of({ producers: [producer1, producer2] }));
-    jobDataSourceSpy.eiJobsSubject.and.returnValue(of({ jobs: [job1, job2] }));
+
+    jobDataSourceSpy.eiJobsSubject.and.returnValue(of([ job1, job2 ]));
 
     await TestBed.configureTestingModule({
       imports: [
+        MatButtonModule,
         MatIconModule,
         MatTableModule,
         BrowserAnimationsModule,
@@ -87,13 +78,13 @@ describe('EICoordinatorComponent', () => {
         EICoordinatorComponent
       ],
       providers: [
+        { provide: ProducersListComponent, useValue: producersListSpy },
         { provide: EIJobDataSource, useValue: jobDataSourceSpy },
-        { provide: EIProducerDataSource, useValue: producerDataSourceSpy },
         UiService,
         FormBuilder,
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(EICoordinatorComponent);
     component = fixture.componentInstance;
@@ -106,26 +97,23 @@ describe('EICoordinatorComponent', () => {
   });
 
   describe('#content', () => {
-    it('should contain refresh button with correct icon', () => {
-      const button = fixture.debugElement.nativeElement.querySelector('#refreshButton');
-      expect(button).toBeTruthy();
-      expect(button.innerHTML).toContain('refresh');
+    it('should contain refresh button with coorect icon', async () => {
+      let refreshButton = await loader.getHarness(MatButtonHarness.with({ selector: '#refreshButton' }));
+      expect(refreshButton).toBeTruthy();
+      expect(await refreshButton.getText()).toEqual('refresh');
     });
 
-    it('should contain producers table with correct columns', async () => {
-      let producersTable = await loader.getHarness(MatTableHarness.with({selector: '#producersTable'}));
-      let headerRow = (await producersTable.getHeaderRows())[0];
-      let headers = await headerRow.getCellTextByColumnName();
-
-      expect(headers).toEqual({id: 'Producer ID', types: 'Producer types', status: 'Producer status'});
+    it('should contain producers table', async () => {
+      const producersTableComponent = fixture.debugElement.nativeElement.querySelector('nrcp-producers-list');
+      expect(producersTableComponent).toBeTruthy();
     });
 
     it('should contain jobs table with correct columns', async () => {
-      let producersTable = await loader.getHarness(MatTableHarness.with({selector: '#jobsTable'}));
+      let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
       let headerRow = (await producersTable.getHeaderRows())[0];
       let headers = await headerRow.getCellTextByColumnName();
 
-      expect(headers).toEqual({id: 'Job ID', typeId: 'Type ID', owner: 'Owner', targetUri: 'Target URI'});
+      expect(headers).toEqual({ id: 'Job ID', typeId: 'Type ID', owner: 'Owner', targetUri: 'Target URI' });
     });
 
     it('should set correct dark mode from UIService', () => {
@@ -137,95 +125,19 @@ describe('EICoordinatorComponent', () => {
       expect(component.darkMode).toBeFalsy();
 
     });
-  });
 
-  describe('#producersTable', () => {
-    const expectedProducer1Row = { id: 'producer1', types: 'type1,type2', status: 'ENABLED' };
-    beforeEach(() => {
-      const producers: EIProducer[] =[ producer1, producer2 ];
-      producerDataSourceSpy.eiProducersSubject.and.returnValue(of(producers));
-    });
+    it('should refresh tables', async () => {
+      let refreshButton = await loader.getHarness(MatButtonHarness.with({ selector: '#refreshButton' }));
+      await refreshButton.click();
 
-    it('should contain data after initialization', async () => {
-      component.ngOnInit();
-      const expectedProducerRows = [
-        expectedProducer1Row,
-        {id: 'producer2', types: 'type2,type3', status: 'DISABLED'}
-      ];
-      let producersTable = await loader.getHarness(MatTableHarness.with({selector: '#producersTable'}));
-      let producerRows = await producersTable.getRows();
-      expect(producerRows.length).toEqual(2);
-      producerRows.forEach(row => {
-        row.getCellTextByColumnName().then(values => {
-          expect(expectedProducerRows).toContain(jasmine.objectContaining(values));
-        });
-      });
-    });
-
-    describe('should display default values for non required properties', () => {
-      it('producer defaults', async () => {
-        const producerMissingProperties = {
-          ei_producer_id: 'producer1'
-        } as EIProducer;
-        const producers: EIProducer[] =[ producerMissingProperties ];
-        producerDataSourceSpy.eiProducersSubject.and.returnValue(of(producers));
-        component.ngOnInit();
-
-        const expectedProducerRow = { id: 'producer1', types: '< No types >', status: '< No status >' };
-        let producersTable = await loader.getHarness(MatTableHarness.with({selector: '#producersTable'}));
-        let producerRows = await producersTable.getRows();
-        expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducerRow);
-        });
-
-      it('job defaults', async () => {
-        const jobMissingProperties = {
-          ei_job_identity: 'job1',
-          target_uri: 'http://one'
-        } as EIJob;
-        const jobs: EIJob[] =[ jobMissingProperties ];
-        jobDataSourceSpy.eiJobsSubject.and.returnValue(of(jobs));
-        component.ngOnInit();
-
-        const expectedJobRow = { id: 'job1', typeId: '< No type >', owner: '< No owner >', targetUri: 'http://one' };
-        let jobsTable = await loader.getHarness(MatTableHarness.with({selector: '#jobsTable'}));
-        let jobRows = await jobsTable.getRows();
-        expect(await jobRows[0].getCellTextByColumnName()).toEqual(expectedJobRow);
-        });
-    });
-
-    it('filtering', async () => {
-      component.ngOnInit();
-      let producersTable = await loader.getHarness(MatTableHarness.with({selector: '#producersTable'}));
-
-      let idFilterInput = await loader.getHarness(MatInputHarness.with({selector: '#producerIdFilter'}));
-      await idFilterInput.setValue("1");
-      let producerRows = await producersTable.getRows();
-      expect(producerRows.length).toEqual(1);
-      expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducer1Row);
-
-      idFilterInput.setValue('');
-      let typesFilterInput = await loader.getHarness(MatInputHarness.with({selector: '#producerTypesFilter'}));
-      await typesFilterInput.setValue("1");
-      producerRows = await producersTable.getRows();
-      expect(producerRows.length).toEqual(1);
-      expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducer1Row);
-      await typesFilterInput.setValue("2");
-      producerRows = await producersTable.getRows();
-      expect(producerRows.length).toEqual(2);
-
-      typesFilterInput.setValue('');
-      let statusFilterInput = await loader.getHarness(MatInputHarness.with({selector: '#producerStatusFilter'}));
-      await statusFilterInput.setValue("enabled");
-      producerRows = await producersTable.getRows();
-      expect(producerRows.length).toEqual(1);
-      expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducer1Row);
+      expect(producersListSpy.refresh).toHaveBeenCalled();
     });
   });
 
   describe('#jobsTable', () => {
     const expectedJob1Row = { id: 'job1', typeId: 'type1', owner: 'owner1', targetUri: 'http://one' };
     beforeEach(() => {
-      const jobs: EIJob[] =[ job1, job2 ];
+      const jobs: EIJob[] = [ job1, job2 ];
       jobDataSourceSpy.eiJobsSubject.and.returnValue(of(jobs));
     });
 
@@ -235,7 +147,7 @@ describe('EICoordinatorComponent', () => {
         expectedJob1Row,
         { id: 'job2', typeId: 'type2', owner: 'owner2', targetUri: 'http://two' }
       ];
-      let jobsTable = await loader.getHarness(MatTableHarness.with({selector: '#jobsTable'}));
+      let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
       let jobRows = await jobsTable.getRows();
       expect(jobRows.length).toEqual(2);
       jobRows.forEach(row => {
@@ -245,31 +157,46 @@ describe('EICoordinatorComponent', () => {
       });
     });
 
+    it('job defaults', async () => {
+      const jobMissingProperties = {
+        ei_job_identity: 'job1',
+        target_uri: 'http://one'
+      } as EIJob;
+      const jobs: EIJob[] = [jobMissingProperties];
+      jobDataSourceSpy.eiJobsSubject.and.returnValue(of(jobs));
+      component.ngOnInit();
+
+      const expectedJobRow = { id: 'job1', typeId: '< No type >', owner: '< No owner >', targetUri: 'http://one' };
+      let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
+      let jobRows = await jobsTable.getRows();
+      expect(await jobRows[0].getCellTextByColumnName()).toEqual(expectedJobRow);
+    });
+
     it('filtering', async () => {
       component.ngOnInit();
-      let jobsTable = await loader.getHarness(MatTableHarness.with({selector: '#jobsTable'}));
+      let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
 
-      let idFilterInput = await loader.getHarness(MatInputHarness.with({selector: '#jobIdFilter'}));
+      let idFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#jobIdFilter' }));
       await idFilterInput.setValue("1");
       let jobRows = await jobsTable.getRows();
       expect(jobRows.length).toEqual(1);
       expect(await jobRows[0].getCellTextByColumnName()).toEqual(expectedJob1Row);
 
       idFilterInput.setValue('');
-      let typeIdFilterInput = await loader.getHarness(MatInputHarness.with({selector: '#jobTypeIdFilter'}));
+      let typeIdFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#jobTypeIdFilter' }));
       await typeIdFilterInput.setValue("1");
       jobRows = await jobsTable.getRows();
       expect(jobRows.length).toEqual(1);
 
       typeIdFilterInput.setValue('');
-      let ownerFilterInput = await loader.getHarness(MatInputHarness.with({selector: '#jobOwnerFilter'}));
+      let ownerFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#jobOwnerFilter' }));
       await ownerFilterInput.setValue("1");
       jobRows = await jobsTable.getRows();
       expect(jobRows.length).toEqual(1);
       expect(await jobRows[0].getCellTextByColumnName()).toEqual(expectedJob1Row);
 
       ownerFilterInput.setValue('');
-      let targetUriFilterInput = await loader.getHarness(MatInputHarness.with({selector: '#jobTargetUriFilter'}));
+      let targetUriFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#jobTargetUriFilter' }));
       await targetUriFilterInput.setValue("one");
       jobRows = await jobsTable.getRows();
       expect(jobRows.length).toEqual(1);
