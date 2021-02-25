@@ -1,0 +1,8 @@
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Code-Review+1: Henrik Andersson <henrik.b.andersson@est.tech>
+Code-Review+2: Patrik Buhr <patrik.buhr@est.tech>
+Submitted-by: Patrik Buhr <patrik.buhr@est.tech>
+Submitted-at: Thu, 25 Feb 2021 11:05:39 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/portal/nonrtric-controlpanel/+/5692
+Project: portal/nonrtric-controlpanel
+Branch: refs/heads/master
