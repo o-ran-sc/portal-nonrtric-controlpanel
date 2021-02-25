@@ -68,6 +68,7 @@ import { EICoordinatorComponent } from './ei-coordinator/ei-coordinator.componen
 import { HttpMockRequestInterceptor } from './interceptor.mock';
 import { environment } from 'src/environments/environment';
 import { HttpRequestInterceptor } from './interceptor';
+import { ProducersListComponent } from './ei-coordinator/producers-list/producers-list.component';
 
 export const isMock = environment.mock;
 
@@ -82,6 +83,7 @@ export const isMock = environment.mock;
     MainComponent,
     NodeModulesComponent,
     SidenavListComponent,
+    ProducersListComponent,
   ],
   imports: [
     AppRoutingModule,
