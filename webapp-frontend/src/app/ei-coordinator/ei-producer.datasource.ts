@@ -59,7 +59,7 @@ export class EIProducerDataSource {
         this.producers = [];
 
         this.eiSvc.getProducerIds().pipe(
-            mergeMap(prodIds => 
+            mergeMap(prodIds =>
                 forkJoin(prodIds.map(id => {
                     return forkJoin([
                         of(id),
@@ -67,7 +67,7 @@ export class EIProducerDataSource {
                         this.eiSvc.getProducerStatus(id)
                     ])
                 })
-            )),
+                )),
             finalize(() => this.loadingSubject.next(false))
         ).subscribe(result => {
             this.producers = result.map(producer => {

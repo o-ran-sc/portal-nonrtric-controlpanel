@@ -1,3 +1,22 @@
+/*-
+ * ========================LICENSE_START=================================
+ * O-RAN-SC
+ * %%
+ * Copyright (C) 2021 Nordix Foundation
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================LICENSE_END===================================
+ */
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -7,8 +26,8 @@ import { MatInputHarness } from '@angular/material/input/testing';
 import { MatTableModule } from '@angular/material/table';
 import { MatTableHarness } from '@angular/material/table/testing';
 import { of } from 'rxjs/observable/of';
-import { EIProducer } from 'src/app/interfaces/ei.types';
-import { UiService } from 'src/app/services/ui/ui.service';
+import { EIProducer } from '../../interfaces/ei.types';
+import { UiService } from '../../services/ui/ui.service';
 import { EIProducerDataSource } from '../ei-producer.datasource';
 
 import { ProducersListComponent } from './producers-list.component';

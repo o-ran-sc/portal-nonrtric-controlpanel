@@ -17,19 +17,6 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-
-.ei-coordinator-table {
-  width: 100%;
-  min-height: 150px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: transparent;
-}
-
-.table-dark {
-  background-color: #2d2d3d;
-}
-
 .display-none {
   display: none;
 }
@@ -38,19 +25,4 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-}
-
-.table-container {
-  margin-top: 10px;
-  max-height: 300px;
-  overflow: auto;
-}
-
-.filter-form {
-  width: 200px;
-}
-
-.mat-form-field {
-  font-size: 14px;
-  width: 100%;
 }

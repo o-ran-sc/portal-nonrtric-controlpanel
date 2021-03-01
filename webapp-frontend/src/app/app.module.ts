@@ -57,6 +57,7 @@ import { FooterComponent } from './footer/footer.component';
 import { MainComponent } from './main/main.component';
 import { MaterialDesignFrameworkModule } from 'angular6-json-schema-form';
 import { PolicyModule } from './policy/policy.module'
+import { EiCoordinatorModule } from './ei-coordinator/ei-coordinator.module'
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
@@ -64,11 +65,9 @@ import { UiService } from './services/ui/ui.service';
 import { CookieService } from 'ngx-cookie-service';
 import { NodeModulesComponent } from './node-modules/node-modules.component';
 import { EICardComponent } from './ui/ei-card/ei-card.component';
-import { EICoordinatorComponent } from './ei-coordinator/ei-coordinator.component';
 import { HttpMockRequestInterceptor } from './interceptor.mock';
 import { environment } from 'src/environments/environment';
 import { HttpRequestInterceptor } from './interceptor';
-import { ProducersListComponent } from './ei-coordinator/producers-list/producers-list.component';
 
 export const isMock = environment.mock;
 
@@ -77,13 +76,11 @@ export const isMock = environment.mock;
     AppComponent,
     ConfirmDialogComponent,
     EICardComponent,
-    EICoordinatorComponent,
     ErrorDialogComponent,
     FooterComponent,
     MainComponent,
     NodeModulesComponent,
     SidenavListComponent,
-    ProducersListComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -118,6 +115,7 @@ export const isMock = environment.mock;
     MaterialDesignFrameworkModule,
     MDBBootstrapModule.forRoot(),
     PolicyModule,
+    EiCoordinatorModule,
     ReactiveFormsModule,
     ToastrModule.forRoot(),
   ],
@@ -146,7 +144,6 @@ export const isMock = environment.mock;
   providers: [
     CookieService,
     ErrorDialogService,
-    ProducersListComponent,
     UiService,
     {
       provide: HTTP_INTERCEPTORS,

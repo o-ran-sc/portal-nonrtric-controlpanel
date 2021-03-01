@@ -21,7 +21,7 @@ limitations under the License.
 <div fxLayout="row">
   <div class="nrcp-global-page-title">Enrichment Information Coordinator</div>
   <div class="refresh-button">
-        <button id="refreshButton" mat-icon-button color="primary" (click)="refreshTables()">
+    <button id="refreshButton" mat-icon-button color="primary" (click)="refreshTables()">
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
@@ -29,68 +29,8 @@ limitations under the License.
 
 <br>
 <h4>Producers</h4>
-  <nrcp-producers-list></nrcp-producers-list>
+<nrcp-producers-list></nrcp-producers-list>
 
 <br>
 <h4>Jobs</h4>
-
-<div class="table-container">
-    <mat-table id="jobsTable" [dataSource]="jobsDataSource" fixedLayout
-    matSort (matSortChange)="sortJobs($event)"
-    class="ei-coordinator-table mat-elevation-z8">
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div (click)="stopSort($event)">
-          <form style="display: flex" [formGroup]="jobsFormControl">
-            <mat-form-field>
-                        <input id="jobIdFilter" matInput formControlName="id">
-              <mat-placeholder>Job ID</mat-placeholder>
-            </mat-form-field>
-          </form>
-        </div>
-      </mat-header-cell>
-            <mat-cell *matCellDef="let eiJob"> {{eiJob.ei_job_identity}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="typeId">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div (click)="stopSort($event)">
-          <form style="display: flex" [formGroup]="jobsFormControl">
-            <mat-form-field>
-                        <input id="jobTypeIdFilter" matInput formControlName="typeId">
-              <mat-placeholder>Type ID</mat-placeholder>
-            </mat-form-field>
-          </form>
-        </div>
-      </mat-header-cell>
-            <mat-cell *matCellDef="let eiJob">{{this.getJobTypeId(eiJob)}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="owner">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div (click)="stopSort($event)">
-          <form style="display: flex" [formGroup]="jobsFormControl">
-            <mat-form-field>
-                        <input id="jobOwnerFilter" matInput formControlName="owner">
-              <mat-placeholder>Owner</mat-placeholder>
-            </mat-form-field>
-          </form>
-        </div>
-      </mat-header-cell>
-            <mat-cell *matCellDef="let eiJob">{{this.getJobOwner(eiJob)}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="targetUri">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div (click)="stopSort($event)">
-          <form style="display: flex" [formGroup]="jobsFormControl">
-            <mat-form-field>
-                        <input id="jobTargetUriFilter" matInput formControlName="targetUri">
-              <mat-placeholder>Target URI</mat-placeholder>
-            </mat-form-field>
-          </form>
-        </div>
-      </mat-header-cell>
-            <mat-cell *matCellDef="let eiJob"> {{eiJob.target_uri}}  </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="['id', 'typeId', 'owner', 'targetUri']"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: ['id', 'typeId', 'owner', 'targetUri'];"></mat-row>
-  </mat-table>
-</div>
+<nrcp-jobs-list></nrcp-jobs-list>

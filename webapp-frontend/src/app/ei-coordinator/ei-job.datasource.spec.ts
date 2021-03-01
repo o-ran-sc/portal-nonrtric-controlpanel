@@ -29,12 +29,12 @@ describe('EIJobDataSource', () => {
     let dataSource: EIJobDataSource;
     let eiServiceSpy: any;
 
-    const job = { ei_job_identity: '1', ei_job_data: 'data', ei_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'};
+    const job = { ei_job_identity: '1', ei_job_data: 'data', ei_type_identity: 'Type ID 1', target_uri: 'hhtp://url', owner: 'owner' };
 
     beforeEach(() => {
         eiServiceSpy = jasmine.createSpyObj('EIService', ['getProducerIds', 'getJobsForProducer']);
 
-        eiServiceSpy.getProducerIds.and.returnValue(of([ 'producer1', 'producer2']));
+        eiServiceSpy.getProducerIds.and.returnValue(of(['producer1', 'producer2']));
         eiServiceSpy.getJobsForProducer.and.returnValue(of([job]));
         TestBed.configureTestingModule({
             imports: [ToastrModule.forRoot()],
@@ -52,7 +52,7 @@ describe('EIJobDataSource', () => {
     it('#getJobs', () => {
         dataSource.loadJobs();
         const actualJobs: EIJob[] = dataSource.eiJobs();
-        expect(actualJobs).toEqual([ job, job ]);
+        expect(actualJobs).toEqual([job, job]);
         expect(dataSource.rowCount).toEqual(2);
     });
 });

@@ -1,9 +1,28 @@
+/*-
+ * ========================LICENSE_START=================================
+ * O-RAN-SC
+ * %%
+ * Copyright (C) 2021 Nordix Foundation
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================LICENSE_END===================================
+ */
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { EIProducer } from 'src/app/interfaces/ei.types';
-import { UiService } from 'src/app/services/ui/ui.service';
+import { EIProducer } from '../../interfaces/ei.types';
+import { UiService } from '../../services/ui/ui.service';
 import { EIProducerDataSource } from '../ei-producer.datasource';
 
 @Component({
@@ -14,24 +33,23 @@ import { EIProducerDataSource } from '../ei-producer.datasource';
 export class ProducersListComponent implements OnInit {
   darkMode: boolean;
   producersDataSource: MatTableDataSource<EIProducer> = new MatTableDataSource<EIProducer>();
-
-  readonly producersFormControl: AbstractControl;
+  producerForm: FormGroup;
 
   constructor(
     private eiProducersDataSource: EIProducerDataSource,
-    private ui: UiService,
-    private formBuilder: FormBuilder) {
-    this.producersFormControl = formBuilder.group({
-      ei_producer_id: '',
-      ei_producer_types: '',
-      status: ''
+    private ui: UiService) {
+
+    this.producerForm = new FormGroup({
+      ei_producer_id: new FormControl(''),
+      ei_producer_types: new FormControl(''),
+      status: new FormControl('')
     });
   }
 
   ngOnInit(): void {
     this.refresh();
 
-    this.producersFormControl.valueChanges.subscribe(value => {
+    this.producerForm.valueChanges.subscribe(value => {
       const filter = { ...value, ei_producer_id: value.ei_producer_id.trim().toLowerCase() } as string;
       this.producersDataSource.filter = filter;
     });

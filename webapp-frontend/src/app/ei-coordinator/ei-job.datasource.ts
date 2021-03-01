@@ -59,16 +59,16 @@ export class EIJobDataSource {
         this.loadingSubject.next(true);
         this.jobs = [];
         this.eiSvc.getProducerIds().pipe(
-            mergeMap(prodIds => 
+            mergeMap(prodIds =>
                 forkJoin(prodIds.map(id => this.eiSvc.getJobsForProducer(id)))),
             mergeMap(result => result),
             finalize(() => this.loadingSubject.next(false))
         ).subscribe(result => {
             this.jobs = this.jobs.concat(result);
             this.jobsSubject.next(this.jobs);
-        } );       
+        });
         this.rowCount = this.jobs.length;
     }
 
- 
+
 }

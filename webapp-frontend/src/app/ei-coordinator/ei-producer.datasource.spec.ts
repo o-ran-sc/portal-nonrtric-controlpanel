@@ -30,10 +30,10 @@ describe('EIProducerDataSource', () => {
     let eiServiceSpy: any;
 
     let producer1 = {
-        supported_ei_types: [ 'type1', 'type2' ]
+        supported_ei_types: ['type1', 'type2']
     } as ProducerRegistrationInfo;
     let producer2 = {
-        supported_ei_types: [ 'type3', 'type4' ]
+        supported_ei_types: ['type3', 'type4']
     } as ProducerRegistrationInfo;
     let producerStatus1 = {
         operational_state: OperationalState.ENABLED
@@ -44,19 +44,19 @@ describe('EIProducerDataSource', () => {
 
     let expectedProducer1 = {
         ei_producer_id: 'producer1',
-        ei_producer_types: [ 'type1', 'type2' ],
+        ei_producer_types: ['type1', 'type2'],
         status: 'ENABLED'
     } as EIProducer;
     let expectedProducer2 = {
         ei_producer_id: 'producer2',
-        ei_producer_types: [ 'type3', 'type4' ],
+        ei_producer_types: ['type3', 'type4'],
         status: 'DISABLED'
     } as EIProducer;
 
     beforeEach(() => {
         eiServiceSpy = jasmine.createSpyObj('EIService', ['getProducerIds', 'getProducer', 'getProducerStatus']);
 
-        eiServiceSpy.getProducerIds.and.returnValue(of([ 'producer1', 'producer2']));
+        eiServiceSpy.getProducerIds.and.returnValue(of(['producer1', 'producer2']));
         eiServiceSpy.getProducer.and.returnValues(of(producer1), of(producer2));
         eiServiceSpy.getProducerStatus.and.returnValues(of(producerStatus1), of(producerStatus2));
         TestBed.configureTestingModule({
@@ -75,7 +75,7 @@ describe('EIProducerDataSource', () => {
     it('#loadProducers', () => {
         dataSource.loadProducers();
         const actualProducers: EIProducer[] = dataSource.eiProducers();
-        expect(actualProducers).toEqual([ expectedProducer1, expectedProducer2 ]);
+        expect(actualProducers).toEqual([expectedProducer1, expectedProducer2]);
         expect(dataSource.rowCount).toEqual(2);
     });
 });

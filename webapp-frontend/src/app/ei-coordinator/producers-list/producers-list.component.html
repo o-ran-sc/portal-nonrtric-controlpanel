@@ -1,50 +1,68 @@
+<!--
+========================LICENSE_START=================================
+O-RAN-SC
+%%
+Copyright (C) 2021 Nordix Foundation
+%%
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+========================LICENSE_END===================================
+-->
 <div class="table-container">
-    <mat-table id="producersTable" [dataSource]="producersDataSource" fixedLayout
-      matSort (matSortChange)="sortProducers($event)"
-      class="ei-coordinator-table mat-elevation-z8">
-      <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          <div (click)="stopSort($event)">
-          <form style="display: flex" [formGroup]="producersFormControl">
+  <mat-table id="producersTable" [dataSource]="producersDataSource" fixedLayout matSort
+    (matSortChange)="sortProducers($event)" class="ei-coordinator-table mat-elevation-z8">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div (click)="stopSort($event)">
+          <form style="display: flex" [formGroup]="producerForm">
             <mat-form-field>
               <input id="producerIdFilter" matInput formControlName="ei_producer_id">
               <mat-placeholder>Producer ID</mat-placeholder>
             </mat-form-field>
           </form>
         </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let eiProducer"> {{eiProducer.ei_producer_id}} </mat-cell>
-      </ng-container>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let eiProducer"> {{eiProducer.ei_producer_id}} </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="types">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          <div (click)="stopSort($event)">
-          <form style="display: flex" [formGroup]="producersFormControl">
+    <ng-container matColumnDef="types">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div (click)="stopSort($event)">
+          <form style="display: flex" [formGroup]="producerForm">
             <mat-form-field>
               <input id="producerTypesFilter" matInput formControlName="ei_producer_types">
               <mat-placeholder>Producer types</mat-placeholder>
             </mat-form-field>
           </form>
-          </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let eiProducer"> {{this.getProducerTypes(eiProducer)}} </mat-cell>
-      </ng-container>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let eiProducer"> {{this.getProducerTypes(eiProducer)}} </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>
-          <div (click)="stopSort($event)">
-          <form style="display: flex" [formGroup]="producersFormControl">
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div (click)="stopSort($event)">
+          <form style="display: flex" [formGroup]="producerForm">
             <mat-form-field>
               <input id="producerStatusFilter" matInput formControlName="status">
               <mat-placeholder>Producer status</mat-placeholder>
             </mat-form-field>
           </form>
-          </div>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let eiProducer"> {{this.getProducerStatus(eiProducer)}} </mat-cell>
-      </ng-container>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let eiProducer"> {{this.getProducerStatus(eiProducer)}} </mat-cell>
+    </ng-container>
 
-      <mat-header-row *matHeaderRowDef="['id', 'types', 'status']"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: ['id', 'types', 'status'];"></mat-row>
-    </mat-table>
-  </div>
+    <mat-header-row *matHeaderRowDef="['id', 'types', 'status']"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['id', 'types', 'status'];"></mat-row>
+  </mat-table>
+</div>
