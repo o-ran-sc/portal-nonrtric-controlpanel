@@ -19,18 +19,18 @@
  */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {EICardComponent} from './ei-card.component';
+import {EiCardComponent} from './ei-card.component';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterTestingModule } from '@angular/router/testing';
 import {UiService} from '../../services/ui/ui.service';
 
 describe('EICardComponent', () => {
-  let component: EICardComponent;
-  let fixture: ComponentFixture<EICardComponent>;
+  let component: EiCardComponent;
+  let fixture: ComponentFixture<EiCardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [EICardComponent],
+      declarations: [EiCardComponent],
       imports: [ MatIconModule,
         RouterTestingModule
       ],
@@ -40,7 +40,7 @@ describe('EICardComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EICardComponent);
+    fixture = TestBed.createComponent(EiCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

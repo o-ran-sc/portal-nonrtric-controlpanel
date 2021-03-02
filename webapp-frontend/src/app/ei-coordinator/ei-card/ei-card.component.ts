@@ -26,7 +26,7 @@ import { UiService } from '../../services/ui/ui.service';
   templateUrl: './ei-card.component.html',
   styleUrls: ['./ei-card.component.scss']
 })
-export class EICardComponent implements OnInit, OnDestroy {
+export class EiCardComponent implements OnInit, OnDestroy {
   darkMode: boolean;
 
   constructor(public router: Router, private ui: UiService) { }
