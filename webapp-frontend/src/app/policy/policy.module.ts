@@ -31,6 +31,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MaterialDesignFrameworkModule } from 'angular6-json-schema-form';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { Routes, RouterModule } from '@angular/router';
+import { RicSelectorComponent } from './ric-selector/ric-selector.component';
+import { NoTypePolicyEditorComponent } from './no-type-policy-editor/no-type-policy-editor.component';
 
 const routes:Routes = [
   {path: 'policy', component: PolicyControlComponent}
@@ -43,6 +45,8 @@ const routes:Routes = [
     PolicyControlComponent,
     PolicyInstanceComponent,
     PolicyInstanceDialogComponent,
+    RicSelectorComponent,
+    NoTypePolicyEditorComponent,
   ],
   imports: [
     CommonModule,
@@ -77,6 +81,6 @@ const routes:Routes = [
   exports: [
     PolicyCardComponent,
     PolicyControlComponent
-  ],
+  ]
 })
 export class PolicyModule { }
