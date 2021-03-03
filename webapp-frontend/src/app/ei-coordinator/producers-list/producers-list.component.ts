@@ -17,13 +17,16 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Sort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { forkJoin, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { mergeMap, finalize, catchError } from 'rxjs/operators';
+import { EIService } from 'src/app/services/ei/ei.service';
 import { EIProducer } from '../../interfaces/ei.types';
 import { UiService } from '../../services/ui/ui.service';
-import { EIProducerDataSource } from '../ei-producer.datasource';
 
 @Component({
   selector: 'nrcp-producers-list',
@@ -31,12 +34,19 @@ import { EIProducerDataSource } from '../ei-producer.datasource';
   styleUrls: ['./producers-list.component.scss']
 })
 export class ProducersListComponent implements OnInit {
-  darkMode: boolean;
+
+  @ViewChild(MatSort) sort: MatSort;
+
   producersDataSource: MatTableDataSource<EIProducer> = new MatTableDataSource<EIProducer>();
   producerForm: FormGroup;
+  darkMode: boolean;
+
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  private producerSubject = new BehaviorSubject<EIProducer[]>([]);
+  public loading$ = this.loadingSubject.asObservable();
 
   constructor(
-    private eiProducersDataSource: EIProducerDataSource,
+    private eiSvc: EIService,
     private ui: UiService) {
 
     this.producerForm = new FormGroup({
@@ -47,7 +57,11 @@ export class ProducersListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.refresh();
+    this.loadProducers();
+    this.producerSubject.subscribe((data) => {
+      this.producersDataSource = new MatTableDataSource<EIProducer>(data);
+      //this.producersDataSource.data = data;
+    });
 
     this.producerForm.valueChanges.subscribe(value => {
       const filter = { ...value, ei_producer_id: value.ei_producer_id.trim().toLowerCase() } as string;
@@ -63,6 +77,12 @@ export class ProducersListComponent implements OnInit {
     this.ui.darkModeState.subscribe((isDark) => {
       this.darkMode = isDark;
     });
+  }
+
+  ngOnDestroy() {
+    if (!this.producerSubject) this.producerSubject.unsubscribe();
+    if (!this.loadingSubject) this.loadingSubject.unsubscribe();
+    if (!this.ui.darkModeState) this.ui.darkModeState.unsubscribe();
   }
 
   isDataIncluding(data: string, filter: string): boolean {
@@ -105,10 +125,40 @@ export class ProducersListComponent implements OnInit {
     return '< No status >';
   }
 
-  refresh() {
-    this.eiProducersDataSource.loadProducers();
-    this.eiProducersDataSource.eiProducersSubject().subscribe((data) => {
-      this.producersDataSource.data = data;
+  public eiProducers(): EIProducer[] {
+    return this.producerSubject.value;
+  }
+
+  loadProducers() {
+    this.loadingSubject.next(true);
+    let producers = [];
+
+    this.eiSvc.getProducerIds().pipe(
+      mergeMap(prodIds =>
+        forkJoin(prodIds.map(id => {
+          return forkJoin([
+            of(id),
+            this.eiSvc.getProducer(id),
+            this.eiSvc.getProducerStatus(id)
+          ])
+        })
+      )),
+      finalize(() => this.loadingSubject.next(false)),
+    ).subscribe(result => {
+      producers = result.map(producer => {
+        let eiProducer = <EIProducer>{};
+        eiProducer.ei_producer_id = producer[0];
+        if(producer[1].supported_ei_types){
+          eiProducer.ei_producer_types = producer[1].supported_ei_types;
+        }
+        if(producer[2].operational_state){
+          eiProducer.status = producer[2].operational_state.toString();
+        }
+        return eiProducer;
+      });
+      this.producerSubject.next(producers);
+    }, err => {
+      console.error("Subscribe function error:"+ err);
     });
   }
 }

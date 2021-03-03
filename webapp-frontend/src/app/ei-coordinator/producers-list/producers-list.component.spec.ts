@@ -1,63 +1,38 @@
-/*-
- * ========================LICENSE_START=================================
- * O-RAN-SC
- * %%
- * Copyright (C) 2021 Nordix Foundation
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================LICENSE_END===================================
- */
-import { HarnessLoader } from '@angular/cdk/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatInputHarness } from '@angular/material/input/testing';
-import { MatTableModule } from '@angular/material/table';
-import { MatTableHarness } from '@angular/material/table/testing';
-import { of } from 'rxjs/observable/of';
-import { EIProducer } from '../../interfaces/ei.types';
-import { UiService } from '../../services/ui/ui.service';
-import { EIProducerDataSource } from '../ei-producer.datasource';
 
-import { ProducersListComponent } from './producers-list.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { MatTableHarness } from '@angular/material/table/testing';
+import { MatSortHarness } from '@angular/material/sort/testing';
+import { ProducersListComponent } from "./producers-list.component";
+import { EIService } from 'src/app/services/ei/ei.service';
+import { EIProducer, OperationalState, ProducerRegistrationInfo, ProducerStatus } from 'src/app/interfaces/ei.types';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputHarness } from '@angular/material/input/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UiService } from 'src/app/services/ui/ui.service';
+import { of } from 'rxjs';
+import { MatSortModule } from '@angular/material/sort';
+
+let component: ProducersListComponent;
+let fixture: ComponentFixture<ProducersListComponent>;
 
 describe('ProducersListComponent', () => {
-  let component: ProducersListComponent;
-  let fixture: ComponentFixture<ProducersListComponent>;
-  let loader: HarnessLoader;
-  let producerDataSourceSpy: jasmine.SpyObj<EIProducerDataSource>;
 
-  const producer1 = {
-    ei_producer_id: 'producer1',
-    ei_producer_types: ['type1', 'type2'],
-    status: 'ENABLED'
-  } as EIProducer;
-  const producer2 = {
-    ei_producer_id: 'producer2',
-    ei_producer_types: ['type2', 'type3'],
-    status: 'DISABLED'
-  } as EIProducer;
+  let loader: HarnessLoader;
 
   beforeEach(async(() => {
-    producerDataSourceSpy = jasmine.createSpyObj('EIProducerDataSource', ['loadProducers', 'eiProducers', 'eiProducersSubject']);
-
-    const producers: EIProducer[] = [producer1, producer2];
-    producerDataSourceSpy.eiProducersSubject.and.returnValue(of(producers));
+    const spy = jasmine.createSpyObj('EIService', ['getProducerIds', 'getProducer', 'getProducerStatus']);
 
     TestBed.configureTestingModule({
       imports: [
+        MatIconModule,
         MatTableModule,
+        MatSortModule,
+        BrowserAnimationsModule,
         ReactiveFormsModule
       ],
       schemas: [
@@ -67,93 +42,195 @@ describe('ProducersListComponent', () => {
         ProducersListComponent
       ],
       providers: [
-        { provide: EIProducerDataSource, useValue: producerDataSourceSpy },
+        { provide: EIService, useValue: spy },
         UiService,
-        FormBuilder,
       ]
     })
-      .compileComponents();
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(ProducersListComponent);
+        component = fixture.componentInstance;
+        loader = TestbedHarnessEnvironment.loader(fixture);
+      });
   }));
-
-  const expectedProducer1Row = { id: 'producer1', types: 'type1,type2', status: 'ENABLED' };
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ProducersListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    loader = TestbedHarnessEnvironment.loader(fixture);
-  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain producers table with correct columns', async () => {
-    let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#producersTable' }));
-    let headerRow = (await producersTable.getHeaderRows())[0];
-    let headers = await headerRow.getCellTextByColumnName();
+  describe('#content', () => {
 
-    expect(headers).toEqual({ id: 'Producer ID', types: 'Producer types', status: 'Producer status' });
-  });
+    it('should loadProducers', () => {
+      const producer1 = {
+        ei_producer_id: 'producer1',
+        ei_producer_types: ['type1', 'type2'],
+        status: 'ENABLED'
+      } as EIProducer;
+      const producer2 = {
+        ei_producer_id: 'producer2',
+        ei_producer_types: ['type2', 'type3'],
+        status: 'DISABLED'
+      } as EIProducer;
 
+      setServiceSpy();
+      component.loadProducers();
+      const actualProducers: EIProducer[] = component.eiProducers();
+      expect(actualProducers).toEqual([producer1, producer2]);
+    });
 
-  it('should contain data after initialization', async () => {
-    component.ngOnInit();
-    const expectedProducerRows = [
-      expectedProducer1Row,
-      { id: 'producer2', types: 'type2,type3', status: 'DISABLED' }
-    ];
-    let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#producersTable' }));
-    let producerRows = await producersTable.getRows();
-    expect(producerRows.length).toEqual(2);
-    producerRows.forEach(row => {
-      row.getCellTextByColumnName().then(values => {
-        expect(expectedProducerRows).toContain(jasmine.objectContaining(values));
-      });
+    it('should contain producers table with correct columns', async () => {
+      setServiceSpy();
+
+      let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#producersTable' }));
+      let headerRow = (await producersTable.getHeaderRows())[0];
+      let headers = await headerRow.getCellTextByColumnName();
+      expect(headers).toEqual({ id: 'Producer ID', types: 'Producer types', status: 'Producer status' });
+    });
+
+    it('should set correct dark mode from UIService', () => {
+      setServiceSpy();
+      component.ngOnInit();
+      expect(component.darkMode).toBeTruthy();
+
+      const uiService: UiService = TestBed.inject(UiService);
+      uiService.darkModeState.next(false);
+      fixture.detectChanges();
+      expect(component.darkMode).toBeFalsy();
     });
   });
 
-  describe('should display default values for non required properties', () => {
-    it('producer defaults', async () => {
-      const producerMissingProperties = {
-        ei_producer_id: 'producer1'
-      } as EIProducer;
-      const producers: EIProducer[] = [producerMissingProperties];
-      producerDataSourceSpy.eiProducersSubject.and.returnValue(of(producers));
-      component.ngOnInit();
+  describe('#producersTable', () => {
 
+    const expectedProducer1Row = { id: 'producer1', types: 'type1,type2', status: 'ENABLED' };
+
+    it('should contain data after initialization', async () => {
+      setServiceSpy();
+      component.ngOnInit();
+      const expectedProducerRows = [
+        expectedProducer1Row,
+        { id: 'producer2', types: 'type2,type3', status: 'DISABLED' }
+      ];
+      let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#producersTable' }));
+      let producerRows = await producersTable.getRows();
+      expect(producerRows.length).toEqual(2);
+      producerRows.forEach(row => {
+        row.getCellTextByColumnName().then(values => {
+          expect(expectedProducerRows).toContain(jasmine.objectContaining(values));
+        });
+      });
+    });
+
+    it('should display defaults values for non required properties', async () => {
+      let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
+
+      eiServiceSpy.getProducerIds.and.returnValue(of(['producer1']));
+      eiServiceSpy.getProducer.and.returnValues(of({} as ProducerRegistrationInfo));
+      eiServiceSpy.getProducerStatus.and.returnValues(of({} as ProducerStatus));
+
+      component.ngOnInit();
       const expectedProducerRow = { id: 'producer1', types: '< No types >', status: '< No status >' };
       let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#producersTable' }));
       let producerRows = await producersTable.getRows();
       expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducerRow);
     });
-  });
 
-  it('filtering', async () => {
-    const expectedProducer1Row = { id: 'producer1', types: 'type1,type2', status: 'ENABLED' };
-    component.ngOnInit();
-    let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#producersTable' }));
+    it('filtering', async () => {
+      setServiceSpy();
+      component.ngOnInit();
+      let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#producersTable' }));
 
-    let idFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#producerIdFilter' }));
-    await idFilterInput.setValue("1");
-    let producerRows = await producersTable.getRows();
-    expect(producerRows.length).toEqual(1);
-    expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducer1Row);
+      let idFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#producerIdFilter' }));
+      await idFilterInput.setValue("1");
+      let producerRows = await producersTable.getRows();
+      expect(producerRows.length).toEqual(1);
+      expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducer1Row);
 
-    idFilterInput.setValue('');
-    let typesFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#producerTypesFilter' }));
-    await typesFilterInput.setValue("1");
-    producerRows = await producersTable.getRows();
-    expect(producerRows.length).toEqual(1);
-    expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducer1Row);
-    await typesFilterInput.setValue("2");
-    producerRows = await producersTable.getRows();
-    expect(producerRows.length).toEqual(2);
+      idFilterInput.setValue('');
+      let typesFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#producerTypesFilter' }));
+      await typesFilterInput.setValue("1");
+      producerRows = await producersTable.getRows();
+      expect(producerRows.length).toEqual(1);
+      expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducer1Row);
+      await typesFilterInput.setValue("2");
+      producerRows = await producersTable.getRows();
+      expect(producerRows.length).toEqual(2);
 
-    typesFilterInput.setValue('');
-    let statusFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#producerStatusFilter' }));
-    await statusFilterInput.setValue("enabled");
-    producerRows = await producersTable.getRows();
-    expect(producerRows.length).toEqual(1);
-    expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducer1Row);
+      typesFilterInput.setValue('');
+      let statusFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#producerStatusFilter' }));
+      await statusFilterInput.setValue("enabled");
+      producerRows = await producersTable.getRows();
+      expect(producerRows.length).toEqual(1);
+      expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducer1Row);
+    });
+
+    describe('#sorting', () => {
+
+      it('should load harness for mat-sort', async () => {
+        setServiceSpy();
+
+        const sorts = await loader.getAllHarnesses(MatSortHarness);
+        expect(sorts.length).toBe(1);
+      });
+
+      it('should be able to filter headers by their sorted state', async () => {
+        setServiceSpy();
+
+        const sort = await loader.getHarness(MatSortHarness);
+        let headers = await sort.getSortHeaders({ sortDirection: '' });
+        expect(headers.length).toBe(3);
+        await headers[0].click();
+
+        headers = await sort.getSortHeaders({ sortDirection: 'asc' });
+        expect(headers.length).toBe(1);
+      });
+
+      it('should get the active state of a header', async () => {
+        setServiceSpy();
+
+        const sort = await loader.getHarness(MatSortHarness);
+        const secondHeader = (await sort.getSortHeaders())[1];
+        expect(await secondHeader.isActive()).toBe(false);
+
+        await secondHeader.click();
+        expect(await secondHeader.isActive()).toBe(true);
+      });
+
+      it('should get the sort direction of a header', async () => {
+        setServiceSpy();
+
+        const sort = await loader.getHarness(MatSortHarness);
+        const thirdHeader = (await sort.getSortHeaders())[2];
+        expect(await thirdHeader.getSortDirection()).toBe('');
+
+        await thirdHeader.click();
+        expect(await thirdHeader.getSortDirection()).toBe('asc');
+
+        await thirdHeader.click();
+        expect(await thirdHeader.getSortDirection()).toBe('desc');
+      });
+    });
   });
 });
+
+function setServiceSpy() {
+  let producerRegInfo1 = {
+    supported_ei_types: ['type1', 'type2']
+  } as ProducerRegistrationInfo;
+  let producerRegInfo2 = {
+    supported_ei_types: ['type2', 'type3']
+  } as ProducerRegistrationInfo;
+  let producerStatus1 = {
+    operational_state: OperationalState.ENABLED
+  } as ProducerStatus;
+  let producerStatus2 = {
+    operational_state: OperationalState.DISABLED
+  } as ProducerStatus;
+
+  let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
+
+  eiServiceSpy.getProducerIds.and.returnValue(of(['producer1', 'producer2']));
+  eiServiceSpy.getProducer.and.returnValues(of(producerRegInfo1), of(producerRegInfo2));
+  eiServiceSpy.getProducerStatus.and.returnValues(of(producerStatus1), of(producerStatus2));
+}
+
+

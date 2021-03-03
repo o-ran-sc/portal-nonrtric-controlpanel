@@ -33,6 +33,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { EiCardComponent } from './ei-card/ei-card.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 const routes: Routes = [
@@ -55,7 +57,9 @@ const routes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     MatSortModule,
+    MatPaginatorModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     RouterModule.forChild(routes)
   ],
   exports: [

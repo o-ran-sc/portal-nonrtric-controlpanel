@@ -17,13 +17,17 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { EIJob } from 'src/app/interfaces/ei.types';
-import { UiService } from 'src/app/services/ui/ui.service';
-import { EIJobDataSource } from '../ei-job.datasource';
+import { forkJoin } from 'rxjs';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { mergeMap, finalize } from 'rxjs/operators';
+import { EIJob } from '../../interfaces/ei.types';
+import { EIService } from '../../services/ei/ei.service';
+import { UiService } from '../../services/ui/ui.service';
 
 @Component({
   selector: 'nrcp-jobs-list',
@@ -31,13 +35,18 @@ import { EIJobDataSource } from '../ei-job.datasource';
   styleUrls: ['./jobs-list.component.scss']
 })
 export class JobsListComponent implements OnInit {
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
   darkMode: boolean;
   jobsDataSource: MatTableDataSource<EIJob> = new MatTableDataSource<EIJob>();
-
   jobForm: FormGroup;
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  private jobsSubject = new BehaviorSubject<EIJob[]>([]);
+  public loading$ = this.loadingSubject.asObservable();
 
   constructor(
-    private eiJobsDataSource: EIJobDataSource,
+    private eiSvc: EIService,
     private ui: UiService
   ) {
     this.jobForm = new FormGroup({
@@ -46,11 +55,15 @@ export class JobsListComponent implements OnInit {
       owner: new FormControl(''),
       targetUri: new FormControl('')
     });
-
   }
 
   ngOnInit(): void {
-    this.refresh();
+    this.loadJobs();
+    this.jobsSubject.subscribe((data) => {
+      this.jobsDataSource = new MatTableDataSource<EIJob>(data);
+      //this.jobsDataSource.data = data;
+      this.jobsDataSource.paginator = this.paginator;
+    });
 
     this.jobForm.valueChanges.subscribe(value => {
       const filter = { ...value, id: value.id.trim().toLowerCase() } as string;
@@ -67,6 +80,12 @@ export class JobsListComponent implements OnInit {
     this.ui.darkModeState.subscribe((isDark) => {
       this.darkMode = isDark;
     });
+  }
+
+  ngOnDestroy() {
+    if (!this.jobsSubject) this.jobsSubject.unsubscribe();
+    if (!this.loadingSubject) this.loadingSubject.unsubscribe();
+    if (!this.ui.darkModeState) this.ui.darkModeState.unsubscribe();
   }
 
   sortJobs(sort: Sort) {
@@ -109,13 +128,23 @@ export class JobsListComponent implements OnInit {
     }
     return '< No owner >';
   }
+  
+  public jobs(): EIJob[] {
+    return this.jobsSubject.value;
+  }
 
-  refresh() {
-    this.eiJobsDataSource.loadJobs();
-
-    this.eiJobsDataSource.eiJobsSubject().subscribe((data) => {
-      this.jobsDataSource.data = data;
-    });
+  loadJobs() {
+    this.loadingSubject.next(true);
+    let jobs = [];
+    this.eiSvc.getProducerIds().pipe(
+        mergeMap(prodIds => 
+            forkJoin(prodIds.map(id => this.eiSvc.getJobsForProducer(id)))),
+        mergeMap(result => result),
+        finalize(() => this.loadingSubject.next(false))
+    ).subscribe(result => {
+        jobs = jobs.concat(result);
+        this.jobsSubject.next(jobs);
+    } );       
   }
 
 }
