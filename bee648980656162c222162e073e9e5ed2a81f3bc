@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bb1fb15_7ee0d9e7",
+        "filename": "webapp-frontend/src/app/ei-coordinator/ei-card/ei-card.component.scss",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-03T15:12:13Z",
+      "side": 1,
+      "message": "Please remove trailing whitespaces.",
+      "revId": "bee648980656162c222162e073e9e5ed2a81f3bc",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
