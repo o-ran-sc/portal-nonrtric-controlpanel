@@ -17,8 +17,8 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PolicyService } from '../../services/policy/policy.service';
 import { NotificationService } from '../../services/ui/notification.service';
@@ -26,8 +26,9 @@ import { UiService } from '../../services/ui/ui.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorDialogService } from '../../services/ui/error-dialog.service';
 import * as uuid from 'uuid';
-import { Rics } from '../../interfaces/ric';
 import { CreatePolicyInstance } from '../../interfaces/policy.types';
+import { RicSelectorComponent } from '../ric-selector/ric-selector.component';
+import { formatJsonString, NoTypePolicyEditorComponent } from '../no-type-policy-editor/no-type-policy-editor.component';
 
 @Component({
   selector: 'nrcp-no-type-policy-instance-dialog',
@@ -36,7 +37,10 @@ import { CreatePolicyInstance } from '../../interfaces/policy.types';
 })
 export class NoTypePolicyInstanceDialogComponent implements OnInit {
   instanceForm: FormGroup;
-
+  @ViewChild(RicSelectorComponent)
+  private ricSelectorComponent: RicSelectorComponent;
+  @ViewChild(NoTypePolicyEditorComponent)
+  private policyEditorComponent: NoTypePolicyEditorComponent;
   policyInstanceId: string; // null if not yet created
   policyJson: string;
   darkMode: boolean;
@@ -51,7 +55,7 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data,
     private ui: UiService) {
     this.policyInstanceId = data.instanceId;
-    this.policyJson = data.instanceJson ? this.formatJsonString(data.instanceJson) : '';
+    this.policyJson = data.instanceJson ? formatJsonString(data.instanceJson) : '{}';
     this.ric = data.ric;
   }
 
@@ -59,30 +63,15 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
     this.ui.darkModeState.subscribe((isDark) => {
       this.darkMode = isDark;
     });
-    this.instanceForm = new FormGroup({
-      'ricSelector': new FormControl(this.ric, [
-        Validators.required
-      ]),
-      'policyJsonTextArea': new FormControl(this.policyJson, [
-        Validators.required,
-        jsonValidator()
-      ])
-    });
-    if (!this.policyInstanceId) {
-      this.getRicIds();
-    }
+    this.instanceForm = new FormGroup({});
   }
-
-  get policyJsonTextArea() { return this.instanceForm.get('policyJsonTextArea'); }
-
-  get ricSelector() { return this.instanceForm.get('ricSelector'); }
 
   onSubmit() {
     if (this.policyInstanceId == null) {
       this.policyInstanceId = uuid.v4();
     }
     const self: NoTypePolicyInstanceDialogComponent = this;
-    let createPolicyInstance: CreatePolicyInstance = this.createPolicyInstance(this.policyJsonTextArea.value);
+    let createPolicyInstance: CreatePolicyInstance = this.createPolicyInstance(this.policyEditorComponent.policyJsonTextArea.value);
     this.policySvc.putPolicy(createPolicyInstance).subscribe(
       {
         next(_) {
@@ -101,48 +90,8 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
     createPolicyInstance.policy_data = JSON.parse(policyJson);
     createPolicyInstance.policy_id = this.policyInstanceId;
     createPolicyInstance.policytype_id = '';
-    createPolicyInstance.ric_id = (!this.ricSelector.value.ric_id) ? this.ric : this.ricSelector.value.ric_id;
+    createPolicyInstance.ric_id = this.ricSelectorComponent.selectedRic;
     createPolicyInstance.service_id = 'controlpanel';
     return createPolicyInstance;
-  }
-
-  getRicIds() {
-    const self: NoTypePolicyInstanceDialogComponent = this;
-    this.policySvc.getRics('').subscribe(
-      {
-        next(value: Rics) {
-          value.rics.forEach(ric => {
-            self.allRicIds.push(ric.ric_id);
-          });
-        }
-      });
-  }
-
-  private formatJsonString(jsonToFormat: any): string {
-    return JSON.stringify(jsonToFormat, null, 2);
-  }
-
-  formatJsonInput() {
-    this.policyJson = this.formatJsonString(JSON.parse(this.policyJsonTextArea.value));
-  }
-}
-
-export function jsonValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    const notValid = !isJsonValid(control.value);
-    return notValid ? { 'invalidJson': { value: control.value } } : null;
-  };
-}
-
-export function isJsonValid(json: string): boolean {
-  try {
-    if (json != null) {
-      JSON.parse(json);
-      return true;
-    } else {
-      return false;
-    }
-  } catch (jsonError) {
-    return false;
   }
 }

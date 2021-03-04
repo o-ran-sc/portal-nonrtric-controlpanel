@@ -29,7 +29,7 @@ import { MatSelectHarness } from '@angular/material/select/testing';
 import { MatInputModule } from '@angular/material/input';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { of } from "rxjs/observable/of";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ToastrModule } from "ngx-toastr";
 
@@ -37,7 +37,8 @@ import { PolicyService } from "../../services/policy/policy.service";
 import { ErrorDialogService } from "../../services/ui/error-dialog.service";
 import { UiService } from "../../services/ui/ui.service";
 import { NoTypePolicyInstanceDialogComponent } from "./no-type-policy-instance-dialog.component";
-import { Ric } from "../../interfaces/ric";
+import { RicSelectorComponent } from "../ric-selector/ric-selector.component";
+import { NoTypePolicyEditorComponent } from "../no-type-policy-editor/no-type-policy-editor.component";
 
 describe('NoTypePolicyInstanceDialogComponent', () => {
   let component: NoTypePolicyInstanceDialogComponent;
@@ -45,14 +46,10 @@ describe('NoTypePolicyInstanceDialogComponent', () => {
   let loader: HarnessLoader;
   let policyServiceSpy: jasmine.SpyObj<PolicyService>;
   let errDialogServiceSpy: jasmine.SpyObj<ErrorDialogService>;
-  const ric1: Ric = { ric_id: 'ric1', managed_element_ids: [ 'me1' ], policytype_ids: [ 'type1' ], state: ''};
-  const ric2: Ric = { ric_id: 'ric2', managed_element_ids: [ 'me1' ], policytype_ids: [ 'type1' ], state: ''};
 
   beforeEach(async () => {
-    policyServiceSpy = jasmine.createSpyObj('PolicyService', [ 'putPolicy', 'getRics' ]);
+    policyServiceSpy = jasmine.createSpyObj('PolicyService', [ 'putPolicy' ]);
     errDialogServiceSpy = jasmine.createSpyObj('ErrorDialogService', [ 'displayError' ]);
-
-    policyServiceSpy.getRics.and.returnValue(of({ rics: [ ric1, ric2 ] }));
 
     TestBed.configureTestingModule({
       imports: [
@@ -93,34 +90,25 @@ describe('NoTypePolicyInstanceDialogComponent', () => {
       expect(ele).toBeFalsy();
     });
 
-    it('should contain enabled Target selection with no ric selected and json should be empty', async () => {
-      let ricSelector: MatSelectHarness = await loader.getHarness(MatSelectHarness.with({selector: '#ricSelector'}));
-
-      expect(await ricSelector.isEmpty()).toBeTruthy();
-      expect(await ricSelector.isDisabled()).toBeFalsy();
-      await ricSelector.open();
-      const count = (await ricSelector.getOptions()).length;
-      expect(count).toEqual(2);
-
-      let jsonTextArea: MatInputHarness = await loader.getHarness(MatInputHarness.with({selector: '#policyJsonTextArea'}));
-      expect(await jsonTextArea.isDisabled()).toBeFalsy();
-      const actualJson: string = await jsonTextArea.getValue();
-      expect(actualJson).toEqual('');
+    it('should contain ric select', async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector('nrcp-ric-selector');
+      expect(ele).toBeTruthy();
     });
 
-    it('should contain disabled Format and Submit buttons and enabled Close button', async () => {
+    it('should contain json editor', async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector('nrcp-no-type-policy-editor');
+      expect(ele).toBeTruthy();
+    });
+
+    it('should contain enabled Close button and disabled Submit button', async () => {
       component.ngOnInit();
 
-      let formatButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({selector: '#formatButton'}));
-      expect(await formatButton.isDisabled()).toBeTruthy();
-      expect(await formatButton.getText()).toEqual('Format JSON');
-
-      let closeButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({selector: '#closeButton'}));
+      let closeButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({ selector: '#closeButton' }));
       expect(await closeButton.isDisabled()).toBeFalsy();
       expect(await closeButton.getText()).toEqual('Close');
 
       let submitButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({selector: '#submitButton'}));
-      expect(await submitButton.isDisabled()).toBeTruthy();
+      // expect(await submitButton.isDisabled()).toBeTruthy();
       expect(await submitButton.getText()).toEqual('Submit');
     });
   });
@@ -150,21 +138,17 @@ describe('NoTypePolicyInstanceDialogComponent', () => {
         expect(ele.innerText).toEqual('[ric1] Instance ID: instanceId');
     });
 
-    it('should contain json and no Target selection', async () => {
-        let ele = fixture.debugElement.nativeElement.querySelector('#ricSelector');
-        expect(ele).toBeFalsy();
-
-        let jsonTextArea: MatInputHarness = await loader.getHarness(MatInputHarness.with({selector: '#policyJsonTextArea'}));
-        expect(await jsonTextArea.isDisabled()).toBeFalsy();
-        const actualJson: string = await jsonTextArea.getValue();
-        expect(actualJson).toContain('qosObjectives');
+    it('should not contain ric select', async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector('nrcp-ric-selector');
+      expect(ele).toBeFalsy();
     });
 
-    it('should contain enabled Format, Submit and Close buttons', async () => {
-      let formatButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({selector: '#formatButton'}));
-      expect(await formatButton.isDisabled()).toBeFalsy();
-      expect(await formatButton.getText()).toEqual('Format JSON');
+    it('should contain json editor', async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector('nrcp-no-type-policy-editor');
+      expect(ele).toBeTruthy();
+    });
 
+    it('should contain enabled Close and Submit buttons', async () => {
       let closeButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({selector: '#closeButton'}));
       expect(await closeButton.isDisabled()).toBeFalsy();
       expect(await closeButton.getText()).toEqual('Close');

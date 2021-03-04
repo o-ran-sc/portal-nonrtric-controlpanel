@@ -140,7 +140,7 @@ export class HttpMockRequestInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (request.method === "PUT" && request.url.includes("policies")) {
-            console.log('Answered PUT policy ' + request.url);
+            console.log('Answered PUT policy ', request.url, request.body);
             return of(new HttpResponse({ status: 200 }));
         }
         for (const element of urls) {
