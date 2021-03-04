@@ -32,6 +32,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { EiCardComponent } from './ei-card/ei-card.component';
 
 
 const routes: Routes = [
@@ -42,7 +43,8 @@ const routes: Routes = [
   declarations: [
     EICoordinatorComponent,
     ProducersListComponent,
-    JobsListComponent
+    JobsListComponent,
+    EiCardComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +59,8 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   exports: [
-    EICoordinatorComponent
+    EICoordinatorComponent,
+    EiCardComponent
   ]
 })
 export class EiCoordinatorModule { }

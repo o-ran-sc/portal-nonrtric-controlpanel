@@ -64,7 +64,6 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
 import { UiService } from './services/ui/ui.service';
 import { CookieService } from 'ngx-cookie-service';
 import { NodeModulesComponent } from './node-modules/node-modules.component';
-import { EICardComponent } from './ui/ei-card/ei-card.component';
 import { HttpMockRequestInterceptor } from './interceptor.mock';
 import { environment } from 'src/environments/environment';
 import { HttpRequestInterceptor } from './interceptor';
@@ -75,7 +74,6 @@ export const isMock = environment.mock;
   declarations: [
     AppComponent,
     ConfirmDialogComponent,
-    EICardComponent,
     ErrorDialogComponent,
     FooterComponent,
     MainComponent,
