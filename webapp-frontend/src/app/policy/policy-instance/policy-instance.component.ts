@@ -59,7 +59,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.instanceDataSource = new PolicyInstanceDataSource(this.policySvc, this.sort, this.notificationService, this.policyTypeSchema);
+        this.instanceDataSource = new PolicyInstanceDataSource(this.policySvc, this.sort, this.policyTypeSchema);
         this.expanded.subscribe((isExpanded: boolean) => this.onExpand(isExpanded));
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;

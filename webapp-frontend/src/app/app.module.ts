@@ -63,7 +63,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import { UiService } from './services/ui/ui.service';
 import { CookieService } from 'ngx-cookie-service';
-import { NodeModulesComponent } from './node-modules/node-modules.component';
 import { HttpMockRequestInterceptor } from './interceptor.mock';
 import { environment } from 'src/environments/environment';
 import { HttpRequestInterceptor } from './interceptor';
@@ -77,7 +76,6 @@ export const isMock = environment.mock;
     ErrorDialogComponent,
     FooterComponent,
     MainComponent,
-    NodeModulesComponent,
     SidenavListComponent,
   ],
   imports: [

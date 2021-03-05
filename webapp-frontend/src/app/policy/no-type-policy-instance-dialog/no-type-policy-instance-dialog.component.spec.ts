@@ -25,11 +25,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSelectHarness } from '@angular/material/select/testing';
 import { MatInputModule } from '@angular/material/input';
-import { MatInputHarness } from '@angular/material/input/testing';
-import { of } from "rxjs/observable/of";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ToastrModule } from "ngx-toastr";
 
@@ -37,8 +34,6 @@ import { PolicyService } from "../../services/policy/policy.service";
 import { ErrorDialogService } from "../../services/ui/error-dialog.service";
 import { UiService } from "../../services/ui/ui.service";
 import { NoTypePolicyInstanceDialogComponent } from "./no-type-policy-instance-dialog.component";
-import { RicSelectorComponent } from "../ric-selector/ric-selector.component";
-import { NoTypePolicyEditorComponent } from "../no-type-policy-editor/no-type-policy-editor.component";
 
 describe('NoTypePolicyInstanceDialogComponent', () => {
   let component: NoTypePolicyInstanceDialogComponent;

@@ -20,7 +20,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { JsonPointer } from 'angular6-json-schema-form';
 import * as uuid from 'uuid';
 import { CreatePolicyInstance, PolicyInstance, PolicyTypeSchema } from '../../interfaces/policy.types';
@@ -79,8 +78,6 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     liveFormData: any = {};
     formValidationErrors: any;
     formIsValid = false;
-
-    @ViewChild(MatMenuTrigger, { static: true }) menuTrigger: MatMenuTrigger;
 
     policyInstanceId: string; // null if not yet created
     policyTypeName: string;

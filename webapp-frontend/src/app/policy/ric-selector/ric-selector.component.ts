@@ -17,11 +17,10 @@
 //   limitations under the License.
 //   ========================LICENSE_END===================================
 //  /
-//
 
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
-import { Ric, Rics } from 'src/app/interfaces/ric';
+import { Rics } from 'src/app/interfaces/ric';
 import { PolicyService } from 'src/app/services/policy/policy.service';
 
 @Component({

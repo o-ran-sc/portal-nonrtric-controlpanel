@@ -19,16 +19,13 @@
  */
 
 import { DataSource } from '@angular/cdk/collections';
-import { HttpErrorResponse } from '@angular/common/http';
 import { MatSort } from '@angular/material/sort';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { merge } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-import { catchError, finalize, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { PolicyInstance, PolicyTypeSchema } from '../../interfaces/policy.types';
 import { PolicyService } from '../../services/policy/policy.service';
-import { NotificationService } from '../../services/ui/notification.service';
 
 export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
 
@@ -45,7 +42,6 @@ export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
     constructor(
         private policySvc: PolicyService,
         public sort: MatSort,
-        private notificationService: NotificationService,
         private policyTypeSchema: PolicyTypeSchema) {
         super();
     }

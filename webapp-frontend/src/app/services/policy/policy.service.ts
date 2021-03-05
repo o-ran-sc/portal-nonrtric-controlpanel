@@ -21,10 +21,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { CreatePolicyInstance, PolicyInstance, PolicyInstanceAck, PolicyInstances, PolicyStatus, PolicyType, PolicyTypes } from '../../interfaces/policy.types';
-import { ControlpanelSuccessTransport } from '../../interfaces/controlpanel.types';
-import { Ric, Rics } from 'src/app/interfaces/ric';
+import { Rics } from 'src/app/interfaces/ric';
 
 /**
  * Services for calling the policy endpoints.
