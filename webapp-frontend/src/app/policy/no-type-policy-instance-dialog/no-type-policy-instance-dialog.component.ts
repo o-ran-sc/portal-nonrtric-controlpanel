@@ -90,7 +90,7 @@ export class NoTypePolicyInstanceDialogComponent implements OnInit {
     createPolicyInstance.policy_data = JSON.parse(policyJson);
     createPolicyInstance.policy_id = this.policyInstanceId;
     createPolicyInstance.policytype_id = '';
-    createPolicyInstance.ric_id = this.ricSelectorComponent.selectedRic;
+    createPolicyInstance.ric_id = this.ricSelectorComponent ? this.ricSelectorComponent.selectedRic : this.ric;
     createPolicyInstance.service_id = 'controlpanel';
     return createPolicyInstance;
   }

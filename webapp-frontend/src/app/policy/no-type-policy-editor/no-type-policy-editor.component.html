@@ -1,6 +1,6 @@
 <mat-form-field style="width: 800px;"  appearance="fill">
     <textarea id="policyJsonTextArea" formControlName="policyJsonTextArea" matInput cdkTextareaAutosize
-        cdkAutosizeMinRows="10" required [(value)]="this.policyJson" placeholder="Policy properties"
+        cdkAutosizeMinRows="10" required [value]="this.policyJson" placeholder="Policy properties"
         matTooltip="The properties of the policy instance, in JSON format" matTooltipPosition="before">
     </textarea>
     <div *ngIf="policyJsonTextArea.invalid && (policyJsonTextArea.dirty || policyJsonTextArea.touched)">

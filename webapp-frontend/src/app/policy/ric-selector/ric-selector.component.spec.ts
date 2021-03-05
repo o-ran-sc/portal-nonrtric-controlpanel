@@ -1,6 +1,27 @@
+// -
+//   ========================LICENSE_START=================================
+//   O-RAN-SC
+//   %%
+//   Copyright (C) 2021: Nordix Foundation
+//   %%
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+//   ========================LICENSE_END===================================
+//  /
+//
+
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,9 +33,9 @@ import { PolicyService } from 'src/app/services/policy/policy.service';
 
 import { RicSelectorComponent } from './ric-selector.component';
 
-let formGroup: FormGroup = new FormGroup({});
 
 describe('RicSelectorComponent', () => {
+  let formGroup: FormGroup = new FormGroup({});
   let component: TestRicSelectorHostComponent;
   let fixture: ComponentFixture<TestRicSelectorHostComponent>;
   let loader: HarnessLoader;
@@ -38,6 +59,9 @@ describe('RicSelectorComponent', () => {
         BrowserAnimationsModule,
         MatSelectModule,
       ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+      ],
       declarations: [
         RicSelectorComponent,
         TestRicSelectorHostComponent
@@ -47,7 +71,7 @@ describe('RicSelectorComponent', () => {
         FormBuilder
       ]
     })
-      .compileComponents();
+    .compileComponents();
 
     fixture = TestBed.createComponent(TestRicSelectorHostComponent);
     component = fixture.componentInstance;
@@ -80,15 +104,15 @@ describe('RicSelectorComponent', () => {
     const count = (await ricSelector.getOptions()).length;
     expect(count).toEqual(2);
   });
-});
 
-@Component({
-  selector: `ric-selector-host-component`,
-  template: `<nrcp-ric-selector [instanceForm]="instanceForm" [policyTypeName]="policyTypeName"></nrcp-ric-selector>`
-})
-export class TestRicSelectorHostComponent {
-  @ViewChild(RicSelectorComponent)
-  private ricSelectorComponent: RicSelectorComponent;
-  instanceForm: FormGroup = formGroup;
-  policyTypeName: string = 'policyTypeName';
-}
+  @Component({
+    selector: `ric-selector-host-component`,
+    template: `<nrcp-ric-selector [instanceForm]="instanceForm" [policyTypeName]="policyTypeName"></nrcp-ric-selector>`
+  })
+  class TestRicSelectorHostComponent {
+    @ViewChild(RicSelectorComponent)
+    private ricSelectorComponent: RicSelectorComponent;
+    instanceForm: FormGroup = formGroup;
+    policyTypeName: string = 'policyTypeName';
+  }
+});
