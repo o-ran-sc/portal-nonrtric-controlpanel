@@ -34,6 +34,7 @@ import { PolicyService } from "../../services/policy/policy.service";
 import { ErrorDialogService } from "../../services/ui/error-dialog.service";
 import { UiService } from "../../services/ui/ui.service";
 import { NoTypePolicyInstanceDialogComponent } from "./no-type-policy-instance-dialog.component";
+import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 
 describe('NoTypePolicyInstanceDialogComponent', () => {
   let component: NoTypePolicyInstanceDialogComponent;
@@ -55,6 +56,9 @@ describe('NoTypePolicyInstanceDialogComponent', () => {
         MatSelectModule,
         ReactiveFormsModule,
         ToastrModule.forRoot()
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
       ],
       declarations: [
         NoTypePolicyInstanceDialogComponent

@@ -63,9 +63,9 @@
         <div *ngIf="isVisible.form" class="json-schema-form" [@expandSection]="true">
             <div *ngIf="!formActive">{{jsonFormStatusMessage}}</div>
 
-            <json-schema-form *ngIf="formActive" loadExternalAssets="true" [form]="jsonSchemaObject"
+            <json-schema-form *ngIf="formActive" [form]="jsonSchemaObject"
                 [(data)]="jsonObject" [options]="jsonFormOptions" [framework]="'material-design'" [language]="'en'"
-                (onChanges)="onChanges($event)" (onSubmit)="onSubmit($event)" (isValid)="isValid($event)"
+                (onChanges)="onChanges($event)" (onSubmit)="onSubmit()" (isValid)="isValid($event)"
                 (validationErrors)="validationErrors($event)">
             </json-schema-form>
         </div>
