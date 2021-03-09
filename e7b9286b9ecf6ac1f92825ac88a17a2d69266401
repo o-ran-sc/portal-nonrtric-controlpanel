@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42828971_e0a1b1e3",
+        "filename": "webapp-frontend/src/app/policy/policy.module.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2021-03-09T08:59:10Z",
+      "side": 1,
+      "message": "missing copyright header",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 47
+      },
+      "revId": "e7b9286b9ecf6ac1f92825ac88a17a2d69266401",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa382954_c7bd4f0b",
+        "filename": "webapp-frontend/src/app/policy/typed-policy-editor/typed-policy-editor.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2021-03-09T08:59:10Z",
+      "side": 1,
+      "message": "missing copyright header",
+      "revId": "e7b9286b9ecf6ac1f92825ac88a17a2d69266401",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e93f9d18_1b16c74a",
+        "filename": "webapp-frontend/src/app/policy/typed-policy-editor/typed-policy-editor.component.scss",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2021-03-09T08:59:10Z",
+      "side": 1,
+      "message": "missing copyright header",
+      "revId": "e7b9286b9ecf6ac1f92825ac88a17a2d69266401",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb24e522_31b8fe38",
+        "filename": "webapp-frontend/src/app/policy/typed-policy-editor/typed-policy-editor.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2021-03-09T08:59:10Z",
+      "side": 1,
+      "message": "missing copyright header",
+      "revId": "e7b9286b9ecf6ac1f92825ac88a17a2d69266401",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dbdeb23_a58eea69",
+        "filename": "webapp-frontend/src/app/policy/typed-policy-editor/typed-policy-editor.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000262
+      },
+      "writtenOn": "2021-03-09T08:59:10Z",
+      "side": 1,
+      "message": "missing copyright header",
+      "revId": "e7b9286b9ecf6ac1f92825ac88a17a2d69266401",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
