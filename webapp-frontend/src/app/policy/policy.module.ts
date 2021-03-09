@@ -33,6 +33,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { Routes, RouterModule } from '@angular/router';
 import { RicSelectorComponent } from './ric-selector/ric-selector.component';
 import { NoTypePolicyEditorComponent } from './no-type-policy-editor/no-type-policy-editor.component';
+import { TypedPolicyEditorComponent } from './typed-policy-editor/typed-policy-editor.component';
 
 const routes:Routes = [
   {path: 'policy', component: PolicyControlComponent}
@@ -47,6 +48,7 @@ const routes:Routes = [
     PolicyInstanceDialogComponent,
     RicSelectorComponent,
     NoTypePolicyEditorComponent,
+    TypedPolicyEditorComponent,
   ],
   imports: [
     CommonModule,
