@@ -17,10 +17,8 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { JsonPointer } from 'angular6-json-schema-form';
 import * as uuid from 'uuid';
 import { CreatePolicyInstance, PolicyInstance, PolicyTypeSchema } from '../../interfaces/policy.types';
 import { PolicyService } from '../../services/policy/policy.service';
@@ -31,59 +29,26 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
 import { Ric, Rics } from '../../interfaces/ric';
+import { TypedPolicyEditorComponent } from '../typed-policy-editor/typed-policy-editor.component';
 
 
 @Component({
     selector: 'nrcp-policy-instance-dialog',
     templateUrl: './policy-instance-dialog.component.html',
-    styleUrls: ['./policy-instance-dialog.component.scss'],
-    animations: [
-        trigger('expandSection', [
-            state('in', style({ height: '*' })),
-            transition(':enter', [
-                style({ height: 0 }), animate(100),
-            ]),
-            transition(':leave', [
-                style({ height: '*' }),
-                animate(100, style({ height: 0 })),
-            ]),
-        ]),
-    ],
+    styleUrls: ['./policy-instance-dialog.component.scss']
 })
 export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
+    @ViewChild(TypedPolicyEditorComponent)
+    policyEditor: TypedPolicyEditorComponent;
     instanceForm: FormGroup;
 
 
-    formActive = false;
-    isVisible = {
-        form: true,
-        json: false,
-        schema: false
-    };
-
-    jsonFormStatusMessage = 'Loading form...';
-    jsonSchemaObject: any = {};
-    jsonObject: any = {};
-
-
-    jsonFormOptions: any = {
-        addSubmit: false, // Add a submit button if layout does not have one
-        debug: false, // Don't show inline debugging information
-        loadExternalAssets: true, // Load external css and JavaScript for frameworks
-        returnEmptyFields: false, // Don't return values for empty input fields
-        setSchemaDefaults: true, // Always use schema defaults for empty fields
-        defautWidgetOptions: { feedback: true }, // Show inline feedback icons
-    };
-
-    liveFormData: any = {};
-    formValidationErrors: any;
-    formIsValid = false;
-
-    policyInstanceId: string; // null if not yet created
-    policyTypeName: string;
-    darkMode: boolean;
     ric: string;
     allRics: Ric[];
+    policyInstanceId: string; // null if not yet created
+    policyTypeName: string;
+    jsonSchemaObject: any = {};
+    darkMode: boolean;
 
     private fetchRics() {
         console.log('fetchRics ' + this.policyTypeName);
@@ -102,20 +67,16 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         private dataService: PolicyService,
         private errorService: ErrorDialogService,
         private notificationService: NotificationService,
-        @Inject(MAT_DIALOG_DATA) private data,
+        @Inject(MAT_DIALOG_DATA) public data,
         private dialogRef: MatDialogRef<PolicyInstanceDialogComponent>,
         private ui: UiService) {
-        this.formActive = false;
         this.policyInstanceId = data.instanceId;
         this.policyTypeName = data.name;
         this.jsonSchemaObject = data.createSchema;
-        this.jsonObject = data.instanceJson;
         this.ric = data.ric;
     }
 
     ngOnInit() {
-        this.jsonFormStatusMessage = 'Init';
-        this.formActive = true;
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
         });
@@ -139,7 +100,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         if (this.policyInstanceId == null) {
             this.policyInstanceId = uuid.v4();
         }
-        const policyJson: string = this.prettyLiveFormData;
+        const policyJson: string = this.policyEditor.prettyLiveFormData;
         const self: PolicyInstanceDialogComponent = this;
         let createPolicyInstance: CreatePolicyInstance = this.createPolicyInstance(policyJson);
         this.dataService.putPolicy(createPolicyInstance).subscribe(
@@ -170,65 +131,8 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         this.dialogRef.close();
     }
 
-    public onChanges(formData: any) {
-        this.liveFormData = formData;
-    }
-
-    get prettyLiveFormData(): string {
-        return JSON.stringify(this.liveFormData, null, 2);
-    }
-
-    get schemaAsString(): string {
-        return JSON.stringify(this.jsonSchemaObject, null, 2);
-    }
-
-    get jsonAsString(): string {
-        return JSON.stringify(this.jsonObject, null, 2);
-    }
-
-    isValid(isValid: boolean): void {
-        this.formIsValid = isValid;
-    }
-
-    validationErrors(validationErrors: any): void {
-        this.formValidationErrors = validationErrors;
-    }
-
-    get prettyValidationErrors() {
-        if (!this.formValidationErrors) { return null; }
-        const errorArray = [];
-        for (const error of this.formValidationErrors) {
-            const message = error.message;
-            const dataPathArray = JsonPointer.parse(error.dataPath);
-            if (dataPathArray.length) {
-                let field = dataPathArray[0];
-                for (let i = 1; i < dataPathArray.length; i++) {
-                    const key = dataPathArray[i];
-                    field += /^\d+$/.test(key) ? `[${key}]` : `.${key}`;
-                }
-                errorArray.push(`${field}: ${message}`);
-            } else {
-                errorArray.push(message);
-            }
-        }
-        return errorArray.join('<br>');
-    }
-
-    private parseJson(str: string): string {
-        try {
-            if (str != null) {
-                return JSON.parse(str);
-            }
-        } catch (jsonError) {
-            this.jsonFormStatusMessage =
-                'Invalid JSON\n' +
-                'parser returned:\n\n' + jsonError;
-        }
-        return null;
-    }
-
-    public toggleVisible(item: string) {
-        this.isVisible[item] = !this.isVisible[item];
+    get isJsonFormValid(): boolean {
+        return this.policyEditor ? this.policyEditor.formIsValid : false;
     }
 }
 
