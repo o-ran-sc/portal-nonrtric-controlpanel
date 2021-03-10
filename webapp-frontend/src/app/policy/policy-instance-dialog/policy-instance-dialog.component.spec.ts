@@ -33,19 +33,19 @@ import { ToastrModule } from "ngx-toastr";
 import { PolicyService } from "../../services/policy/policy.service";
 import { ErrorDialogService } from "../../services/ui/error-dialog.service";
 import { UiService } from "../../services/ui/ui.service";
-import { NoTypePolicyInstanceDialogComponent } from "./no-type-policy-instance-dialog.component";
+import { PolicyInstanceDialogComponent } from "./policy-instance-dialog.component";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 
-describe('NoTypePolicyInstanceDialogComponent', () => {
-  let component: NoTypePolicyInstanceDialogComponent;
-  let fixture: ComponentFixture<NoTypePolicyInstanceDialogComponent>;
+describe('PolicyInstanceDialogComponent', () => {
+  let component: PolicyInstanceDialogComponent;
+  let fixture: ComponentFixture<PolicyInstanceDialogComponent>;
   let loader: HarnessLoader;
   let policyServiceSpy: jasmine.SpyObj<PolicyService>;
   let errDialogServiceSpy: jasmine.SpyObj<ErrorDialogService>;
 
   beforeEach(async () => {
-    policyServiceSpy = jasmine.createSpyObj('PolicyService', [ 'putPolicy' ]);
-    errDialogServiceSpy = jasmine.createSpyObj('ErrorDialogService', [ 'displayError' ]);
+    policyServiceSpy = jasmine.createSpyObj('PolicyService', ['putPolicy']);
+    errDialogServiceSpy = jasmine.createSpyObj('ErrorDialogService', ['displayError']);
 
     TestBed.configureTestingModule({
       imports: [
@@ -61,7 +61,7 @@ describe('NoTypePolicyInstanceDialogComponent', () => {
         CUSTOM_ELEMENTS_SCHEMA
       ],
       declarations: [
-        NoTypePolicyInstanceDialogComponent
+        PolicyInstanceDialogComponent
       ],
       providers: [
         { provide: MatDialogRef, useValue: component },
@@ -73,8 +73,12 @@ describe('NoTypePolicyInstanceDialogComponent', () => {
     });
   });
 
-  describe('content when creating policy', () => {
+  describe('content when creating policy without type', () => {
     beforeEach(async () => {
+      const policyData = {
+        createSchema: '{}'
+      };
+      TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: policyData }); // Should be provided with a policy
       ({ fixture, component, loader } = compileAndGetComponents(fixture, component, loader));
     });
 
@@ -83,7 +87,7 @@ describe('NoTypePolicyInstanceDialogComponent', () => {
       expect(ele.src).toContain('assets/oran-logo.png');
 
       ele = fixture.debugElement.nativeElement.querySelector('text');
-      expect(ele.childNodes[0].childNodes[0].textContent).toEqual('Create new policy instance of < No type >');
+      expect(ele.textContent).toEqual('Create new policy instance of type < No Type >');
 
       ele = fixture.debugElement.nativeElement.querySelector('#instanceInfo');
       expect(ele).toBeFalsy();
@@ -106,35 +110,35 @@ describe('NoTypePolicyInstanceDialogComponent', () => {
       expect(await closeButton.isDisabled()).toBeFalsy();
       expect(await closeButton.getText()).toEqual('Close');
 
-      let submitButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({selector: '#submitButton'}));
+      let submitButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({ selector: '#submitButton' }));
       // expect(await submitButton.isDisabled()).toBeTruthy();
       expect(await submitButton.getText()).toEqual('Submit');
     });
   });
 
-  describe('content when editing policy', () => {
+  describe('content when editing policy without type', () => {
     beforeEach(async () => {
       const policyData = {
-        createSchema: "{}",
-        instanceId: "instanceId",
+        createSchema: '{}',
+        instanceId: 'instanceId',
         instanceJson: '{"qosObjectives": {"priorityLevel": 3100}}',
-        name: "name",
-        ric: "ric1"
-    };
-      TestBed.overrideProvider(MAT_DIALOG_DATA, {useValue: policyData }); // Should be provided with a policy
+        name: 'name',
+        ric: 'ric1'
+      };
+      TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: policyData }); // Should be provided with a policy
       ({ fixture, component, loader } = compileAndGetComponents(fixture, component, loader));
     });
 
     it('should contain oran logo and instance info', async () => {
-        let ele = fixture.debugElement.nativeElement.querySelector('img');
-        expect(ele.src).toContain('assets/oran-logo.png');
+      let ele = fixture.debugElement.nativeElement.querySelector('img');
+      expect(ele.src).toContain('assets/oran-logo.png');
 
-        ele = fixture.debugElement.nativeElement.querySelector('text');
-        expect(ele.childNodes[0].childNodes[0]).toBeFalsy(); // No create title
+      ele = fixture.debugElement.nativeElement.querySelector('text');
+      expect(ele.childNodes[0].childNodes[0]).toBeFalsy(); // No create title
 
-        ele = fixture.debugElement.nativeElement.querySelector('#instanceInfo');
-        expect(ele).toBeTruthy();
-        expect(ele.innerText).toEqual('[ric1] Instance ID: instanceId');
+      ele = fixture.debugElement.nativeElement.querySelector('#instanceInfo');
+      expect(ele).toBeTruthy();
+      expect(ele.innerText).toEqual('[ric1] Instance ID: instanceId');
     });
 
     it('should not contain ric select', async () => {
@@ -148,11 +152,11 @@ describe('NoTypePolicyInstanceDialogComponent', () => {
     });
 
     it('should contain enabled Close and Submit buttons', async () => {
-      let closeButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({selector: '#closeButton'}));
+      let closeButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({ selector: '#closeButton' }));
       expect(await closeButton.isDisabled()).toBeFalsy();
       expect(await closeButton.getText()).toEqual('Close');
 
-      let submitButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({selector: '#submitButton'}));
+      let submitButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({ selector: '#submitButton' }));
       expect(await submitButton.isDisabled()).toBeFalsy();
       expect(await submitButton.getText()).toEqual('Submit');
     });
@@ -160,10 +164,10 @@ describe('NoTypePolicyInstanceDialogComponent', () => {
   });
 });
 
-function compileAndGetComponents(fixture: ComponentFixture<NoTypePolicyInstanceDialogComponent>, component: NoTypePolicyInstanceDialogComponent, loader: HarnessLoader) {
+function compileAndGetComponents(fixture: ComponentFixture<PolicyInstanceDialogComponent>, component: PolicyInstanceDialogComponent, loader: HarnessLoader) {
   TestBed.compileComponents();
 
-  fixture = TestBed.createComponent(NoTypePolicyInstanceDialogComponent);
+  fixture = TestBed.createComponent(PolicyInstanceDialogComponent);
   component = fixture.componentInstance;
   fixture.detectChanges();
   loader = TestbedHarnessEnvironment.loader(fixture);

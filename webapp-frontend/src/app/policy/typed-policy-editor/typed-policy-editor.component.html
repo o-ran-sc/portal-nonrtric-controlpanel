@@ -25,9 +25,7 @@
     Properties
 </h4>
 <div id="propertiesDiv" *ngIf="isVisible.form" class="json-schema-form" [@expandSection]="true">
-    <div *ngIf="!formActive">{{jsonFormStatusMessage}}</div>
-
-    <json-schema-form id="json-schema-form" *ngIf="formActive" [form]="jsonSchemaObject"
+    <json-schema-form id="json-schema-form" [form]="jsonSchemaObject"
         [(data)]="jsonObject" [options]="jsonFormOptions" [framework]="'material-design'" [language]="'en'"
         (onChanges)="onChanges($event)" (isValid)="isValid($event)"
         (validationErrors)="validationErrors($event)">

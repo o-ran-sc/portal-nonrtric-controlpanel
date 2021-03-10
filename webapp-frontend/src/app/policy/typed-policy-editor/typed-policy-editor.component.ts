@@ -59,19 +59,13 @@ export class TypedPolicyEditorComponent implements OnInit {
         json: false,
         schema: false
     };
-    formActive: boolean = false;
-    jsonFormStatusMessage: string = 'Loading form...';
     liveFormData: any = {};
     formIsValid: boolean = false;
     formValidationErrors: any;
 
-    constructor() {
-        this.formActive = false;
-    }
+    constructor() {}
 
-    ngOnInit(): void {
-         this.formActive = true;
-    }
+    ngOnInit(): void {}
 
     public onChanges(formData: any) {
         this.liveFormData = formData;

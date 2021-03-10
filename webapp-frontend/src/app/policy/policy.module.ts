@@ -23,7 +23,6 @@ import { NgModule } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { PolicyCardComponent } from './policy-card/policy-card.component';
 import { PolicyControlComponent } from './policy-control.component';
-import { NoTypePolicyInstanceDialogComponent } from './no-type-policy-instance-dialog/no-type-policy-instance-dialog.component';
 import { PolicyInstanceDialogComponent } from './policy-instance-dialog/policy-instance-dialog.component';
 import { PolicyInstanceComponent } from './policy-instance/policy-instance.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -52,8 +51,8 @@ import { MaterialDesignFrameworkModule } from 'angular6-json-schema-form';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { Routes, RouterModule } from '@angular/router';
 import { RicSelectorComponent } from './ric-selector/ric-selector.component';
-import { NoTypePolicyEditorComponent } from './no-type-policy-editor/no-type-policy-editor.component';
 import { TypedPolicyEditorComponent } from './typed-policy-editor/typed-policy-editor.component';
+import { NoTypePolicyEditorComponent } from './no-type-policy-editor/no-type-policy-editor.component';
 
 const routes:Routes = [
   {path: 'policy', component: PolicyControlComponent}
@@ -61,7 +60,6 @@ const routes:Routes = [
 
 @NgModule({
   declarations: [
-    NoTypePolicyInstanceDialogComponent,
     PolicyCardComponent,
     PolicyControlComponent,
     PolicyInstanceComponent,

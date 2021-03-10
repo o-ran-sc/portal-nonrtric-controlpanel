@@ -2,7 +2,7 @@
   ========================LICENSE_START=================================
   O-RAN-SC
   %%
-  Copyright (C) 2019 Nordix Foundation
+  Copyright (C) 2020 Nordix Foundation
   %%
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
   -->
 
 <div class="text-muted logo" fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="space-around center">
-    <div *ngIf="policyInstanceId">[{{ric}}] Instance ID: {{policyInstanceId}}</div>
+    <div id="instanceInfo" *ngIf="policyInstanceId">[{{this.ric}}] Instance ID: {{policyInstanceId}}</div>
 </div>
 <div class="mat-elevation-z8 header row" [ngClass]="{'header-dark': darkMode}">
     <div class="logo">
@@ -27,7 +27,7 @@
         <svg class="logo__icon" viewBox="150.3 22.2 1000 50">
             <text class="logo__text" [ngClass]="{'logo__text-dark': darkMode}" font-size="30" font-weight="600"
                 letter-spacing=".1em" transform="translate(149 56)">
-                <tspan *ngIf="!policyInstanceId">Create new policy instance of type </tspan>
+                <tspan *ngIf="!this.policyInstanceId">Create new policy instance of type</tspan>
                 <tspan *ngIf="jsonSchemaObject.title"> {{jsonSchemaObject.title}}</tspan>
                 <tspan *ngIf="!jsonSchemaObject.title"> {{policyTypeName}}</tspan>
             </text>
@@ -37,30 +37,21 @@
 
 <div class="text-muted" *ngIf="jsonSchemaObject.description">{{jsonSchemaObject.description}}</div>
 
-<div [formGroup]="instanceForm" fxLayout="row" fxLayoutAlign="space-around start" fxLayout.lt-sm="column"
+<form [formGroup]="instanceForm" fxLayout="row" fxLayoutAlign="space-around start" fxLayout.lt-sm="column"
     fxLayoutAlign.lt-sm="flex-start center">
 
     <mat-card class="card" [ngClass]="{'card-dark': darkMode}">
-        <mat-form-field *ngIf="!policyInstanceId" appearance="fill">
-            <mat-select id="ricSelector" formControlName="ricSelector" matInput required [(value)]="ric"
-                placeholder="Target"
-                matTooltip="Element where the policy instance resides, e.g. a gNodeB or Near-RT RIC">
-                <mat-option *ngFor="let ric of allRics" [value]="ric">
-                    {{ric.ric_id}}
-                </mat-option>
-            </mat-select>
-            <div *ngIf="ricSelector.invalid && (ricSelector.dirty || ricSelector.touched)">
-                <div *ngIf="ricSelector.errors.required">
-                    <mat-error role="alert">This field is required.</mat-error>
-                </div>
-            </div>
-        </mat-form-field>
-
-        <nrcp-typed-policy-editor [jsonSchemaObject]="jsonSchemaObject" [jsonObject]="data.instanceJson" [darkMode]="darkMode"></nrcp-typed-policy-editor>
-        <hr />
-        <button mat-raised-button (click)="onClose()">Close</button>
-        <button mat-raised-button (click)="onSubmit()" [disabled]="!isJsonFormValid || !ric"
-            class="submitBtn">Submit</button>
-        <hr />
+        <nrcp-ric-selector *ngIf="!policyInstanceId" [instanceForm]="instanceForm"></nrcp-ric-selector>
+        <h4 *ngIf="!typeHasSchema()">
+            Properties
+        </h4>
+        <nrcp-no-type-policy-editor *ngIf="!typeHasSchema()" [policyJson]="policyJson" [instanceForm]="instanceForm"></nrcp-no-type-policy-editor>
+        <nrcp-typed-policy-editor *ngIf="typeHasSchema()" [jsonSchemaObject]="jsonSchemaObject" [jsonObject]="policyJson" [darkMode]="darkMode"></nrcp-typed-policy-editor>
+        <div mat-dialog-actions>
+            <button id="closeButton"  mat-raised-button [mat-dialog-close]="false">Close</button>
+            <button id="submitButton" mat-raised-button (click)="onSubmit()" class="submitBtn" [disabled]="!isFormValid()">
+                Submit
+            </button>
+        </div>
     </mat-card>
-</div>
+</form>

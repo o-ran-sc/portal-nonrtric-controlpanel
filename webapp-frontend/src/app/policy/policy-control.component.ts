@@ -23,7 +23,6 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { NoTypePolicyInstanceDialogComponent } from './no-type-policy-instance-dialog/no-type-policy-instance-dialog.component';
 import { PolicyTypeSchema } from '../interfaces/policy.types';
 import { PolicyTypeDataSource } from './policy-type/policy-type.datasource';
 import { getPolicyDialogProperties } from './policy-instance-dialog/policy-instance-dialog.component';
@@ -67,14 +66,8 @@ export class PolicyControlComponent implements OnInit {
     }
 
     createPolicyInstance(policyTypeSchema: PolicyTypeSchema): void {
-        let dialogRef;
-        if (this.isSchemaEmpty(policyTypeSchema)) {
-            dialogRef = this.dialog.open(NoTypePolicyInstanceDialogComponent,
-                getPolicyDialogProperties(policyTypeSchema, null, this.darkMode));
-        } else {
-            dialogRef = this.dialog.open(PolicyInstanceDialogComponent,
-                getPolicyDialogProperties(policyTypeSchema, null, this.darkMode));
-        }
+        let dialogRef = this.dialog.open(PolicyInstanceDialogComponent,
+            getPolicyDialogProperties(policyTypeSchema, null, this.darkMode));
         const info: PolicyTypeInfo = this.getPolicyTypeInfo(policyTypeSchema);
         dialogRef.afterClosed().subscribe(
             (_) => {
@@ -86,10 +79,6 @@ export class PolicyControlComponent implements OnInit {
     toggleListInstances(policyTypeSchema: PolicyTypeSchema): void {
         const info = this.getPolicyTypeInfo(policyTypeSchema);
         info.isExpanded.next(!info.isExpanded.getValue());
-    }
-
-    private isSchemaEmpty(policyTypeSchema: PolicyTypeSchema): boolean {
-        return policyTypeSchema.schemaObject === '{}';
     }
 
     getPolicyTypeInfo(policyTypeSchema: PolicyTypeSchema): PolicyTypeInfo {

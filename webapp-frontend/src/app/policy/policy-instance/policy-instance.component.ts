@@ -28,7 +28,6 @@ import { NotificationService } from '../../services/ui/notification.service';
 import { PolicyService } from '../../services/policy/policy.service';
 import { ConfirmDialogService } from '../../services/ui/confirm-dialog.service';
 import { PolicyInstance } from '../../interfaces/policy.types';
-import { NoTypePolicyInstanceDialogComponent } from '../no-type-policy-instance-dialog/no-type-policy-instance-dialog.component';
 import { PolicyInstanceDialogComponent } from '../policy-instance-dialog/policy-instance-dialog.component';
 import { getPolicyDialogProperties } from '../policy-instance-dialog/policy-instance-dialog.component';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
@@ -84,24 +83,13 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
         this.policySvc.getPolicyInstance(instance.policy_id).subscribe(
             (refreshedJson: any) => {
                 instance = refreshedJson;
-                if (this.isSchemaEmpty()) {
-                    this.dialog.open(
-                        NoTypePolicyInstanceDialogComponent,
-                        getPolicyDialogProperties(this.policyTypeSchema, instance, this.darkMode)).afterClosed().subscribe(
-                            (_: any) => {
-                                this.instanceDataSource.getPolicyInstances();
-                            }
-                        );
-                } else {
-                    this.dialog.open(
-                        PolicyInstanceDialogComponent,
-                        getPolicyDialogProperties(this.policyTypeSchema, instance, this.darkMode)).afterClosed().subscribe(
-                            (_: any) => {
-                                this.instanceDataSource.getPolicyInstances();
-                            }
-                        );
-
-                }
+                this.dialog.open(
+                    PolicyInstanceDialogComponent,
+                    getPolicyDialogProperties(this.policyTypeSchema, instance, this.darkMode)).afterClosed().subscribe(
+                        (_: any) => {
+                            this.instanceDataSource.getPolicyInstances();
+                        }
+                    );
             },
             (httpError: HttpErrorResponse) => {
                 this.notificationService.error('Could not refresh instance. Please try again.' + httpError.message);
