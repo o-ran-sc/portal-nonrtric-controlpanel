@@ -17,7 +17,7 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as uuid from 'uuid';
 import { CreatePolicyInstance, PolicyInstance, PolicyTypeSchema } from '../../interfaces/policy.types';
@@ -27,7 +27,6 @@ import { NotificationService } from './../../services/ui/notification.service';
 import { UiService } from '../../services/ui/ui.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ChangeDetectorRef } from '@angular/core';
 import { Ric, Rics } from '../../interfaces/ric';
 import { TypedPolicyEditorComponent } from '../typed-policy-editor/typed-policy-editor.component';
 
@@ -37,7 +36,7 @@ import { TypedPolicyEditorComponent } from '../typed-policy-editor/typed-policy-
     templateUrl: './policy-instance-dialog.component.html',
     styleUrls: ['./policy-instance-dialog.component.scss']
 })
-export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
+export class PolicyInstanceDialogComponent implements OnInit {
     @ViewChild(TypedPolicyEditorComponent)
     policyEditor: TypedPolicyEditorComponent;
     instanceForm: FormGroup;
@@ -63,7 +62,6 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     }
 
     constructor(
-        private cdr: ChangeDetectorRef,
         private dataService: PolicyService,
         private errorService: ErrorDialogService,
         private notificationService: NotificationService,
@@ -88,10 +86,6 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         if (!this.policyInstanceId) {
             this.fetchRics();
         }
-    }
-
-    ngAfterViewInit() {
-        this.cdr.detectChanges();
     }
 
     get ricSelector() { return this.instanceForm.get('ricSelector'); }

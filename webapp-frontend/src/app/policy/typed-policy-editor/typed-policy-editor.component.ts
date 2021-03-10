@@ -19,7 +19,7 @@
 //
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { JsonPointer } from 'angular6-json-schema-form';
 
 @Component({
@@ -65,17 +65,12 @@ export class TypedPolicyEditorComponent implements OnInit {
     formIsValid: boolean = false;
     formValidationErrors: any;
 
-    constructor(
-        private cdr: ChangeDetectorRef) {
+    constructor() {
         this.formActive = false;
     }
 
     ngOnInit(): void {
          this.formActive = true;
-    }
-
-    ngAfterViewInit() {
-        this.cdr.detectChanges();
     }
 
     public onChanges(formData: any) {

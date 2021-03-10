@@ -20,11 +20,11 @@
 
 -->
 
-<h4 class="default-cursor" (click)="toggleVisible('form')">
-    <mat-icon matTooltip="Properties">{{isVisible.form ? 'expand_less' : 'expand_more'}}</mat-icon>
+<h4 id="propertiesHeading" class="default-cursor" (click)="toggleVisible('form')">
+    <mat-icon id="propertiesIcon" matTooltip="Properties">{{isVisible.form ? 'expand_less' : 'expand_more'}}</mat-icon>
     Properties
 </h4>
-<div *ngIf="isVisible.form" class="json-schema-form" [@expandSection]="true">
+<div id="propertiesDiv" *ngIf="isVisible.form" class="json-schema-form" [@expandSection]="true">
     <div *ngIf="!formActive">{{jsonFormStatusMessage}}</div>
 
     <json-schema-form id="json-schema-form" *ngIf="formActive" [form]="jsonSchemaObject"
@@ -33,12 +33,12 @@
         (validationErrors)="validationErrors($event)">
     </json-schema-form>
 </div>
-<h4 [class.text-danger]="!formIsValid && !isVisible.json" [class.default-cursor]="formIsValid || isVisible.json"
+<h4 id="jsonHeading" [class.text-danger]="!formIsValid && !isVisible.json" [class.default-cursor]="formIsValid || isVisible.json"
 (click)="toggleVisible('json')">
-<mat-icon matTooltip="Json">{{isVisible.json ? 'expand_less' : 'expand_more'}}</mat-icon>
-Json
+<mat-icon id="jsonIcon" matTooltip="Json">{{isVisible.json ? 'expand_less' : 'expand_more'}}</mat-icon>
+JSON
 </h4>
-<div *ngIf="isVisible.json" fxLayout="column" [@expandSection]="true">
+<div id="jsonDiv" *ngIf="isVisible.json" fxLayout="column" [@expandSection]="true">
 <div>
     <strong *ngIf="formIsValid || prettyValidationErrors" [class.text-muted]="formIsValid"
         [class.text-danger]="!formIsValid">
@@ -53,11 +53,11 @@ Json
 </div>
 </div>
 
-<h4 class="default-cursor" (click)="toggleVisible('schema')">
-<mat-icon matTooltip="Json Schema">{{isVisible.schema ? 'expand_less' : 'expand_more'}}</mat-icon>
-Json Schema
+<h4 id="schemaHeading" class="default-cursor" (click)="toggleVisible('schema')">
+<mat-icon id="schemaIcon" matTooltip="Json Schema">{{isVisible.schema ? 'expand_less' : 'expand_more'}}</mat-icon>
+JSON Schema
 </h4>
-<div *ngIf="isVisible.schema" fxLayout="column" [@expandSection]="true">
+<div id="schemaDiv" *ngIf="isVisible.schema" fxLayout="column" [@expandSection]="true">
 <strong class="text-muted">Schema</strong>
 <pre [class.text__dark]="darkMode">{{schemaAsString}}</pre>
 </div>
