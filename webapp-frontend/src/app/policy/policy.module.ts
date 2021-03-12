@@ -23,6 +23,7 @@ import { NgModule } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { PolicyCardComponent } from './policy-card/policy-card.component';
 import { PolicyControlComponent } from './policy-control.component';
+import { PolicyTypeComponent } from './policy-type/policy-type.component';
 import { NoTypePolicyInstanceDialogComponent } from './no-type-policy-instance-dialog/no-type-policy-instance-dialog.component';
 import { PolicyInstanceDialogComponent } from './policy-instance-dialog/policy-instance-dialog.component';
 import { PolicyInstanceComponent } from './policy-instance/policy-instance.component';
@@ -66,6 +67,7 @@ const routes:Routes = [
     PolicyControlComponent,
     PolicyInstanceComponent,
     PolicyInstanceDialogComponent,
+    PolicyTypeComponent,
     RicSelectorComponent,
     NoTypePolicyEditorComponent,
     TypedPolicyEditorComponent,
@@ -102,7 +104,8 @@ const routes:Routes = [
   ],
   exports: [
     PolicyCardComponent,
-    PolicyControlComponent
-  ]
+    PolicyControlComponent,
+    PolicyTypeComponent
+  ],
 })
 export class PolicyModule { }

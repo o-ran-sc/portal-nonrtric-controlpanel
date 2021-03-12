@@ -23,9 +23,12 @@ import { Injectable, Injector } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import * as policyinstances1 from './mock/policy-instance-1.json';
 import * as policies from './mock/policies.json';
+import * as policiesnotype from './mock/policies_notype.json';
 import * as policyinstances2 from './mock/policy-instance-2.json';
+import * as policyinstancesnotype from './mock/policy-instance-notype.json';
 import * as policyinstances1Status from './mock/policy-instance-1-status.json';
 import * as policyinstances2Status from './mock/policy-instance-2-status.json';
+import * as policyinstancesnotypeStatus from './mock/policy-instance-notype-status.json';
 import * as eijobsProd1 from './mock/ei-jobs-producer1.json';
 import * as eijobsProd2 from './mock/ei-jobs-producer2.json';
 import * as eiProducerIds from './mock/ei-producerids.json';
@@ -54,7 +57,7 @@ const urls = [
     },
     {
         url: '/a1-policy/v2/policies?policytype_id=',
-        json: policies
+        json: policiesnotype
     },
     {
         url: '/a1-policy/v2/policies?policytype_id=1',
@@ -65,12 +68,20 @@ const urls = [
         json: policyinstances1
     },
     {
+        url: '/a1-policy/v2/policies/2001',
+        json: policyinstancesnotype
+    },
+    {
         url: '/a1-policy/v2/policies/2100',
         json: policyinstances2
     },
     {
         url: '/a1-policy/v2/policies/2000/status',
         json: policyinstances1Status
+    },
+    {
+        url: '/a1-policy/v2/policies/2001/status',
+        json: policyinstancesnotypeStatus
     },
     {
         url: '/a1-policy/v2/policies/2100/status',
