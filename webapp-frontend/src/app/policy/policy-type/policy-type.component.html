@@ -1,0 +1,14 @@
+<div fxLayout="row" fxLayoutGap="10px">
+  <div class="default-cursor" (click)="toggleVisible()">
+    <mat-icon matTooltip="Properties">{{isVisible.value? 'expand_less' : 'expand_more'}}</mat-icon>
+  </div>
+  <div>
+    <u>Policy type:</u> {{this.policyTypeInfo.type.id}}
+  </div>
+  <div>
+    <u>Description:</u> {{this.policyTypeInfo.type.schemaObject.description}}
+  </div>
+</div>
+
+<nrcp-policy-instance *ngIf="isVisible.value" [policyTypeSchema]=this.policyTypeInfo.type [expanded]=this.isVisible.asObservable()>
+</nrcp-policy-instance>
