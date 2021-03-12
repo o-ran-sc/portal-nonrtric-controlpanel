@@ -72,6 +72,20 @@ export class PolicyTypeDataSource extends DataSource<PolicyTypeSchema> {
             })
     }
 
+    public getPolicyType(policyTypeId: string): PolicyTypeSchema {
+        var policyTypeSchema = {} as PolicyTypeSchema;
+        this.policySvc.getPolicyType(policyTypeId)
+            .subscribe((policyType: PolicyType) => {
+                policyTypeSchema.id = policyTypeId;
+                policyTypeSchema.schemaObject = policyType.policy_schema;
+                policyTypeSchema.name = policyType.policy_schema.title;
+            })
+            if (policyTypeId === "") {
+                policyTypeSchema.id = '<No Type>';
+            }
+        return policyTypeSchema;
+    }
+
     connect(collectionViewer: CollectionViewer): Observable<PolicyTypeSchema[]> {
         return of(this.policyTypeSubject.getValue());
     }
