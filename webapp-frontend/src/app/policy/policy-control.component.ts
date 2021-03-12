@@ -23,11 +23,13 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { PolicyTypeSchema } from '@interfaces/policy.types';
+import { PolicyTypes, PolicyTypeSchema } from '@interfaces/policy.types';
 import { PolicyTypeDataSource } from './policy-type/policy-type.datasource';
 import { getPolicyDialogProperties } from './policy-instance-dialog/policy-instance-dialog.component';
 import { PolicyInstanceDialogComponent } from './policy-instance-dialog/policy-instance-dialog.component';
 import { UiService } from '@services/ui/ui.service';
+import { PolicyService } from '@services/policy/policy.service';
+import { PolicyTypeComponent } from './policy-type/policy-type.component';
 
 class PolicyTypeInfo {
     constructor(public type: PolicyTypeSchema) { }
@@ -51,11 +53,14 @@ class PolicyTypeInfo {
 export class PolicyControlComponent implements OnInit {
 
     policyTypeInfo = new Map<string, PolicyTypeInfo>();
+    policyTypeIds: Array<string>;
+    policyTypeComponent = new PolicyTypeComponent(this.policyTypesDataSource);
     darkMode: boolean;
 
     constructor(
         public policyTypesDataSource: PolicyTypeDataSource,
         private dialog: MatDialog,
+        private policyService: PolicyService,
         private ui: UiService) { }
 
     ngOnInit() {
@@ -63,15 +68,8 @@ export class PolicyControlComponent implements OnInit {
         this.ui.darkModeState.subscribe((isDark) => {
             this.darkMode = isDark;
         });
-    }
-
-    createPolicyInstance(policyTypeSchema: PolicyTypeSchema): void {
-        let dialogRef = this.dialog.open(PolicyInstanceDialogComponent,
-            getPolicyDialogProperties(policyTypeSchema, null, this.darkMode));
-        const info: PolicyTypeInfo = this.getPolicyTypeInfo(policyTypeSchema);
-        dialogRef.afterClosed().subscribe(
-            (_) => {
-                info.isExpanded.next(info.isExpanded.getValue());
+        this.policyService.getPolicyTypes().subscribe((policyType: PolicyTypes) => {
+            this.policyTypeIds = policyType.policytype_ids;
             }
         );
     }
@@ -97,15 +95,12 @@ export class PolicyControlComponent implements OnInit {
         return '< No type >';
     }
 
-    isInstancesShown(policyTypeSchema: PolicyTypeSchema): boolean {
-        return this.getPolicyTypeInfo(policyTypeSchema).isExpanded.getValue();
-    }
-
     getExpandedObserver(policyTypeSchema: PolicyTypeSchema): Observable<boolean> {
         return this.getPolicyTypeInfo(policyTypeSchema).isExpanded.asObservable();
     }
 
     refreshTables() {
         this.policyTypesDataSource.getPolicyTypes();
+        this.policyTypeComponent.setIsVisible(false);
     }
 }
