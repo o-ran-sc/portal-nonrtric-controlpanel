@@ -30,6 +30,7 @@ import { PolicyControlComponent } from './policy-control.component';
 import { PolicyTypeDataSource } from './policy-type/policy-type.datasource';
 import { UiService } from '@services/ui/ui.service';
 import { PolicyTypeSchema } from '@interfaces/policy.types';
+import { PolicyService } from '../services/policy/policy.service';
 
 describe('PolicyControlComponent', () => {
   let component: PolicyControlComponent;
@@ -37,11 +38,13 @@ describe('PolicyControlComponent', () => {
 
   beforeEach(async(() => {
     const policyTypeDataSourceSpy = jasmine.createSpyObj('PolicyTypeDataSource', [ 'connect', 'getPolicyTypes',  'disconnect' ]);
+    const policyServiceSpy = jasmine.createSpyObj('PolicyService', ['getPolicyTypes']);
     var policyTypeSchema = {} as PolicyTypeSchema;
     policyTypeSchema.name = '';
     policyTypeSchema.schemaObject = '';
     policyTypeDataSourceSpy.connect.and.returnValue(of([ policyTypeSchema]));
     policyTypeDataSourceSpy.disconnect();
+    policyServiceSpy.getPolicyTypes.and.returnValue(of(["type1"]));
 
     let matDialogStub: Partial<MatDialog>;
     let notificationServiceStub: Partial<NotificationService>;
@@ -59,6 +62,7 @@ describe('PolicyControlComponent', () => {
         PolicyControlComponent
        ],
       providers: [
+        { provide : PolicyService, useValue: policyServiceSpy},
         { provide: PolicyTypeDataSource, useValue: policyTypeDataSourceSpy },
         { provide: MatDialog, useValue: matDialogStub },
         { provide: NotificationService, useValue: notificationServiceStub },
