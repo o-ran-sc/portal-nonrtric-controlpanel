@@ -24,8 +24,9 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PolicyInstance, PolicyTypeSchema } from '@interfaces/policy.types';
+import { PolicyInstance } from '@interfaces/policy.types';
 import { PolicyService } from '@services/policy/policy.service';
+import { NotificationService } from '../../services/ui/notification.service';
 
 export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
 
@@ -42,16 +43,16 @@ export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
     constructor(
         private policySvc: PolicyService,
         public sort: MatSort,
-        private policyTypeSchema: PolicyTypeSchema) {
+        private notificationService: NotificationService,
+        private policyTypeSchemaId: string) {
         super();
     }
 
     public getPolicyInstances() {
         this.policyInstances = [] as PolicyInstance[];
-        this.policySvc.getPolicyInstancesByType(this.policyTypeSchema.id).subscribe(policies => {
+        this.policySvc.getPolicyInstancesByType(this.policyTypeSchemaId).subscribe(policies => {
             if (policies.policy_ids.length != 0) {
                 policies.policy_ids.forEach(policyId => {
-                    var policyInstance = {} as PolicyInstance
                     this.policySvc.getPolicyInstance(policyId).subscribe(policyInstance => {
                         this.policySvc.getPolicyStatus(policyId).subscribe(policyStatus => {
                             policyInstance.lastModified = policyStatus.last_modified;
