@@ -27,9 +27,7 @@
         <svg class="logo__icon" viewBox="150.3 22.2 1000 50">
             <text class="logo__text" [ngClass]="{'logo__text-dark': darkMode}" font-size="30" font-weight="600"
                 letter-spacing=".1em" transform="translate(149 56)">
-                <tspan *ngIf="!this.policyInstanceId">Create new policy instance of type</tspan>
-                <tspan *ngIf="jsonSchemaObject.title"> {{jsonSchemaObject.title}}</tspan>
-                <tspan *ngIf="!jsonSchemaObject.title"> {{policyTypeName}}</tspan>
+                <tspan *ngIf="!this.policyInstanceId">Create new policy instance of type {{policyTypeName}}</tspan>
             </text>
         </svg>
     </div>

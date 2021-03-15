@@ -17,26 +17,44 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PolicyService } from '../../services/policy/policy.service';
-import { NotificationService } from '../../services/ui/notification.service';
-import { UiService } from '../../services/ui/ui.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ErrorDialogService } from '../../services/ui/error-dialog.service';
-import * as uuid from 'uuid';
-import { CreatePolicyInstance, PolicyInstance, PolicyTypeSchema } from '../../interfaces/policy.types';
-import { RicSelectorComponent } from '../ric-selector/ric-selector.component';
-import { formatJsonString, NoTypePolicyEditorComponent } from '../no-type-policy-editor/no-type-policy-editor.component';
-import { TypedPolicyEditorComponent } from '../typed-policy-editor/typed-policy-editor.component';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import {
+  MatDialogConfig,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
+import { PolicyService } from "../../services/policy/policy.service";
+import { NotificationService } from "../../services/ui/notification.service";
+import { UiService } from "../../services/ui/ui.service";
+import { HttpErrorResponse } from "@angular/common/http";
+import { ErrorDialogService } from "../../services/ui/error-dialog.service";
+import * as uuid from "uuid";
+import {
+  CreatePolicyInstance,
+  PolicyInstance,
+  PolicyTypeSchema,
+} from "../../interfaces/policy.types";
+import { RicSelectorComponent } from "../ric-selector/ric-selector.component";
+import {
+  formatJsonString,
+  NoTypePolicyEditorComponent,
+} from "../no-type-policy-editor/no-type-policy-editor.component";
+import { TypedPolicyEditorComponent } from "../typed-policy-editor/typed-policy-editor.component";
 
 @Component({
-  selector: 'nrcp-policy-instance-dialog',
-  templateUrl: './policy-instance-dialog.component.html',
-  styleUrls: ['./policy-instance-dialog.component.scss']
+  selector: "nrcp-policy-instance-dialog",
+  templateUrl: "./policy-instance-dialog.component.html",
+  styleUrls: ["./policy-instance-dialog.component.scss"],
 })
-export class PolicyInstanceDialogComponent implements OnInit {
+export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
   instanceForm: FormGroup;
   @ViewChild(RicSelectorComponent)
   ricSelector: RicSelectorComponent;
@@ -47,20 +65,22 @@ export class PolicyInstanceDialogComponent implements OnInit {
   policyInstanceId: string; // null if not yet created
   policyJson: string;
   policyTypeName: string;
-  jsonSchemaObject: any = {};
+  jsonSchemaObject: any;
   darkMode: boolean;
   ric: string;
   allRicIds: string[] = [];
 
   constructor(
+    private cdr: ChangeDetectorRef,
     public dialogRef: MatDialogRef<PolicyInstanceDialogComponent>,
     private policySvc: PolicyService,
     private errorService: ErrorDialogService,
     private notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) private data,
-    private ui: UiService) {
+    private ui: UiService
+  ) {
     this.policyInstanceId = data.instanceId;
-    this.policyTypeName = data.name ? data.name : '< No Type >';
+    this.policyTypeName = data.name ? data.name : "< No Type >";
     this.policyJson = data.instanceJson;
     this.jsonSchemaObject = data.createSchema;
     this.ric = data.ric;
@@ -74,12 +94,17 @@ export class PolicyInstanceDialogComponent implements OnInit {
     this.formatNoTypePolicyJson();
   }
 
+  // Do not remove! Needed to avoid "Expression has changed after it was checked" warning
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
+  }
+
   private formatNoTypePolicyJson() {
     if (!this.typeHasSchema()) {
       if (this.policyJson) {
         this.policyJson = formatJsonString(this.policyJson);
       } else {
-        this.policyJson = '{}';
+        this.policyJson = "{}";
       }
     }
   }
@@ -95,28 +120,34 @@ export class PolicyInstanceDialogComponent implements OnInit {
     } else {
       policyData = this.noTypePolicyEditor.policyJsonTextArea.value;
     }
-    let createPolicyInstance: CreatePolicyInstance = this.createPolicyInstance(policyData);
-    this.policySvc.putPolicy(createPolicyInstance).subscribe(
-      {
-        next(_) {
-          self.notificationService.success('Policy without type:' + self.policyInstanceId + ' submitted');
-          self.dialogRef.close();
-        },
-        error(error: HttpErrorResponse) {
-          self.errorService.displayError('Submit failed: ' + error.error);
-        },
-        complete() { }
-      });
+    let createPolicyInstance: CreatePolicyInstance = this.createPolicyInstance(
+      policyData
+    );
+    this.policySvc.putPolicy(createPolicyInstance).subscribe({
+      next(_) {
+        self.notificationService.success(
+          "Policy without type:" + self.policyInstanceId + " submitted"
+        );
+        self.dialogRef.close();
+      },
+      error(error: HttpErrorResponse) {
+        self.errorService.displayError("Submit failed: " + error.error);
+      },
+      complete() {},
+    });
   }
 
   typeHasSchema(): boolean {
-    return this.jsonSchemaObject !== '{}';
+    return this.jsonSchemaObject.schemaObject !== "{}";
   }
 
   isFormValid(): boolean {
     let isValid: boolean = this.instanceForm.valid;
     if (this.typeHasSchema()) {
-      isValid = isValid && this.typedPolicyEditor ? this.typedPolicyEditor.formIsValid : false;
+      isValid =
+        isValid && this.typedPolicyEditor
+          ? this.typedPolicyEditor.formIsValid
+          : false;
     }
     return isValid;
   }
@@ -125,32 +156,38 @@ export class PolicyInstanceDialogComponent implements OnInit {
     let createPolicyInstance = {} as CreatePolicyInstance;
     createPolicyInstance.policy_data = JSON.parse(policyJson);
     createPolicyInstance.policy_id = this.policyInstanceId;
-    createPolicyInstance.policytype_id = '';
-    createPolicyInstance.ric_id = this.ricSelector ? this.ricSelector.selectedRic : this.ric;
-    createPolicyInstance.service_id = 'controlpanel';
+    createPolicyInstance.policytype_id = "";
+    createPolicyInstance.ric_id = this.ricSelector
+      ? this.ricSelector.selectedRic
+      : this.ric;
+    createPolicyInstance.service_id = "controlpanel";
     return createPolicyInstance;
   }
 }
 
-export function getPolicyDialogProperties(policyTypeSchema: PolicyTypeSchema, instance: PolicyInstance, darkMode: boolean): MatDialogConfig {
+export function getPolicyDialogProperties(
+  policyTypeSchema: PolicyTypeSchema,
+  instance: PolicyInstance,
+  darkMode: boolean
+): MatDialogConfig {
   const createSchema = policyTypeSchema.schemaObject;
   const instanceId = instance ? instance.policy_id : null;
   const instanceJson = instance ? instance.policy_data : null;
   const name = policyTypeSchema.name;
   const ric = instance ? instance.ric_id : null;
   return {
-      maxWidth: '1200px',
-      maxHeight: '900px',
-      width: '900px',
-      role: 'dialog',
-      disableClose: false,
-      panelClass: darkMode ? 'dark-theme' : '',
-      data: {
-          createSchema,
-          instanceId,
-          instanceJson,
-          name,
-          ric
-      }
+    maxWidth: "1200px",
+    maxHeight: "900px",
+    width: "900px",
+    role: "dialog",
+    disableClose: false,
+    panelClass: darkMode ? "dark-theme" : "",
+    data: {
+      createSchema,
+      instanceId,
+      instanceJson,
+      name,
+      ric,
+    },
   };
 }

@@ -21,12 +21,16 @@
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { HarnessLoader } from "@angular/cdk/testing";
-import { MatButtonModule } from '@angular/material/button';
-import { MatButtonHarness } from '@angular/material/button/testing';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatButtonHarness } from "@angular/material/button/testing";
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
+import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";
+import { AbstractControl, ReactiveFormsModule } from "@angular/forms";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ToastrModule } from "ngx-toastr";
 
@@ -34,9 +38,31 @@ import { PolicyService } from "../../services/policy/policy.service";
 import { ErrorDialogService } from "../../services/ui/error-dialog.service";
 import { UiService } from "../../services/ui/ui.service";
 import { PolicyInstanceDialogComponent } from "./policy-instance-dialog.component";
-import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+} from "@angular/core";
+import { TypedPolicyEditorComponent } from "../typed-policy-editor/typed-policy-editor.component";
+import { RicSelectorComponent } from "../ric-selector/ric-selector.component";
+import { NoTypePolicyEditorComponent } from "../no-type-policy-editor/no-type-policy-editor.component";
+import { PolicyTypeSchema } from "../../interfaces/policy.types";
 
-describe('PolicyInstanceDialogComponent', () => {
+describe("PolicyInstanceDialogComponent", () => {
+  const untypedSchema = "{}";
+  const untypedSchemaObject = {
+    id: "",
+    name: "",
+    schemaObject: untypedSchema,
+  } as PolicyTypeSchema;
+  const typedSchema =
+    '{ "description": "Type 1 policy type", "title": "1", "type": "object", "properties": { "priorityLevel": "number" }, "required": [ "priorityLevel" ]}';
+  const typedSchemaObject = {
+    id: "Type 1",
+    name: "Type 1",
+    schemaObject: typedSchema,
+  } as PolicyTypeSchema;
+
   let component: PolicyInstanceDialogComponent;
   let fixture: ComponentFixture<PolicyInstanceDialogComponent>;
   let loader: HarnessLoader;
@@ -44,8 +70,10 @@ describe('PolicyInstanceDialogComponent', () => {
   let errDialogServiceSpy: jasmine.SpyObj<ErrorDialogService>;
 
   beforeEach(async () => {
-    policyServiceSpy = jasmine.createSpyObj('PolicyService', ['putPolicy']);
-    errDialogServiceSpy = jasmine.createSpyObj('ErrorDialogService', ['displayError']);
+    policyServiceSpy = jasmine.createSpyObj("PolicyService", ["putPolicy"]);
+    errDialogServiceSpy = jasmine.createSpyObj("ErrorDialogService", [
+      "displayError",
+    ]);
 
     TestBed.configureTestingModule({
       imports: [
@@ -55,116 +83,263 @@ describe('PolicyInstanceDialogComponent', () => {
         MatInputModule,
         MatSelectModule,
         ReactiveFormsModule,
-        ToastrModule.forRoot()
+        ToastrModule.forRoot(),
       ],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [
-        PolicyInstanceDialogComponent
+        PolicyInstanceDialogComponent,
+        RicSelectorStubComponent,
+        NoTypePolicyEditorStubComponent,
+        TypedPolicyEditorStubComponent,
       ],
       providers: [
+        ChangeDetectorRef,
         { provide: MatDialogRef, useValue: component },
         { provide: PolicyService, useValue: policyServiceSpy },
         { provide: ErrorDialogService, useValue: errDialogServiceSpy },
         { provide: MAT_DIALOG_DATA, useValue: true },
-        UiService
-      ]
+        UiService,
+      ],
     });
   });
 
-  describe('content when creating policy without type', () => {
+  describe("content when creating policy without type", () => {
     beforeEach(async () => {
       const policyData = {
-        createSchema: '{}'
+        createSchema: untypedSchemaObject,
       };
       TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: policyData }); // Should be provided with a policy
-      ({ fixture, component, loader } = compileAndGetComponents(fixture, component, loader));
+      ({ fixture, component, loader } = compileAndGetComponents(
+        fixture,
+        component,
+        loader
+      ));
     });
 
-    it('should contain oran logo and create title and no instance info', async () => {
-      let ele = fixture.debugElement.nativeElement.querySelector('img');
-      expect(ele.src).toContain('assets/oran-logo.png');
+    it("should contain oran logo and create title and no instance info", async () => {
+      let ele = fixture.debugElement.nativeElement.querySelector("img");
+      expect(ele.src).toContain("assets/oran-logo.png");
 
-      ele = fixture.debugElement.nativeElement.querySelector('text');
-      expect(ele.textContent).toEqual('Create new policy instance of type < No Type >');
+      ele = fixture.debugElement.nativeElement.querySelector("text");
+      expect(ele.textContent).toEqual(
+        "Create new policy instance of type < No Type >"
+      );
 
-      ele = fixture.debugElement.nativeElement.querySelector('#instanceInfo');
+      ele = fixture.debugElement.nativeElement.querySelector("#instanceInfo");
       expect(ele).toBeFalsy();
     });
 
-    it('should contain ric select', async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector('nrcp-ric-selector');
+    it("should contain ric select", async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector(
+        "nrcp-ric-selector"
+      );
       expect(ele).toBeTruthy();
     });
 
-    it('should contain json editor', async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector('nrcp-no-type-policy-editor');
+    it("should contain json editor", async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector(
+        "nrcp-no-type-policy-editor"
+      );
       expect(ele).toBeTruthy();
     });
 
-    it('should contain enabled Close button and disabled Submit button', async () => {
+    it("should contain enabled Close button and disabled Submit button", async () => {
       component.ngOnInit();
 
-      let closeButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({ selector: '#closeButton' }));
+      let closeButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#closeButton" })
+      );
       expect(await closeButton.isDisabled()).toBeFalsy();
-      expect(await closeButton.getText()).toEqual('Close');
+      expect(await closeButton.getText()).toEqual("Close");
 
-      let submitButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({ selector: '#submitButton' }));
+      let submitButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#submitButton" })
+      );
       // expect(await submitButton.isDisabled()).toBeTruthy();
-      expect(await submitButton.getText()).toEqual('Submit');
+      expect(await submitButton.getText()).toEqual("Submit");
     });
   });
 
-  describe('content when editing policy without type', () => {
+  describe("content when creating policy with type", () => {
     beforeEach(async () => {
       const policyData = {
-        createSchema: '{}',
-        instanceId: 'instanceId',
-        instanceJson: '{"qosObjectives": {"priorityLevel": 3100}}',
-        name: 'name',
-        ric: 'ric1'
+        name: "Type 1",
+        createSchema: typedSchemaObject,
       };
       TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: policyData }); // Should be provided with a policy
-      ({ fixture, component, loader } = compileAndGetComponents(fixture, component, loader));
+      ({ fixture, component, loader } = compileAndGetComponents(
+        fixture,
+        component,
+        loader
+      ));
     });
 
-    it('should contain oran logo and instance info', async () => {
-      let ele = fixture.debugElement.nativeElement.querySelector('img');
-      expect(ele.src).toContain('assets/oran-logo.png');
+    it("should contain oran logo and create title and no instance info", async () => {
+      let ele = fixture.debugElement.nativeElement.querySelector("img");
+      expect(ele.src).toContain("assets/oran-logo.png");
 
-      ele = fixture.debugElement.nativeElement.querySelector('text');
-      expect(ele.childNodes[0].childNodes[0]).toBeFalsy(); // No create title
+      ele = fixture.debugElement.nativeElement.querySelector("text");
+      expect(ele.textContent).toEqual(
+        "Create new policy instance of type Type 1"
+      );
 
-      ele = fixture.debugElement.nativeElement.querySelector('#instanceInfo');
-      expect(ele).toBeTruthy();
-      expect(ele.innerText).toEqual('[ric1] Instance ID: instanceId');
-    });
-
-    it('should not contain ric select', async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector('nrcp-ric-selector');
+      ele = fixture.debugElement.nativeElement.querySelector("#instanceInfo");
       expect(ele).toBeFalsy();
     });
 
-    it('should contain json editor', async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector('nrcp-no-type-policy-editor');
+    it("should contain ric select", async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector(
+        "nrcp-ric-selector"
+      );
       expect(ele).toBeTruthy();
     });
 
-    it('should contain enabled Close and Submit buttons', async () => {
-      let closeButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({ selector: '#closeButton' }));
-      expect(await closeButton.isDisabled()).toBeFalsy();
-      expect(await closeButton.getText()).toEqual('Close');
-
-      let submitButton: MatButtonHarness = await loader.getHarness(MatButtonHarness.with({ selector: '#submitButton' }));
-      expect(await submitButton.isDisabled()).toBeFalsy();
-      expect(await submitButton.getText()).toEqual('Submit');
+    it("should contain typed json editor", async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector(
+        "nrcp-typed-policy-editor"
+      );
+      expect(ele).toBeTruthy();
     });
 
+    it("should contain enabled Close button and disabled Submit button", async () => {
+      component.ngOnInit();
+
+      let closeButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#closeButton" })
+      );
+      expect(await closeButton.isDisabled()).toBeFalsy();
+      expect(await closeButton.getText()).toEqual("Close");
+
+      let submitButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#submitButton" })
+      );
+      // expect(await submitButton.isDisabled()).toBeTruthy();
+      expect(await submitButton.getText()).toEqual("Submit");
+    });
+  });
+
+  describe("content when editing policy without type", () => {
+    beforeEach(async () => {
+      const policyData = {
+        createSchema: untypedSchemaObject,
+        instanceId: "instanceId",
+        instanceJson: '{"qosObjectives": {"priorityLevel": 3100}}',
+        name: "Type 1",
+        ric: "ric1",
+      };
+      TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: policyData }); // Should be provided with a policy
+      ({ fixture, component, loader } = compileAndGetComponents(
+        fixture,
+        component,
+        loader
+      ));
+    });
+
+    it("should contain oran logo and instance info", async () => {
+      let ele = fixture.debugElement.nativeElement.querySelector("img");
+      expect(ele.src).toContain("assets/oran-logo.png");
+
+      ele = fixture.debugElement.nativeElement.querySelector("text");
+      expect(ele.childNodes[0].childNodes[0]).toBeFalsy(); // No create title
+
+      ele = fixture.debugElement.nativeElement.querySelector("#instanceInfo");
+      expect(ele).toBeTruthy();
+      expect(ele.innerText).toEqual("[ric1] Instance ID: instanceId");
+    });
+
+    it("should not contain ric select", async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector(
+        "nrcp-ric-selector"
+      );
+      expect(ele).toBeFalsy();
+    });
+
+    it("should contain json editor", async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector(
+        "nrcp-no-type-policy-editor"
+      );
+      expect(ele).toBeTruthy();
+    });
+
+    it("should contain enabled Close and Submit buttons", async () => {
+      let closeButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#closeButton" })
+      );
+      expect(await closeButton.isDisabled()).toBeFalsy();
+      expect(await closeButton.getText()).toEqual("Close");
+
+      let submitButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#submitButton" })
+      );
+      expect(await submitButton.isDisabled()).toBeFalsy();
+      expect(await submitButton.getText()).toEqual("Submit");
+    });
+  });
+
+  describe("content when editing policy with type", () => {
+    beforeEach(async () => {
+      const policyData = {
+        createSchema: typedSchemaObject,
+        instanceId: "instanceId",
+        instanceJson: '{"qosObjectives": {"priorityLevel": 3100}}',
+        name: "name",
+        ric: "ric1",
+      };
+      TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: policyData }); // Should be provided with a policy
+      ({ fixture, component, loader } = compileAndGetComponents(
+        fixture,
+        component,
+        loader
+      ));
+    });
+
+    it("should contain oran logo and instance info", async () => {
+      let ele = fixture.debugElement.nativeElement.querySelector("img");
+      expect(ele.src).toContain("assets/oran-logo.png");
+
+      ele = fixture.debugElement.nativeElement.querySelector("text");
+      expect(ele.childNodes[0].childNodes[0]).toBeFalsy(); // No create title
+
+      ele = fixture.debugElement.nativeElement.querySelector("#instanceInfo");
+      expect(ele).toBeTruthy();
+      expect(ele.innerText).toEqual("[ric1] Instance ID: instanceId");
+    });
+
+    it("should not contain ric select", async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector(
+        "nrcp-ric-selector"
+      );
+      expect(ele).toBeFalsy();
+    });
+
+    it("should contain typed json editor", async () => {
+      const ele = fixture.debugElement.nativeElement.querySelector(
+        "nrcp-typed-policy-editor"
+      );
+      expect(ele).toBeTruthy();
+    });
+
+    it("should contain enabled Close and Submit buttons", async () => {
+      let closeButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#closeButton" })
+      );
+      expect(await closeButton.isDisabled()).toBeFalsy();
+      expect(await closeButton.getText()).toEqual("Close");
+
+      let submitButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#submitButton" })
+      );
+      expect(await submitButton.isDisabled()).toBeFalsy();
+      expect(await submitButton.getText()).toEqual("Submit");
+    });
   });
 });
 
-function compileAndGetComponents(fixture: ComponentFixture<PolicyInstanceDialogComponent>, component: PolicyInstanceDialogComponent, loader: HarnessLoader) {
+function compileAndGetComponents(
+  fixture: ComponentFixture<PolicyInstanceDialogComponent>,
+  component: PolicyInstanceDialogComponent,
+  loader: HarnessLoader
+) {
   TestBed.compileComponents();
 
   fixture = TestBed.createComponent(PolicyInstanceDialogComponent);
@@ -172,4 +347,50 @@ function compileAndGetComponents(fixture: ComponentFixture<PolicyInstanceDialogC
   fixture.detectChanges();
   loader = TestbedHarnessEnvironment.loader(fixture);
   return { fixture, component, loader };
+}
+
+@Component({
+  selector: "nrcp-ric-selecor",
+  template: "",
+  providers: [
+    { provide: RicSelectorComponent, useClass: RicSelectorStubComponent },
+  ],
+})
+class RicSelectorStubComponent {
+  get selectedRic(): string {
+    return "ric1";
+  }
+}
+
+@Component({
+  selector: "nrcp-no-type-policy-editor",
+  template: "",
+  providers: [
+    {
+      provide: NoTypePolicyEditorComponent,
+      useClass: NoTypePolicyEditorStubComponent,
+    },
+  ],
+})
+class NoTypePolicyEditorStubComponent {
+  get policyJsonTextArea(): AbstractControl {
+    const textArea = { value: "{}" } as AbstractControl;
+    return textArea;
+  }
+}
+
+@Component({
+  selector: "nrcp-typed-policy-editor",
+  template: "",
+  providers: [
+    {
+      provide: TypedPolicyEditorComponent,
+      useClass: TypedPolicyEditorStubComponent,
+    },
+  ],
+})
+class TypedPolicyEditorStubComponent {
+  get formIsValid(): boolean {
+    return true;
+  }
 }
