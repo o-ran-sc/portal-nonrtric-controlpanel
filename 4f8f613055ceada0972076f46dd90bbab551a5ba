@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60b7d8b2_94fdc72f",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-15T12:02:10Z",
+      "side": 1,
+      "message": "Please remove trailing whitespaces",
+      "revId": "4f8f613055ceada0972076f46dd90bbab551a5ba",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c46ddd0c_319fd119",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-15T12:02:10Z",
+      "side": 1,
+      "message": "Please remove trailing whitespaces",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 5
+      },
+      "revId": "4f8f613055ceada0972076f46dd90bbab551a5ba",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c06ddc0f_51b43865",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-15T12:02:10Z",
+      "side": 1,
+      "message": "I don\u0027t really understand what this actually tetsts. The MatSortHarness is only used for testing, not in production. So I don\u0027t see why there is a need to verify that. Or is the fact that a MatSortHarness exists proof that sorting is available in the component? If so, then I think the description should be \"should have sorting activated\" instead.",
+      "range": {
+        "startLine": 202,
+        "startChar": 10,
+        "endLine": 202,
+        "endChar": 42
+      },
+      "revId": "4f8f613055ceada0972076f46dd90bbab551a5ba",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0707f8ad_7e97be8b",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-15T12:02:10Z",
+      "side": 1,
+      "message": "I don\u0027t really understand what kind of production value this tests verifies. Is it that only one column has \u0027asc\u0027 sorting activated? Then I think this should be reflected in the description. And if so I also think that it should be verified that the correct column is activated, not just any column. If not, then I think the description should better convay what is actually verified for the produciton value of the component.",
+      "range": {
+        "startLine": 208,
+        "startChar": 10,
+        "endLine": 208,
+        "endChar": 64
+      },
+      "revId": "4f8f613055ceada0972076f46dd90bbab551a5ba",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5154ac8_48ab9f0b",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-15T12:02:10Z",
+      "side": 1,
+      "message": "Isn\u0027t this rather a test that the sort order is toggled when clicking? Also I think that it would be good have more than one row and verify that the soring of the table is actually performed in the table.",
+      "range": {
+        "startLine": 219,
+        "startChar": 10,
+        "endLine": 219,
+        "endChar": 49
+      },
+      "revId": "4f8f613055ceada0972076f46dd90bbab551a5ba",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72d0b5bd_4252a527",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-15T12:02:10Z",
+      "side": 1,
+      "message": "See above test case.\n\nI guess it is a question of how much testing of the actual sorting that is needed here. Since we are using standard-out-of-the-box sorting from Angular, maybe it is enough to just verify that we have set this up properly? So just verify that the columns that we want to be able to sort on are included in the MatSortHarness is enough? Then we can trust Angular for the actual sorting?",
+      "range": {
+        "startLine": 229,
+        "startChar": 11,
+        "endLine": 229,
+        "endChar": 51
+      },
+      "revId": "4f8f613055ceada0972076f46dd90bbab551a5ba",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b966bfbe_e37e5686",
+        "filename": "webapp-frontend/src/app/ei-coordinator/producers-list/producers-list.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-15T12:02:10Z",
+      "side": 1,
+      "message": "Please remove trailing whitespaces",
+      "revId": "4f8f613055ceada0972076f46dd90bbab551a5ba",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a2f1637_c50d3147",
+        "filename": "webapp-frontend/src/app/ei-coordinator/producers-list/producers-list.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-15T12:02:10Z",
+      "side": 1,
+      "message": "See my comments in the jobs list test",
+      "range": {
+        "startLine": 166,
+        "startChar": 16,
+        "endLine": 166,
+        "endChar": 22
+      },
+      "revId": "4f8f613055ceada0972076f46dd90bbab551a5ba",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
