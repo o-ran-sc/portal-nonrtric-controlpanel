@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "a8b4c270_76ea503b",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1001106
+      },
+      "writtenOn": "2021-03-15T21:43:14Z",
+      "side": 1,
+      "message": "Thank you for the comments.\nI agree that these tests are testing more of sorting functionality that is handle by the framework. So in my new patch I remove most of these testcases and only leave one that test sorting and add one test that actually test sorting is perform on the table.",
+      "parentUuid": "c06ddc0f_51b43865",
+      "range": {
+        "startLine": 202,
+        "startChar": 10,
+        "endLine": 202,
+        "endChar": 42
+      },
+      "revId": "4f8f613055ceada0972076f46dd90bbab551a5ba",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0707f8ad_7e97be8b",
         "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.spec.ts",
         "patchSetId": 1
