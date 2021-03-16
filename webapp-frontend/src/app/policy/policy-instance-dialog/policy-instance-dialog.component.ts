@@ -80,7 +80,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     private ui: UiService
   ) {
     this.policyInstanceId = data.instanceId;
-    this.policyTypeName = data.name ? data.name : "< No Type >";
+    this.policyTypeName = data.name;
     this.policyJson = data.instanceJson;
     this.jsonSchemaObject = data.createSchema;
     this.ric = data.ric;
@@ -138,7 +138,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
   }
 
   typeHasSchema(): boolean {
-    return this.jsonSchemaObject.schemaObject !== "{}";
+    return this.jsonSchemaObject !== "{}";
   }
 
   isFormValid(): boolean {

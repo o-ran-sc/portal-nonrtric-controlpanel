@@ -21,11 +21,13 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import * as policyinstances1 from './mock/policy-instance-1.json';
-import * as policies from './mock/policies.json';
-import * as policyinstances2 from './mock/policy-instance-2.json';
-import * as policyinstances1Status from './mock/policy-instance-1-status.json';
-import * as policyinstances2Status from './mock/policy-instance-2-status.json';
+import * as policyinstance1 from './mock/policy-instance-1.json';
+import * as noTypePolicies from './mock/no-type-policies.json';
+import * as typedPolicies from './mock/policies.json';
+import * as policyinstance2 from './mock/policy-instance-2.json';
+import * as noTypePolicyinstance from './mock/policy-instance-notype.json';
+import * as policyinstance1Status from './mock/policy-instance-1-status.json';
+import * as policyinstance2Status from './mock/policy-instance-2-status.json';
 import * as eijobsProd1 from './mock/ei-jobs-producer1.json';
 import * as eijobsProd2 from './mock/ei-jobs-producer2.json';
 import * as eiProducerIds from './mock/ei-producerids.json';
@@ -54,27 +56,35 @@ const urls = [
     },
     {
         url: '/a1-policy/v2/policies?policytype_id=',
-        json: policies
+        json: noTypePolicies
     },
     {
         url: '/a1-policy/v2/policies?policytype_id=1',
-        json: policies
+        json: typedPolicies
+    },
+    {
+        url: '/a1-policy/v2/policies/2001',
+        json: noTypePolicyinstance
     },
     {
         url: '/a1-policy/v2/policies/2000',
-        json: policyinstances1
+        json: policyinstance1
     },
     {
         url: '/a1-policy/v2/policies/2100',
-        json: policyinstances2
+        json: policyinstance2
+    },
+    {
+        url: '/a1-policy/v2/policies/2001/status',
+        json: policyinstance1Status
     },
     {
         url: '/a1-policy/v2/policies/2000/status',
-        json: policyinstances1Status
+        json: policyinstance1Status
     },
     {
         url: '/a1-policy/v2/policies/2100/status',
-        json: policyinstances2Status
+        json: policyinstance2Status
     },
     {
         url: '/a1-policy/v2/policies/2000?type=',
