@@ -18,125 +18,157 @@
 //   ========================LICENSE_END===================================
 //
 
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
-import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material/icon';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/compiler";
+import { Component } from "@angular/core";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatIconModule } from "@angular/material/icon";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-import { TypedPolicyEditorComponent } from './typed-policy-editor.component';
+import { TypedPolicyEditorComponent } from "./typed-policy-editor.component";
 
-describe('TypedPolicyEditorComponent', () => {
+describe("TypedPolicyEditorComponent", () => {
   let component: TestTypedPolicyEditorComponentHostComponent;
   let fixture: ComponentFixture<TestTypedPolicyEditorComponentHostComponent>;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        MatIconModule
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, MatIconModule],
       declarations: [
         TypedPolicyEditorComponent,
-        TestTypedPolicyEditorComponentHostComponent
+        TestTypedPolicyEditorComponentHostComponent,
       ],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TestTypedPolicyEditorComponentHostComponent);
+    fixture = TestBed.createComponent(
+      TestTypedPolicyEditorComponentHostComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have JSON form visible and JSON and JSON Schema not visible', () => {
-    let propertiesHeading = fixture.debugElement.nativeElement.querySelector('#propertiesHeading');
+  it("should have JSON form visible and JSON and JSON Schema not visible", () => {
+    let propertiesHeading = fixture.debugElement.nativeElement.querySelector(
+      "#propertiesHeading"
+    );
     expect(propertiesHeading).toBeTruthy();
-    expect(propertiesHeading.innerText).toContain('Properties');
-    let propertiesIcon = fixture.debugElement.nativeElement.querySelector('#propertiesIcon');
+    expect(propertiesHeading.innerText).toContain("Properties");
+    let propertiesIcon = fixture.debugElement.nativeElement.querySelector(
+      "#propertiesIcon"
+    );
     expect(propertiesIcon).toBeTruthy();
-    expect(propertiesIcon.innerText).toEqual('expand_less');
-    let jsonForm = fixture.debugElement.nativeElement.querySelector('json-schema-form');
+    expect(propertiesIcon.innerText).toEqual("expand_less");
+    let jsonForm = fixture.debugElement.nativeElement.querySelector(
+      "json-schema-form"
+    );
     expect(jsonForm).toBeTruthy();
 
-    let jsonHeading = fixture.debugElement.nativeElement.querySelector('#jsonHeading');
+    let jsonHeading = fixture.debugElement.nativeElement.querySelector(
+      "#jsonHeading"
+    );
     expect(jsonHeading).toBeTruthy();
-    expect(jsonHeading.innerText).toContain('JSON')
-    let jsonIcon = fixture.debugElement.nativeElement.querySelector('#jsonIcon');
+    expect(jsonHeading.innerText).toContain("JSON");
+    let jsonIcon = fixture.debugElement.nativeElement.querySelector(
+      "#jsonIcon"
+    );
     expect(jsonIcon).toBeTruthy();
-    expect(jsonIcon.innerText).toEqual('expand_more');
-    let jsonDiv = fixture.debugElement.nativeElement.querySelector('#jsonDiv');
+    expect(jsonIcon.innerText).toEqual("expand_more");
+    let jsonDiv = fixture.debugElement.nativeElement.querySelector("#jsonDiv");
     expect(jsonDiv).toBeFalsy();
 
-    let schemaHeading = fixture.debugElement.nativeElement.querySelector('#schemaHeading');
+    let schemaHeading = fixture.debugElement.nativeElement.querySelector(
+      "#schemaHeading"
+    );
     expect(schemaHeading).toBeTruthy();
-    expect(schemaHeading.innerText).toContain('JSON Schema');
-    let schemaIcon = fixture.debugElement.nativeElement.querySelector('#schemaIcon');
+    expect(schemaHeading.innerText).toContain("JSON Schema");
+    let schemaIcon = fixture.debugElement.nativeElement.querySelector(
+      "#schemaIcon"
+    );
     expect(schemaIcon).toBeTruthy();
-    expect(schemaIcon.innerText).toEqual('expand_more');
-    let schemaDiv = fixture.debugElement.nativeElement.querySelector('#schemaDiv');
+    expect(schemaIcon.innerText).toEqual("expand_more");
+    let schemaDiv = fixture.debugElement.nativeElement.querySelector(
+      "#schemaDiv"
+    );
     expect(schemaDiv).toBeFalsy();
   });
 
-  it('should hide JSON form', () => {
-    let propertiesHeading = fixture.debugElement.nativeElement.querySelector('#propertiesHeading');
+  it("should hide JSON form", () => {
+    let propertiesHeading = fixture.debugElement.nativeElement.querySelector(
+      "#propertiesHeading"
+    );
     expect(propertiesHeading).toBeTruthy();
     propertiesHeading.click();
     fixture.detectChanges();
 
-    let propertiesIcon = fixture.debugElement.nativeElement.querySelector('#propertiesIcon');
+    let propertiesIcon = fixture.debugElement.nativeElement.querySelector(
+      "#propertiesIcon"
+    );
     expect(propertiesIcon).toBeTruthy();
-    expect(propertiesIcon.innerText).toEqual('expand_more');
-    let propertiesDiv = fixture.debugElement.nativeElement.querySelector('propertiesDiv');
+    expect(propertiesIcon.innerText).toEqual("expand_more");
+    let propertiesDiv = fixture.debugElement.nativeElement.querySelector(
+      "propertiesDiv"
+    );
     expect(propertiesDiv).toBeFalsy();
   });
 
-  it('should show JSON with text for dark mode', () => {
-    let jsonHeading = fixture.debugElement.nativeElement.querySelector('#jsonHeading');
+  it("should show JSON with text for dark mode", () => {
+    let jsonHeading = fixture.debugElement.nativeElement.querySelector(
+      "#jsonHeading"
+    );
     expect(jsonHeading).toBeTruthy();
     jsonHeading.click();
     fixture.detectChanges();
 
-    let jsonIcon = fixture.debugElement.nativeElement.querySelector('#jsonIcon');
+    let jsonIcon = fixture.debugElement.nativeElement.querySelector(
+      "#jsonIcon"
+    );
     expect(jsonIcon).toBeTruthy();
-    expect(jsonIcon.innerText).toEqual('expand_less');
-    let jsonDiv = fixture.debugElement.nativeElement.querySelector('#jsonDiv');
+    expect(jsonIcon.innerText).toEqual("expand_less");
+    let jsonDiv = fixture.debugElement.nativeElement.querySelector("#jsonDiv");
     expect(jsonDiv).toBeTruthy();
-    let jsonText = jsonDiv.querySelector('pre');
-    expect(jsonText.classList).toContain('text__dark');
+    let jsonText = jsonDiv.querySelector("pre");
+    expect(jsonText.classList).toContain("text__dark");
   });
 
-  it('should show JSON Schema with text for dark mode', () => {
-    let schemaHeading = fixture.debugElement.nativeElement.querySelector('#schemaHeading');
+  it("should show JSON Schema with text for dark mode", () => {
+    let schemaHeading = fixture.debugElement.nativeElement.querySelector(
+      "#schemaHeading"
+    );
     expect(schemaHeading).toBeTruthy();
     schemaHeading.click();
     fixture.detectChanges();
 
-    let schemaIcon = fixture.debugElement.nativeElement.querySelector('#schemaIcon');
+    let schemaIcon = fixture.debugElement.nativeElement.querySelector(
+      "#schemaIcon"
+    );
     expect(schemaIcon).toBeTruthy();
-    expect(schemaIcon.innerText).toEqual('expand_less');
-    let schemaDiv = fixture.debugElement.nativeElement.querySelector('#schemaDiv');
+    expect(schemaIcon.innerText).toEqual("expand_less");
+    let schemaDiv = fixture.debugElement.nativeElement.querySelector(
+      "#schemaDiv"
+    );
     expect(schemaDiv).toBeTruthy();
-    let jsonSchemaText = schemaDiv.querySelector('pre');
-    expect(jsonSchemaText.classList).toContain('text__dark');
+    let jsonSchemaText = schemaDiv.querySelector("pre");
+    expect(jsonSchemaText.classList).toContain("text__dark");
   });
 
   @Component({
     selector: `typed-policy-editor-host-component`,
-    template: `<nrcp-typed-policy-editor [jsonObject]="policyJson" [jsonSchemaObject]="jsonSchemaObject" [darkMode]="true"></nrcp-typed-policy-editor>`
+    template: `<nrcp-typed-policy-editor
+      [jsonObject]="policyJson"
+      [jsonSchemaObject]="jsonSchemaObject"
+      [darkMode]="true"
+    ></nrcp-typed-policy-editor>`,
   })
   class TestTypedPolicyEditorComponentHostComponent {
     policyJson: string = '{"A":"A"}';
-    jsonSchemaObject: string = 'policy_schema": { "$schema": "http://json-schema.org/draft-07/schema#", "description": "Type 1 policy type", "additionalProperties": false, "title": "1", "type": "object", "properties": { "A": "string" }, "required": [ "A" ]}';
+    jsonSchemaObject: string =
+      'policy_schema": { "description": "Type 1 policy type", "title": "1", "type": "object", "properties": { "A": "string" }, "required": [ "A" ]}';
   }
 });

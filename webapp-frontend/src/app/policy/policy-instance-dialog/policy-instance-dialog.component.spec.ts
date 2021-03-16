@@ -30,7 +30,13 @@ import {
 } from "@angular/material/dialog";
 import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from "@angular/material/input";
-import { AbstractControl, ReactiveFormsModule } from "@angular/forms";
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ToastrModule } from "ngx-toastr";
 
@@ -42,26 +48,17 @@ import {
   ChangeDetectorRef,
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
+  Input,
 } from "@angular/core";
 import { TypedPolicyEditorComponent } from "../typed-policy-editor/typed-policy-editor.component";
 import { RicSelectorComponent } from "../ric-selector/ric-selector.component";
 import { NoTypePolicyEditorComponent } from "../no-type-policy-editor/no-type-policy-editor.component";
-import { PolicyTypeSchema } from "../../interfaces/policy.types";
+import { By } from "@angular/platform-browser";
 
 describe("PolicyInstanceDialogComponent", () => {
   const untypedSchema = "{}";
-  const untypedSchemaObject = {
-    id: "",
-    name: "",
-    schemaObject: untypedSchema,
-  } as PolicyTypeSchema;
   const typedSchema =
-    '{ "description": "Type 1 policy type", "title": "1", "type": "object", "properties": { "priorityLevel": "number" }, "required": [ "priorityLevel" ]}';
-  const typedSchemaObject = {
-    id: "Type 1",
-    name: "Type 1",
-    schemaObject: typedSchema,
-  } as PolicyTypeSchema;
+    '{ "description": "Type 1 policy type", "title": "1", "type": "object", "properties": { "priorityLevel": "number" }}';
 
   let component: PolicyInstanceDialogComponent;
   let fixture: ComponentFixture<PolicyInstanceDialogComponent>;
@@ -106,7 +103,7 @@ describe("PolicyInstanceDialogComponent", () => {
   describe("content when creating policy without type", () => {
     beforeEach(async () => {
       const policyData = {
-        createSchema: untypedSchemaObject,
+        createSchema: untypedSchema,
       };
       TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: policyData }); // Should be provided with a policy
       ({ fixture, component, loader } = compileAndGetComponents(
@@ -129,22 +126,29 @@ describe("PolicyInstanceDialogComponent", () => {
       expect(ele).toBeFalsy();
     });
 
-    it("should contain ric select", async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector(
-        "nrcp-ric-selector"
-      );
-      expect(ele).toBeTruthy();
+    it("should contain ric select with instance form and no policy type", async () => {
+      const ricSelector: RicSelectorComponent = fixture.debugElement.query(By.directive(RicSelectorComponent)).componentInstance;
+      expect(ricSelector).toBeTruthy();
+      expect(ricSelector.instanceForm).toBeTruthy();
+      expect(ricSelector.policyTypeName).toBeFalsy();
     });
 
-    it("should contain json editor", async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector(
-        "nrcp-no-type-policy-editor"
-      );
-      expect(ele).toBeTruthy();
+    it("should contain json editor with instance form and empty JSON", async () => {
+      const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(By.directive(NoTypePolicyEditorComponent)).componentInstance;
+      expect(noTypePolicyEditor).toBeTruthy();
+      expect(noTypePolicyEditor.instanceForm).toBeTruthy();
+      expect(noTypePolicyEditor.policyJson).toEqual("{}");
     });
 
     it("should contain enabled Close button and disabled Submit button", async () => {
       component.ngOnInit();
+      // Add an empty value with required validator to set the dialog's instance form to be invalid.
+      const value: any = null;
+      component.instanceForm.addControl(
+        "dummy",
+        new FormControl(value, [Validators.required])
+      );
+      expect(component.instanceForm.valid).toBeFalsy();
 
       let closeButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#closeButton" })
@@ -155,7 +159,7 @@ describe("PolicyInstanceDialogComponent", () => {
       let submitButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#submitButton" })
       );
-      // expect(await submitButton.isDisabled()).toBeTruthy();
+      expect(await submitButton.isDisabled()).toBeTruthy();
       expect(await submitButton.getText()).toEqual("Submit");
     });
   });
@@ -164,7 +168,7 @@ describe("PolicyInstanceDialogComponent", () => {
     beforeEach(async () => {
       const policyData = {
         name: "Type 1",
-        createSchema: typedSchemaObject,
+        createSchema: typedSchema,
       };
       TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: policyData }); // Should be provided with a policy
       ({ fixture, component, loader } = compileAndGetComponents(
@@ -187,22 +191,30 @@ describe("PolicyInstanceDialogComponent", () => {
       expect(ele).toBeFalsy();
     });
 
-    it("should contain ric select", async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector(
-        "nrcp-ric-selector"
-      );
-      expect(ele).toBeTruthy();
+    it("should contain ric select with instance form and provided policy type", async () => {
+      const ricSelector: RicSelectorComponent = fixture.debugElement.query(By.directive(RicSelectorComponent)).componentInstance;
+      expect(ricSelector).toBeTruthy();
+      expect(ricSelector.instanceForm).toBeTruthy();
+      expect(ricSelector.policyTypeName).toEqual("Type 1");
     });
 
-    it("should contain typed json editor", async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector(
-        "nrcp-typed-policy-editor"
-      );
-      expect(ele).toBeTruthy();
+    it("should contain typed json editor with empty JSON, schema and dark mode true", async () => {
+      const typedPolicyEditor: TypedPolicyEditorComponent = fixture.debugElement.query(By.directive(TypedPolicyEditorComponent)).componentInstance;
+      expect(typedPolicyEditor).toBeTruthy();
+      expect(typedPolicyEditor.jsonObject).toBeFalsy();
+      expect(typedPolicyEditor.jsonSchemaObject).toEqual(typedSchema);
+      expect(typedPolicyEditor.darkMode).toBeTruthy();
     });
 
     it("should contain enabled Close button and disabled Submit button", async () => {
       component.ngOnInit();
+      // Add an empty value with required validator to set the dialog's instance form to be invalid.
+      const value: any = null;
+      component.instanceForm.addControl(
+        "dummy",
+        new FormControl(value, [Validators.required])
+      );
+      expect(component.instanceForm.valid).toBeFalsy();
 
       let closeButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#closeButton" })
@@ -213,17 +225,18 @@ describe("PolicyInstanceDialogComponent", () => {
       let submitButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#submitButton" })
       );
-      // expect(await submitButton.isDisabled()).toBeTruthy();
+      expect(await submitButton.isDisabled()).toBeTruthy();
       expect(await submitButton.getText()).toEqual("Submit");
     });
   });
 
   describe("content when editing policy without type", () => {
+    const instanceJson = '{"qosObjectives": {"priorityLevel": 3100}}';
     beforeEach(async () => {
       const policyData = {
-        createSchema: untypedSchemaObject,
+        createSchema: untypedSchema,
         instanceId: "instanceId",
-        instanceJson: '{"qosObjectives": {"priorityLevel": 3100}}',
+        instanceJson: instanceJson,
         name: "Type 1",
         ric: "ric1",
       };
@@ -248,20 +261,20 @@ describe("PolicyInstanceDialogComponent", () => {
     });
 
     it("should not contain ric select", async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector(
-        "nrcp-ric-selector"
-      );
-      expect(ele).toBeFalsy();
+      const ricSelector = fixture.debugElement.query(By.directive(RicSelectorComponent));
+      expect(ricSelector).toBeFalsy();
     });
 
-    it("should contain json editor", async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector(
-        "nrcp-no-type-policy-editor"
-      );
-      expect(ele).toBeTruthy();
+    it("should contain json editor with form and json data", async () => {
+      const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(By.directive(NoTypePolicyEditorComponent)).componentInstance;
+      expect(noTypePolicyEditor).toBeTruthy();
+      expect(noTypePolicyEditor.instanceForm).toBeTruthy();
+      expect(unescapeQuotes(noTypePolicyEditor.policyJson)).toEqual('"' + instanceJson + '"');
     });
 
-    it("should contain enabled Close and Submit buttons", async () => {
+    it("should contain enabled Close and Submit buttons when all inputs are valid", async () => {
+      expect(component.instanceForm.valid).toBeTruthy();
+
       let closeButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#closeButton" })
       );
@@ -277,11 +290,12 @@ describe("PolicyInstanceDialogComponent", () => {
   });
 
   describe("content when editing policy with type", () => {
+    const instanceJson = '{"qosObjectives": {"priorityLevel": 3100}}';
     beforeEach(async () => {
       const policyData = {
-        createSchema: typedSchemaObject,
+        createSchema: typedSchema,
         instanceId: "instanceId",
-        instanceJson: '{"qosObjectives": {"priorityLevel": 3100}}',
+        instanceJson: instanceJson,
         name: "name",
         ric: "ric1",
       };
@@ -306,20 +320,21 @@ describe("PolicyInstanceDialogComponent", () => {
     });
 
     it("should not contain ric select", async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector(
-        "nrcp-ric-selector"
-      );
-      expect(ele).toBeFalsy();
+      const ricSelector = fixture.debugElement.query(By.directive(RicSelectorComponent));
+      expect(ricSelector).toBeFalsy();
     });
 
-    it("should contain typed json editor", async () => {
-      const ele = fixture.debugElement.nativeElement.querySelector(
-        "nrcp-typed-policy-editor"
-      );
-      expect(ele).toBeTruthy();
+    it("should contain typed json editor with instance JSON, schema and dark mode true", async () => {
+      const typedPolicyEditor: TypedPolicyEditorComponent = fixture.debugElement.query(By.directive(TypedPolicyEditorComponent)).componentInstance;
+      expect(typedPolicyEditor).toBeTruthy();
+      expect(unescapeQuotes(typedPolicyEditor.jsonObject)).toEqual(instanceJson);
+      expect(typedPolicyEditor.jsonSchemaObject).toEqual(typedSchema);
+      expect(typedPolicyEditor.darkMode).toBeTruthy();
     });
 
-    it("should contain enabled Close and Submit buttons", async () => {
+    it("should contain enabled Close and Submit buttons when all inputs are valid", async () => {
+      expect(component.instanceForm.valid).toBeTruthy();
+
       let closeButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#closeButton" })
       );
@@ -349,14 +364,24 @@ function compileAndGetComponents(
   return { fixture, component, loader };
 }
 
+function unescapeQuotes(string: string): string {
+  return string.replace(/\\"/g, '"');
+}
+
 @Component({
-  selector: "nrcp-ric-selecor",
+  selector: "nrcp-ric-selector",
   template: "",
   providers: [
-    { provide: RicSelectorComponent, useClass: RicSelectorStubComponent },
+    {
+      provide: RicSelectorComponent,
+      useClass: RicSelectorStubComponent,
+    },
   ],
 })
 class RicSelectorStubComponent {
+  @Input() instanceForm: FormGroup;
+  @Input() policyTypeName: string = "";
+
   get selectedRic(): string {
     return "ric1";
   }
@@ -373,6 +398,9 @@ class RicSelectorStubComponent {
   ],
 })
 class NoTypePolicyEditorStubComponent {
+  @Input() instanceForm: FormGroup;
+  @Input() policyJson: string;
+
   get policyJsonTextArea(): AbstractControl {
     const textArea = { value: "{}" } as AbstractControl;
     return textArea;
@@ -390,6 +418,11 @@ class NoTypePolicyEditorStubComponent {
   ],
 })
 class TypedPolicyEditorStubComponent {
+  @Input() jsonSchemaObject: any = {};
+  @Input() jsonObject: any = {};
+  @Input() darkMode: boolean;
+
+  prettyLiveFormData = '"A": "string"';
   get formIsValid(): boolean {
     return true;
   }
