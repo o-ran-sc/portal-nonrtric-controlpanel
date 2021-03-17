@@ -18,8 +18,9 @@ limitations under the License.
 ========================LICENSE_END===================================
 -->
 <div class="table-container">
-  <mat-table id="producersTable" [dataSource]="producersDataSource" fixedLayout matSort
-    (matSortChange)="sortProducers($event)" class="ei-coordinator-table mat-elevation-z8">
+  <mat-table id="producersTable" [dataSource]="producersDataSource" fixedLayout
+    class="ei-coordinator-table mat-elevation-z8" matSort matSortDisableClear matSortDirection="asc"
+    (matSortChange)="sortProducers($event)">
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div (click)="stopSort($event)">

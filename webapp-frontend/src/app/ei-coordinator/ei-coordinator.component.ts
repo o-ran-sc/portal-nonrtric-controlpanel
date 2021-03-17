@@ -50,7 +50,7 @@ export class EICoordinatorComponent implements OnInit {
     }
 
     refreshTables() {
-        this.jobComponent.refresh();
-        this.producersList.refresh();
+        this.jobComponent.loadJobs();
+        this.producersList.loadProducers();
     }
 }

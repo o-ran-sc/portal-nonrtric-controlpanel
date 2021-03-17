@@ -18,8 +18,12 @@ limitations under the License.
 ========================LICENSE_END===================================
 -->
 <div class="table-container">
+    <div class="spinner-container" style="display: flex; justify-content: center; align-items: center;"
+        *ngIf="loading$ | async">
+        <mat-spinner></mat-spinner>
+    </div>
     <mat-table id="jobsTable" [dataSource]="jobsDataSource" fixedLayout matSort (matSortChange)="sortJobs($event)"
-        class="ei-coordinator-table mat-elevation-z8">
+        matSortDisableClear matSortDirection="asc" class="ei-coordinator-table mat-elevation-z8">
         <ng-container matColumnDef="id">
             <mat-header-cell *matHeaderCellDef mat-sort-header>
                 <div (click)="stopSort($event)">
@@ -75,4 +79,6 @@ limitations under the License.
         <mat-header-row *matHeaderRowDef="['id', 'typeId', 'owner', 'targetUri']"></mat-header-row>
         <mat-row *matRowDef="let row; columns: ['id', 'typeId', 'owner', 'targetUri'];"></mat-row>
     </mat-table>
+    <mat-paginator [length]="jobs()?.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
+        class="ei-coordinator-table mat-elevation-z8"></mat-paginator>
 </div>
