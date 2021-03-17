@@ -51,6 +51,8 @@ export class EICoordinatorComponent implements OnInit {
 
     refreshTables() {
         this.jobComponent.loadJobs();
+        this.jobComponent.clearFilter();
         this.producersList.loadProducers();
+        this.producersList.clearFilter();
     }
 }

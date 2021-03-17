@@ -39,7 +39,7 @@ export class JobsListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   darkMode: boolean;
-  jobsDataSource: MatTableDataSource<EIJob> = new MatTableDataSource<EIJob>();
+  jobsDataSource: MatTableDataSource<EIJob>;// = new MatTableDataSource<EIJob>();
   jobForm: FormGroup;
   private loadingSubject = new BehaviorSubject<boolean>(false);
   private jobsSubject = new BehaviorSubject<EIJob[]>([]);
@@ -61,21 +61,20 @@ export class JobsListComponent implements OnInit {
     this.loadJobs();
     this.jobsSubject.subscribe((data) => {
       this.jobsDataSource = new MatTableDataSource<EIJob>(data);
-      //this.jobsDataSource.data = data;
       this.jobsDataSource.paginator = this.paginator;
+
+      this.jobsDataSource.filterPredicate = ((data: EIJob, filter) => {
+        let searchTerms = JSON.parse(filter);
+        return this.isDataIncluding(data.ei_job_identity, searchTerms.id)
+          && this.isDataIncluding(data.target_uri, searchTerms.targetUri)
+          && this.isDataIncluding(data.owner, searchTerms.owner)
+          && this.isDataIncluding(data.ei_type_identity, searchTerms.typeId);
+      }) as (data: EIJob, filter: any) => boolean;
     });
 
     this.jobForm.valueChanges.subscribe(value => {
-      const filter = { ...value, id: value.id.trim().toLowerCase() } as string;
-      this.jobsDataSource.filter = filter;
+      this.jobsDataSource.filter = JSON.stringify(value);
     });
-
-    this.jobsDataSource.filterPredicate = ((data: EIJob, filter) => {
-      return this.isDataIncluding(data.ei_job_identity, filter.id)
-        && this.isDataIncluding(data.target_uri, filter.targetUri)
-        && this.isDataIncluding(data.owner, filter.owner)
-        && this.isDataIncluding(data.ei_type_identity, filter.typeId);
-    }) as (data: EIJob, filter: any) => boolean;
 
     this.ui.darkModeState.subscribe((isDark) => {
       this.darkMode = isDark;
@@ -86,6 +85,13 @@ export class JobsListComponent implements OnInit {
     if (!this.jobsSubject) this.jobsSubject.unsubscribe();
     if (!this.loadingSubject) this.loadingSubject.unsubscribe();
     if (!this.ui.darkModeState) this.ui.darkModeState.unsubscribe();
+  }
+
+  clearFilter() {
+    this.jobForm.get('id').setValue('');
+    this.jobForm.get('typeId').setValue('');
+    this.jobForm.get('owner').setValue('');
+    this.jobForm.get('targetUri').setValue('');
   }
 
   sortJobs(sort: Sort) {
@@ -112,7 +118,8 @@ export class JobsListComponent implements OnInit {
   }
 
   isDataIncluding(data: string, filter: string): boolean {
-    return !filter || data.toLowerCase().includes(filter);
+    const transformedFilter = filter.trim().toLowerCase();
+    return data.toLowerCase().includes(transformedFilter);
   }
 
   getJobTypeId(eiJob: EIJob): string {
