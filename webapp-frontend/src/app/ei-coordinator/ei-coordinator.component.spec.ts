@@ -101,11 +101,15 @@ describe('EICoordinatorComponent', () => {
     it('should refresh tables', async () => {
       let refreshButton = await loader.getHarness(MatButtonHarness.with({ selector: '#refreshButton' }));
       spyOn(component.producersList, 'loadProducers');
+      spyOn(component.producersList, 'clearFilter');
       spyOn(component.jobComponent, 'loadJobs');
+      spyOn(component.jobComponent, 'clearFilter');
       await refreshButton.click();
 
       expect(component.jobComponent.loadJobs).toHaveBeenCalled();
+      expect(component.jobComponent.clearFilter).toHaveBeenCalled();
       expect(component.producersList.loadProducers).toHaveBeenCalled();
+      expect(component.producersList.clearFilter).toHaveBeenCalled();
     });
   });
 
@@ -121,6 +125,7 @@ describe('EICoordinatorComponent', () => {
   })
   class JobsListStubComponent {
     loadJobs() { }
+    clearFilter() { }
   }
 
   @Component({
@@ -135,6 +140,7 @@ describe('EICoordinatorComponent', () => {
   })
   class ProducerListStubComponent {
     loadProducers() { }
+    clearFilter() { }
   }
 
 });

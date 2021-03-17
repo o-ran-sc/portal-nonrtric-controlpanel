@@ -23,7 +23,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { forkJoin, of } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { mergeMap, finalize, catchError } from 'rxjs/operators';
+import { mergeMap, finalize } from 'rxjs/operators';
 import { EIService } from 'src/app/services/ei/ei.service';
 import { EIProducer } from '../../interfaces/ei.types';
 import { UiService } from '../../services/ui/ui.service';
@@ -37,7 +37,7 @@ export class ProducersListComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  producersDataSource: MatTableDataSource<EIProducer> = new MatTableDataSource<EIProducer>();
+  producersDataSource: MatTableDataSource<EIProducer>;
   producerForm: FormGroup;
   darkMode: boolean;
 
@@ -60,19 +60,18 @@ export class ProducersListComponent implements OnInit {
     this.loadProducers();
     this.producerSubject.subscribe((data) => {
       this.producersDataSource = new MatTableDataSource<EIProducer>(data);
-      //this.producersDataSource.data = data;
+
+      this.producersDataSource.filterPredicate = ((data, filter) => {
+        let searchTerms = JSON.parse(filter);
+        return this.isDataIncluding(data.ei_producer_id, searchTerms.ei_producer_id)
+          && this.isDataIncluding(data.ei_producer_types.join(','), searchTerms.ei_producer_types)
+          && this.isDataIncluding(data.status, searchTerms.status);
+      }) as (data: EIProducer, filter: any) => boolean;
     });
 
     this.producerForm.valueChanges.subscribe(value => {
-      const filter = { ...value, ei_producer_id: value.ei_producer_id.trim().toLowerCase() } as string;
-      this.producersDataSource.filter = filter;
+      this.producersDataSource.filter = JSON.stringify(value);
     });
-
-    this.producersDataSource.filterPredicate = ((data, filter) => {
-      return this.isDataIncluding(data.ei_producer_id, filter.ei_producer_id)
-        && this.isDataIncluding(data.ei_producer_types.join(','), filter.ei_producer_types)
-        && this.isDataIncluding(data.status, filter.status);
-    }) as (data: EIProducer, filter: any) => boolean;
 
     this.ui.darkModeState.subscribe((isDark) => {
       this.darkMode = isDark;
@@ -86,7 +85,14 @@ export class ProducersListComponent implements OnInit {
   }
 
   isDataIncluding(data: string, filter: string): boolean {
-    return !filter || data.toLowerCase().includes(filter);
+    const transformedFilter = filter.trim().toLowerCase();
+    return data.toLowerCase().includes(transformedFilter);
+  }
+
+  clearFilter() {
+    this.producerForm.get('ei_producer_id').setValue('');
+    this.producerForm.get('ei_producer_types').setValue('');
+    this.producerForm.get('status').setValue('');
   }
 
   sortProducers(sort: Sort) {
