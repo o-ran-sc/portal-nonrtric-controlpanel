@@ -22,7 +22,6 @@ import { HarnessLoader } from "@angular/cdk/testing";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { Component, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonHarness } from "@angular/material/button/testing";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -34,7 +33,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NoTypePolicyEditorComponent } from "./no-type-policy-editor.component";
 
 describe("NoTypePolicyEditorComponent", () => {
-  let formGroup: FormGroup = new FormGroup({});
 
   let component: TestNoTypePolicyEditorComponentHostComponent;
   let fixture: ComponentFixture<TestNoTypePolicyEditorComponentHostComponent>;
@@ -54,7 +52,6 @@ describe("NoTypePolicyEditorComponent", () => {
         NoTypePolicyEditorComponent,
         TestNoTypePolicyEditorComponentHostComponent,
       ],
-      providers: [FormBuilder],
     }).compileComponents();
 
     fixture = TestBed.createComponent(
@@ -82,7 +79,9 @@ describe("NoTypePolicyEditorComponent", () => {
   });
 
   it("Format button should be disabled when json not valid", async () => {
-    const ele = component.noTypePolicyEditorComponent.instanceForm.get("policyJsonTextArea");
+    const ele = component.noTypePolicyEditorComponent.instanceForm.get(
+      "policyJsonTextArea"
+    );
     ele.setValue("{");
 
     let formatButton: MatButtonHarness = await loader.getHarness(
@@ -92,7 +91,9 @@ describe("NoTypePolicyEditorComponent", () => {
   });
 
   it("should format unformatted json", async () => {
-    const textArea = component.noTypePolicyEditorComponent.instanceForm.get("policyJsonTextArea");
+    const textArea = component.noTypePolicyEditorComponent.instanceForm.get(
+      "policyJsonTextArea"
+    );
     textArea.setValue('{"A":"A"}');
     component.noTypePolicyEditorComponent.formatJsonInput();
     expect(component.noTypePolicyEditorComponent.policyJson).toEqual(

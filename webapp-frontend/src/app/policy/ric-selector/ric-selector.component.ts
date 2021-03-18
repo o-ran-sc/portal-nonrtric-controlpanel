@@ -22,7 +22,6 @@ import { Component, Input, OnInit, Output } from "@angular/core";
 import {
   AbstractControl,
   ControlContainer,
-  FormBuilder,
   FormControl,
   FormGroup,
   FormGroupDirective,
@@ -51,10 +50,7 @@ export class RicSelectorComponent implements OnInit {
   });
   allRics: string[] = [];
 
-  constructor(
-    private dataService: PolicyService,
-    private formBuilder: FormBuilder
-  ) {}
+  constructor(private dataService: PolicyService) {}
 
   ngOnInit(): void {
     console.log("Ric:", this.ric);

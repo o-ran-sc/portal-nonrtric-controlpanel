@@ -18,9 +18,15 @@
 //   ========================LICENSE_END===================================
 //
 
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { JsonPointer } from 'angular6-json-schema-form';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from "@angular/animations";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { JsonPointer } from "angular6-json-schema-form";
 
 @Component({
   selector: "nrcp-typed-policy-editor",
