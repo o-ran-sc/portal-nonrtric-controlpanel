@@ -19,7 +19,7 @@
 //
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { JsonPointer } from 'angular6-json-schema-form';
 
 @Component({
@@ -50,6 +50,7 @@ export class TypedPolicyEditorComponent implements OnInit {
   @Input() jsonSchemaObject: any = {};
   @Input() jsonObject: any = {};
   @Input() darkMode: boolean;
+  @Output() validJson: EventEmitter<string> = new EventEmitter<string>();
 
   isVisible = {
     form: true,
@@ -82,6 +83,11 @@ export class TypedPolicyEditorComponent implements OnInit {
 
   isValid(isValid: boolean): void {
     this.formIsValid = isValid;
+    let json = this.prettyLiveFormData;
+    if (!this.formIsValid) {
+      json = null;
+    }
+    this.validJson.emit(json);
   }
 
   validationErrors(validationErrors: any): void {

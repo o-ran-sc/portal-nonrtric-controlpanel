@@ -20,24 +20,29 @@
   /
 -->
 
-<mat-form-field style="width: 800px;"  appearance="fill">
-    <textarea id="policyJsonTextArea" formControlName="policyJsonTextArea" matInput cdkTextareaAutosize
-        cdkAutosizeMinRows="10" required [value]="this.policyJson" placeholder="Policy properties"
-        matTooltip="The properties of the policy instance, in JSON format" matTooltipPosition="before">
+<h4>
+    Properties *
+</h4>
+<form [formGroup]="instanceForm">
+    <mat-form-field style="width: 800px;" appearance="fill">
+        <textarea id="policyJsonTextArea" formControlName="policyJsonTextArea" matInput cdkTextareaAutosize
+            cdkAutosizeMinRows="10" required [value]="this.policyJson" placeholder="Policy properties"
+            matTooltip="The properties of the policy instance, in JSON format" matTooltipPosition="before">
     </textarea>
-    <div *ngIf="policyJsonTextArea.invalid && (policyJsonTextArea.dirty || policyJsonTextArea.touched)">
-        <div *ngIf="policyJsonTextArea.errors.required">
-            <mat-error role="alert">
-                This field is required.
-            </mat-error>
+        <div *ngIf="policyJsonTextArea.invalid && (policyJsonTextArea.dirty || policyJsonTextArea.touched)">
+            <div *ngIf="policyJsonTextArea.errors.required">
+                <mat-error role="alert">
+                    This field is required.
+                </mat-error>
+            </div>
+            <div *ngIf="policyJsonTextArea.errors.invalidJson">
+                <mat-error role="alert">
+                    The policy properties must be a valid JSON.
+                </mat-error>
+            </div>
         </div>
-        <div *ngIf="policyJsonTextArea.errors.invalidJson">
-            <mat-error role="alert">
-                The policy properties must be a valid JSON.
-            </mat-error>
-        </div>
-    </div>
-    <button id="formatButton" (click)="formatJsonInput();" mat-raised-button [disabled]="!policyJsonTextArea.valid">
-        Format JSON
-    </button>
-</mat-form-field>
+        <button id="formatButton" (click)="formatJsonInput();" mat-raised-button [disabled]="!policyJsonTextArea.valid">
+            Format JSON
+        </button>
+    </mat-form-field>
+</form>

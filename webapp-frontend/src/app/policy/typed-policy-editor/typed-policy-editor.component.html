@@ -22,7 +22,7 @@
 
 <h4 id="propertiesHeading" class="default-cursor" (click)="toggleVisible('form')">
     <mat-icon id="propertiesIcon" matTooltip="Properties">{{isVisible.form ? 'expand_less' : 'expand_more'}}</mat-icon>
-    Properties
+    Properties *
 </h4>
 <div id="propertiesDiv" *ngIf="isVisible.form" class="json-schema-form" [@expandSection]="true">
     <json-schema-form id="json-schema-form" [form]="jsonSchemaObject"

@@ -18,6 +18,7 @@
 //   ========================LICENSE_END===================================
 //
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
@@ -47,6 +48,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MaterialDesignFrameworkModule } from 'angular6-json-schema-form';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { Routes, RouterModule } from '@angular/router';
@@ -69,6 +71,7 @@ const routes:Routes = [
     TypedPolicyEditorComponent,
   ],
   imports: [
+    BrowserAnimationsModule,
     CommonModule,
     FlexLayoutModule,
     FormsModule,
@@ -94,6 +97,7 @@ const routes:Routes = [
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
+    MatTooltipModule,
     MaterialDesignFrameworkModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes)

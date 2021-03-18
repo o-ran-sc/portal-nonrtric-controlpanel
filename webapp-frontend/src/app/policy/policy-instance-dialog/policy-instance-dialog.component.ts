@@ -23,9 +23,7 @@ import {
   Component,
   Inject,
   OnInit,
-  ViewChild,
 } from "@angular/core";
-import { FormGroup } from "@angular/forms";
 import {
   MatDialogConfig,
   MatDialogRef,
@@ -42,12 +40,7 @@ import {
   PolicyInstance,
   PolicyTypeSchema,
 } from "../../interfaces/policy.types";
-import { RicSelectorComponent } from "../ric-selector/ric-selector.component";
-import {
-  formatJsonString,
-  NoTypePolicyEditorComponent,
-} from "../no-type-policy-editor/no-type-policy-editor.component";
-import { TypedPolicyEditorComponent } from "../typed-policy-editor/typed-policy-editor.component";
+import { formatJsonString } from "../no-type-policy-editor/no-type-policy-editor.component";
 
 @Component({
   selector: "nrcp-policy-instance-dialog",
@@ -55,19 +48,10 @@ import { TypedPolicyEditorComponent } from "../typed-policy-editor/typed-policy-
   styleUrls: ["./policy-instance-dialog.component.scss"],
 })
 export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
-  instanceForm: FormGroup;
-  @ViewChild(RicSelectorComponent)
-  ricSelector: RicSelectorComponent;
-  @ViewChild(NoTypePolicyEditorComponent)
-  noTypePolicyEditor: NoTypePolicyEditorComponent;
-  @ViewChild(TypedPolicyEditorComponent)
-  typedPolicyEditor: TypedPolicyEditorComponent;
-  policyInstanceId: string; // null if not yet created
+  policyInstance = {} as CreatePolicyInstance;
   policyJson: string;
-  policyTypeName: string;
   jsonSchemaObject: any;
   darkMode: boolean;
-  ric: string;
   allRicIds: string[] = [];
 
   constructor(
@@ -79,18 +63,18 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     @Inject(MAT_DIALOG_DATA) private data,
     private ui: UiService
   ) {
-    this.policyInstanceId = data.instanceId;
-    this.policyTypeName = data.name;
+    this.policyInstance.policy_id = data.instanceId;
+    this.policyInstance.policytype_id = data.name;
+    this.policyInstance.policy_data = data.instanceJson;
     this.policyJson = data.instanceJson;
     this.jsonSchemaObject = data.createSchema;
-    this.ric = data.ric;
+    this.policyInstance.ric_id = data.ric;
   }
 
   ngOnInit() {
     this.ui.darkModeState.subscribe((isDark) => {
       this.darkMode = isDark;
     });
-    this.instanceForm = new FormGroup({});
     this.formatNoTypePolicyJson();
   }
 
@@ -101,32 +85,31 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
 
   private formatNoTypePolicyJson() {
     if (!this.typeHasSchema()) {
-      if (this.policyJson) {
-        this.policyJson = formatJsonString(this.policyJson);
+      if (this.policyInstance.policy_data) {
+        this.policyJson = formatJsonString(this.policyInstance.policy_data);
       } else {
         this.policyJson = "{}";
       }
     }
   }
 
+  onSelectedRicChanged(newRic: string): void {
+    this.policyInstance.ric_id = newRic;
+  }
+
+  onJsonChanged(newJson: string): void {
+    this.policyInstance.policy_data = newJson;
+  }
+
   onSubmit() {
-    if (this.policyInstanceId == null) {
-      this.policyInstanceId = uuid.v4();
+    if (this.policyInstance.policy_id == null) {
+      this.policyInstance.policy_id = uuid.v4();
     }
     const self: PolicyInstanceDialogComponent = this;
-    let policyData: string;
-    if (this.typeHasSchema()) {
-      policyData = this.typedPolicyEditor.prettyLiveFormData;
-    } else {
-      policyData = this.noTypePolicyEditor.policyJsonTextArea.value;
-    }
-    let createPolicyInstance: CreatePolicyInstance = this.createPolicyInstance(
-      policyData
-    );
-    this.policySvc.putPolicy(createPolicyInstance).subscribe({
+    this.policySvc.putPolicy(this.policyInstance).subscribe({
       next(_) {
         self.notificationService.success(
-          "Policy without type:" + self.policyInstanceId + " submitted"
+          "Policy " + self.policyInstance.policy_id + " submitted"
         );
         self.dialogRef.close();
       },
@@ -142,26 +125,10 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
   }
 
   isFormValid(): boolean {
-    let isValid: boolean = this.instanceForm.valid;
-    if (this.typeHasSchema()) {
-      isValid =
-        isValid && this.typedPolicyEditor
-          ? this.typedPolicyEditor.formIsValid
-          : false;
-    }
-    return isValid;
-  }
-
-  private createPolicyInstance(policyJson: string): CreatePolicyInstance {
-    let createPolicyInstance = {} as CreatePolicyInstance;
-    createPolicyInstance.policy_data = JSON.parse(policyJson);
-    createPolicyInstance.policy_id = this.policyInstanceId;
-    createPolicyInstance.policytype_id = "";
-    createPolicyInstance.ric_id = this.ricSelector
-      ? this.ricSelector.selectedRic
-      : this.ric;
-    createPolicyInstance.service_id = "controlpanel";
-    return createPolicyInstance;
+    return (
+      this.policyInstance.ric_id !== null &&
+      this.policyInstance.policy_data !== null
+    );
   }
 }
 

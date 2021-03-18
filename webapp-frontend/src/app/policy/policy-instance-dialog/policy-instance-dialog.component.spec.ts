@@ -126,29 +126,20 @@ describe("PolicyInstanceDialogComponent", () => {
       expect(ele).toBeFalsy();
     });
 
-    it("should contain ric select with instance form and no policy type", async () => {
+    it("should contain ric select with no policy type", async () => {
       const ricSelector: RicSelectorComponent = fixture.debugElement.query(By.directive(RicSelectorComponent)).componentInstance;
       expect(ricSelector).toBeTruthy();
-      expect(ricSelector.instanceForm).toBeTruthy();
       expect(ricSelector.policyTypeName).toBeFalsy();
     });
 
-    it("should contain json editor with instance form and empty JSON", async () => {
+    it("should contain json editor with empty JSON", async () => {
       const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(By.directive(NoTypePolicyEditorComponent)).componentInstance;
       expect(noTypePolicyEditor).toBeTruthy();
-      expect(noTypePolicyEditor.instanceForm).toBeTruthy();
       expect(noTypePolicyEditor.policyJson).toEqual("{}");
     });
 
-    it("should contain enabled Close button and disabled Submit button", async () => {
+    it("should contain enabled Close button and Submit button", async () => {
       component.ngOnInit();
-      // Add an empty value with required validator to set the dialog's instance form to be invalid.
-      const value: any = null;
-      component.instanceForm.addControl(
-        "dummy",
-        new FormControl(value, [Validators.required])
-      );
-      expect(component.instanceForm.valid).toBeFalsy();
 
       let closeButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#closeButton" })
@@ -159,7 +150,6 @@ describe("PolicyInstanceDialogComponent", () => {
       let submitButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#submitButton" })
       );
-      expect(await submitButton.isDisabled()).toBeTruthy();
       expect(await submitButton.getText()).toEqual("Submit");
     });
   });
@@ -191,10 +181,9 @@ describe("PolicyInstanceDialogComponent", () => {
       expect(ele).toBeFalsy();
     });
 
-    it("should contain ric select with instance form and provided policy type", async () => {
+    it("should contain ric select with provided policy type", async () => {
       const ricSelector: RicSelectorComponent = fixture.debugElement.query(By.directive(RicSelectorComponent)).componentInstance;
       expect(ricSelector).toBeTruthy();
-      expect(ricSelector.instanceForm).toBeTruthy();
       expect(ricSelector.policyTypeName).toEqual("Type 1");
     });
 
@@ -206,15 +195,8 @@ describe("PolicyInstanceDialogComponent", () => {
       expect(typedPolicyEditor.darkMode).toBeTruthy();
     });
 
-    it("should contain enabled Close button and disabled Submit button", async () => {
+    it("should contain enabled Close button and Submit button", async () => {
       component.ngOnInit();
-      // Add an empty value with required validator to set the dialog's instance form to be invalid.
-      const value: any = null;
-      component.instanceForm.addControl(
-        "dummy",
-        new FormControl(value, [Validators.required])
-      );
-      expect(component.instanceForm.valid).toBeFalsy();
 
       let closeButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#closeButton" })
@@ -225,7 +207,6 @@ describe("PolicyInstanceDialogComponent", () => {
       let submitButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#submitButton" })
       );
-      expect(await submitButton.isDisabled()).toBeTruthy();
       expect(await submitButton.getText()).toEqual("Submit");
     });
   });
@@ -265,16 +246,13 @@ describe("PolicyInstanceDialogComponent", () => {
       expect(ricSelector).toBeFalsy();
     });
 
-    it("should contain json editor with form and json data", async () => {
+    it("should contain json editor with json data", async () => {
       const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(By.directive(NoTypePolicyEditorComponent)).componentInstance;
       expect(noTypePolicyEditor).toBeTruthy();
-      expect(noTypePolicyEditor.instanceForm).toBeTruthy();
       expect(unescapeQuotes(noTypePolicyEditor.policyJson)).toEqual('"' + instanceJson + '"');
     });
 
     it("should contain enabled Close and Submit buttons when all inputs are valid", async () => {
-      expect(component.instanceForm.valid).toBeTruthy();
-
       let closeButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#closeButton" })
       );
@@ -333,8 +311,6 @@ describe("PolicyInstanceDialogComponent", () => {
     });
 
     it("should contain enabled Close and Submit buttons when all inputs are valid", async () => {
-      expect(component.instanceForm.valid).toBeTruthy();
-
       let closeButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#closeButton" })
       );
@@ -379,7 +355,6 @@ function unescapeQuotes(string: string): string {
   ],
 })
 class RicSelectorStubComponent {
-  @Input() instanceForm: FormGroup;
   @Input() policyTypeName: string = "";
 
   get selectedRic(): string {
@@ -398,7 +373,6 @@ class RicSelectorStubComponent {
   ],
 })
 class NoTypePolicyEditorStubComponent {
-  @Input() instanceForm: FormGroup;
   @Input() policyJson: string;
 
   get policyJsonTextArea(): AbstractControl {
