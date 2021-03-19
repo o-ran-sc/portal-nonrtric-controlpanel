@@ -82,13 +82,6 @@ describe('RicSelectorComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should be added to form group with required validator', async () => {
-    let ricSelector: MatSelectHarness = await loader.getHarness(MatSelectHarness.with({ selector: '#ricSelector' }));
-
-    expect(formGroup.get('ricSelector')).toBeTruthy();
-    expect(await ricSelector.isRequired()).toBeTruthy();
-  });
-
   it('no ric selected', async () => {
     let ricSelector: MatSelectHarness = await loader.getHarness(MatSelectHarness.with({ selector: '#ricSelector' }));
 

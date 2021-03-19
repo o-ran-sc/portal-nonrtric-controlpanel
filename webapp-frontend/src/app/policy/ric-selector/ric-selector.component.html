@@ -19,20 +19,21 @@
    ========================LICENSE_END===================================
   /
 -->
-
-<mat-form-field appearance="fill">
-    <mat-select id="ricSelector" formControlName="ricSelector" matInput required
-        placeholder="Target" matTooltip="Element where the policy instance resides, e.g. a gNodeB or Near-RT RIC">
-        <mat-option *ngFor="let ric of this.allRics" [value]="ric">
-            {{ric}}
-        </mat-option>
-    </mat-select>
-    <div *ngIf="ricSelector.invalid && (ricSelector.dirty || ricSelector.touched)" class="alert mat-error"
-    style="width: 300px;">
-    <div id="ricSelectorError" *ngIf="ricSelector.errors.required">
-        <mat-error role="alert">
-            This field is required.
-        </mat-error>
-    </div>
-</div>
-</mat-form-field>
+<form [formGroup]="instanceForm">
+    <mat-form-field appearance="fill">
+        <mat-select id="ricSelector" formControlName="ricSelector" (selectionChange)="onRicChanged($event)" matInput
+            required placeholder="Target *"
+            matTooltip="Element where the policy instance resides, e.g. a gNodeB or Near-RT RIC">
+            <mat-option *ngFor="let ric of this.allRics" [value]="ric">
+                {{ric}}
+            </mat-option>
+        </mat-select>
+        <div *ngIf="ricSelector.invalid" class="alert mat-error" style="width: 300px;">
+            <div id="ricSelectorError" *ngIf="ricSelector.errors.required">
+                <mat-error role="alert">
+                    This field is required.
+                </mat-error>
+            </div>
+        </div>
+    </mat-form-field>
+</form>

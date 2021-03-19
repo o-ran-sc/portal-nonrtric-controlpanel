@@ -69,15 +69,6 @@ describe("NoTypePolicyEditorComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should be added to form group with required validator", async () => {
-    let textArea: MatInputHarness = await loader.getHarness(
-      MatInputHarness.with({ selector: "#policyJsonTextArea" })
-    );
-
-    expect(formGroup.get("policyJsonTextArea")).toBeTruthy();
-    expect(await textArea.isRequired()).toBeTruthy();
-  });
-
   it("should contain provided policy json and enabled Format button", async () => {
     let textArea: MatInputHarness = await loader.getHarness(
       MatInputHarness.with({ selector: "#policyJsonTextArea" })
@@ -91,7 +82,7 @@ describe("NoTypePolicyEditorComponent", () => {
   });
 
   it("Format button should be disabled when json not valid", async () => {
-    const ele = formGroup.get("policyJsonTextArea");
+    const ele = component.noTypePolicyEditorComponent.instanceForm.get("policyJsonTextArea");
     ele.setValue("{");
 
     let formatButton: MatButtonHarness = await loader.getHarness(
@@ -101,7 +92,7 @@ describe("NoTypePolicyEditorComponent", () => {
   });
 
   it("should format unformatted json", async () => {
-    const textArea = formGroup.get("policyJsonTextArea");
+    const textArea = component.noTypePolicyEditorComponent.instanceForm.get("policyJsonTextArea");
     textArea.setValue('{"A":"A"}');
     component.noTypePolicyEditorComponent.formatJsonInput();
     expect(component.noTypePolicyEditorComponent.policyJson).toEqual(
@@ -113,13 +104,11 @@ describe("NoTypePolicyEditorComponent", () => {
     selector: `no-type-policy-editor-host-component`,
     template: `<nrcp-no-type-policy-editor
       [policyJson]="this.policyJson"
-      [instanceForm]="instanceForm"
     ></nrcp-no-type-policy-editor>`,
   })
   class TestNoTypePolicyEditorComponentHostComponent {
     @ViewChild(NoTypePolicyEditorComponent)
     noTypePolicyEditorComponent: NoTypePolicyEditorComponent;
-    instanceForm: FormGroup = formGroup;
     policyJson: string = '{"A":"A"}';
   }
 });

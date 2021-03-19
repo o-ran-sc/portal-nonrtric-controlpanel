@@ -18,7 +18,7 @@
 //   ========================LICENSE_END===================================
 //  /
 
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, Output } from "@angular/core";
 import {
   AbstractControl,
   ControlContainer,
@@ -28,8 +28,10 @@ import {
   FormGroupDirective,
   Validators,
 } from "@angular/forms";
+import { EventEmitter } from "@angular/core";
 import { Rics } from "src/app/interfaces/ric";
 import { PolicyService } from "src/app/services/policy/policy.service";
+import { MatSelectChange } from "@angular/material/select";
 
 @Component({
   selector: "nrcp-ric-selector",
@@ -40,9 +42,13 @@ import { PolicyService } from "src/app/services/policy/policy.service";
   ],
 })
 export class RicSelectorComponent implements OnInit {
-  @Input() instanceForm: FormGroup;
   @Input() policyTypeName: string = "";
-  ric: string;
+  @Output() selectedRic: EventEmitter<string> = new EventEmitter<string>();
+
+  ric: string = null;
+  instanceForm: FormGroup = new FormGroup({
+    ricSelector: new FormControl(this.ric, [Validators.required]),
+  });
   allRics: string[] = [];
 
   constructor(
@@ -51,17 +57,12 @@ export class RicSelectorComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.instanceForm.addControl(
-      "ricSelector",
-      new FormControl(this.ric, [Validators.required])
-    );
-
     console.log("Ric:", this.ric);
     this.fetchRics();
   }
 
-  get selectedRic(): string {
-    return this.ric;
+  onRicChanged(newvalue: MatSelectChange): void {
+    this.selectedRic.emit(newvalue.value);
   }
 
   get ricSelector(): AbstractControl {
