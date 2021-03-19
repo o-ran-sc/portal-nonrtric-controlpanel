@@ -31,6 +31,8 @@ import { EICoordinatorComponent } from './ei-coordinator.component';
 import { UiService } from '../services/ui/ui.service';
 import { ProducersListComponent } from './producers-list/producers-list.component';
 import { JobsListComponent } from './jobs-list/jobs-list.component';
+import { MockComponent } from 'ng-mocks';
+import { By } from '@angular/platform-browser';
 
 describe('EICoordinatorComponent', () => {
   let component: EICoordinatorComponent;
@@ -51,8 +53,8 @@ describe('EICoordinatorComponent', () => {
       ],
       declarations: [
         EICoordinatorComponent,
-        JobsListStubComponent,
-        ProducerListStubComponent,
+        MockComponent(JobsListComponent),
+        MockComponent(ProducersListComponent),
       ],
       providers: [
         UiService
@@ -100,47 +102,22 @@ describe('EICoordinatorComponent', () => {
 
     it('should refresh tables', async () => {
       let refreshButton = await loader.getHarness(MatButtonHarness.with({ selector: '#refreshButton' }));
-      spyOn(component.producersList, 'loadProducers');
-      spyOn(component.producersList, 'clearFilter');
-      spyOn(component.jobComponent, 'loadJobs');
-      spyOn(component.jobComponent, 'clearFilter');
+
+      const jobsComponent: JobsListComponent = fixture.debugElement.query(By.directive(JobsListComponent)).componentInstance;
+      spyOn(jobsComponent, 'loadJobs');
+      spyOn(jobsComponent, 'clearFilter');
+
+      const prodsComponent: ProducersListComponent = fixture.debugElement.query(By.directive(ProducersListComponent)).componentInstance;
+      spyOn(prodsComponent, 'loadProducers');
+      spyOn(prodsComponent, 'clearFilter');
+
       await refreshButton.click();
 
-      expect(component.jobComponent.loadJobs).toHaveBeenCalled();
-      expect(component.jobComponent.clearFilter).toHaveBeenCalled();
-      expect(component.producersList.loadProducers).toHaveBeenCalled();
-      expect(component.producersList.clearFilter).toHaveBeenCalled();
+      expect(jobsComponent.loadJobs).toHaveBeenCalled();
+      expect(jobsComponent.clearFilter).toHaveBeenCalled();
+      expect(prodsComponent.loadProducers).toHaveBeenCalled();
+      expect(prodsComponent.clearFilter).toHaveBeenCalled();
+
     });
   });
-
-  @Component({
-    selector: 'nrcp-jobs-list',
-    template: '',
-    providers: [
-      {
-        provide: JobsListComponent,
-        useClass: JobsListStubComponent
-      }
-    ]
-  })
-  class JobsListStubComponent {
-    loadJobs() { }
-    clearFilter() { }
-  }
-
-  @Component({
-    selector: 'nrcp-producers-list',
-    template: '',
-    providers: [
-      {
-        provide: ProducersListComponent,
-        useClass: ProducerListStubComponent
-      }
-    ]
-  })
-  class ProducerListStubComponent {
-    loadProducers() { }
-    clearFilter() { }
-  }
-
 });
