@@ -25,37 +25,36 @@
     Properties *
 </h4>
 <div id="propertiesDiv" *ngIf="isVisible.form" class="json-schema-form" [@expandSection]="true">
-    <json-schema-form id="json-schema-form" [form]="jsonSchemaObject"
-        [(data)]="jsonObject" [options]="jsonFormOptions" [framework]="'material-design'" [language]="'en'"
-        (onChanges)="onChanges($event)" (isValid)="isValid($event)"
+    <json-schema-form id="json-schema-form" [form]="jsonSchemaObject" [(data)]="jsonObject" [options]="jsonFormOptions"
+        [framework]="'material-design'" [language]="'en'" (onChanges)="onChanges($event)" (isValid)="isValid($event)"
         (validationErrors)="validationErrors($event)">
     </json-schema-form>
 </div>
-<h4 id="jsonHeading" [class.text-danger]="!formIsValid && !isVisible.json" [class.default-cursor]="formIsValid || isVisible.json"
-(click)="toggleVisible('json')">
-<mat-icon id="jsonIcon" matTooltip="Json">{{isVisible.json ? 'expand_less' : 'expand_more'}}</mat-icon>
-JSON
+<h4 id="jsonHeading" [class.text-danger]="!formIsValid && !isVisible.json"
+    [class.default-cursor]="formIsValid || isVisible.json" (click)="toggleVisible('json')">
+    <mat-icon id="jsonIcon" matTooltip="Json">{{isVisible.json ? 'expand_less' : 'expand_more'}}</mat-icon>
+    JSON
 </h4>
 <div id="jsonDiv" *ngIf="isVisible.json" fxLayout="column" [@expandSection]="true">
-<div>
-    <strong *ngIf="formIsValid || prettyValidationErrors" [class.text-muted]="formIsValid"
-        [class.text-danger]="!formIsValid">
-        {{formIsValid ? 'Json' : 'Not valid'}}
-    </strong>
-    <span *ngIf="!formIsValid && !prettyValidationErrors">Invalid form</span>
-    <span *ngIf="prettyValidationErrors">— errors:</span>
-    <div *ngIf="prettyValidationErrors" class="text-danger" [innerHTML]="prettyValidationErrors"></div>
-</div>
-<div>
-    <pre [class.text__dark]="darkMode">{{prettyLiveFormData}}</pre>
-</div>
+    <div>
+        <strong *ngIf="formIsValid || prettyValidationErrors" [class.text-muted]="formIsValid"
+            [class.text-danger]="!formIsValid">
+            {{formIsValid ? 'Json' : 'Not valid'}}
+        </strong>
+        <span *ngIf="!formIsValid && !prettyValidationErrors">Invalid form</span>
+        <span *ngIf="prettyValidationErrors">— errors:</span>
+        <div *ngIf="prettyValidationErrors" class="text-danger" [innerHTML]="prettyValidationErrors"></div>
+    </div>
+    <div>
+        <pre [class.text__dark]="darkMode">{{prettyLiveFormData}}</pre>
+    </div>
 </div>
 
 <h4 id="schemaHeading" class="default-cursor" (click)="toggleVisible('schema')">
-<mat-icon id="schemaIcon" matTooltip="Json Schema">{{isVisible.schema ? 'expand_less' : 'expand_more'}}</mat-icon>
-JSON Schema
+    <mat-icon id="schemaIcon" matTooltip="Json Schema">{{isVisible.schema ? 'expand_less' : 'expand_more'}}</mat-icon>
+    JSON Schema
 </h4>
 <div id="schemaDiv" *ngIf="isVisible.schema" fxLayout="column" [@expandSection]="true">
-<strong class="text-muted">Schema</strong>
-<pre [class.text__dark]="darkMode">{{schemaAsString}}</pre>
+    <strong class="text-muted">Schema</strong>
+    <pre [class.text__dark]="darkMode">{{schemaAsString}}</pre>
 </div>

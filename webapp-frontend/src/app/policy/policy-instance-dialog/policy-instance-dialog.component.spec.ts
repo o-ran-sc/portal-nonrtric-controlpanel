@@ -30,13 +30,7 @@ import {
 } from "@angular/material/dialog";
 import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from "@angular/material/input";
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
+import { AbstractControl, ReactiveFormsModule } from "@angular/forms";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ToastrModule } from "ngx-toastr";
 
@@ -127,13 +121,17 @@ describe("PolicyInstanceDialogComponent", () => {
     });
 
     it("should contain ric select with no policy type", async () => {
-      const ricSelector: RicSelectorComponent = fixture.debugElement.query(By.directive(RicSelectorComponent)).componentInstance;
+      const ricSelector: RicSelectorComponent = fixture.debugElement.query(
+        By.directive(RicSelectorComponent)
+      ).componentInstance;
       expect(ricSelector).toBeTruthy();
       expect(ricSelector.policyTypeName).toBeFalsy();
     });
 
     it("should contain json editor with empty JSON", async () => {
-      const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(By.directive(NoTypePolicyEditorComponent)).componentInstance;
+      const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(
+        By.directive(NoTypePolicyEditorComponent)
+      ).componentInstance;
       expect(noTypePolicyEditor).toBeTruthy();
       expect(noTypePolicyEditor.policyJson).toEqual("{}");
     });
@@ -182,13 +180,17 @@ describe("PolicyInstanceDialogComponent", () => {
     });
 
     it("should contain ric select with provided policy type", async () => {
-      const ricSelector: RicSelectorComponent = fixture.debugElement.query(By.directive(RicSelectorComponent)).componentInstance;
+      const ricSelector: RicSelectorComponent = fixture.debugElement.query(
+        By.directive(RicSelectorComponent)
+      ).componentInstance;
       expect(ricSelector).toBeTruthy();
       expect(ricSelector.policyTypeName).toEqual("Type 1");
     });
 
     it("should contain typed json editor with empty JSON, schema and dark mode true", async () => {
-      const typedPolicyEditor: TypedPolicyEditorComponent = fixture.debugElement.query(By.directive(TypedPolicyEditorComponent)).componentInstance;
+      const typedPolicyEditor: TypedPolicyEditorComponent = fixture.debugElement.query(
+        By.directive(TypedPolicyEditorComponent)
+      ).componentInstance;
       expect(typedPolicyEditor).toBeTruthy();
       expect(typedPolicyEditor.jsonObject).toBeFalsy();
       expect(typedPolicyEditor.jsonSchemaObject).toEqual(typedSchema);
@@ -242,14 +244,20 @@ describe("PolicyInstanceDialogComponent", () => {
     });
 
     it("should not contain ric select", async () => {
-      const ricSelector = fixture.debugElement.query(By.directive(RicSelectorComponent));
+      const ricSelector = fixture.debugElement.query(
+        By.directive(RicSelectorComponent)
+      );
       expect(ricSelector).toBeFalsy();
     });
 
     it("should contain json editor with json data", async () => {
-      const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(By.directive(NoTypePolicyEditorComponent)).componentInstance;
+      const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(
+        By.directive(NoTypePolicyEditorComponent)
+      ).componentInstance;
       expect(noTypePolicyEditor).toBeTruthy();
-      expect(unescapeQuotes(noTypePolicyEditor.policyJson)).toEqual('"' + instanceJson + '"');
+      expect(unescapeQuotes(noTypePolicyEditor.policyJson)).toEqual(
+        '"' + instanceJson + '"'
+      );
     });
 
     it("should contain enabled Close and Submit buttons when all inputs are valid", async () => {
@@ -298,14 +306,20 @@ describe("PolicyInstanceDialogComponent", () => {
     });
 
     it("should not contain ric select", async () => {
-      const ricSelector = fixture.debugElement.query(By.directive(RicSelectorComponent));
+      const ricSelector = fixture.debugElement.query(
+        By.directive(RicSelectorComponent)
+      );
       expect(ricSelector).toBeFalsy();
     });
 
     it("should contain typed json editor with instance JSON, schema and dark mode true", async () => {
-      const typedPolicyEditor: TypedPolicyEditorComponent = fixture.debugElement.query(By.directive(TypedPolicyEditorComponent)).componentInstance;
+      const typedPolicyEditor: TypedPolicyEditorComponent = fixture.debugElement.query(
+        By.directive(TypedPolicyEditorComponent)
+      ).componentInstance;
       expect(typedPolicyEditor).toBeTruthy();
-      expect(unescapeQuotes(typedPolicyEditor.jsonObject)).toEqual(instanceJson);
+      expect(unescapeQuotes(typedPolicyEditor.jsonObject)).toEqual(
+        instanceJson
+      );
       expect(typedPolicyEditor.jsonSchemaObject).toEqual(typedSchema);
       expect(typedPolicyEditor.darkMode).toBeTruthy();
     });

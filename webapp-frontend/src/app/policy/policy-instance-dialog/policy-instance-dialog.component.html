@@ -19,7 +19,8 @@
   -->
 
 <div class="text-muted logo" fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="space-around center">
-    <div id="instanceInfo" *ngIf="policyInstance.policy_id">[{{policyInstance.ric_id}}] Instance ID: {{policyInstance.policy_id}}</div>
+    <div id="instanceInfo" *ngIf="policyInstance.policy_id">[{{policyInstance.ric_id}}] Instance ID:
+        {{policyInstance.policy_id}}</div>
 </div>
 <div class="mat-elevation-z8 header row" [ngClass]="{'header-dark': darkMode}">
     <div class="logo">
@@ -41,10 +42,12 @@
     <nrcp-ric-selector *ngIf="!policyInstance.policy_id" [policyTypeName]="policyInstance.policytype_id"
         (selectedRic)="onSelectedRicChanged($event)"></nrcp-ric-selector>
 
-    <nrcp-no-type-policy-editor *ngIf="!typeHasSchema()" (validJson)="onJsonChanged($event)" [policyJson]="policyJson"></nrcp-no-type-policy-editor>
+    <nrcp-no-type-policy-editor *ngIf="!typeHasSchema()" (validJson)="onJsonChanged($event)" [policyJson]="policyJson">
+    </nrcp-no-type-policy-editor>
 
-    <nrcp-typed-policy-editor *ngIf="typeHasSchema()" (validJson)="onJsonChanged($event)" [jsonSchemaObject]="jsonSchemaObject" [jsonObject]="policyJson"
-        [darkMode]="darkMode"></nrcp-typed-policy-editor>
+    <nrcp-typed-policy-editor *ngIf="typeHasSchema()" (validJson)="onJsonChanged($event)"
+        [jsonSchemaObject]="jsonSchemaObject" [jsonObject]="policyJson" [darkMode]="darkMode">
+    </nrcp-typed-policy-editor>
 
     <div mat-dialog-actions>
         <button id="closeButton" mat-raised-button [mat-dialog-close]="false">Close</button>
