@@ -53,7 +53,6 @@ export class RicSelectorComponent implements OnInit {
   constructor(private dataService: PolicyService) {}
 
   ngOnInit(): void {
-    console.log("Ric:", this.ric);
     this.fetchRics();
   }
 

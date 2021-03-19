@@ -22,6 +22,7 @@ import { HarnessLoader } from "@angular/cdk/testing";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { Component, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { OptionHarnessFilters } from "@angular/material/core/testing";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSelectHarness } from "@angular/material/select/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -77,7 +78,7 @@ describe("RicSelectorComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("no ric selected when no ric provided", async () => {
+  it("no ric selected", async () => {
     let ricSelector: MatSelectHarness = await loader.getHarness(
       MatSelectHarness.with({ selector: "#ricSelector" })
     );
@@ -96,6 +97,20 @@ describe("RicSelectorComponent", () => {
     expect(count).toEqual(2);
   });
 
+  it("should send selected ric", async () => {
+    let selectedRic: string;
+    component.ricSelectorComponent.selectedRic.subscribe((ric: string) => {
+      selectedRic = ric;
+    });
+
+    let ricSelector: MatSelectHarness = await loader.getHarness(
+      MatSelectHarness.with({ selector: "#ricSelector" })
+    );
+    await ricSelector.clickOptions({ text: "ric1" });
+
+    expect(selectedRic).toEqual("ric1");
+  });
+
   @Component({
     selector: `ric-selector-host-component`,
     template: `<nrcp-ric-selector
@@ -104,7 +119,7 @@ describe("RicSelectorComponent", () => {
   })
   class TestRicSelectorHostComponent {
     @ViewChild(RicSelectorComponent)
-    private ricSelectorComponent: RicSelectorComponent;
+    ricSelectorComponent: RicSelectorComponent;
     policyTypeName: string = "policyTypeName";
   }
 });
