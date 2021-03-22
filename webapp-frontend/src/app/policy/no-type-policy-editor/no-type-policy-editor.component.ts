@@ -63,9 +63,9 @@ export class NoTypePolicyEditorComponent implements OnInit {
   }
 
   formatJsonInput(): void {
-    this.policyJson = formatJsonString(
-      JSON.parse(this.policyJsonTextArea.value)
-    );
+    let jsonBefore: string = this.policyJsonTextArea.value;
+    let jsonAfter = formatJsonString(JSON.parse(jsonBefore));
+    this.policyJsonTextArea.setValue(jsonAfter);
   }
 
   jsonValidator(): ValidatorFn {
@@ -85,16 +85,14 @@ export class NoTypePolicyEditorComponent implements OnInit {
   }
 
   isJsonValid(json: string): boolean {
+    let valid = false as boolean;
     try {
       if (json != null) {
         JSON.parse(json);
-        return true;
-      } else {
-        return false;
+        valid = true;
       }
-    } catch (jsonError) {
-      return false;
-    }
+    } catch (jsonError) {}
+    return valid;
   }
 }
 

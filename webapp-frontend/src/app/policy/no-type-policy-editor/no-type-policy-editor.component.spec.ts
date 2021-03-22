@@ -33,7 +33,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NoTypePolicyEditorComponent } from "./no-type-policy-editor.component";
 
 describe("NoTypePolicyEditorComponent", () => {
-
   let component: TestNoTypePolicyEditorComponentHostComponent;
   let fixture: ComponentFixture<TestNoTypePolicyEditorComponentHostComponent>;
   let loader: HarnessLoader;
@@ -67,12 +66,12 @@ describe("NoTypePolicyEditorComponent", () => {
   });
 
   it("should contain provided policy json and enabled Format button", async () => {
-    let textArea: MatInputHarness = await loader.getHarness(
+    const textArea: MatInputHarness = await loader.getHarness(
       MatInputHarness.with({ selector: "#policyJsonTextArea" })
     );
     expect(await textArea.getValue()).toEqual('{"A":"A"}');
 
-    let formatButton: MatButtonHarness = await loader.getHarness(
+    const formatButton: MatButtonHarness = await loader.getHarness(
       MatButtonHarness.with({ selector: "#formatButton" })
     );
     expect(await formatButton.isDisabled()).toBeFalsy();
@@ -84,7 +83,7 @@ describe("NoTypePolicyEditorComponent", () => {
     );
     ele.setValue("{");
 
-    let formatButton: MatButtonHarness = await loader.getHarness(
+    const formatButton: MatButtonHarness = await loader.getHarness(
       MatButtonHarness.with({ selector: "#formatButton" })
     );
     expect(await formatButton.isDisabled()).toBeTruthy();
@@ -94,11 +93,40 @@ describe("NoTypePolicyEditorComponent", () => {
     const textArea = component.noTypePolicyEditorComponent.instanceForm.get(
       "policyJsonTextArea"
     );
-    textArea.setValue('{"A":"A"}');
+    expect(textArea.value).toEqual('{"A":"A"}');
+
     component.noTypePolicyEditorComponent.formatJsonInput();
-    expect(component.noTypePolicyEditorComponent.policyJson).toEqual(
-      '{\n  "A": "A"\n}'
+    expect(textArea.value).toEqual('{\n  "A": "A"\n}');
+  });
+
+  it("should send valid json", async () => {
+    const textArea = component.noTypePolicyEditorComponent.instanceForm.get(
+      "policyJsonTextArea"
     );
+    expect(textArea.value).toEqual('{"A":"A"}');
+
+    let validJson: string;
+    component.noTypePolicyEditorComponent.validJson.subscribe((json: string) => {
+      validJson = json;
+    });
+
+    textArea.setValue('{"B":"B"}');
+    expect(validJson).toEqual('{"B":"B"}');
+  });
+
+  it("should send null when invalid json", async () => {
+    const textArea = component.noTypePolicyEditorComponent.instanceForm.get(
+      "policyJsonTextArea"
+    );
+    expect(textArea.value).toEqual('{"A":"A"}');
+
+    let invalidJson: string;
+    component.noTypePolicyEditorComponent.validJson.subscribe((json: string) => {
+      invalidJson = json;
+    });
+
+    textArea.setValue('{');
+    expect(invalidJson).toBeFalsy();
   });
 
   @Component({
