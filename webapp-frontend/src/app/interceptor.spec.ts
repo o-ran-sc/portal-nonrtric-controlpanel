@@ -25,8 +25,8 @@ import {
 } from '@angular/common/http/testing';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpRequestInterceptor } from './interceptor';
-import { NotificationService } from './services/ui/notification.service';
-import { EIService } from './services/ei/ei.service';
+import { NotificationService } from '@services/ui/notification.service';
+import { EIService } from '@services/ei/ei.service';
 import { of } from 'rxjs/observable/of';
 
 describe(`HttpRequestInterceptor`, () => {

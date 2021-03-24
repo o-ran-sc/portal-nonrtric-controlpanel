@@ -5,7 +5,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { MatTableHarness } from '@angular/material/table/testing';
 import { MatSortHarness } from '@angular/material/sort/testing';
 import { ProducersListComponent } from "./producers-list.component";
-import { EIService } from 'src/app/services/ei/ei.service';
+import { EIService } from '@services/ei/ei.service';
 import { EIProducer, OperationalState, ProducerRegistrationInfo, ProducerStatus } from 'src/app/interfaces/ei.types';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UiService } from 'src/app/services/ui/ui.service';
+import { UiService } from '@services/ui/ui.service';
 import { of } from 'rxjs';
 import { MatSortModule } from '@angular/material/sort';
 

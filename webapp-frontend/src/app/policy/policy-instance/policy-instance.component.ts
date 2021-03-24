@@ -23,16 +23,16 @@ import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/cor
 import { MatDialog } from '@angular/material/dialog';
 import { PolicyTypeSchema } from '../../interfaces/policy.types';
 import { PolicyInstanceDataSource } from './policy-instance.datasource';
-import { ErrorDialogService } from '../../services/ui/error-dialog.service';
-import { NotificationService } from '../../services/ui/notification.service';
-import { PolicyService } from '../../services/policy/policy.service';
-import { ConfirmDialogService } from '../../services/ui/confirm-dialog.service';
-import { PolicyInstance } from '../../interfaces/policy.types';
+import { ErrorDialogService } from '@services/ui/error-dialog.service';
+import { NotificationService } from '@services/ui/notification.service';
+import { PolicyService } from '@services/policy/policy.service';
+import { ConfirmDialogService } from '@services/ui/confirm-dialog.service';
+import { PolicyInstance } from '@interfaces/policy.types';
 import { PolicyInstanceDialogComponent } from '../policy-instance-dialog/policy-instance-dialog.component';
 import { getPolicyDialogProperties } from '../policy-instance-dialog/policy-instance-dialog.component';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UiService } from '../../services/ui/ui.service';
+import { UiService } from '@services/ui/ui.service';
 
 @Component({
     selector: 'nrcp-policy-instance',

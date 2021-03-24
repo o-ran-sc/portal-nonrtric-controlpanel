@@ -19,7 +19,7 @@
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { UiService } from '../services/ui/ui.service';
+import { UiService } from '@services/ui/ui.service';
 import { JobsListComponent } from './jobs-list/jobs-list.component';
 import { ProducersListComponent } from './producers-list/producers-list.component';
 

@@ -19,7 +19,7 @@
  */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UiService } from '../../services/ui/ui.service';
+import { UiService } from '@services/ui/ui.service';
 
 @Component({
   selector: 'nrcp-ei-card',

@@ -17,7 +17,7 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { ErrorDialogComponent } from '../../ui/error-dialog/error-dialog.component';
+import { ErrorDialogComponent } from '@ui/error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Injectable } from '@angular/core';
 import { UiService } from './ui.service';

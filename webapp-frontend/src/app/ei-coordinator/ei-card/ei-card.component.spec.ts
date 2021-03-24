@@ -22,7 +22,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {EiCardComponent} from './ei-card.component';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterTestingModule } from '@angular/router/testing';
-import {UiService} from '../../services/ui/ui.service';
+import {UiService} from '@services/ui/ui.service';
 
 describe('EICardComponent', () => {
   let component: EiCardComponent;

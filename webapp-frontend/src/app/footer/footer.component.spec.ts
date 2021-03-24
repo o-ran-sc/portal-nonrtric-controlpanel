@@ -20,7 +20,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FooterComponent } from './footer.component';
-import { UiService } from '../services/ui/ui.service';
+import { UiService } from '@services/ui/ui.service';
 
 describe('FooterComponent', () => {
   let component: FooterComponent;

@@ -21,7 +21,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { EIJob, ProducerStatus, ProducerRegistrationInfo } from '../../interfaces/ei.types';
+import { EIJob, ProducerStatus, ProducerRegistrationInfo } from '@interfaces/ei.types';
 
 /**
  * Services for calling the EI endpoints.

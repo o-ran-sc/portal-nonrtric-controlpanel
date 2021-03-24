@@ -23,7 +23,7 @@ import {PolicyCardComponent} from './policy-card.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { RouterTestingModule} from '@angular/router/testing';
-import {UiService} from '../../services/ui/ui.service';
+import {UiService} from '@services/ui/ui.service';
 
 describe('PolicyCardComponent', () => {
   let component: PolicyCardComponent;

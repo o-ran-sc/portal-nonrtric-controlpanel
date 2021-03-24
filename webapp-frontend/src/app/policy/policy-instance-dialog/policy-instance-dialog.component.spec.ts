@@ -34,9 +34,9 @@ import { AbstractControl, ReactiveFormsModule } from "@angular/forms";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ToastrModule } from "ngx-toastr";
 
-import { PolicyService } from "../../services/policy/policy.service";
-import { ErrorDialogService } from "../../services/ui/error-dialog.service";
-import { UiService } from "../../services/ui/ui.service";
+import { PolicyService } from "@services/policy/policy.service";
+import { ErrorDialogService } from "@services/ui/error-dialog.service";
+import { UiService } from "@services/ui/ui.service";
 import { PolicyInstanceDialogComponent } from "./policy-instance-dialog.component";
 import {
   ChangeDetectorRef,

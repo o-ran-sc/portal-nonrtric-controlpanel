@@ -29,17 +29,17 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from "@angular/material/dialog";
-import { PolicyService } from "../../services/policy/policy.service";
-import { NotificationService } from "../../services/ui/notification.service";
-import { UiService } from "../../services/ui/ui.service";
+import { PolicyService } from "@services/policy/policy.service";
+import { NotificationService } from "@services/ui/notification.service";
+import { UiService } from "@services/ui/ui.service";
 import { HttpErrorResponse } from "@angular/common/http";
-import { ErrorDialogService } from "../../services/ui/error-dialog.service";
+import { ErrorDialogService } from "@services/ui/error-dialog.service";
 import * as uuid from "uuid";
 import {
   CreatePolicyInstance,
   PolicyInstance,
   PolicyTypeSchema,
-} from "../../interfaces/policy.types";
+} from "@interfaces/policy.types";
 import { formatJsonString } from "../no-type-policy-editor/no-type-policy-editor.component";
 
 @Component({

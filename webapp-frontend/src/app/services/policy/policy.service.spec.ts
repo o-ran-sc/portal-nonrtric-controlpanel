@@ -21,7 +21,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { PolicyService } from './policy.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
-import { PolicyInstance, PolicyInstances, PolicyTypes } from '../../interfaces/policy.types';
+import { PolicyInstance, PolicyInstances, PolicyTypes } from '@interfaces/policy.types';
 
 describe('PolicyService', () => {
   let apiVersion2 = 'v2'

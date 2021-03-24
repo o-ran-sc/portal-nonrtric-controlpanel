@@ -23,7 +23,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { NotificationService } from './services/ui/notification.service';
+import { NotificationService } from '@services/ui/notification.service';
 
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {

@@ -22,8 +22,8 @@ import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { ToastrModule } from 'ngx-toastr';
 import { PolicyTypeDataSource } from './policy-type.datasource';
-import { PolicyService } from '../../services/policy/policy.service';
-import { PolicyTypeSchema } from '../../interfaces/policy.types';
+import { PolicyService } from '@services/policy/policy.service';
+import { PolicyTypeSchema } from '@interfaces/policy.types';
 
 describe('PolicyTypeDataSource', () => {
   let policyTypeDataSource: PolicyTypeDataSource;

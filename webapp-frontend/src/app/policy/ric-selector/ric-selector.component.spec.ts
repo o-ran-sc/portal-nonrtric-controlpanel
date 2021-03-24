@@ -27,8 +27,8 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatSelectHarness } from "@angular/material/select/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { of } from "rxjs/observable/of";
-import { Ric } from "src/app/interfaces/ric";
-import { PolicyService } from "src/app/services/policy/policy.service";
+import { Ric } from "@interfaces/ric";
+import { PolicyService } from "@services/policy/policy.service";
 
 import { RicSelectorComponent } from "./ric-selector.component";
 

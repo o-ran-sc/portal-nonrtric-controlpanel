@@ -18,7 +18,7 @@
  * ========================LICENSE_END===================================
  */
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { UiService } from '../../services/ui/ui.service';
+import { UiService } from '@services/ui/ui.service';
 
 @Component({
   selector: 'nrcp-sidenav-list',
