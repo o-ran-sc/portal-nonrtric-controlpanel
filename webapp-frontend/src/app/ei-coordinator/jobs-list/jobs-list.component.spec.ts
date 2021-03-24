@@ -33,9 +33,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTableHarness } from '@angular/material/table/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs/observable/of';
-import { EIJob } from '../../interfaces/ei.types';
-import { EIService } from '../../services/ei/ei.service';
-import { UiService } from '../../services/ui/ui.service';
+import { EIJob } from '@interfaces/ei.types';
+import { EIService } from '@services/ei/ei.service';
+import { UiService } from '@services/ui/ui.service';
 
 import { JobsListComponent } from './jobs-list.component';
 

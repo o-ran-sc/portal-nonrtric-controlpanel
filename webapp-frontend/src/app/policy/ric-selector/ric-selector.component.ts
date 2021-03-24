@@ -28,8 +28,8 @@ import {
   Validators,
 } from "@angular/forms";
 import { EventEmitter } from "@angular/core";
-import { Rics } from "src/app/interfaces/ric";
-import { PolicyService } from "src/app/services/policy/policy.service";
+import { Rics } from "@interfaces/ric";
+import { PolicyService } from "@services/policy/policy.service";
 import { MatSelectChange } from "@angular/material/select";
 
 @Component({

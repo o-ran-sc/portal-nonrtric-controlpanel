@@ -20,7 +20,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing';
 
-import { EIJob, ProducerStatus, OperationalState, ProducerRegistrationInfo } from '../../interfaces/ei.types';
+import { EIJob, ProducerStatus, OperationalState, ProducerRegistrationInfo } from '@interfaces/ei.types';
 import { EIService } from './ei.service';
 
 describe('EIService', () => {

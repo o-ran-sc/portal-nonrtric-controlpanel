@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -13,6 +13,16 @@
     "importHelpers": true,
     "resolveJsonModule": true,
     "target": "es2015",
+    "paths": {
+      "@angular/*": [ "../node_modules/@angular/*" ],
+      "@app/*": ["app/*"],
+      "@interfaces/*": ["app/interfaces/*"],
+      "@ei-coordinator/*": ["app/ei-coordinator/*"],
+      "@policy/*": ["app/policy/*"],
+      "@services/*": ["app/services/*"],
+      "@navigation/*": ["app/navigation/*"],
+      "@ui/*": ["app/ui/*"],
+    },
     "typeRoots": [
       "node_modules/@types"
     ],

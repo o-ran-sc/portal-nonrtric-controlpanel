@@ -28,7 +28,7 @@ import { MatTableModule } from '@angular/material/table';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
 import { EICoordinatorComponent } from './ei-coordinator.component';
-import { UiService } from '../services/ui/ui.service';
+import { UiService } from '@services/ui/ui.service';
 import { ProducersListComponent } from './producers-list/producers-list.component';
 import { JobsListComponent } from './jobs-list/jobs-list.component';
 

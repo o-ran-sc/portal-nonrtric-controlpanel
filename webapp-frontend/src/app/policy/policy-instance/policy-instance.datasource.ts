@@ -24,8 +24,8 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PolicyInstance, PolicyTypeSchema } from '../../interfaces/policy.types';
-import { PolicyService } from '../../services/policy/policy.service';
+import { PolicyInstance, PolicyTypeSchema } from '@interfaces/policy.types';
+import { PolicyService } from '@services/policy/policy.service';
 
 export class PolicyInstanceDataSource extends DataSource<PolicyInstance> {
 

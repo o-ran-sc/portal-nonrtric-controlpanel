@@ -24,9 +24,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { forkJoin, of } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { mergeMap, finalize } from 'rxjs/operators';
-import { EIService } from 'src/app/services/ei/ei.service';
-import { EIProducer } from '../../interfaces/ei.types';
-import { UiService } from '../../services/ui/ui.service';
+import { EIService } from '@services/ei/ei.service';
+import { EIProducer } from '@interfaces/ei.types';
+import { UiService } from '@services/ui/ui.service';
 
 @Component({
   selector: 'nrcp-producers-list',

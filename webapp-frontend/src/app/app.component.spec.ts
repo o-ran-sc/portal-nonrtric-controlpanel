@@ -22,7 +22,7 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
-import { UiService } from './services/ui/ui.service';
+import { UiService } from '@services/ui/ui.service';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;

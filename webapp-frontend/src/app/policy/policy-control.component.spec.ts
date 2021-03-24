@@ -25,11 +25,11 @@ import { MatTableModule } from '@angular/material/table';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 
-import { NotificationService } from '../services/ui/notification.service';
+import { NotificationService } from '@services/ui/notification.service';
 import { PolicyControlComponent } from './policy-control.component';
 import { PolicyTypeDataSource } from './policy-type/policy-type.datasource';
-import { UiService } from '../services/ui/ui.service';
-import { PolicyTypeSchema } from '../interfaces/policy.types';
+import { UiService } from '@services/ui/ui.service';
+import { PolicyTypeSchema } from '@interfaces/policy.types';
 
 describe('PolicyControlComponent', () => {
   let component: PolicyControlComponent;

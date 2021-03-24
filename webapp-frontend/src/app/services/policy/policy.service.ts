@@ -21,8 +21,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CreatePolicyInstance, PolicyInstance, PolicyInstanceAck, PolicyInstances, PolicyStatus, PolicyType, PolicyTypes } from '../../interfaces/policy.types';
-import { Rics } from 'src/app/interfaces/ric';
+import { CreatePolicyInstance, PolicyInstance, PolicyInstanceAck, PolicyInstances, PolicyStatus, PolicyType, PolicyTypes } from '@interfaces/policy.types';
+import { Rics } from '@interfaces/ric';
 
 /**
  * Services for calling the policy endpoints.
