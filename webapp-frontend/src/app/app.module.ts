@@ -22,6 +22,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -44,6 +45,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { HttpMockRequestInterceptor } from './interceptor.mock';
 import { environment } from 'src/environments/environment';
 import { HttpRequestInterceptor } from './interceptor';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 export const isMock = environment.mock;
 
@@ -63,7 +65,9 @@ export const isMock = environment.mock;
     HttpClientModule,
     MatDialogModule,
     MatIconModule,
+    MatListModule,
     MatSidenavModule,
+    MatSlideToggleModule,
     MaterialDesignFrameworkModule,
     MDBBootstrapModule.forRoot(),
     PolicyModule,

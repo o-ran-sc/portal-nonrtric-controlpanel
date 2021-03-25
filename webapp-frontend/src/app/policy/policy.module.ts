@@ -36,6 +36,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { RicSelectorComponent } from './ric-selector/ric-selector.component';
 import { TypedPolicyEditorComponent } from './typed-policy-editor/typed-policy-editor.component';
 import { NoTypePolicyEditorComponent } from './no-type-policy-editor/no-type-policy-editor.component';
+import { MatSortModule } from '@angular/material/sort';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatCardModule } from '@angular/material/card';
 
 const routes:Routes = [
   {path: 'policy', component: PolicyControlComponent}
@@ -54,11 +59,16 @@ const routes:Routes = [
   imports: [
     BrowserAnimationsModule,
     CommonModule,
+    FlexLayoutModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatSelectModule,
+    MatSortModule,
     MaterialDesignFrameworkModule,
-    MatDialogModule,
     MatTableModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes)
