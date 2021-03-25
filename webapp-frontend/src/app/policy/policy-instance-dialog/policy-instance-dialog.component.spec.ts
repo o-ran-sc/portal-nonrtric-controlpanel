@@ -30,9 +30,10 @@ import {
 } from "@angular/material/dialog";
 import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from "@angular/material/input";
-import { AbstractControl, ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ToastrModule } from "ngx-toastr";
+import { MockComponent } from "ng-mocks";
 
 import { PolicyService } from "../../services/policy/policy.service";
 import { ErrorDialogService } from "../../services/ui/error-dialog.service";
@@ -40,14 +41,16 @@ import { UiService } from "../../services/ui/ui.service";
 import { PolicyInstanceDialogComponent } from "./policy-instance-dialog.component";
 import {
   ChangeDetectorRef,
-  Component,
   CUSTOM_ELEMENTS_SCHEMA,
-  Input,
 } from "@angular/core";
 import { TypedPolicyEditorComponent } from "../typed-policy-editor/typed-policy-editor.component";
 import { RicSelectorComponent } from "../ric-selector/ric-selector.component";
 import { NoTypePolicyEditorComponent } from "../no-type-policy-editor/no-type-policy-editor.component";
 import { By } from "@angular/platform-browser";
+import { CreatePolicyInstance } from "src/app/interfaces/policy.types";
+import { of } from "rxjs";
+import { NotificationService } from "src/app/services/ui/notification.service";
+import * as uuid from "uuid";
 
 describe("PolicyInstanceDialogComponent", () => {
   const untypedSchema = "{}";
@@ -57,14 +60,18 @@ describe("PolicyInstanceDialogComponent", () => {
   let component: PolicyInstanceDialogComponent;
   let fixture: ComponentFixture<PolicyInstanceDialogComponent>;
   let loader: HarnessLoader;
+  let dialogRefSpy: MatDialogRef<PolicyInstanceDialogComponent>;
   let policyServiceSpy: jasmine.SpyObj<PolicyService>;
   let errDialogServiceSpy: jasmine.SpyObj<ErrorDialogService>;
+  let notificationServiceSpy: NotificationService;
 
   beforeEach(async () => {
+    dialogRefSpy = jasmine.createSpyObj("MatDialogRef", [ "close" ]);
     policyServiceSpy = jasmine.createSpyObj("PolicyService", ["putPolicy"]);
     errDialogServiceSpy = jasmine.createSpyObj("ErrorDialogService", [
       "displayError",
     ]);
+    notificationServiceSpy = jasmine.createSpyObj("NotificationService", [ "success"]);
 
     TestBed.configureTestingModule({
       imports: [
@@ -79,22 +86,23 @@ describe("PolicyInstanceDialogComponent", () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [
         PolicyInstanceDialogComponent,
-        RicSelectorStubComponent,
-        NoTypePolicyEditorStubComponent,
-        TypedPolicyEditorStubComponent,
+        MockComponent(RicSelectorComponent),
+        MockComponent(NoTypePolicyEditorComponent),
+        MockComponent(TypedPolicyEditorComponent),
       ],
       providers: [
         ChangeDetectorRef,
-        { provide: MatDialogRef, useValue: component },
+        { provide: MatDialogRef, useValue: dialogRefSpy },
         { provide: PolicyService, useValue: policyServiceSpy },
         { provide: ErrorDialogService, useValue: errDialogServiceSpy },
+        { provide: NotificationService, useValue: notificationServiceSpy },
         { provide: MAT_DIALOG_DATA, useValue: true },
         UiService,
       ],
     });
   });
 
-  describe("content when creating policy without type", () => {
+  describe("creating policy without type", () => {
     beforeEach(async () => {
       const policyData = {
         createSchema: untypedSchema,
@@ -105,6 +113,7 @@ describe("PolicyInstanceDialogComponent", () => {
         component,
         loader
       ));
+      jasmine.addCustomEqualityTester(policyTester);
     });
 
     it("should contain oran logo and create title and no instance info", async () => {
@@ -120,20 +129,21 @@ describe("PolicyInstanceDialogComponent", () => {
       expect(ele).toBeFalsy();
     });
 
-    it("should contain ric select with no policy type", async () => {
+    it("should contain ric select with no policy type and no ric selected", async () => {
       const ricSelector: RicSelectorComponent = fixture.debugElement.query(
         By.directive(RicSelectorComponent)
       ).componentInstance;
       expect(ricSelector).toBeTruthy();
       expect(ricSelector.policyTypeName).toBeFalsy();
+      expect(component.policyInstance.ric_id).toBeFalsy();
     });
 
-    it("should contain json editor with empty JSON", async () => {
+    it("should contain json editor with no JSON", async () => {
       const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(
         By.directive(NoTypePolicyEditorComponent)
       ).componentInstance;
       expect(noTypePolicyEditor).toBeTruthy();
-      expect(noTypePolicyEditor.policyJson).toEqual("{}");
+      expect(noTypePolicyEditor.policyJson).toBeFalsy();
     });
 
     it("should contain enabled Close button and Submit button", async () => {
@@ -149,6 +159,51 @@ describe("PolicyInstanceDialogComponent", () => {
         MatButtonHarness.with({ selector: "#submitButton" })
       );
       expect(await submitButton.getText()).toEqual("Submit");
+    });
+
+    it("should enable Submit button when ric is selected and json is valid", async () => {
+      const ricSelector: RicSelectorComponent = fixture.debugElement.query(
+        By.directive(RicSelectorComponent)
+      ).componentInstance;
+      const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(
+        By.directive(NoTypePolicyEditorComponent)
+      ).componentInstance;
+      let submitButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#submitButton" })
+      );
+
+      noTypePolicyEditor.validJson.emit(null);
+      expect(await submitButton.isDisabled()).toBeTruthy();
+
+      ricSelector.selectedRic.emit("ric1");
+      expect(await submitButton.isDisabled()).toBeTruthy();
+
+      noTypePolicyEditor.validJson.emit("{}");
+      expect(await submitButton.isDisabled()).toBeFalsy();
+    });
+
+    it("should generate policy ID when submitting new policy", async () => {
+      const ricSelector: RicSelectorComponent = fixture.debugElement.query(
+        By.directive(RicSelectorComponent)
+      ).componentInstance;
+      const noTypePolicyEditor: NoTypePolicyEditorComponent = fixture.debugElement.query(
+        By.directive(NoTypePolicyEditorComponent)
+      ).componentInstance;
+      let submitButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#submitButton" })
+      );
+
+      spyOn(uuid, 'v4').and.returnValue(1234567890);
+      ricSelector.selectedRic.emit("ric1");
+      noTypePolicyEditor.validJson.emit("{}");
+      await submitButton.click();
+
+      const policyInstance = {} as CreatePolicyInstance;
+      policyInstance.policy_data = "{}";
+      policyInstance.policy_id = "1234567890";
+      policyInstance.ric_id = "ric1";
+      policyInstance.service_id = "controlpanel";
+      expect(policyServiceSpy.putPolicy).toHaveBeenCalledWith(policyInstance);
     });
   });
 
@@ -211,6 +266,27 @@ describe("PolicyInstanceDialogComponent", () => {
       );
       expect(await submitButton.getText()).toEqual("Submit");
     });
+
+    it("should enable Submit button when ric is selected and json is valid", async () => {
+      const ricSelector: RicSelectorComponent = fixture.debugElement.query(
+        By.directive(RicSelectorComponent)
+      ).componentInstance;
+      const typedPolicyEditor: TypedPolicyEditorComponent = fixture.debugElement.query(
+        By.directive(TypedPolicyEditorComponent)
+      ).componentInstance;
+      let submitButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#submitButton" })
+      );
+
+      typedPolicyEditor.validJson.emit(null);
+      expect(await submitButton.isDisabled()).toBeTruthy();
+
+      ricSelector.selectedRic.emit("ric1");
+      expect(await submitButton.isDisabled()).toBeTruthy();
+
+      typedPolicyEditor.validJson.emit("{}");
+      expect(await submitButton.isDisabled()).toBeFalsy();
+    });
   });
 
   describe("content when editing policy without type", () => {
@@ -229,6 +305,7 @@ describe("PolicyInstanceDialogComponent", () => {
         component,
         loader
       ));
+      jasmine.addCustomEqualityTester(policyTester);
     });
 
     it("should contain oran logo and instance info", async () => {
@@ -255,9 +332,7 @@ describe("PolicyInstanceDialogComponent", () => {
         By.directive(NoTypePolicyEditorComponent)
       ).componentInstance;
       expect(noTypePolicyEditor).toBeTruthy();
-      expect(unescapeQuotes(noTypePolicyEditor.policyJson)).toEqual(
-        '"' + instanceJson + '"'
-      );
+      expect(unescapeQuotes(noTypePolicyEditor.policyJson)).toEqual(instanceJson);
     });
 
     it("should contain enabled Close and Submit buttons when all inputs are valid", async () => {
@@ -272,6 +347,25 @@ describe("PolicyInstanceDialogComponent", () => {
       );
       expect(await submitButton.isDisabled()).toBeFalsy();
       expect(await submitButton.getText()).toEqual("Submit");
+    });
+
+    it("should submit policy with correct data, close dialog and notify user about success", async () => {
+      policyServiceSpy.putPolicy.and.returnValue(of("ok"));
+      let submitButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#submitButton" })
+      );
+
+      await submitButton.click();
+
+      const policyInstance = {} as CreatePolicyInstance;
+      policyInstance.policy_data = instanceJson;
+      policyInstance.policy_id = "instanceId";
+      policyInstance.ric_id = "ric1";
+      policyInstance.service_id = "controlpanel";
+      expect(policyServiceSpy.putPolicy).toHaveBeenCalledWith(policyInstance);
+
+      expect(dialogRefSpy.close).toHaveBeenCalled();
+      expect(notificationServiceSpy.success).toHaveBeenCalledWith("Policy instanceId submitted");
     });
   });
 
@@ -358,60 +452,16 @@ function unescapeQuotes(string: string): string {
   return string.replace(/\\"/g, '"');
 }
 
-@Component({
-  selector: "nrcp-ric-selector",
-  template: "",
-  providers: [
-    {
-      provide: RicSelectorComponent,
-      useClass: RicSelectorStubComponent,
-    },
-  ],
-})
-class RicSelectorStubComponent {
-  @Input() policyTypeName: string = "";
-
-  get selectedRic(): string {
-    return "ric1";
-  }
-}
-
-@Component({
-  selector: "nrcp-no-type-policy-editor",
-  template: "",
-  providers: [
-    {
-      provide: NoTypePolicyEditorComponent,
-      useClass: NoTypePolicyEditorStubComponent,
-    },
-  ],
-})
-class NoTypePolicyEditorStubComponent {
-  @Input() policyJson: string;
-
-  get policyJsonTextArea(): AbstractControl {
-    const textArea = { value: "{}" } as AbstractControl;
-    return textArea;
-  }
-}
-
-@Component({
-  selector: "nrcp-typed-policy-editor",
-  template: "",
-  providers: [
-    {
-      provide: TypedPolicyEditorComponent,
-      useClass: TypedPolicyEditorStubComponent,
-    },
-  ],
-})
-class TypedPolicyEditorStubComponent {
-  @Input() jsonSchemaObject: any = {};
-  @Input() jsonObject: any = {};
-  @Input() darkMode: boolean;
-
-  prettyLiveFormData = '"A": "string"';
-  get formIsValid(): boolean {
-    return true;
+function policyTester(first, second) {
+  if (typeof first === "object" && typeof second === "object") {
+    const policy1 = first as CreatePolicyInstance;
+    const policy2 = second as CreatePolicyInstance;
+    return (
+      policy1.policy_data === policy2.policy_data &&
+      policy1.policy_id === policy2.policy_id &&
+      policy1.policytype_id === policy2.policytype_id &&
+      policy1.ric_id === policy2.ric_id &&
+      policy1.service_id === policy2.service_id
+    );
   }
 }
