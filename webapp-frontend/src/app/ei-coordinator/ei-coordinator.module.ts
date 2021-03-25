@@ -28,13 +28,13 @@ import { JobsListComponent } from './jobs-list/jobs-list.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { EiCardComponent } from './ei-card/ei-card.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 const routes: Routes = [
@@ -55,7 +55,6 @@ const routes: Routes = [
     MatIconModule,
     MatInputModule,
     ReactiveFormsModule,
-    FormsModule,
     MatSortModule,
     MatPaginatorModule,
     MatButtonModule,

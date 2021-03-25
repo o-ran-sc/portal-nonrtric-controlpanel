@@ -20,40 +20,17 @@
  * ========================LICENSE_END===================================
  */
 import { BrowserModule } from '@angular/platform-browser';
-import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { ChartsModule } from 'ng2-charts';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { ConfirmDialogComponent } from './ui/confirm-dialog/confirm-dialog.component';
 import { ErrorDialogComponent } from './ui/error-dialog/error-dialog.component';
 import { ErrorDialogService } from './services/ui/error-dialog.service';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { FooterComponent } from './footer/footer.component';
 import { MainComponent } from './main/main.component';
 import { MaterialDesignFrameworkModule } from 'angular6-json-schema-form';
@@ -83,57 +60,15 @@ export const isMock = environment.mock;
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-    ChartsModule,
-    FlexLayoutModule,
-    FormsModule,
     HttpClientModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
     MatDialogModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatGridListModule,
     MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatPaginatorModule,
-    MatSelectModule,
     MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
     MaterialDesignFrameworkModule,
     MDBBootstrapModule.forRoot(),
     PolicyModule,
     EiCoordinatorModule,
-    ReactiveFormsModule,
     ToastrModule.forRoot(),
-  ],
-  exports: [
-    ErrorDialogComponent,
-    FormsModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatDialogModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatTabsModule
   ],
   entryComponents: [
     ConfirmDialogComponent,
