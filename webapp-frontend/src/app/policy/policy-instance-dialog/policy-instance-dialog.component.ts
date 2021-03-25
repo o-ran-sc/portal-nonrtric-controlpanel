@@ -40,7 +40,6 @@ import {
   PolicyInstance,
   PolicyTypeSchema,
 } from "../../interfaces/policy.types";
-import { formatJsonString } from "../no-type-policy-editor/no-type-policy-editor.component";
 
 @Component({
   selector: "nrcp-policy-instance-dialog",
@@ -69,28 +68,18 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     this.policyJson = data.instanceJson;
     this.jsonSchemaObject = data.createSchema;
     this.policyInstance.ric_id = data.ric;
+    this.policyInstance.service_id = "controlpanel";
   }
 
   ngOnInit() {
     this.ui.darkModeState.subscribe((isDark) => {
       this.darkMode = isDark;
     });
-    this.formatNoTypePolicyJson();
   }
 
   // Do not remove! Needed to avoid "Expression has changed after it was checked" warning
   ngAfterViewInit() {
     this.cdr.detectChanges();
-  }
-
-  private formatNoTypePolicyJson() {
-    if (!this.typeHasSchema()) {
-      if (this.policyInstance.policy_data) {
-        this.policyJson = formatJsonString(this.policyInstance.policy_data);
-      } else {
-        this.policyJson = "{}";
-      }
-    }
   }
 
   onSelectedRicChanged(newRic: string): void {

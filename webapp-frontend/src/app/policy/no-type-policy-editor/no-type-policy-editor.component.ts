@@ -54,6 +54,7 @@ export class NoTypePolicyEditorComponent implements OnInit {
         this.jsonValidator(),
       ])
     );
+    if (!this.policyJson) this.policyJson = "{}";
   }
 
   get policyJsonTextArea(): AbstractControl {
