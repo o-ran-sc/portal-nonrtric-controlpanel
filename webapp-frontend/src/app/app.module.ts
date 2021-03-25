@@ -22,6 +22,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -63,6 +64,7 @@ export const isMock = environment.mock;
     HttpClientModule,
     MatDialogModule,
     MatIconModule,
+    MatListModule,
     MatSidenavModule,
     MaterialDesignFrameworkModule,
     MDBBootstrapModule.forRoot(),
