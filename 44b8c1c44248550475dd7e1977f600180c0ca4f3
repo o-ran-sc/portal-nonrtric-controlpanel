@@ -22,6 +22,30 @@
       "revId": "44b8c1c44248550475dd7e1977f600180c0ca4f3",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74ea3631_f2f8aede",
+        "filename": "webapp-frontend/src/app/policy/policy-control.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-26T08:40:58Z",
+      "side": 1,
+      "message": "No, it is not needed, even though TypeScript accepts it...",
+      "parentUuid": "50360f7c_10e3b28d",
+      "range": {
+        "startLine": 60,
+        "startChar": 17,
+        "endLine": 60,
+        "endChar": 18
+      },
+      "revId": "44b8c1c44248550475dd7e1977f600180c0ca4f3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
