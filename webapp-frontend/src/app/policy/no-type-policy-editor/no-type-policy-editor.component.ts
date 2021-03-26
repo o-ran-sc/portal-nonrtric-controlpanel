@@ -47,14 +47,19 @@ export class NoTypePolicyEditorComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    let initialJson: string;
+    if (this.policyJson) {
+      initialJson = formatJsonString(this.policyJson);
+    } else {
+      initialJson = "{}";
+    }
     this.instanceForm.addControl(
       "policyJsonTextArea",
-      new FormControl(this.policyJson, [
+      new FormControl(initialJson, [
         Validators.required,
         this.jsonValidator(),
       ])
     );
-    if (!this.policyJson) this.policyJson = "{}";
   }
 
   get policyJsonTextArea(): AbstractControl {
