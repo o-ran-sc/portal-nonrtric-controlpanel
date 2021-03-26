@@ -89,43 +89,40 @@ describe("NoTypePolicyEditorComponent", () => {
     expect(await formatButton.isDisabled()).toBeTruthy();
   });
 
-  it("should format unformatted json", async () => {
-    const textArea = component.noTypePolicyEditorComponent.instanceForm.get(
-      "policyJsonTextArea"
-    );
-    expect(textArea.value).toEqual('{"A":"A"}');
-
-    component.noTypePolicyEditorComponent.formatJsonInput();
-    expect(textArea.value).toEqual('{\n  "A": "A"\n}');
-  });
-
   it("should send valid json", async () => {
-    const textArea = component.noTypePolicyEditorComponent.instanceForm.get(
-      "policyJsonTextArea"
+    const textAreaHarness: MatInputHarness = await loader.getHarness(
+      MatInputHarness.with({ selector: "#policyJsonTextArea" })
     );
-    expect(textArea.value).toEqual('{"A":"A"}');
+    expect(await textAreaHarness.getValue()).toEqual('{"A":"A"}');
 
     let validJson: string;
-    component.noTypePolicyEditorComponent.validJson.subscribe((json: string) => {
-      validJson = json;
-    });
+    component.noTypePolicyEditorComponent.validJson.subscribe(
+      (json: string) => {
+        validJson = json;
+      }
+    );
 
+    const textArea = component.noTypePolicyEditorComponent.instanceForm.get(
+      "policyJsonTextArea"
+    );
     textArea.setValue('{"B":"B"}');
     expect(validJson).toEqual('{"B":"B"}');
   });
 
   it("should send null when invalid json", async () => {
-    const textArea = component.noTypePolicyEditorComponent.instanceForm.get(
-      "policyJsonTextArea"
+    const textArea: MatInputHarness = await loader.getHarness(
+      MatInputHarness.with({ selector: "#policyJsonTextArea" })
     );
-    expect(textArea.value).toEqual('{"A":"A"}');
+    expect(await textArea.getValue()).toEqual('{"A":"A"}');
 
     let invalidJson: string;
-    component.noTypePolicyEditorComponent.validJson.subscribe((json: string) => {
-      invalidJson = json;
-    });
+    component.noTypePolicyEditorComponent.validJson.subscribe(
+      (json: string) => {
+        invalidJson = json;
+      }
+    );
 
-    textArea.setValue('{');
+    textArea.setValue("{");
     expect(invalidJson).toBeFalsy();
   });
 
