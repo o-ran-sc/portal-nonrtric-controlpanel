@@ -19,6 +19,8 @@
  */
 
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { By } from "@angular/platform-browser";
+import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { HarnessLoader } from "@angular/cdk/testing";
 import { MatButtonModule } from "@angular/material/button";
@@ -30,6 +32,7 @@ import {
 } from "@angular/material/dialog";
 import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from "@angular/material/input";
+import { of } from "rxjs";
 import { ReactiveFormsModule } from "@angular/forms";
 import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
 import { ToastrModule } from "ngx-toastr";
@@ -39,13 +42,10 @@ import { PolicyService } from "@services/policy/policy.service";
 import { ErrorDialogService } from "@services/ui/error-dialog.service";
 import { UiService } from "@services/ui/ui.service";
 import { PolicyInstanceDialogComponent } from "./policy-instance-dialog.component";
-import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
-import { TypedPolicyEditorComponent } from "../typed-policy-editor/typed-policy-editor.component";
-import { RicSelectorComponent } from "../ric-selector/ric-selector.component";
-import { NoTypePolicyEditorComponent } from "../no-type-policy-editor/no-type-policy-editor.component";
-import { By } from "@angular/platform-browser";
+import { TypedPolicyEditorComponent } from "@policy/typed-policy-editor/typed-policy-editor.component";
+import { RicSelectorComponent } from "@policy/ric-selector/ric-selector.component";
+import { NoTypePolicyEditorComponent } from "@policy/no-type-policy-editor/no-type-policy-editor.component";
 import { CreatePolicyInstance } from "@interfaces/policy.types";
-import { of } from "rxjs";
 import { NotificationService } from "@services/ui/notification.service";
 import * as uuid from "uuid";
 

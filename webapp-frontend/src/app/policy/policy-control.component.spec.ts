@@ -17,55 +17,49 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { of } from 'rxjs';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatDialog } from "@angular/material/dialog";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTableModule } from "@angular/material/table";
+import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { of } from "rxjs";
 
-import { NotificationService } from '@services/ui/notification.service';
-import { PolicyControlComponent } from './policy-control.component';
-import { PolicyTypeDataSource } from './policy-type/policy-type.datasource';
-import { UiService } from '@services/ui/ui.service';
-import { PolicyTypeSchema } from '@interfaces/policy.types';
+import { NotificationService } from "@services/ui/notification.service";
+import { PolicyControlComponent } from "./policy-control.component";
+import { PolicyTypeDataSource } from "@policy/policy-type/policy-type.datasource";
+import { UiService } from "@services/ui/ui.service";
+import { PolicyTypeSchema } from "@interfaces/policy.types";
 
-describe('PolicyControlComponent', () => {
+describe("PolicyControlComponent", () => {
   let component: PolicyControlComponent;
   let fixture: ComponentFixture<PolicyControlComponent>;
 
   beforeEach(async(() => {
-    const policyTypeDataSourceSpy = jasmine.createSpyObj('PolicyTypeDataSource', [ 'connect', 'getPolicyTypes',  'disconnect' ]);
+    const policyTypeDataSourceSpy = jasmine.createSpyObj(
+      "PolicyTypeDataSource",
+      ["connect", "getPolicyTypes", "disconnect"]
+    );
     var policyTypeSchema = {} as PolicyTypeSchema;
-    policyTypeSchema.name = '';
-    policyTypeSchema.schemaObject = '';
-    policyTypeDataSourceSpy.connect.and.returnValue(of([ policyTypeSchema]));
+    policyTypeSchema.name = "";
+    policyTypeSchema.schemaObject = "";
+    policyTypeDataSourceSpy.connect.and.returnValue(of([policyTypeSchema]));
     policyTypeDataSourceSpy.disconnect();
 
     let matDialogStub: Partial<MatDialog>;
     let notificationServiceStub: Partial<NotificationService>;
 
     TestBed.configureTestingModule({
-      imports: [
-        MatIconModule,
-        MatTableModule,
-        BrowserAnimationsModule
-      ],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ],
-      declarations: [
-        PolicyControlComponent
-       ],
+      imports: [MatIconModule, MatTableModule, BrowserAnimationsModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      declarations: [PolicyControlComponent],
       providers: [
         { provide: PolicyTypeDataSource, useValue: policyTypeDataSourceSpy },
         { provide: MatDialog, useValue: matDialogStub },
         { provide: NotificationService, useValue: notificationServiceStub },
-        UiService
-       ]
-    })
-    .compileComponents();
+        UiService,
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -74,7 +68,7 @@ describe('PolicyControlComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
