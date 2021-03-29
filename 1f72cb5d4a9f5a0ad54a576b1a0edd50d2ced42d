@@ -16,6 +16,24 @@
       "revId": "1f72cb5d4a9f5a0ad54a576b1a0edd50d2ced42d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddebc252_ca54f387",
+        "filename": "webapp-frontend/src/app/policy/policy-instance/policy-instance.component.html",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-03-29T07:47:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c548d85_e1f2cf67",
+      "revId": "1f72cb5d4a9f5a0ad54a576b1a0edd50d2ced42d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }

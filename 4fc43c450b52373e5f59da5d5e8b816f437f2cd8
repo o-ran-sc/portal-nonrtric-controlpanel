@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bcb4a0e4_6b8beab8",
+        "filename": "webapp-frontend/src/app/policy/policy-control.component.ts",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-03-29T07:47:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b2a61dd_c7d75c6f",
+      "range": {
+        "startLine": 31,
+        "startChar": 31,
+        "endLine": 31,
+        "endChar": 33
+      },
+      "revId": "4fc43c450b52373e5f59da5d5e8b816f437f2cd8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e44826f_fec377b4",
         "filename": "webapp-frontend/src/app/policy/policy-instance/policy-instance.datasource.ts",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "4fc43c450b52373e5f59da5d5e8b816f437f2cd8",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c56dd48_9dd20135",
+        "filename": "webapp-frontend/src/app/policy/policy-instance/policy-instance.datasource.ts",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-03-29T07:47:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e44826f_fec377b4",
+      "range": {
+        "startLine": 29,
+        "startChar": 37,
+        "endLine": 29,
+        "endChar": 43
+      },
+      "revId": "4fc43c450b52373e5f59da5d5e8b816f437f2cd8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     }
   ]
 }
