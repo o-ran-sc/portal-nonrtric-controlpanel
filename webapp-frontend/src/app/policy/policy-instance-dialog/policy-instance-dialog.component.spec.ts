@@ -210,13 +210,13 @@ describe("PolicyInstanceDialogComponent", () => {
         MatButtonHarness.with({ selector: "#submitButton" })
       );
 
-      spyOn(uuid, "v4").and.returnValue(1234567890);
+      spyOn(uuid, "v4").and.returnValue("1234567890");
       ricSelector.selectedRic.emit("ric1");
       noTypePolicyEditor.validJson.emit("{}");
       await submitButton.click();
 
       const policyInstance = {} as CreatePolicyInstance;
-      policyInstance.policy_data = "{}";
+      policyInstance.policy_data = JSON.parse("{}");
       policyInstance.policy_id = "1234567890";
       policyInstance.ric_id = "ric1";
       policyInstance.service_id = "controlpanel";
@@ -307,13 +307,12 @@ describe("PolicyInstanceDialogComponent", () => {
   });
 
   describe("content when editing policy without type", () => {
-    const instanceJson = '{"qosObjectives": {"priorityLevel": 3100}}';
+    const instanceJson = JSON.parse('{"qosObjectives": {"priorityLevel": 3100}}');
     beforeEach(async () => {
       const policyData = {
         createSchema: untypedSchema,
         instanceId: "instanceId",
         instanceJson: instanceJson,
-        name: "Type 1",
         ric: "ric1",
       };
       TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: policyData }); // Should be provided with a policy
@@ -349,7 +348,7 @@ describe("PolicyInstanceDialogComponent", () => {
         By.directive(NoTypePolicyEditorComponent)
       ).componentInstance;
       expect(noTypePolicyEditor).toBeTruthy();
-      expect(unescapeQuotes(noTypePolicyEditor.policyJson)).toEqual(
+      expect(noTypePolicyEditor.policyJson).toEqual(
         instanceJson
       );
     });
@@ -474,11 +473,13 @@ function unescapeQuotes(string: string): string {
 }
 
 function policyTester(first, second) {
-  if (typeof first === "object" && typeof second === "object") {
-    const policy1 = first as CreatePolicyInstance;
-    const policy2 = second as CreatePolicyInstance;
+  if (typeof first[0] === "object" && typeof second[0] === "object") {
+    const policy1 = first[0] as CreatePolicyInstance;
+    const policy2 = second[0] as CreatePolicyInstance;
     return (
-      policy1.policy_data === policy2.policy_data &&
+      typeof policy1.policy_data === "object" &&
+      typeof policy2.policy_data === "object" &&
+      JSON.stringify(policy1.policy_data) === JSON.stringify(policy2.policy_data) &&
       policy1.policy_id === policy2.policy_id &&
       policy1.policytype_id === policy2.policytype_id &&
       policy1.ric_id === policy2.ric_id &&
