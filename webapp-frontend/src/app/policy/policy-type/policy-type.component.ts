@@ -42,14 +42,31 @@ export class PolicyTypeComponent implements OnInit {
   isVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   policyTypeInfo: PolicyTypeInfo;
+  policyType: string;
+  policyDescription: string;
 
   constructor(private policyTypeDataSource: PolicyTypeDataSource) {
   }
 
   ngOnInit(): void {
-    const policyTypeSchema = this.policyTypeDataSource.getPolicyType(this.policyTypeId);
-    this.policyTypeInfo = new PolicyTypeInfo(policyTypeSchema);
-    console.log("this.policyType: ", this.policyTypeInfo);
+    if (this.policyTypeId !== "") {
+      const policyTypeSchema = this.policyTypeDataSource.getPolicyType(this.policyTypeId);
+      console.log("policyTypeSchema:", policyTypeSchema);
+      this.policyTypeInfo = new PolicyTypeInfo(policyTypeSchema);
+      console.log("this.policyType: ", this.policyTypeInfo);
+      this.policyType = this.policyTypeId;
+      this.policyDescription = policyTypeSchema.schemaObject.description;
+    } else {
+      this.policyType = "< No Type >";
+      this.policyDescription = "Type with no schema";
+      const noTypeSchema = {
+        id: "",
+        name: "",
+        schemaObject: JSON.parse("{}")
+      }  as PolicyTypeSchema;
+      this.policyTypeInfo = new PolicyTypeInfo(noTypeSchema);
+      console.log("this.policyType: ", this.policyTypeInfo);
+    }
     this.isVisible.next(false);
   }
 
