@@ -18,28 +18,28 @@
  * ========================LICENSE_END===================================
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { PolicyTypeComponent } from './policy-type.component';
-import { PolicyTypeDataSource } from './policy-type.datasource';
-import { PolicyTypeSchema } from '../../interfaces/policy.types';
+import { PolicyTypeComponent } from "./policy-type.component";
+import { PolicyType } from "@interfaces/policy.types";
+import { PolicyService } from "@services/policy/policy.service";
+import { of } from "rxjs";
 
-describe('PolicyTypeComponent', () => {
+describe("PolicyTypeComponent", () => {
   let component: PolicyTypeComponent;
+  let policyServiceSpy: jasmine.SpyObj<PolicyService>;
   let fixture: ComponentFixture<PolicyTypeComponent>;
 
   beforeEach(async(() => {
-    const policyTypeDataSourceSpy = jasmine.createSpyObj('PolicyTypeDataSource', ['getPolicyType']);
-    const policyTypeSchema = {"schemaObject": {"description": "Type 1 policy type"}} as PolicyTypeSchema;
-    policyTypeDataSourceSpy.getPolicyType.and.returnValue(policyTypeSchema);
+    policyServiceSpy = jasmine.createSpyObj("PolicyService", ["getPolicyType"]);
+    const policyTypeSchema = JSON.parse('{"schemaObject": {"description": "Type 1 policy type"}}');
+    const policyType = { policy_schema: policyTypeSchema} as PolicyType;
+    policyServiceSpy.getPolicyType.and.returnValue(of(policyType));
 
     TestBed.configureTestingModule({
-      declarations: [ PolicyTypeComponent ],
-      providers: [
-        { provide: PolicyTypeDataSource, useValue: policyTypeDataSourceSpy }
-       ]
-    })
-    .compileComponents();
+      declarations: [PolicyTypeComponent],
+      providers: [{ provide: PolicyService, useValue: policyServiceSpy }],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -48,7 +48,7 @@ describe('PolicyTypeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

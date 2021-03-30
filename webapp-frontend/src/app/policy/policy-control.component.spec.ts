@@ -25,42 +25,33 @@ import { MatTableModule } from "@angular/material/table";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { of } from "rxjs";
 
-import { NotificationService } from "@services/ui/notification.service";
 import { PolicyControlComponent } from "./policy-control.component";
-import { PolicyTypeDataSource } from "@policy/policy-type/policy-type.datasource";
 import { UiService } from "@services/ui/ui.service";
 import { PolicyTypeSchema } from "@interfaces/policy.types";
-import { PolicyService } from '../services/policy/policy.service';
+import { PolicyService } from "@services/policy/policy.service";
 
 describe("PolicyControlComponent", () => {
   let component: PolicyControlComponent;
   let fixture: ComponentFixture<PolicyControlComponent>;
 
   beforeEach(async(() => {
-    const policyTypeDataSourceSpy = jasmine.createSpyObj(
-      "PolicyTypeDataSource",
-      ["connect", "getPolicyTypes", "disconnect"]
-    );
-    const policyServiceSpy = jasmine.createSpyObj('PolicyService', ['getPolicyTypes']);
+    const policyServiceSpy = jasmine.createSpyObj("PolicyService", [
+      "getPolicyTypes",
+    ]);
     var policyTypeSchema = {} as PolicyTypeSchema;
     policyTypeSchema.name = "";
     policyTypeSchema.schemaObject = "";
-    policyTypeDataSourceSpy.connect.and.returnValue(of([policyTypeSchema]));
-    policyTypeDataSourceSpy.disconnect();
     policyServiceSpy.getPolicyTypes.and.returnValue(of(["type1"]));
 
     let matDialogStub: Partial<MatDialog>;
-    let notificationServiceStub: Partial<NotificationService>;
 
     TestBed.configureTestingModule({
       imports: [MatIconModule, MatTableModule, BrowserAnimationsModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [PolicyControlComponent],
       providers: [
-        { provide : PolicyService, useValue: policyServiceSpy},
-        { provide: PolicyTypeDataSource, useValue: policyTypeDataSourceSpy },
+        { provide: PolicyService, useValue: policyServiceSpy },
         { provide: MatDialog, useValue: matDialogStub },
-        { provide: NotificationService, useValue: notificationServiceStub },
         UiService,
       ],
     }).compileComponents();

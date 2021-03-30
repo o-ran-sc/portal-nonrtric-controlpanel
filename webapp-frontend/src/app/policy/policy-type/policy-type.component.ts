@@ -18,42 +18,62 @@
  * ========================LICENSE_END===================================
  */
 
-import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { PolicyTypeSchema } from '@interfaces/policy.types';
-import { PolicyService } from '@services/policy/policy.service';
-import { PolicyTypeDataSource } from './policy-type.datasource';
+import { Component, Input, OnInit } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { PolicyType, PolicyTypeSchema } from "@interfaces/policy.types";
+import { PolicyService } from "@app/services/policy/policy.service";
 
 class PolicyTypeInfo {
-  constructor(public type: PolicyTypeSchema) { }
+  constructor(public type: PolicyTypeSchema) {}
 
   isExpanded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 }
 
 @Component({
-  selector: 'nrcp-policy-type',
-  templateUrl: './policy-type.component.html',
-  styleUrls: ['./policy-type.component.scss']
+  selector: "nrcp-policy-type",
+  templateUrl: "./policy-type.component.html",
+  styleUrls: ["./policy-type.component.scss"],
 })
 export class PolicyTypeComponent implements OnInit {
-
   @Input() policyTypeId: string;
 
   isVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   policyTypeInfo: PolicyTypeInfo;
+  policyType: string;
+  policyDescription: string;
 
-  constructor(private policyTypeDataSource: PolicyTypeDataSource) {
-  }
+  constructor(private policyService: PolicyService) {}
 
   ngOnInit(): void {
-    const policyTypeSchema = this.policyTypeDataSource.getPolicyType(this.policyTypeId);
-    this.policyTypeInfo = new PolicyTypeInfo(policyTypeSchema);
-    console.log("this.policyType: ", this.policyTypeInfo);
+    if (this.policyTypeId !== "") {
+      this.policyService
+        .getPolicyType(this.policyTypeId)
+        .subscribe((policyType: PolicyType) => {
+          const policyTypeSchema = this.getSchemaObject(policyType);
+          this.policyTypeInfo = new PolicyTypeInfo(policyTypeSchema);
+          this.policyType = this.policyTypeId;
+          this.policyDescription = policyTypeSchema.schemaObject.description;
+        });
+    } else {
+      const noType = { policy_schema: JSON.parse('{"schemaObject": "{}"}') } as PolicyType;
+      const noTypeSchema = this.getSchemaObject(noType);
+      this.policyTypeInfo = new PolicyTypeInfo(noTypeSchema);
+      this.policyType = "< No Type >";
+      this.policyDescription = "Type with no schema";
+    }
     this.isVisible.next(false);
   }
 
-  public setIsVisible(status: boolean){
+  private getSchemaObject(policyType: PolicyType) {
+    const policyTypeSchema = {} as PolicyTypeSchema;
+    policyTypeSchema.id = this.policyTypeId;
+    policyTypeSchema.schemaObject = policyType.policy_schema;
+    policyTypeSchema.name = policyType.policy_schema.title;
+    return policyTypeSchema;
+  }
+
+  public setIsVisible(status: boolean) {
     this.isVisible.next(status);
   }
 
