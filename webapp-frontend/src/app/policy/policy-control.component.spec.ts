@@ -19,14 +19,17 @@
  */
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { By } from "@angular/platform-browser";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { of } from "rxjs";
 
 import { PolicyControlComponent } from "./policy-control.component";
-import { PolicyTypeSchema } from "@interfaces/policy.types";
+import { PolicyTypes } from "@interfaces/policy.types";
 import { PolicyService } from "@services/policy/policy.service";
+import { MockComponent } from "ng-mocks";
+import { PolicyTypeComponent } from "./policy-type/policy-type.component";
 
 describe("PolicyControlComponent", () => {
   let component: PolicyControlComponent;
@@ -36,15 +39,16 @@ describe("PolicyControlComponent", () => {
     const policyServiceSpy = jasmine.createSpyObj("PolicyService", [
       "getPolicyTypes",
     ]);
-    var policyTypeSchema = {} as PolicyTypeSchema;
-    policyTypeSchema.name = "";
-    policyTypeSchema.schemaObject = "";
-    policyServiceSpy.getPolicyTypes.and.returnValue(of(["type1"]));
+    const policyTypes = { policytype_ids: ["type1", "type2"] } as PolicyTypes;
+    policyServiceSpy.getPolicyTypes.and.returnValue(of(policyTypes));
 
     TestBed.configureTestingModule({
       imports: [MatIconModule, MatTableModule, BrowserAnimationsModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [PolicyControlComponent],
+      declarations: [
+        PolicyControlComponent,
+        MockComponent(PolicyTypeComponent),
+      ],
       providers: [{ provide: PolicyService, useValue: policyServiceSpy }],
     }).compileComponents();
   }));
@@ -57,5 +61,18 @@ describe("PolicyControlComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should contain two PolicyType components instantiated with the correct type", () => {
+    const typeComponents = [] as PolicyTypeComponent[];
+    fixture.debugElement
+      .queryAll(By.directive(PolicyTypeComponent))
+      .forEach((element) => {
+        typeComponents.push(element.componentInstance);
+      });
+
+    expect(typeComponents.length).toEqual(2);
+    expect(typeComponents[0].policyTypeId).toEqual("type1");
+    expect(typeComponents[1].policyTypeId).toEqual("type2");
   });
 });
