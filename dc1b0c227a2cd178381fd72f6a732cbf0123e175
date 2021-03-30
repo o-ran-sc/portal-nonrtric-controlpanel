@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "350416d9_59a68db9",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-03-30T14:41:46Z",
+      "side": 1,
+      "message": "Please remove trailing whitespace",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 2
+      },
+      "revId": "dc1b0c227a2cd178381fd72f6a732cbf0123e175",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
