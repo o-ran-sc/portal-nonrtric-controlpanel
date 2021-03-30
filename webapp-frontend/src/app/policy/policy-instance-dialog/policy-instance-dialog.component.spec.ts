@@ -50,9 +50,9 @@ import { NotificationService } from "@services/ui/notification.service";
 import * as uuid from "uuid";
 
 describe("PolicyInstanceDialogComponent", () => {
-  const untypedSchema = "{}";
+  const untypedSchema = JSON.parse("{}");
   const typedSchema =
-    '{ "description": "Type 1 policy type", "title": "1", "type": "object", "properties": { "priorityLevel": "number" }}';
+    JSON.parse('{ "description": "Type 1 policy type", "title": "1", "type": "object", "properties": { "priorityLevel": "number" }}');
 
   let component: PolicyInstanceDialogComponent;
   let fixture: ComponentFixture<PolicyInstanceDialogComponent>;

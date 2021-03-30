@@ -47,10 +47,6 @@ const urls = [
         json: policytypesList
     },
     {
-        url: '/a1-policy/v2/policy-types/',
-        json: policytypes1
-    },
-    {
         url: '/a1-policy/v2/policy-types/1',
         json: policytypes1
     },

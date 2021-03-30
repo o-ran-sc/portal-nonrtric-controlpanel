@@ -73,12 +73,5 @@ describe('PolicyTypeDataSource', () => {
       policyTypeDataSource = TestBed.inject(PolicyTypeDataSource);
       expect(policyTypeDataSource).toBeTruthy();
     });
-
-    it('should return all policy type with Schema', () => {
-      policyTypeDataSource.getPolicyTypes();
-      const jobsSubject: BehaviorSubject<PolicyTypeSchema[]> = policyTypeDataSource.policyTypeSubject;
-      const value = jobsSubject.getValue();
-      expect(value).toEqual(expectedPolicyTypeValue);
-    });
   });
 });
