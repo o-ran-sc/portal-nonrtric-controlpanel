@@ -75,11 +75,7 @@ export class PolicyInstanceComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        let schemaId = this.policyTypeSchema.id;
-        if(schemaId.includes('<No Type>')){
-            schemaId = '';
-        }
-        this.policyInstanceDataSource = new PolicyInstanceDataSource(this.policySvc, this.sort, this.notificationService, schemaId);
+        this.policyInstanceDataSource = new PolicyInstanceDataSource(this.policySvc, this.sort, this.notificationService, this.policyTypeSchema.id);
         this.expanded.subscribe((isExpanded: boolean) => this.onExpand(isExpanded));
 
         this.policyInstanceDataSource.connect().subscribe((data) => {
