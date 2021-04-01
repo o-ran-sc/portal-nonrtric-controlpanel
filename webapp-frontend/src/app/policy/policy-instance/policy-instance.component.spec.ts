@@ -18,38 +18,109 @@
  * ========================LICENSE_END===================================
  */
 
-import { async, ComponentFixture } from "@angular/core/testing";
+import { Component, ViewChild } from "@angular/core";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatDialog } from "@angular/material/dialog";
+import {
+  PolicyInstance,
+  PolicyInstances,
+  PolicyStatus,
+  PolicyTypeSchema,
+} from "@app/interfaces/policy.types";
 import { PolicyService } from "@app/services/policy/policy.service";
+import { ConfirmDialogService } from "@app/services/ui/confirm-dialog.service";
+import { ErrorDialogService } from "@app/services/ui/error-dialog.service";
+import { NotificationService } from "@app/services/ui/notification.service";
+import { UiService } from "@app/services/ui/ui.service";
+import { ToastrModule } from "ngx-toastr";
+import { of } from "rxjs";
 import { PolicyInstanceComponent } from "./policy-instance.component";
 
 describe("PolicyInstanceComponent", () => {
-    let component: PolicyInstanceComponent;
-    let fixture: ComponentFixture<PolicyInstanceComponent>;
+  let hostComponent: PolicyInstanceComponentHostComponent;
+  let hostFixture: ComponentFixture<PolicyInstanceComponentHostComponent>;
+  let policyServiceSpy: jasmine.SpyObj<PolicyService>;
+  let dialogSpy: jasmine.SpyObj<MatDialog>;
 
-    // beforeEach(async(() => {
-    //   policyDataSourceSpy = jasmine.createSpyObj("PolicyInstanceDataSource", ["getPolicyType"]);
-    //   const policyTypeSchema = JSON.parse(
-    //     '{"title": "1", "description": "Type 1 policy type"}'
-    //   );
-    //   const policyType = { policy_schema: policyTypeSchema } as PolicyType;
-    //   policyDataSourceSpy.getPolicyType.and.returnValue(of(policyType));
+  @Component({
+    selector: "policy-instance-compnent-host-component",
+    template:
+      "<nrcp-policy-instance [policyTypeSchema]=policyType></nrcp-policy-instance>",
+  })
+  class PolicyInstanceComponentHostComponent {
+    @ViewChild(PolicyInstanceComponent)
+    componentUnderTest: PolicyInstanceComponent;
+    policyTypeSchema = JSON.parse(
+      '{"title": "1", "description": "Type 1 policy type"}'
+    );
+    policyType = {
+      id: "type1",
+      name: "1",
+      schemaObject: this.policyTypeSchema,
+    } as PolicyTypeSchema;
+  }
 
-    //   TestBed.configureTestingModule({
-    //     declarations: [
-    //       PolicyTypeComponent,
-    //       MockComponent(PolicyInstanceComponent),
-    //     ],
-    //     providers: [{ provide: PolicyService, useValue: policyDataSourceSpy }],
-    //   }).compileComponents();
-    // }));
+  beforeEach(async(() => {
+    policyServiceSpy = jasmine.createSpyObj("PolicyService", [
+      "getPolicyInstancesByType",
+      "getPolicyInstance",
+      "getPolicyStatus",
+    ]);
+    let policyInstances = { policy_ids: ["policy1", "policy2"] } as PolicyInstances;
+    policyServiceSpy.getPolicyInstancesByType.and.returnValue(
+      of(policyInstances)
+    );
+    let policy1 = {
+      policy_id: "policy1",
+      policy_data: "{}",
+      ric_id: "1",
+      service_id: "service",
+      lastModified: "Now",
+    } as PolicyInstance;
+    let policy2 = {
+      policy_id: "policy2",
+      policy_data: "{}",
+      ric_id: "2",
+      service_id: "service",
+      lastModified: "Now",
+    } as PolicyInstance;
+    policyServiceSpy.getPolicyInstance.and.returnValues(
+      of(policy1),
+      of(policy2)
+    );
+    let policy1Status = { last_modified: "Just now" } as PolicyStatus;
+    let policy2Status = { last_modified: "Before" } as PolicyStatus;
+    policyServiceSpy.getPolicyStatus.and.returnValues(
+      of(policy1Status),
+      of(policy2Status)
+    );
 
-    // beforeEach(() => {
-    //   fixture = TestBed.createComponent(PolicyTypeComponent);
-    //   component = fixture.componentInstance;
-    //   fixture.detectChanges();
-    // });
+    dialogSpy = jasmine.createSpyObj("MatDialog", ["open"]);
 
-    // it("should create", () => {
-    //   expect(component).toBeTruthy();
-    // });
-})
+    TestBed.configureTestingModule({
+      imports: [ToastrModule.forRoot()],
+      declarations: [
+        PolicyInstanceComponent,
+        PolicyInstanceComponentHostComponent,
+      ],
+      providers: [
+        { provide: PolicyService, useValue: policyServiceSpy },
+        { provide: MatDialog, useValue: dialogSpy },
+        ErrorDialogService,
+        NotificationService,
+        ConfirmDialogService,
+        UiService,
+      ],
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    hostFixture = TestBed.createComponent(PolicyInstanceComponentHostComponent);
+    hostComponent = hostFixture.componentInstance;
+    hostFixture.detectChanges();
+  });
+
+  it("should create", () => {
+    expect(hostComponent).toBeTruthy();
+  });
+});
