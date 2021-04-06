@@ -35,6 +35,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { EiCardComponent } from './ei-card/ei-card.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 const routes: Routes = [
@@ -59,6 +60,7 @@ const routes: Routes = [
     MatPaginatorModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     RouterModule.forChild(routes)
   ],
   exports: [
