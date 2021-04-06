@@ -87,7 +87,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
   }
 
   onJsonChanged(newJson: string): void {
-    this.policyInstance.policy_data = newJson;
+    this.policyInstance.policy_data = newJson ? JSON.parse(newJson) : null;
   }
 
   onSubmit() {
