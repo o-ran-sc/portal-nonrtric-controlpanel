@@ -110,7 +110,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
   }
 
   typeHasSchema(): boolean {
-    return this.jsonSchemaObject !== "{}";
+    return this.jsonSchemaObject.description ? true : false;
   }
 
   isFormValid(): boolean {
