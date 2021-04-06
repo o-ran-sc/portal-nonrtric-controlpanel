@@ -46,7 +46,12 @@ export class PolicyTypeComponent implements OnInit {
   constructor(private policyService: PolicyService) {}
 
   ngOnInit(): void {
-    if (this.policyTypeId !== "") {
+    this.loadTypeInfo();
+    this.isVisible.next(false);
+  }
+
+  public loadTypeInfo() {
+    if (this.policyTypeId && this.policyTypeId !== "") {
       this.policyService
         .getPolicyType(this.policyTypeId)
         .subscribe((policyType: PolicyType) => {
@@ -57,15 +62,14 @@ export class PolicyTypeComponent implements OnInit {
         });
     } else {
       const noType = {
-        policy_schema: JSON.parse('{"schemaObject": "{}"}'),
+        policy_schema: JSON.parse('{}'),
       } as PolicyType;
       const noTypeSchema = this.getSchemaObject(noType);
       this.policyTypeInfo = new PolicyTypeInfo(noTypeSchema);
       this.policyType = "< No Type >";
       this.policyDescription = "Type with no schema";
     }
-    this.isVisible.next(false);
-  }
+}
 
   private getSchemaObject(policyType: PolicyType) {
     const policyTypeSchema = {} as PolicyTypeSchema;
@@ -73,10 +77,6 @@ export class PolicyTypeComponent implements OnInit {
     policyTypeSchema.schemaObject = policyType.policy_schema;
     policyTypeSchema.name = policyType.policy_schema.title;
     return policyTypeSchema;
-  }
-
-  public setIsVisible(status: boolean) {
-    this.isVisible.next(status);
   }
 
   public toggleVisible() {
