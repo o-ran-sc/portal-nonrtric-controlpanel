@@ -27,7 +27,7 @@
     </button>
 </div>
 
-<table #table mat-table class="instances-table mat-elevation-z8" [ngClass]="{'table-dark': darkMode}" matSort
+<table #table mat-table class="instances-table mat-elevation-z8" [ngClass]="{'table-dark': darkMode}" matSort (matSortChange)="getSortedData($event)"
     multiTemplateDataRows [dataSource]="instanceDataSource">
 
     <ng-container matColumnDef="instanceId">
@@ -110,12 +110,7 @@
         <mat-footer-cell *matFooterCellDef>No records found.</mat-footer-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="['instanceId', 'ric', 'service', 'lastModified', 'action']"
-        [ngClass]="{'display-none': !this.hasInstances()}">
+    <mat-header-row *matHeaderRowDef="['instanceId', 'ric', 'service', 'lastModified', 'action']">
     </mat-header-row>
     <mat-row *matRowDef="let instance; columns: ['instanceId', 'ric', 'service', 'lastModified', 'action'];"></mat-row>
-
-    <mat-footer-row *matFooterRowDef="['noRecordsFound']" [ngClass]="{'display-none': this.hasInstances()}">
-    </mat-footer-row>
-
 </table>
