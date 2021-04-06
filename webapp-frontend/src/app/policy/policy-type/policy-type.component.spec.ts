@@ -102,6 +102,5 @@ describe("PolicyTypeComponent", () => {
       schemaObject: JSON.parse("{}")
     } as PolicyTypeSchema;
     expect(policyInstanceComp.policyTypeSchema).toEqual(expectedPolicyType);
-    expect(policyInstanceComp.expanded).toBeTruthy();
   });
 });

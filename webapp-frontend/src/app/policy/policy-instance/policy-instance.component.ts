@@ -30,7 +30,7 @@ import { PolicyInstance } from "@interfaces/policy.types";
 import { PolicyInstanceDialogComponent } from "../policy-instance-dialog/policy-instance-dialog.component";
 import { getPolicyDialogProperties } from "../policy-instance-dialog/policy-instance-dialog.component";
 import { HttpErrorResponse, HttpResponse } from "@angular/common/http";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { UiService } from "@services/ui/ui.service";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatTableDataSource } from "@angular/material/table";
@@ -48,7 +48,6 @@ class PolicyTypeInfo {
 })
 export class PolicyInstanceComponent implements OnInit {
   @Input() policyTypeSchema: PolicyTypeSchema;
-  @Input() expanded: Observable<boolean>;
   policyInstances: PolicyInstance[] = [];
   private policyInstanceSubject = new BehaviorSubject<PolicyInstance[]>([]);
   policyTypeInfo = new Map<string, PolicyTypeInfo>();
@@ -73,8 +72,6 @@ export class PolicyInstanceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.expanded.subscribe((isExpanded: boolean) => this.onExpand(isExpanded));
-
     this.getPolicyInstances();
     this.policyInstanceSubject.subscribe((data) => {
       this.instanceDataSource.data = data;
@@ -105,14 +102,14 @@ export class PolicyInstanceComponent implements OnInit {
   getPolicyInstances() {
     this.policyInstances = [] as PolicyInstance[];
     this.policySvc
-      .getPolicyInstancesByType(this.policyTypeSchema.id)
-      .subscribe((policies) => {
-        if (policies.policy_ids.length != 0) {
-          policies.policy_ids.forEach((policyId) => {
+    .getPolicyInstancesByType(this.policyTypeSchema.id)
+    .subscribe((policies) => {
+      if (policies.policy_ids.length != 0) {
+        policies.policy_ids.forEach((policyId) => {
+          this.policySvc
+          .getPolicyInstance(policyId)
+          .subscribe((policyInstance) => {
             this.policySvc
-              .getPolicyInstance(policyId)
-              .subscribe((policyInstance) => {
-                this.policySvc
                   .getPolicyStatus(policyId)
                   .subscribe((policyStatus) => {
                     policyInstance.lastModified = policyStatus.last_modified;
