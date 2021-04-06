@@ -218,6 +218,7 @@ describe("PolicyInstanceDialogComponent", () => {
       const policyInstance = {} as CreatePolicyInstance;
       policyInstance.policy_data = JSON.parse("{}");
       policyInstance.policy_id = "1234567890";
+      policyInstance.policytype_id = "";
       policyInstance.ric_id = "ric1";
       policyInstance.service_id = "controlpanel";
       expect(policyServiceSpy.putPolicy).toHaveBeenCalledWith(policyInstance);
@@ -378,6 +379,7 @@ describe("PolicyInstanceDialogComponent", () => {
       const policyInstance = {} as CreatePolicyInstance;
       policyInstance.policy_data = instanceJson;
       policyInstance.policy_id = "instanceId";
+      policyInstance.policytype_id = "";
       policyInstance.ric_id = "ric1";
       policyInstance.service_id = "controlpanel";
       expect(policyServiceSpy.putPolicy).toHaveBeenCalledWith(policyInstance);
