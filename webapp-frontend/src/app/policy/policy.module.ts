@@ -18,34 +18,33 @@
 //   ========================LICENSE_END===================================
 //
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
-import { PolicyCardComponent } from './policy-card/policy-card.component';
-import { PolicyControlComponent } from './policy-control.component';
-import { PolicyTypeComponent } from './policy-type/policy-type.component';
-import { PolicyInstanceDialogComponent } from './policy-instance-dialog/policy-instance-dialog.component';
-import { PolicyInstanceComponent } from './policy-instance/policy-instance.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSelectModule } from '@angular/material/select';
-import { MaterialDesignFrameworkModule } from 'angular6-json-schema-form';
-import { Routes, RouterModule } from '@angular/router';
-import { RicSelectorComponent } from './ric-selector/ric-selector.component';
-import { TypedPolicyEditorComponent } from './typed-policy-editor/typed-policy-editor.component';
-import { NoTypePolicyEditorComponent } from './no-type-policy-editor/no-type-policy-editor.component';
-import { MatSortModule } from '@angular/material/sort';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatCardModule } from '@angular/material/card';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { MatTableModule } from "@angular/material/table";
+import { PolicyCardComponent } from "./policy-card/policy-card.component";
+import { PolicyControlComponent } from "./policy-control.component";
+import { PolicyTypeComponent } from "./policy-type/policy-type.component";
+import { PolicyInstanceDialogComponent } from "./policy-instance-dialog/policy-instance-dialog.component";
+import { PolicyInstanceComponent } from "./policy-instance/policy-instance.component";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatIconModule } from "@angular/material/icon";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatSelectModule } from "@angular/material/select";
+import { MaterialDesignFrameworkModule } from "angular6-json-schema-form";
+import { Routes, RouterModule } from "@angular/router";
+import { RicSelectorComponent } from "./ric-selector/ric-selector.component";
+import { TypedPolicyEditorComponent } from "./typed-policy-editor/typed-policy-editor.component";
+import { NoTypePolicyEditorComponent } from "./no-type-policy-editor/no-type-policy-editor.component";
+import { MatSortModule } from "@angular/material/sort";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatCardModule } from "@angular/material/card";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
-const routes:Routes = [
-  {path: 'policy', component: PolicyControlComponent}
-];
+const routes: Routes = [{ path: "policy", component: PolicyControlComponent }];
 
 @NgModule({
   declarations: [
@@ -70,15 +69,12 @@ const routes:Routes = [
     MatInputModule,
     MatSelectModule,
     MatSortModule,
+    MatTooltipModule,
     MaterialDesignFrameworkModule,
     MatTableModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
-  exports: [
-    PolicyCardComponent,
-    PolicyControlComponent,
-    PolicyTypeComponent
-  ],
+  exports: [PolicyCardComponent, PolicyControlComponent, PolicyTypeComponent],
 })
-export class PolicyModule { }
+export class PolicyModule {}
