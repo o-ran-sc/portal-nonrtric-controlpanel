@@ -24,10 +24,19 @@ import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { forkJoin } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { mergeMap, finalize } from 'rxjs/operators';
+import { mergeMap, finalize, tap } from 'rxjs/operators';
 import { EIJob } from '@interfaces/ei.types';
 import { EIService } from '@services/ei/ei.service';
 import { UiService } from '@services/ui/ui.service';
+
+export interface Job {
+  jobId: string;
+  jobData: any;
+  typeId: string;
+  targetUri: string;
+  owner: string;
+  prodId: string;
+}
 
 @Component({
   selector: 'nrcp-jobs-list',
@@ -39,10 +48,10 @@ export class JobsListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   darkMode: boolean;
-  jobsDataSource: MatTableDataSource<EIJob>;
+  jobsDataSource: MatTableDataSource<Job>;
   jobForm: FormGroup;
   private loadingSubject = new BehaviorSubject<boolean>(false);
-  private jobsSubject = new BehaviorSubject<EIJob[]>([]);
+  private jobsSubject = new BehaviorSubject<Job[]>([]);
   public loading$ = this.loadingSubject.asObservable();
 
   constructor(
@@ -50,26 +59,28 @@ export class JobsListComponent implements OnInit {
     private ui: UiService
   ) {
     this.jobForm = new FormGroup({
-      id: new FormControl(''),
+      jobId: new FormControl(''),
       typeId: new FormControl(''),
       owner: new FormControl(''),
-      targetUri: new FormControl('')
+      targetUri: new FormControl(''),
+      prodId: new FormControl('')
     });
   }
 
   ngOnInit(): void {
     this.loadJobs();
     this.jobsSubject.subscribe((data) => {
-      this.jobsDataSource = new MatTableDataSource<EIJob>(data);
+      this.jobsDataSource = new MatTableDataSource<Job>(data);
       this.jobsDataSource.paginator = this.paginator;
 
-      this.jobsDataSource.filterPredicate = ((data: EIJob, filter) => {
+      this.jobsDataSource.filterPredicate = ((data: Job, filter) => {
         let searchTerms = JSON.parse(filter);
-        return this.isDataIncluding(data.ei_job_identity, searchTerms.id)
-          && this.isDataIncluding(data.target_uri, searchTerms.targetUri)
+        return this.isDataIncluding(data.targetUri, searchTerms.targetUri)
+          && this.isDataIncluding(data.jobId, searchTerms.jobId)
           && this.isDataIncluding(data.owner, searchTerms.owner)
-          && this.isDataIncluding(data.ei_type_identity, searchTerms.typeId);
-      }) as (data: EIJob, filter: any) => boolean;
+          && this.isDataIncluding(data.typeId, searchTerms.typeId)
+          && this.isDataIncluding(data.prodId, searchTerms.prodId);
+      }) as (data: Job, filter: any) => boolean;
     });
 
     this.jobForm.valueChanges.subscribe(value => {
@@ -88,21 +99,23 @@ export class JobsListComponent implements OnInit {
   }
 
   clearFilter() {
-    this.jobForm.get('id').setValue('');
+    this.jobForm.get('jobId').setValue('');
     this.jobForm.get('typeId').setValue('');
     this.jobForm.get('owner').setValue('');
     this.jobForm.get('targetUri').setValue('');
+    this.jobForm.get('prodId').setValue('');
   }
 
   sortJobs(sort: Sort) {
     const data = this.jobsDataSource.data
-    data.sort((a: EIJob, b: EIJob) => {
+    data.sort((a: Job, b: Job) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'id': return this.compare(a.ei_job_identity, b.ei_job_identity, isAsc);
-        case 'typeId': return this.compare(a.ei_type_identity, b.ei_type_identity, isAsc);
+        case 'jobId': return this.compare(a.jobId, b.jobId, isAsc);
+        case 'typeId': return this.compare(a.typeId, b.typeId, isAsc);
         case 'owner': return this.compare(a.owner, b.owner, isAsc);
-        case 'targetUri': return this.compare(a.target_uri, b.owner, isAsc);
+        case 'targetUri': return this.compare(a.targetUri, b.targetUri, isAsc);
+        case 'prodId': return this.compare(a.prodId, b.prodId, isAsc);
         default: return 0;
       }
     });
@@ -122,36 +135,54 @@ export class JobsListComponent implements OnInit {
     return data.toLowerCase().includes(transformedFilter);
   }
 
-  getJobTypeId(eiJob: EIJob): string {
-    if (eiJob.ei_type_identity) {
-      return eiJob.ei_type_identity;
+  getJobTypeId(eiJob: Job): string {
+    if (eiJob.typeId) {
+      return eiJob.typeId;
     }
     return '< No type >';
   }
 
-  getJobOwner(eiJob: EIJob): string {
+  getJobOwner(eiJob: Job): string {
     if (eiJob.owner) {
       return eiJob.owner;
     }
     return '< No owner >';
   }
 
-  public jobs(): EIJob[] {
+  public jobs(): Job[] {
     return this.jobsSubject.value;
   }
 
   loadJobs() {
     this.loadingSubject.next(true);
     let jobs = [];
+    let prodId = [];
     this.eiSvc.getProducerIds().pipe(
+      tap(data => prodId = data),
       mergeMap(prodIds =>
         forkJoin(prodIds.map(id => this.eiSvc.getJobsForProducer(id)))),
-      mergeMap(result => result),
       finalize(() => this.loadingSubject.next(false))
     ).subscribe(result => {
-      jobs = jobs.concat(result);
+      jobs = this.createJobList(prodId, result);
       this.jobsSubject.next(jobs);
     });
+  }
+  createJobList(prodId: any[], result: EIJob[][]) {
+    let jobList = [];
+    prodId.forEach((element, index) => {
+      let jobs = result[index];
+      jobList = jobList.concat(jobs.map(job => this.createJob(element, job)));
+    });
+    return jobList;
+  }
+  createJob(element: any, job: EIJob): any {
+    let eiJob = <Job>{};
+    eiJob.jobId = job.ei_job_identity;
+    eiJob.typeId = job.ei_type_identity;
+    eiJob.owner = job.owner;
+    eiJob.targetUri = job.target_uri;
+    eiJob.prodId = element;
+    return eiJob;
   }
 
 }

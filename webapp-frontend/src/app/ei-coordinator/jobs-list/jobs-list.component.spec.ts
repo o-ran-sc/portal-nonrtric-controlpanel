@@ -37,23 +37,52 @@ import { EIJob } from '@interfaces/ei.types';
 import { EIService } from '@services/ei/ei.service';
 import { UiService } from '@services/ui/ui.service';
 
-import { JobsListComponent } from './jobs-list.component';
+import { Job, JobsListComponent } from './jobs-list.component';
 
 let component: JobsListComponent;
 let fixture: ComponentFixture<JobsListComponent>;
 
-const job1 = {
+const eijob1 = {
   ei_job_identity: 'job1',
   ei_type_identity: 'type1',
   owner: 'owner1',
   target_uri: 'http://one'
 } as EIJob;
-const job2 = {
+const eijob2 = {
   ei_job_identity: 'job2',
   ei_type_identity: 'type2',
   owner: 'owner2',
   target_uri: 'http://two'
 } as EIJob;
+
+const job1 = {
+  jobId: 'job1',
+  typeId: 'type1',
+  owner: 'owner1',
+  targetUri: 'http://one',
+  prodId: 'producer1'
+} as Job;
+const job2 = {
+  jobId: 'job2',
+  typeId: 'type2',
+  owner: 'owner2',
+  targetUri: 'http://two',
+  prodId: 'producer1'
+} as Job;
+const job3 = {
+  jobId: 'job1',
+  typeId: 'type1',
+  owner: 'owner1',
+  targetUri: 'http://one',
+  prodId: 'producer2'
+} as Job;
+const job4 = {
+  jobId: 'job2',
+  typeId: 'type2',
+  owner: 'owner2',
+  targetUri: 'http://two',
+  prodId: 'producer2'
+} as Job;
 
 describe('JobsListComponent', () => {
   let loader: HarnessLoader;
@@ -87,7 +116,7 @@ describe('JobsListComponent', () => {
       });
   }));
 
-  const expectedJob1Row = { id: 'job1', typeId: 'type1', owner: 'owner1', targetUri: 'http://one' };
+  const expectedJob1Row = { jobId: 'job1', prodId: 'producer1', typeId: 'type1', owner: 'owner1', targetUri: 'http://one' };
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -98,9 +127,9 @@ describe('JobsListComponent', () => {
     it('should loadJobs', () => {
       setServiceSpy();
       component.loadJobs();
-      const actualJobs: EIJob[] = component.jobs();
+      const actualJobs: Job[] = component.jobs();
       expect(actualJobs.length).toEqual(4);
-      expect(actualJobs).toEqual([job1, job2, job1, job2]);
+      expect(actualJobs).toEqual([job1, job2, job3, job4]);
     });
 
     it('should contain job table with correct columns', async () => {
@@ -109,7 +138,7 @@ describe('JobsListComponent', () => {
       let headerRow = (await jobsTable.getHeaderRows())[0];
       let headers = await headerRow.getCellTextByColumnName();
 
-      expect(headers).toEqual({ id: 'Job ID', typeId: 'Type ID', owner: 'Owner', targetUri: 'Target URI' });
+      expect(headers).toEqual({ jobId: 'Job ID', prodId: 'Producer ID', typeId: 'Type ID', owner: 'Owner', targetUri: 'Target URI' });
     });
 
     it('should set correct dark mode from UIService', () => {
@@ -131,7 +160,9 @@ describe('JobsListComponent', () => {
       component.ngOnInit();
       const expectedJobRows = [
         expectedJob1Row,
-        { id: 'job2', typeId: 'type2', owner: 'owner2', targetUri: 'http://two' }
+        { jobId: 'job2', prodId: 'producer1', typeId: 'type2', owner: 'owner2', targetUri: 'http://two' },
+        { jobId: 'job1', prodId: 'producer2', typeId: 'type1', owner: 'owner1', targetUri: 'http://one' },
+        { jobId: 'job2', prodId: 'producer2', typeId: 'type2', owner: 'owner2', targetUri: 'http://two' }
       ];
       let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
       let jobRows = await jobsTable.getRows();
@@ -160,7 +191,7 @@ describe('JobsListComponent', () => {
       eiServiceSpy.getJobsForProducer.and.returnValue(of([jobMissingProperties]));
 
       component.ngOnInit();
-      const expectedJobRow = { id: 'job1', typeId: '< No type >', owner: '< No owner >', targetUri: 'http://one' };
+      const expectedJobRow = { jobId: 'job1', prodId: 'producer1', typeId: '< No type >', owner: '< No owner >', targetUri: 'http://one' };
       let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
       let jobRows = await jobsTable.getRows();
       expect(await jobRows[0].getCellTextByColumnName()).toEqual(expectedJobRow);
@@ -204,7 +235,7 @@ describe('JobsListComponent', () => {
         setServiceSpy();
         const sort = await loader.getHarness(MatSortHarness);
         let headers = await sort.getSortHeaders({ sortDirection: '' });
-        expect(headers.length).toBe(4);
+        expect(headers.length).toBe(5);
 
         await headers[0].click();
         expect(await headers[0].isActive()).toBe(true);
@@ -239,7 +270,7 @@ describe('JobsListComponent', () => {
       it('should work properly on the table', async () => {
         let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
         eiServiceSpy.getProducerIds.and.returnValue(of(['producer1', 'producer2']));
-        eiServiceSpy.getJobsForProducer.and.returnValue(of([job1, job2, job1]));
+        eiServiceSpy.getJobsForProducer.and.returnValue(of([eijob1, eijob2, eijob1]));
 
         const paging = await loader.getHarness(MatPaginatorHarness);
         await paging.setPageSize(5);
@@ -251,7 +282,8 @@ describe('JobsListComponent', () => {
         await paging.goToNextPage();
         jobRows = await jobsTable.getRows();
         expect(jobRows.length).toEqual(1);
-        expect(await jobRows[jobRows.length - 1].getCellTextByColumnName()).toEqual(expectedJob1Row);
+        const expectedRow = { jobId: 'job1', prodId: 'producer2', typeId: 'type1', owner: 'owner1', targetUri: 'http://one' };
+        expect(await jobRows[jobRows.length - 1].getCellTextByColumnName()).toEqual(expectedRow);
       });
     });
   });
@@ -260,5 +292,5 @@ describe('JobsListComponent', () => {
 function setServiceSpy() {
   let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
   eiServiceSpy.getProducerIds.and.returnValue(of(['producer1', 'producer2']));
-  eiServiceSpy.getJobsForProducer.and.returnValue(of([job1, job2]));
+  eiServiceSpy.getJobsForProducer.and.returnValue(of([eijob1, eijob2]));
 }

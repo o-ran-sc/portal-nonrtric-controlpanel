@@ -24,18 +24,31 @@ limitations under the License.
     </div>
     <mat-table id="jobsTable" [dataSource]="jobsDataSource" fixedLayout matSort (matSortChange)="sortJobs($event)"
         matSortDisableClear matSortDirection="asc" class="ei-coordinator-table mat-elevation-z8">
-        <ng-container matColumnDef="id">
+        <ng-container matColumnDef="jobId">
             <mat-header-cell *matHeaderCellDef mat-sort-header>
                 <div (click)="stopSort($event)">
                     <form style="display: flex" [formGroup]="jobForm">
                         <mat-form-field>
-                            <input id="jobIdFilter" matInput formControlName="id">
+                            <input id="jobIdFilter" matInput formControlName="jobId">
                             <mat-placeholder>Job ID</mat-placeholder>
                         </mat-form-field>
                     </form>
                 </div>
             </mat-header-cell>
-            <mat-cell *matCellDef="let eiJob"> {{eiJob.ei_job_identity}} </mat-cell>
+            <mat-cell *matCellDef="let eiJob"> {{eiJob.jobId}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="prodId">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                <div (click)="stopSort($event)">
+                    <form style="display: flex" [formGroup]="jobForm">
+                        <mat-form-field>
+                            <input id="jobProdIdFilter" matInput formControlName="prodId">
+                            <mat-placeholder>Producer ID</mat-placeholder>
+                        </mat-form-field>
+                    </form>
+                </div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let eiJob"> {{eiJob.prodId}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="typeId">
             <mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -74,10 +87,10 @@ limitations under the License.
                     </form>
                 </div>
             </mat-header-cell>
-            <mat-cell *matCellDef="let eiJob"> {{eiJob.target_uri}} </mat-cell>
+            <mat-cell *matCellDef="let eiJob"> {{eiJob.targetUri}} </mat-cell>
         </ng-container>
-        <mat-header-row *matHeaderRowDef="['id', 'typeId', 'owner', 'targetUri']"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: ['id', 'typeId', 'owner', 'targetUri'];"></mat-row>
+        <mat-header-row *matHeaderRowDef="['jobId', 'prodId', 'typeId', 'owner', 'targetUri']"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ['jobId', 'prodId', 'typeId', 'owner', 'targetUri'];"></mat-row>
     </mat-table>
     <mat-paginator [length]="jobs()?.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
         class="ei-coordinator-table mat-elevation-z8"></mat-paginator>
