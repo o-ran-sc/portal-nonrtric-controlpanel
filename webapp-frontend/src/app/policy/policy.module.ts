@@ -42,6 +42,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const routes:Routes = [
   {path: 'policy', component: PolicyControlComponent}
@@ -72,6 +73,7 @@ const routes:Routes = [
     MatSortModule,
     MaterialDesignFrameworkModule,
     MatTableModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes)
   ],
