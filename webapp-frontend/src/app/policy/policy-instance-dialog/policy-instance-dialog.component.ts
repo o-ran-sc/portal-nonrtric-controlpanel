@@ -63,7 +63,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     private ui: UiService
   ) {
     this.policyInstance.policy_id = data.instanceId;
-    this.policyInstance.policytype_id = data.name;
+    this.policyInstance.policytype_id = data.name ? data.name : "";
     this.policyInstance.policy_data = data.instanceJson;
     this.policyJson = data.instanceJson;
     this.jsonSchemaObject = data.createSchema;
