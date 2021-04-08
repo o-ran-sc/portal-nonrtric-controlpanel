@@ -104,7 +104,7 @@ describe('EICoordinatorComponent', () => {
       let refreshButton = await loader.getHarness(MatButtonHarness.with({ selector: '#refreshButton' }));
 
       const jobsComponent: JobsListComponent = fixture.debugElement.query(By.directive(JobsListComponent)).componentInstance;
-      spyOn(jobsComponent, 'loadJobs');
+      spyOn(jobsComponent, 'refreshDataClick');
       spyOn(jobsComponent, 'clearFilter');
 
       const prodsComponent: ProducersListComponent = fixture.debugElement.query(By.directive(ProducersListComponent)).componentInstance;
@@ -113,7 +113,7 @@ describe('EICoordinatorComponent', () => {
 
       await refreshButton.click();
 
-      expect(jobsComponent.loadJobs).toHaveBeenCalled();
+      expect(jobsComponent.refreshDataClick).toHaveBeenCalled();
       expect(jobsComponent.clearFilter).toHaveBeenCalled();
       expect(prodsComponent.loadProducers).toHaveBeenCalled();
       expect(prodsComponent.clearFilter).toHaveBeenCalled();
