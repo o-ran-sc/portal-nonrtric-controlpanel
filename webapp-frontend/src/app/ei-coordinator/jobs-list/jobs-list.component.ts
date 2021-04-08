@@ -23,6 +23,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import {
+  EMPTY,
   forkJoin,
   Subscription,
   timer,
@@ -33,7 +34,7 @@ import {
   finalize,
   map,
   tap,
-  switchMap,
+  switchMap
 } from "rxjs/operators";
 import { EIJob } from "@interfaces/ei.types";
 import { EIService } from "@services/ei/ei.service";
@@ -59,11 +60,13 @@ export class JobsListComponent implements OnInit {
   jobForm: FormGroup;
   darkMode: boolean;
 
-  private jobsSubject = new BehaviorSubject<Job[]>([]);
+  private jobsSubject$ = new BehaviorSubject<Job[]>([]);
   private refresh$ = new BehaviorSubject("");
-  private loadingSubject = new BehaviorSubject<boolean>(false);
-  public loading$ = this.loadingSubject.asObservable();
+  private loadingSubject$ = new BehaviorSubject<boolean>(false);
+  private polling$ = new BehaviorSubject<boolean>(true);
+  public loading$ = this.loadingSubject$.asObservable();
   subscription: Subscription;
+  checked: boolean = false;
 
   constructor(private eiSvc: EIService, private ui: UiService) {
     this.jobForm = new FormGroup({
@@ -78,7 +81,7 @@ export class JobsListComponent implements OnInit {
   ngOnInit(): void {
     this.subscription = this.dataSubscription();
 
-    this.jobsSubject.subscribe((data) => {
+    this.jobsSubject$.subscribe((data) => {
       this.jobsDataSource = new MatTableDataSource<Job>(data);
       this.jobsDataSource.paginator = this.paginator;
 
@@ -110,22 +113,26 @@ export class JobsListComponent implements OnInit {
       mergeMap((prodIds) =>
         forkJoin(prodIds.map((id) => this.eiSvc.getJobsForProducer(id)))
       ),
-      finalize(() => this.loadingSubject.next(false))
+      finalize(() => this.loadingSubject$.next(false))
     );
 
-    return this.refresh$
+    const refreshedJobs$ = this.refresh$
       .pipe(
-        switchMap((_) =>
-          timer(0, 10000).pipe(
-            tap((_) => {
-              this.loadingSubject.next(true);
-            }),
-            switchMap((_) => jobs$),
-            map((response) => this.extractJobs(prodId, response))
-          )
+        switchMap((_) => timer(0, 10000).pipe(
+          tap((_) => {
+            this.loadingSubject$.next(true);
+          }),
+          switchMap((_) => jobs$),
+          map((response) => this.extractJobs(prodId, response))
         )
-      )
-      .subscribe();
+        )
+      );
+    
+    return this.polling$.pipe(
+      switchMap(p => {
+        return p ? refreshedJobs$ : EMPTY;
+      })
+    ).subscribe();
   }
 
   ngOnDestroy() {
@@ -162,6 +169,10 @@ export class JobsListComponent implements OnInit {
     this.jobsDataSource.data = data;
   }
 
+  stopPolling(checked){
+    this.polling$.next(checked);
+  }
+
   compare(a: any, b: any, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
@@ -190,17 +201,17 @@ export class JobsListComponent implements OnInit {
   }
 
   public jobs(): Job[] {
-    return this.jobsSubject.value;
+    return this.jobsSubject$.value;
   }
 
   private extractJobs(prodId: number[], res: EIJob[][]) {
-    console.log(res.length);
+    this.clearFilter();
     let jobList = [];
     prodId.forEach((element, index) => {
       let jobs = res[index];
       jobList = jobList.concat(jobs.map((job) => this.createJob(element, job)));
     });
-    this.jobsSubject.next(jobList);
+    this.jobsSubject$.next(jobList);
     return jobList;
   }
 
