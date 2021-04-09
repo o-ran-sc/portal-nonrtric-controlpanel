@@ -39,7 +39,6 @@ import { ToastrModule } from "ngx-toastr";
 import { MockComponent } from "ng-mocks";
 
 import { PolicyService } from "@services/policy/policy.service";
-import { ErrorDialogService } from "@services/ui/error-dialog.service";
 import { UiService } from "@services/ui/ui.service";
 import { PolicyInstanceDialogComponent } from "./policy-instance-dialog.component";
 import { TypedPolicyEditorComponent } from "@policy/typed-policy-editor/typed-policy-editor.component";
@@ -48,26 +47,24 @@ import { NoTypePolicyEditorComponent } from "@policy/no-type-policy-editor/no-ty
 import { CreatePolicyInstance } from "@interfaces/policy.types";
 import { NotificationService } from "@services/ui/notification.service";
 import * as uuid from "uuid";
+import { HttpErrorResponse } from "@angular/common/http";
 
 describe("PolicyInstanceDialogComponent", () => {
   const untypedSchema = JSON.parse("{}");
-  const typedSchema =
-    JSON.parse('{ "description": "Type 1 policy type", "title": "1", "type": "object", "properties": { "priorityLevel": "number" }}');
+  const typedSchema = JSON.parse(
+    '{ "description": "Type 1 policy type", "title": "1", "type": "object", "properties": { "priorityLevel": "number" }}'
+  );
 
   let component: PolicyInstanceDialogComponent;
   let fixture: ComponentFixture<PolicyInstanceDialogComponent>;
   let loader: HarnessLoader;
   let dialogRefSpy: MatDialogRef<PolicyInstanceDialogComponent>;
   let policyServiceSpy: jasmine.SpyObj<PolicyService>;
-  let errDialogServiceSpy: jasmine.SpyObj<ErrorDialogService>;
   let notificationServiceSpy: NotificationService;
 
   beforeEach(async () => {
     dialogRefSpy = jasmine.createSpyObj("MatDialogRef", ["close"]);
     policyServiceSpy = jasmine.createSpyObj("PolicyService", ["putPolicy"]);
-    errDialogServiceSpy = jasmine.createSpyObj("ErrorDialogService", [
-      "displayError",
-    ]);
     notificationServiceSpy = jasmine.createSpyObj("NotificationService", [
       "success",
     ]);
@@ -93,7 +90,6 @@ describe("PolicyInstanceDialogComponent", () => {
         ChangeDetectorRef,
         { provide: MatDialogRef, useValue: dialogRefSpy },
         { provide: PolicyService, useValue: policyServiceSpy },
-        { provide: ErrorDialogService, useValue: errDialogServiceSpy },
         { provide: NotificationService, useValue: notificationServiceSpy },
         { provide: MAT_DIALOG_DATA, useValue: true },
         UiService,
@@ -199,7 +195,7 @@ describe("PolicyInstanceDialogComponent", () => {
       expect(await submitButton.isDisabled()).toBeFalsy();
     });
 
-    it("should generate policy ID when submitting new policy", async () => {
+    it("should generate policy ID when submitting new policy and close dialog", async () => {
       const ricSelector: RicSelectorComponent = fixture.debugElement.query(
         By.directive(RicSelectorComponent)
       ).componentInstance;
@@ -213,6 +209,9 @@ describe("PolicyInstanceDialogComponent", () => {
       spyOn(uuid, "v4").and.returnValue("1234567890");
       ricSelector.selectedRic.emit("ric1");
       noTypePolicyEditor.validJson.emit("{}");
+
+      policyServiceSpy.putPolicy.and.returnValue(of("Success"));
+
       await submitButton.click();
 
       const policyInstance = {} as CreatePolicyInstance;
@@ -222,6 +221,26 @@ describe("PolicyInstanceDialogComponent", () => {
       policyInstance.ric_id = "ric1";
       policyInstance.service_id = "controlpanel";
       expect(policyServiceSpy.putPolicy).toHaveBeenCalledWith(policyInstance);
+
+      expect(dialogRefSpy.close).toHaveBeenCalledWith("ok");
+    });
+
+    it("should not close dialog when error from server", async () => {
+      let submitButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#submitButton" })
+      );
+
+      const errorResponse = {
+        status: 400,
+        statusText: "Bad Request",
+      } as HttpErrorResponse;
+      policyServiceSpy.putPolicy.and.returnValue(errorResponse);
+
+      await submitButton.click();
+
+      expect(policyServiceSpy.putPolicy).toHaveBeenCalled();
+
+      expect(dialogRefSpy.close).not.toHaveBeenCalled();
     });
   });
 
@@ -308,7 +327,9 @@ describe("PolicyInstanceDialogComponent", () => {
   });
 
   describe("content when editing policy without type", () => {
-    const instanceJson = JSON.parse('{"qosObjectives": {"priorityLevel": 3100}}');
+    const instanceJson = JSON.parse(
+      '{"qosObjectives": {"priorityLevel": 3100}}'
+    );
     beforeEach(async () => {
       const policyData = {
         createSchema: untypedSchema,
@@ -349,9 +370,7 @@ describe("PolicyInstanceDialogComponent", () => {
         By.directive(NoTypePolicyEditorComponent)
       ).componentInstance;
       expect(noTypePolicyEditor).toBeTruthy();
-      expect(noTypePolicyEditor.policyJson).toEqual(
-        instanceJson
-      );
+      expect(noTypePolicyEditor.policyJson).toEqual(instanceJson);
     });
 
     it("should contain enabled Close and Submit buttons when all inputs are valid", async () => {
@@ -481,7 +500,8 @@ function policyTester(first, second) {
     return (
       typeof policy1.policy_data === "object" &&
       typeof policy2.policy_data === "object" &&
-      JSON.stringify(policy1.policy_data) === JSON.stringify(policy2.policy_data) &&
+      JSON.stringify(policy1.policy_data) ===
+        JSON.stringify(policy2.policy_data) &&
       policy1.policy_id === policy2.policy_id &&
       policy1.policytype_id === policy2.policytype_id &&
       policy1.ric_id === policy2.ric_id &&
