@@ -26,14 +26,42 @@
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: grayscale($color: #eeeaea);
+  background-color: transparent;
 }
 
 .mat-column-instanceId {
   word-wrap: break-word;
   white-space: unset;
-  flex: 0 0 28%;
-  width: 28%;
+  flex: 0 0 22%;
+  width: 22%;
+}
+
+.mat-column-ric {
+  word-wrap: break-word;
+  white-space: unset;
+  flex: 0 0 22%;
+  width: 22%;
+}
+
+.mat-column-service {
+  word-wrap: break-word;
+  white-space: unset;
+  flex: 0 0 22%;
+  width: 22%;
+}
+
+.mat-column-lastModified {
+  word-wrap: break-word;
+  white-space: unset;
+  flex: 0 0 22%;
+  width: 22%;
+}
+
+.mat-column-action {
+  word-wrap: break-word;
+  white-space: unset;
+  flex: 0 0 12%;
+  width: 12%;
 }
 
 

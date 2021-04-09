@@ -32,8 +32,6 @@ import {
 import { PolicyService } from "@services/policy/policy.service";
 import { NotificationService } from "@services/ui/notification.service";
 import { UiService } from "@services/ui/ui.service";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ErrorDialogService } from "@services/ui/error-dialog.service";
 import * as uuid from "uuid";
 import {
   CreatePolicyInstance,
@@ -57,7 +55,6 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     public dialogRef: MatDialogRef<PolicyInstanceDialogComponent>,
     private policySvc: PolicyService,
-    private errorService: ErrorDialogService,
     private notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) private data,
     private ui: UiService
@@ -100,10 +97,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         self.notificationService.success(
           "Policy " + self.policyInstance.policy_id + " submitted"
         );
-        self.dialogRef.close();
-      },
-      error(error: HttpErrorResponse) {
-        self.errorService.displayError("Submit failed: " + error.error);
+        self.dialogRef.close("ok");
       },
       complete() {},
     });
@@ -131,7 +125,7 @@ export function getPolicyDialogProperties(
   const instanceJson = instance ? instance.policy_data : null;
   const name = policyTypeSchema.name;
   const ric = instance ? instance.ric_id : null;
-  return {
+  const data = {
     maxWidth: "1200px",
     maxHeight: "900px",
     width: "900px",
@@ -145,5 +139,6 @@ export function getPolicyDialogProperties(
       name,
       ric,
     },
-  };
+  } as MatDialogConfig;
+  return data;
 }

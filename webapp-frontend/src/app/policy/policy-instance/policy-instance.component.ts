@@ -22,24 +22,18 @@ import { Sort } from "@angular/material/sort";
 import { Component, OnInit, Input } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { PolicyTypeSchema } from "@interfaces/policy.types";
-import { ErrorDialogService } from "@services/ui/error-dialog.service";
 import { NotificationService } from "@services/ui/notification.service";
 import { PolicyService } from "@services/policy/policy.service";
 import { ConfirmDialogService } from "@services/ui/confirm-dialog.service";
 import { PolicyInstance } from "@interfaces/policy.types";
 import { PolicyInstanceDialogComponent } from "../policy-instance-dialog/policy-instance-dialog.component";
 import { getPolicyDialogProperties } from "../policy-instance-dialog/policy-instance-dialog.component";
-import { HttpErrorResponse, HttpResponse } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs";
+import { HttpResponse } from "@angular/common/http";
+import { BehaviorSubject, forkJoin } from "rxjs";
 import { UiService } from "@services/ui/ui.service";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatTableDataSource } from "@angular/material/table";
-
-class PolicyTypeInfo {
-  constructor(public type: PolicyTypeSchema) {}
-
-  isExpanded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-}
+import { mergeMap } from "rxjs/operators";
 
 @Component({
   selector: "nrcp-policy-instance",
@@ -48,17 +42,15 @@ class PolicyTypeInfo {
 })
 export class PolicyInstanceComponent implements OnInit {
   @Input() policyTypeSchema: PolicyTypeSchema;
-  policyInstances: PolicyInstance[] = [];
-  private policyInstanceSubject = new BehaviorSubject<PolicyInstance[]>([]);
-  policyTypeInfo = new Map<string, PolicyTypeInfo>();
-  instanceDataSource: MatTableDataSource<PolicyInstance> = new MatTableDataSource<PolicyInstance>();
-  policyInstanceForm: FormGroup;
   darkMode: boolean;
+  instanceDataSource: MatTableDataSource<PolicyInstance>;
+  policyInstanceForm: FormGroup;
+  private policyInstanceSubject = new BehaviorSubject<PolicyInstance[]>([]);
+  policyInstances: PolicyInstance[] = [];
 
   constructor(
     private policySvc: PolicyService,
     private dialog: MatDialog,
-    private errorDialogService: ErrorDialogService,
     private notificationService: NotificationService,
     private confirmDialogService: ConfirmDialogService,
     private ui: UiService
@@ -74,25 +66,28 @@ export class PolicyInstanceComponent implements OnInit {
   ngOnInit() {
     this.getPolicyInstances();
     this.policyInstanceSubject.subscribe((data) => {
-      this.instanceDataSource.data = data;
+      this.instanceDataSource = new MatTableDataSource<PolicyInstance>(data);
+
+      this.instanceDataSource.filterPredicate = ((
+        data: PolicyInstance,
+        filter
+      ) => {
+        return (
+          this.isDataIncluding(data.policy_id, filter.id) &&
+          this.isDataIncluding(data.ric_id, filter.target) &&
+          this.isDataIncluding(data.service_id, filter.owner) &&
+          this.isDataIncluding(data.lastModified, filter.lastModified)
+        );
+      }) as (data: PolicyInstance, filter: any) => boolean;
     });
 
     this.policyInstanceForm.valueChanges.subscribe((value) => {
-      const filter = { ...value, id: value.id.trim().toLowerCase() } as string;
+      const filter = {
+        ...value,
+        id: value.id.trim().toLowerCase(),
+      } as string;
       this.instanceDataSource.filter = filter;
     });
-
-    this.instanceDataSource.filterPredicate = ((
-      data: PolicyInstance,
-      filter
-    ) => {
-      return (
-        this.isDataIncluding(data.policy_id, filter.id) &&
-        this.isDataIncluding(data.ric_id, filter.target) &&
-        this.isDataIncluding(data.service_id, filter.owner) &&
-        this.isDataIncluding(data.lastModified, filter.lastModified)
-      );
-    }) as (data: PolicyInstance, filter: any) => boolean;
 
     this.ui.darkModeState.subscribe((isDark) => {
       this.darkMode = isDark;
@@ -102,29 +97,33 @@ export class PolicyInstanceComponent implements OnInit {
   getPolicyInstances() {
     this.policyInstances = [] as PolicyInstance[];
     this.policySvc
-    .getPolicyInstancesByType(this.policyTypeSchema.id)
-    .subscribe((policies) => {
-      if (policies.policy_ids.length != 0) {
-        policies.policy_ids.forEach((policyId) => {
-          this.policySvc
-          .getPolicyInstance(policyId)
-          .subscribe((policyInstance) => {
-            this.policySvc
-                  .getPolicyStatus(policyId)
-                  .subscribe((policyStatus) => {
-                    policyInstance.lastModified = policyStatus.last_modified;
-                  });
-                this.policyInstances.push(policyInstance);
-              });
-            this.policyInstanceSubject.next(this.policyInstances);
-          });
-        }
+      .getPolicyInstancesByType(this.policyTypeSchema.id)
+      .pipe(
+        mergeMap((policyIds) =>
+          forkJoin(
+            policyIds.policy_ids.map((id) => {
+              return forkJoin([
+                this.policySvc.getPolicyInstance(id),
+                this.policySvc.getPolicyStatus(id),
+              ]);
+            })
+          )
+        )
+      )
+      .subscribe((res) => {
+        this.policyInstances = res.map((policy) => {
+          let policyInstance = <PolicyInstance>{};
+          policyInstance = policy[0];
+          policyInstance.lastModified = policy[1].last_modified;
+          return policyInstance;
+        });
+        this.policyInstanceSubject.next(this.policyInstances);
       });
   }
 
   getSortedData(sort: Sort) {
     const data = this.instanceDataSource.data;
-    data.sort((a, b) => {
+    data.sort((a: PolicyInstance, b: PolicyInstance) => {
       const isAsc = sort.direction === "asc";
       switch (sort.active) {
         case "instanceId":
@@ -150,43 +149,37 @@ export class PolicyInstanceComponent implements OnInit {
     return !filter || data.toLowerCase().includes(filter);
   }
 
-  private onExpand(isExpanded: boolean) {
-    if (isExpanded) {
-      this.getPolicyInstances();
-    }
-  }
-
-  private isSchemaEmpty(): boolean {
-    return this.policyTypeSchema.schemaObject === "{}";
+  createPolicyInstance(policyTypeSchema: PolicyTypeSchema): void {
+    this.openInstanceDialog(null);
   }
 
   modifyInstance(instance: PolicyInstance): void {
-    this.policySvc.getPolicyInstance(instance.policy_id).subscribe(
-      (refreshedJson: any) => {
-        instance = refreshedJson;
-        this.dialog
-          .open(
-            PolicyInstanceDialogComponent,
-            getPolicyDialogProperties(
-              this.policyTypeSchema,
-              instance,
-              this.darkMode
-            )
-          )
-          .afterClosed()
-          .subscribe((_: any) => {
-            this.getPolicyInstances();
-          });
-      },
-      (httpError: HttpErrorResponse) => {
-        this.notificationService.error(
-          "Could not refresh instance. Please try again." + httpError.message
-        );
-      }
-    );
+    let refreshedInstance: PolicyInstance;
+    this.policySvc
+      .getPolicyInstance(instance.policy_id)
+      .subscribe((refreshedJson: any) => {
+        refreshedInstance = refreshedJson;
+      });
+
+    this.openInstanceDialog(refreshedInstance);
   }
 
-  nbInstances(): number {
+  private openInstanceDialog(policy: PolicyInstance) {
+    const dialogData = getPolicyDialogProperties(
+      this.policyTypeSchema,
+      policy,
+      this.darkMode
+    );
+    const dialogRef = this.dialog.open(
+      PolicyInstanceDialogComponent,
+      dialogData
+    );
+    dialogRef.afterClosed().subscribe((ok: any) => {
+      if (ok) this.getPolicyInstances();
+    });
+  }
+
+  noInstances(): number {
     return this.policyInstances.length;
   }
 
@@ -194,17 +187,6 @@ export class PolicyInstanceComponent implements OnInit {
     const date = new Date(utcTime);
     const toutc = date.toUTCString();
     return new Date(toutc + " UTC").toLocaleString();
-  }
-
-  createPolicyInstance(policyTypeSchema: PolicyTypeSchema): void {
-    let dialogRef = this.dialog.open(
-      PolicyInstanceDialogComponent,
-      getPolicyDialogProperties(policyTypeSchema, null, this.darkMode)
-    );
-    const info: PolicyTypeInfo = this.getPolicyTypeInfo(policyTypeSchema);
-    dialogRef.afterClosed().subscribe((_) => {
-      info.isExpanded.next(info.isExpanded.getValue());
-    });
   }
 
   deleteInstance(instance: PolicyInstance): void {
@@ -215,36 +197,16 @@ export class PolicyInstanceComponent implements OnInit {
       .afterClosed()
       .subscribe((res: any) => {
         if (res) {
-          this.policySvc.deletePolicy(instance.policy_id).subscribe(
-            (response: HttpResponse<Object>) => {
-              switch (response.status) {
-                case 204:
-                  this.notificationService.success("Delete succeeded!");
-                  this.getPolicyInstances();
-                  break;
-                default:
-                  this.notificationService.warn(
-                    "Delete failed " + response.status + " " + response.body
-                  );
+          this.policySvc
+            .deletePolicy(instance.policy_id)
+            .subscribe((response: HttpResponse<Object>) => {
+              if (response.status === 204) {
+                this.notificationService.success("Delete succeeded!");
+                this.getPolicyInstances();
               }
-            },
-            (error: HttpErrorResponse) => {
-              this.errorDialogService.displayError(
-                error.statusText + ", " + error.error
-              );
-            }
-          );
+            });
         }
       });
-  }
-
-  getPolicyTypeInfo(policyTypeSchema: PolicyTypeSchema): PolicyTypeInfo {
-    let info: PolicyTypeInfo = this.policyTypeInfo.get(policyTypeSchema.name);
-    if (!info) {
-      info = new PolicyTypeInfo(policyTypeSchema);
-      this.policyTypeInfo.set(policyTypeSchema.name, info);
-    }
-    return info;
   }
 
   refreshTable() {

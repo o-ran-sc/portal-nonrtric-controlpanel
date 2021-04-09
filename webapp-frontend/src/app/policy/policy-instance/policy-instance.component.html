@@ -18,21 +18,21 @@
   ========================LICENSE_END===================================
   -->
 <div>
-    Number of instances: {{this.nbInstances()}}
-    <button mat-icon-button (click)="createPolicyInstance(policyTypeSchema)">
-        <mat-icon matTooltip="Create instance">add_box</mat-icon>
+    Number of instances: {{noInstances()}}
+    <button id="createButton" mat-icon-button (click)="createPolicyInstance(policyTypeSchema)">
+        <mat-icon id="createIcon" matTooltip="Create instance">add_box</mat-icon>
     </button>
-    <button mat-icon-button color="primary" (click)="refreshTable()">
-        <mat-icon>refresh</mat-icon>
+    <button id="refreshButton" mat-icon-button color="primary" (click)="refreshTable()">
+        <mat-icon id="refreshIcon">refresh</mat-icon>
     </button>
 </div>
 
-<table #table mat-table class="instances-table mat-elevation-z8" [ngClass]="{'table-dark': darkMode}" matSort (matSortChange)="getSortedData($event)"
-    multiTemplateDataRows [dataSource]="instanceDataSource">
+<mat-table class="instances-table mat-elevation-z8" id="policiesTable" [dataSource]="instanceDataSource" matSort
+    (matSortChange)="getSortedData($event)" matSortDisableClear multiTemplateDataRows>
 
     <ng-container matColumnDef="instanceId">
         <mat-header-cell mat-sort-header *matHeaderCellDef matTooltip="The ID of the policy instance">
-            <div (click)="stopSort($event)">
+            <div id="idSortStop" (click)="stopSort($event)">
                 <form style="display: flex" [formGroup]="policyInstanceForm">
                     <mat-form-field>
                         <input id="policyInstanceIdFilter" matInput formControlName="id">
@@ -41,14 +41,14 @@
                 </form>
             </div>
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" (click)="modifyInstance(element)">{{element.policy_id}}
+        <mat-cell *matCellDef="let instance" (click)="modifyInstance(instance)">{{instance.policy_id}}
         </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="ric">
         <mat-header-cell mat-sort-header *matHeaderCellDef
             matTooltip="Element where the policy instance resides, e.g. a gNodeB or Near-RT RIC">
-            <div (click)="stopSort($event)">
+            <div id="targetSortStop" (click)="stopSort($event)">
                 <form style="display: flex" [formGroup]="policyInstanceForm">
                     <mat-form-field>
                         <input id="policyInstanceTargetFilter" matInput formControlName="target">
@@ -57,14 +57,14 @@
                 </form>
             </div>
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" (click)="modifyInstance(element)">{{element.ric_id}}
+        <mat-cell *matCellDef="let instance" (click)="modifyInstance(instance)">{{instance.ric_id}}
         </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="service">
         <mat-header-cell mat-sort-header *matHeaderCellDef
             matTooltip="The service that created the policy instance, and is responsible for its lifecycle">
-            <div (click)="stopSort($event)">
+            <div id="ownerSortStop" (click)="stopSort($event)">
                 <form style="display: flex" [formGroup]="policyInstanceForm">
                     <mat-form-field>
                         <input id="policyInstanceOwnerFilter" matInput formControlName="owner">
@@ -73,14 +73,14 @@
                 </form>
             </div>
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" (click)="modifyInstance(element)">{{element.service_id}}
+        <mat-cell *matCellDef="let instance" (click)="modifyInstance(instance)">{{instance.service_id}}
         </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="lastModified">
         <mat-header-cell mat-sort-header *matHeaderCellDef
             matTooltip="The time of the last modification of the policy instance">
-            <div (click)="stopSort($event)">
+            <div id="lastModifiedSortStop" (click)="stopSort($event)">
                 <form style="display: flex" [formGroup]="policyInstanceForm">
                     <mat-form-field>
                         <input id="policyInstanceLastModifiedFilter" matInput formControlName="lastModified">
@@ -89,17 +89,17 @@
                 </form>
             </div>
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" (click)="modifyInstance(element)">{{toLocalTime(element.lastModified)}}
+        <mat-cell *matCellDef="let instance" (click)="modifyInstance(instance)">{{toLocalTime(instance.lastModified)}}
         </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="action">
         <mat-header-cell class="action-cell" *matHeaderCellDef>Action</mat-header-cell>
         <mat-cell class="action-cell" *matCellDef="let instance">
-            <button mat-icon-button (click)="modifyInstance(instance)" matTooltip="Edit the policy instance">
+            <button mat-icon-button id="{{instance.policy_id + 'EditButton'}}" (click)="modifyInstance(instance)" matTooltip="Edit the policy instance">
                 <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="deleteInstance(instance)"
+            <button mat-icon-button id="{{instance.policy_id + 'DeleteButton'}}" color="warn" (click)="deleteInstance(instance)"
                 matTooltip="Delete the policy instance">
                 <mat-icon>delete</mat-icon>
             </button>
@@ -113,4 +113,4 @@
     <mat-header-row *matHeaderRowDef="['instanceId', 'ric', 'service', 'lastModified', 'action']">
     </mat-header-row>
     <mat-row *matRowDef="let instance; columns: ['instanceId', 'ric', 'service', 'lastModified', 'action'];"></mat-row>
-</table>
+</mat-table>
