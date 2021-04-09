@@ -11,7 +11,7 @@
       "priorityLevel": 3100
     }
   },
-  "service_id": "service1",
+  "service_id": "service2",
   "transient": false,
   "status_notification_uri": ""
 }
