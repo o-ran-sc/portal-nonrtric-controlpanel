@@ -48,6 +48,7 @@ import { NoTypePolicyEditorComponent } from "@policy/no-type-policy-editor/no-ty
 import { CreatePolicyInstance } from "@interfaces/policy.types";
 import { NotificationService } from "@services/ui/notification.service";
 import * as uuid from "uuid";
+import { HttpErrorResponse } from "@angular/common/http";
 
 describe("PolicyInstanceDialogComponent", () => {
   const untypedSchema = JSON.parse("{}");
@@ -199,7 +200,7 @@ describe("PolicyInstanceDialogComponent", () => {
       expect(await submitButton.isDisabled()).toBeFalsy();
     });
 
-    it("should generate policy ID when submitting new policy", async () => {
+    it("should generate policy ID when submitting new policy and close dialog", async () => {
       const ricSelector: RicSelectorComponent = fixture.debugElement.query(
         By.directive(RicSelectorComponent)
       ).componentInstance;
@@ -213,6 +214,9 @@ describe("PolicyInstanceDialogComponent", () => {
       spyOn(uuid, "v4").and.returnValue("1234567890");
       ricSelector.selectedRic.emit("ric1");
       noTypePolicyEditor.validJson.emit("{}");
+
+      policyServiceSpy.putPolicy.and.returnValue(of("Success"));
+
       await submitButton.click();
 
       const policyInstance = {} as CreatePolicyInstance;
@@ -222,6 +226,23 @@ describe("PolicyInstanceDialogComponent", () => {
       policyInstance.ric_id = "ric1";
       policyInstance.service_id = "controlpanel";
       expect(policyServiceSpy.putPolicy).toHaveBeenCalledWith(policyInstance);
+
+      expect(dialogRefSpy.close).toHaveBeenCalledWith("ok");
+    });
+
+    it("should not close dialog when error from server", async () => {
+      let submitButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#submitButton" })
+      );
+
+      const errorResponse = { status: 400, statusText: 'Bad Request' } as HttpErrorResponse;
+      policyServiceSpy.putPolicy.and.returnValue(errorResponse);
+
+      await submitButton.click();
+
+      expect(policyServiceSpy.putPolicy).toHaveBeenCalled();
+
+      expect(dialogRefSpy.close).not.toHaveBeenCalled();
     });
   });
 

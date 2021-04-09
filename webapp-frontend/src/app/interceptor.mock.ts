@@ -149,6 +149,10 @@ export class HttpMockRequestInterceptor implements HttpInterceptor {
             console.log('Answered PUT policy ', request.url, request.body);
             return of(new HttpResponse({ status: 200 }));
         }
+        if (request.method === "DELETE") {
+            console.log('Answered PUT policy ', request.url, request.body);
+            return of(new HttpResponse({ status: 400 }));
+        }
         for (const element of urls) {
             if (request.url === element.url) {
                 console.log('Loaded from stub json : ' + request.url);

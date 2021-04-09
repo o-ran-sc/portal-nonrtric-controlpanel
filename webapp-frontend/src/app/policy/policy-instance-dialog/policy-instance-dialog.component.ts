@@ -100,7 +100,7 @@ export class PolicyInstanceDialogComponent implements OnInit, AfterViewInit {
         self.notificationService.success(
           "Policy " + self.policyInstance.policy_id + " submitted"
         );
-        self.dialogRef.close();
+        self.dialogRef.close("ok");
       },
       error(error: HttpErrorResponse) {
         self.errorService.displayError("Submit failed: " + error.error);
@@ -131,7 +131,7 @@ export function getPolicyDialogProperties(
   const instanceJson = instance ? instance.policy_data : null;
   const name = policyTypeSchema.name;
   const ric = instance ? instance.ric_id : null;
-  return {
+  const data = {
     maxWidth: "1200px",
     maxHeight: "900px",
     width: "900px",
@@ -145,5 +145,6 @@ export function getPolicyDialogProperties(
       name,
       ric,
     },
-  };
+  } as MatDialogConfig;
+  return data;
 }
