@@ -66,14 +66,12 @@ export class RicSelectorComponent implements OnInit {
 
   private fetchRics() {
     if (!this.policyTypeName) this.policyTypeName = "";
-    console.log("fetchRics ", this.policyTypeName);
     const self: RicSelectorComponent = this;
     this.dataService.getRics(this.policyTypeName).subscribe({
       next(value: Rics) {
         value.rics.forEach((ric) => {
           self.allRics.push(ric.ric_id);
         });
-        console.log(value);
       },
     });
   }
