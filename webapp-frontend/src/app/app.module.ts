@@ -30,8 +30,6 @@ import { NgModule } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ToastrModule } from 'ngx-toastr';
 import { ConfirmDialogComponent } from '@ui/confirm-dialog/confirm-dialog.component';
-import { ErrorDialogComponent } from '@ui/error-dialog/error-dialog.component';
-import { ErrorDialogService } from '@services/ui/error-dialog.service';
 import { FooterComponent } from './footer/footer.component';
 import { MainComponent } from './main/main.component';
 import { MaterialDesignFrameworkModule } from 'angular6-json-schema-form';
@@ -53,7 +51,6 @@ export const isMock = environment.mock;
   declarations: [
     AppComponent,
     ConfirmDialogComponent,
-    ErrorDialogComponent,
     FooterComponent,
     MainComponent,
     SidenavListComponent,
@@ -76,11 +73,9 @@ export const isMock = environment.mock;
   ],
   entryComponents: [
     ConfirmDialogComponent,
-    ErrorDialogComponent,
   ],
   providers: [
     CookieService,
-    ErrorDialogService,
     UiService,
     {
       provide: HTTP_INTERCEPTORS,
