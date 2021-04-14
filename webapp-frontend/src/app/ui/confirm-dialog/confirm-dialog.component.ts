@@ -25,15 +25,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   selector: 'nrcp-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
 })
-export class ConfirmDialogComponent implements OnInit {
+export class ConfirmDialogComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data,
     public dialogRef: MatDialogRef<ConfirmDialogComponent>) { }
-
-  ngOnInit() {
-  }
-
-  closeDialog() {
-    this.dialogRef.close(false);
-  }
 }

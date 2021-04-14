@@ -322,6 +322,7 @@ describe("PolicyInstanceComponent", () => {
     await deleteButton.click();
 
     expect(confirmServiceSpy.openConfirmDialog).toHaveBeenCalledWith(
+      "Delete Policy",
       "Are you sure you want to delete this policy instance?"
     );
     expect(policyServiceSpy.deletePolicy).toHaveBeenCalledWith("policy1");

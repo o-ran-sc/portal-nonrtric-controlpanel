@@ -192,6 +192,7 @@ export class PolicyInstanceComponent implements OnInit {
   deleteInstance(instance: PolicyInstance): void {
     this.confirmDialogService
       .openConfirmDialog(
+        "Delete Policy",
         "Are you sure you want to delete this policy instance?"
       )
       .afterClosed()

@@ -18,35 +18,82 @@
  * ========================LICENSE_END===================================
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ConfirmDialogComponent } from './confirm-dialog.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from "./confirm-dialog.component";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
+import { HarnessLoader } from "@angular/cdk/testing";
+import { MatButtonHarness } from "@angular/material/button/testing";
 
-describe('ConfirmDialogComponent', () => {
+describe("ConfirmDialogComponent", () => {
   let component: ConfirmDialogComponent;
   let fixture: ComponentFixture<ConfirmDialogComponent>;
+  let loader: HarnessLoader;
+
+  let dialogRefSpy: jasmine.SpyObj<MatDialogRef<any>>;
 
   beforeEach(async(() => {
+    dialogRefSpy = jasmine.createSpyObj("MatDialogRef", ["close"]);
+
     TestBed.configureTestingModule({
-      declarations: [ ConfirmDialogComponent ],
-      imports: [ MatDialogModule ],
+      declarations: [ConfirmDialogComponent],
+      imports: [MatDialogModule],
       providers: [
-        { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: MatDialogRef, useValue: {} }
-    ]
-    })
-    .compileComponents();
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: { heading: "Delete Policy", message: "Do?" },
+        },
+        { provide: MatDialogRef, useValue: dialogRefSpy },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConfirmDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
-  it('should create', () => {
+  it("should create and contain correct title, message and buttons", async () => {
     expect(component).toBeTruthy();
+
+    const title = fixture.debugElement.nativeElement.querySelector("#title");
+    expect(title.innerText).toEqual("Delete Policy");
+
+    const message = fixture.debugElement.nativeElement.querySelector(
+      "#message"
+    );
+    expect(message.innerText).toEqual("Do?");
+
+    const cancelButton = fixture.debugElement.nativeElement.querySelector(
+      "#cancelButton"
+    );
+    expect(cancelButton).toBeTruthy();
+
+    const okButton = fixture.debugElement.nativeElement.querySelector(
+      "#okButton"
+    );
+    expect(okButton).toBeTruthy();
+  });
+
+  it("should close dialog with true when Ok button clicked", async () =>{
+    let okButton: MatButtonHarness = await loader.getHarness(
+      MatButtonHarness.with({ selector: "#okButton" })
+    );
+    await okButton.click();
+
+    expect(dialogRefSpy.close).toHaveBeenCalledWith(true);
+  });
+
+  it("should close dialog without data when Cancel button clicked", async () =>{
+    let cancelButton: MatButtonHarness = await loader.getHarness(
+      MatButtonHarness.with({ selector: "#cancelButton" })
+    );
+    await cancelButton.click();
+
+    expect(dialogRefSpy.close).toHaveBeenCalledWith("");
   });
 });

@@ -18,38 +18,34 @@
  * ========================LICENSE_END===================================
  */
 
-import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '@ui/confirm-dialog/confirm-dialog.component';
-import { UiService } from './ui.service';
+import { Injectable } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "@ui/confirm-dialog/confirm-dialog.component";
+import { UiService } from "./ui.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ConfirmDialogService {
+  constructor(private dialog: MatDialog, private ui: UiService) {}
 
-  darkMode: boolean;
-  panelClass = '';
-
-  constructor(private dialog: MatDialog,
-    private ui: UiService) { }
-
-  openConfirmDialog(msg: string) {
+  openConfirmDialog(heading: string, msg: string): MatDialogRef<any> {
+    let panelClass = "";
+    let darkMode: boolean;
     this.ui.darkModeState.subscribe((isDark) => {
-      this.darkMode = isDark;
+      darkMode = isDark;
     });
-    if (this.darkMode) {
-      this.panelClass = 'dark-theme';
-    } else {
-      this.panelClass = '';
+    if (darkMode) {
+      panelClass = "dark-theme";
     }
     return this.dialog.open(ConfirmDialogComponent, {
-      panelClass: this.panelClass,
-      width: '480px',
-      position: { top: '100px' },
+      panelClass: panelClass,
+      width: "480px",
+      position: { top: "100px" },
       data: {
-        message: msg
-      }
+        heading: heading,
+        message: msg,
+      },
     });
   }
 }
