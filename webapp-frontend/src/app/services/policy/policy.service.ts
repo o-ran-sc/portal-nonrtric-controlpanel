@@ -84,18 +84,6 @@ export class PolicyService {
   }
 
   /**
-   * Gets policy parameters.
-   * @returns Observable that should yield a policy instance
-   */
-  getPolicy(policyTypeId: string, policyInstanceId: string): Observable<any> {
-    const url =
-      this.buildPath(this.policyPath, policyInstanceId) +
-      "?type=" +
-      policyTypeId;
-    return this.httpClient.get<any>(url);
-  }
-
-  /**
    * Creates or replaces policy instance.
    * @param policyTypeId ID of the policy type that the instance will have
    * @param policyInstanceId ID of the instance
