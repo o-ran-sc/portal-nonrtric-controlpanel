@@ -18,22 +18,47 @@
  * ========================LICENSE_END===================================
  */
 
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from "@angular/core/testing";
 
-import { NotificationService } from './notification.service';
-import { ToastrModule } from 'ngx-toastr';
+import { NotificationService } from "./notification.service";
+import { ToastrService } from "ngx-toastr";
 
-describe('NotificationService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [ToastrModule.forRoot()],
-    providers: [
-        {provide: ToastrModule}
-      ]
+describe("NotificationService", () => {
+  let service: NotificationService;
+  let toastrSpy: jasmine.SpyObj<ToastrService>;
 
+  beforeEach(async(() => {
+    toastrSpy = jasmine.createSpyObj("ToastrService", [
+      "success",
+      "warning",
+      "error",
+    ]);
+
+    TestBed.configureTestingModule({
+      providers: [{ provide: ToastrService, useValue: toastrSpy }],
+    });
+    service = TestBed.inject(NotificationService);
   }));
 
-  it('should be created', () => {
-    const service: NotificationService = TestBed.inject(NotificationService);
+  it("should be created", () => {
     expect(service).toBeTruthy();
+  });
+
+  it("should open success with provided message and correct configuration", () => {
+    service.success("Success!");
+
+    expect(toastrSpy.success).toHaveBeenCalledWith("Success!", "", {
+      timeOut: 10000,
+      closeButton: true,
+    });
+  });
+
+  it("should open error with provided message and correct configuration", () => {
+    service.error("Error!");
+
+    expect(toastrSpy.error).toHaveBeenCalledWith("Error!", "", {
+      disableTimeOut: true,
+      closeButton: true,
+    });
   });
 });

@@ -18,41 +18,30 @@
  * ========================LICENSE_END===================================
  */
 
-import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { Injectable } from "@angular/core";
+import { ToastrService } from "ngx-toastr";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class NotificationService {
-
-  constructor(public toastr: ToastrService) { }
+  constructor(public toastr: ToastrService) {}
 
   successConfig = {
     timeOut: 10000,
-    closeButton: true
-  };
-
-  warningConfig = {
-    disableTimeOut: true,
-    closeButton: true
+    closeButton: true,
   };
 
   errorConfig = {
     disableTimeOut: true,
-    closeButton: true
+    closeButton: true,
   };
 
   success(msg: string) {
-    this.toastr.success(msg, '', this.successConfig);
-  }
-
-  warn(msg: string) {
-    this.toastr.warning(msg, '', this.warningConfig);
+    this.toastr.success(msg, "", this.successConfig);
   }
 
   error(msg: string) {
-    this.toastr.error(msg, '', this.errorConfig);
+    this.toastr.error(msg, "", this.errorConfig);
   }
-
 }
