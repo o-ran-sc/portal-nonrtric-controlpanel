@@ -30,10 +30,14 @@ import { PolicyTypes } from "@interfaces/policy.types";
 import { PolicyService } from "@services/policy/policy.service";
 import { MockComponent } from "ng-mocks";
 import { PolicyTypeComponent } from "./policy-type/policy-type.component";
+import { MatButtonHarness } from '@angular/material/button/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
 describe("PolicyControlComponent", () => {
   let component: PolicyControlComponent;
   let fixture: ComponentFixture<PolicyControlComponent>;
+  let loader: HarnessLoader;
 
   beforeEach(async(() => {
     const policyServiceSpy = jasmine.createSpyObj("PolicyService", [
@@ -57,6 +61,7 @@ describe("PolicyControlComponent", () => {
     fixture = TestBed.createComponent(PolicyControlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
   it("should create", () => {
@@ -72,4 +77,11 @@ describe("PolicyControlComponent", () => {
     expect(typeComponents[0].policyTypeId).toEqual("type1");
     expect(typeComponents[1].policyTypeId).toEqual("type2");
   });
+
+  /*it("should reload when clicking on refresh button", async () => {
+    let refreshButton: MatButtonHarness = await loader.getHarness(
+      MatButtonHarness.with({ selector: "#refreshButton" })
+    );
+
+  })*/
 });

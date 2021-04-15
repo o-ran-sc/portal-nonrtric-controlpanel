@@ -19,7 +19,15 @@
   -->
 
   <div fxLayout="row">
-    <div class="nrcp-global-page-title">Policy Control</div>
+    <div class="nrcp-global-page-title">Policy Types</div>
+    <div class="refresh-button">
+      <button #refreshButton mat-icon-button color="primary" (click)="refreshTables()">
+          <mat-icon>refresh</mat-icon>
+      </button>
+  </div>
 </div>
+<br>
 
 <nrcp-policy-type *ngFor="let policyTypeId of this.policyTypeIds" [policyTypeId]="policyTypeId"></nrcp-policy-type>
+
+<div *ngIf="this.policyTypeIds.length==0">There are no policy types to display.</div>

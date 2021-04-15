@@ -21,20 +21,30 @@ import { Component, OnInit } from "@angular/core";
 
 import { PolicyTypes } from "@interfaces/policy.types";
 import { PolicyService } from "@services/policy/policy.service";
+import { PolicyTypeComponent } from "./policy-type/policy-type.component"
 
 @Component({
   selector: "nrcp-policy-control",
   templateUrl: "./policy-control.component.html",
   styleUrls: ["./policy-control.component.scss"]
 })
-export class PolicyControlComponent implements OnInit {
-  policyTypeIds: Array<string>;
 
-  constructor(private policyService: PolicyService) {}
+export class PolicyControlComponent implements OnInit {
+  policyTypeIds = [];
+  ptComponent: PolicyTypeComponent;
+
+  constructor(private policyService: PolicyService) {
+    this.ptComponent = new PolicyTypeComponent(policyService);
+  }
 
   ngOnInit() {
+    this.refreshTables();
+  }
+
+  refreshTables() {
     this.policyService.getPolicyTypes().subscribe((policyType: PolicyTypes) => {
-      this.policyTypeIds = policyType.policytype_ids;
+      this.policyTypeIds = policyType.policytype_ids.sort();
     });
+    this.ptComponent.toggleVisible();
   }
 }

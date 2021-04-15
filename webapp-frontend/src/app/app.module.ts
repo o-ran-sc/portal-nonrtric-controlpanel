@@ -22,8 +22,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import {MatListModule} from '@angular/material/list';
+import { MatListModule} from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -65,6 +66,7 @@ export const isMock = environment.mock;
     MatListModule,
     MatSidenavModule,
     MatSlideToggleModule,
+    MatTooltipModule,
     MaterialDesignFrameworkModule,
     MDBBootstrapModule.forRoot(),
     PolicyModule,
