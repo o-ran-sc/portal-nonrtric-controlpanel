@@ -179,7 +179,11 @@ export class PolicyInstanceComponent implements OnInit {
     });
   }
 
-  noInstances(): number {
+  hasInstances(): boolean {
+    return this.instanceCount() > 0;
+}
+
+  instanceCount(): number {
     return this.policyInstances.length;
   }
 

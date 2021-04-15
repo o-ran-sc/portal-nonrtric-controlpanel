@@ -1,0 +1,43 @@
+{
+  "policy_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "Type 0 policy type (no instances)",
+    "additionalProperties": false,
+    "title": "0",
+    "type": "object",
+    "properties": {
+      "qosObjectives": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "priorityLevel": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "priorityLevel"
+        ]
+      },
+      "scope": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "qosId": {
+            "type": "string"
+          },
+          "ueId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ueId",
+          "qosId"
+        ]
+      }
+    },
+    "required": [
+      "scope",
+      "qosObjectives"
+    ]
+  }
+}

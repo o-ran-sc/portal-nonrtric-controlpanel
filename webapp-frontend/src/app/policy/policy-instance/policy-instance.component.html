@@ -18,7 +18,7 @@
   ========================LICENSE_END===================================
   -->
 <div>
-    Number of instances: {{noInstances()}}
+    Number of instances: {{instanceCount()}}
     <button id="createButton" mat-icon-button (click)="createPolicyInstance(policyTypeSchema)">
         <mat-icon id="createIcon" matTooltip="Create instance">add_box</mat-icon>
     </button>
@@ -110,7 +110,11 @@
         <mat-footer-cell *matFooterCellDef>No records found.</mat-footer-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="['instanceId', 'ric', 'service', 'lastModified', 'action']">
+    <mat-header-row *matHeaderRowDef="['instanceId', 'ric', 'service', 'lastModified', 'action']" [ngClass]="{'display-none': !this.hasInstances()}">
     </mat-header-row>
     <mat-row *matRowDef="let instance; columns: ['instanceId', 'ric', 'service', 'lastModified', 'action'];"></mat-row>
+
+    <mat-footer-row *matFooterRowDef="['noRecordsFound']" [ngClass]="{'display-none': this.hasInstances()}">
+    </mat-footer-row>
+
 </mat-table>

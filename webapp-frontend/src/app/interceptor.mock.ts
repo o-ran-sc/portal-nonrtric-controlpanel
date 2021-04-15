@@ -37,6 +37,7 @@ import * as eiproducerstatus1 from './mock/ei-producer-status1.json';
 import * as eiproducerstatus2 from './mock/ei-producer-status2.json';
 import * as policytypesList from './mock/policy-types.json';
 import * as policytypes1 from './mock/policy-type1.json';
+import * as policytypes0 from './mock/policy-type0.json';
 import * as policyinstanceedit from './mock/policy-instance-edit.json';
 import * as ric1 from './mock/ric1.json';
 import * as ric2 from './mock/ric2.json';
@@ -49,6 +50,10 @@ const urls = [
     {
         url: '/a1-policy/v2/policy-types/1',
         json: policytypes1
+    },
+    {
+        url: '/a1-policy/v2/policy-types/0',
+        json: policytypes0
     },
     {
         url: '/a1-policy/v2/policies?policytype_id=',
@@ -143,11 +148,18 @@ const urls = [
 @Injectable()
 export class HttpMockRequestInterceptor implements HttpInterceptor {
     constructor(private injector: Injector) { }
+    private numberOfTypes = 0;
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (request.method === "PUT" && request.url.includes("policies")) {
             console.log('Answered PUT policy ', request.url, request.body);
             return of(new HttpResponse({ status: 200 }));
+        }
+        if (request.url === "/a1-policy/v2/policy-types" && this.numberOfTypes > 0) {
+            this.numberOfTypes = 0;
+            return of(new HttpResponse({status: 200, body:JSON.parse('{"policytype_ids": ["","1"]}')}));
+        } else {
+            this.numberOfTypes = 1;
         }
         for (const element of urls) {
             if (request.url === element.url) {
