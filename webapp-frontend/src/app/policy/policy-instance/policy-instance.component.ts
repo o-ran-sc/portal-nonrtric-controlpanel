@@ -154,14 +154,11 @@ export class PolicyInstanceComponent implements OnInit {
   }
 
   modifyInstance(instance: PolicyInstance): void {
-    let refreshedInstance: PolicyInstance;
     this.policySvc
       .getPolicyInstance(instance.policy_id)
-      .subscribe((refreshedJson: any) => {
-        refreshedInstance = refreshedJson;
+      .subscribe((refreshedJson: PolicyInstance) => {
+        this.openInstanceDialog(refreshedJson);
       });
-
-    this.openInstanceDialog(refreshedInstance);
   }
 
   private openInstanceDialog(policy: PolicyInstance) {
