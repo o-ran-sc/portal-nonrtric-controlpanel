@@ -18,159 +18,180 @@
  * ========================LICENSE_END===================================
  */
 
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import * as policyinstance1 from './mock/policy-instance-1.json';
-import * as noTypePolicies from './mock/no-type-policies.json';
-import * as typedPolicies from './mock/policies.json';
-import * as policyinstance2 from './mock/policy-instance-2.json';
-import * as noTypePolicyinstance from './mock/policy-instance-notype.json';
-import * as policyinstance1Status from './mock/policy-instance-1-status.json';
-import * as policyinstance2Status from './mock/policy-instance-2-status.json';
-import * as eijobsProd1 from './mock/ei-jobs-producer1.json';
-import * as eijobsProd2 from './mock/ei-jobs-producer2.json';
-import * as eiProducerIds from './mock/ei-producerids.json';
-import * as eiproducer1 from './mock/ei-producer1.json';
-import * as eiproducer2 from './mock/ei-producer2.json';
-import * as eiproducerstatus1 from './mock/ei-producer-status1.json';
-import * as eiproducerstatus2 from './mock/ei-producer-status2.json';
-import * as policytypesList from './mock/policy-types.json';
-import * as policytypes1 from './mock/policy-type1.json';
-import * as policytypes0 from './mock/policy-type0.json';
-import * as policyinstanceedit from './mock/policy-instance-edit.json';
-import * as ric1 from './mock/ric1.json';
-import * as ric2 from './mock/ric2.json';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse,
+} from "@angular/common/http";
+import { Injectable, Injector } from "@angular/core";
+import { Observable, of } from "rxjs";
+import * as policyinstance1 from "./mock/policy-instance-1.json";
+import * as noTypePolicies from "./mock/no-type-policies.json";
+import * as type0Policies from "./mock/type0-policies.json";
+import * as type1Policies from "./mock/type1-policies.json";
+import * as policyinstance2 from "./mock/policy-instance-2.json";
+import * as noTypePolicyinstance from "./mock/policy-instance-notype.json";
+import * as policyinstance1Status from "./mock/policy-instance-1-status.json";
+import * as policyinstance2Status from "./mock/policy-instance-2-status.json";
+import * as eijobsProd1 from "./mock/ei-jobs-producer1.json";
+import * as eijobsProd2 from "./mock/ei-jobs-producer2.json";
+import * as eiProducerIds from "./mock/ei-producerids.json";
+import * as eiproducer1 from "./mock/ei-producer1.json";
+import * as eiproducer2 from "./mock/ei-producer2.json";
+import * as eiproducerstatus1 from "./mock/ei-producer-status1.json";
+import * as eiproducerstatus2 from "./mock/ei-producer-status2.json";
+import * as policytypesList from "./mock/policy-types.json";
+import * as policytypes1 from "./mock/policy-type1.json";
+import * as policytypes0 from "./mock/policy-type0.json";
+import * as policyinstanceedit from "./mock/policy-instance-edit.json";
+import * as ric1 from "./mock/ric1.json";
+import * as ric2 from "./mock/ric2.json";
+import { delay } from "rxjs/operators";
 
 const urls = [
-    {
-        url: '/a1-policy/v2/policy-types',
-        json: policytypesList
-    },
-    {
-        url: '/a1-policy/v2/policy-types/1',
-        json: policytypes1
-    },
-    {
-        url: '/a1-policy/v2/policy-types/0',
-        json: policytypes0
-    },
-    {
-        url: '/a1-policy/v2/policies?policytype_id=',
-        json: noTypePolicies
-    },
-    {
-        url: '/a1-policy/v2/policies?policytype_id=1',
-        json: typedPolicies
-    },
-    {
-        url: '/a1-policy/v2/policies/2001',
-        json: noTypePolicyinstance
-    },
-    {
-        url: '/a1-policy/v2/policies/2000',
-        json: policyinstance1
-    },
-    {
-        url: '/a1-policy/v2/policies/2100',
-        json: policyinstance2
-    },
-    {
-        url: '/a1-policy/v2/policies/2001/status',
-        json: policyinstance1Status
-    },
-    {
-        url: '/a1-policy/v2/policies/2000/status',
-        json: policyinstance1Status
-    },
-    {
-        url: '/a1-policy/v2/policies/2100/status',
-        json: policyinstance2Status
-    },
-    {
-        url: '/a1-policy/v2/policies/2000?type=',
-        json: policyinstanceedit
-    },
-    {
-        url: '/a1-policy/v2/policies/2100?type=',
-        json: policyinstanceedit
-    },
-    {
-        url: '/a1-policy/v2/policies/2000?type=1',
-        json: policyinstanceedit
-    },
-    {
-        url: '/a1-policy/v2/policies/2100?type=1',
-        json: policyinstanceedit
-    },
-    {
-        url: '/a1-policy/v2/policies/2000?ric=ric1&type=1',
-        json: ''
-    },
-    {
-        url: '/a1-policy/v2/rics?policytype_id=1',
-        json: ric1
-    },
-    {
-        url: '/a1-policy/v2/rics?policytype_id=',
-        json: ric2
-    },
-    {
-        url: '/ei-producer/v1/eiproducers',
-        json: eiProducerIds
-    },
-    {
-        url: '/ei-producer/v1/eiproducers/producer1',
-        json: eiproducer1
-    },
-    {
-        url: '/ei-producer/v1/eiproducers/producer2',
-        json: eiproducer2
-    },
-    {
-        url: '/ei-producer/v1/eiproducers/producer1/status',
-        json: eiproducerstatus1
-    },
-    {
-        url: '/ei-producer/v1/eiproducers/producer2/status',
-        json: eiproducerstatus2
-    },
-    {
-        url: '/ei-producer/v1/eiproducers/producer1/eijobs',
-        json: eijobsProd1
-    },
-    {
-        url: '/ei-producer/v1/eiproducers/producer2/eijobs',
-        json: eijobsProd2
-    }
+  {
+    url: "/a1-policy/v2/policy-types",
+    json: policytypesList,
+  },
+  {
+    url: "/a1-policy/v2/policy-types/1",
+    json: policytypes1,
+  },
+  {
+    url: "/a1-policy/v2/policy-types/0",
+    json: policytypes0,
+  },
+  {
+    url: "/a1-policy/v2/policies?policytype_id=",
+    json: noTypePolicies,
+  },
+  {
+    url: "/a1-policy/v2/policies?policytype_id=0",
+    json: type0Policies,
+  },
+  {
+    url: "/a1-policy/v2/policies?policytype_id=1",
+    json: type1Policies,
+  },
+  {
+    url: "/a1-policy/v2/policies/2001",
+    json: noTypePolicyinstance,
+  },
+  {
+    url: "/a1-policy/v2/policies/2000",
+    json: policyinstance1,
+  },
+  {
+    url: "/a1-policy/v2/policies/2100",
+    json: policyinstance2,
+  },
+  {
+    url: "/a1-policy/v2/policies/2001/status",
+    json: policyinstance1Status,
+  },
+  {
+    url: "/a1-policy/v2/policies/2000/status",
+    json: policyinstance1Status,
+  },
+  {
+    url: "/a1-policy/v2/policies/2100/status",
+    json: policyinstance2Status,
+  },
+  {
+    url: "/a1-policy/v2/policies/2000?type=",
+    json: policyinstanceedit,
+  },
+  {
+    url: "/a1-policy/v2/policies/2100?type=",
+    json: policyinstanceedit,
+  },
+  {
+    url: "/a1-policy/v2/policies/2000?type=1",
+    json: policyinstanceedit,
+  },
+  {
+    url: "/a1-policy/v2/policies/2100?type=1",
+    json: policyinstanceedit,
+  },
+  {
+    url: "/a1-policy/v2/policies/2000?ric=ric1&type=1",
+    json: "",
+  },
+  {
+    url: "/a1-policy/v2/rics?policytype_id=1",
+    json: ric1,
+  },
+  {
+    url: "/a1-policy/v2/rics?policytype_id=",
+    json: ric2,
+  },
+  {
+    url: "/ei-producer/v1/eiproducers",
+    json: eiProducerIds,
+  },
+  {
+    url: "/ei-producer/v1/eiproducers/producer1",
+    json: eiproducer1,
+  },
+  {
+    url: "/ei-producer/v1/eiproducers/producer2",
+    json: eiproducer2,
+  },
+  {
+    url: "/ei-producer/v1/eiproducers/producer1/status",
+    json: eiproducerstatus1,
+  },
+  {
+    url: "/ei-producer/v1/eiproducers/producer2/status",
+    json: eiproducerstatus2,
+  },
+  {
+    url: "/ei-producer/v1/eiproducers/producer1/eijobs",
+    json: eijobsProd1,
+  },
+  {
+    url: "/ei-producer/v1/eiproducers/producer2/eijobs",
+    json: eijobsProd2,
+  },
 ];
 
 @Injectable()
 export class HttpMockRequestInterceptor implements HttpInterceptor {
-    constructor(private injector: Injector) { }
-    private numberOfTypes = 0;
+  constructor(private injector: Injector) {}
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (request.method === "PUT" && request.url.includes("policies")) {
-            console.log('Answered PUT policy ', request.url, request.body);
-            return of(new HttpResponse({ status: 200 }));
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    let result: Observable<any>;
+    if (request.method === "PUT" && request.url.includes("policies")) {
+      result = of(new HttpResponse({ status: 200 }));
+    } else if (request.method === "DELETE") {
+      result = of(new HttpResponse({ status: 204 }));
+    } else {
+      for (const element of urls) {
+        if (request.url === element.url) {
+          result = of(
+            new HttpResponse({
+              status: 200,
+              body: (element.json as any).default,
+            })
+          );
         }
-        if (request.url === "/a1-policy/v2/policy-types" && this.numberOfTypes > 0) {
-            this.numberOfTypes = 0;
-            return of(new HttpResponse({status: 200, body:JSON.parse('{"policytype_ids": ["","1"]}')}));
-        } else {
-            this.numberOfTypes = 1;
-        }
-        for (const element of urls) {
-            if (request.url === element.url) {
-                console.log('Loaded from stub json : ' + request.url);
-                if (request.method === 'DELETE') {
-                    return of(new HttpResponse({ status: 204 }));
-                }
-                return of(new HttpResponse({ status: 200, body: ((element.json) as any).default }));
-            }
-        }
-        console.log('Loaded from mock http call :' + request.url);
-        return next.handle(request);
+      }
     }
+
+    if (result) {
+      console.log(
+        "Loaded from mock http call :" + request.method + " " + request.url,
+        request.method === "PUT" ? request.body : ""
+      );
+      // Adding a delay to simulate real server call.
+      return result.pipe(delay(10));
+    } else {
+      return next.handle(request);
+    }
+  }
 }
