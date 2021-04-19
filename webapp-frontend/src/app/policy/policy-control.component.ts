@@ -21,7 +21,6 @@ import { Component, OnInit } from "@angular/core";
 
 import { PolicyTypes } from "@interfaces/policy.types";
 import { PolicyService } from "@services/policy/policy.service";
-import { PolicyTypeComponent } from "./policy-type/policy-type.component"
 
 @Component({
   selector: "nrcp-policy-control",
@@ -31,10 +30,9 @@ import { PolicyTypeComponent } from "./policy-type/policy-type.component"
 
 export class PolicyControlComponent implements OnInit {
   policyTypeIds = [];
-  ptComponent: PolicyTypeComponent;
+  minimiseBoolean: boolean = false;
 
   constructor(private policyService: PolicyService) {
-    this.ptComponent = new PolicyTypeComponent(policyService);
   }
 
   ngOnInit() {
@@ -45,6 +43,6 @@ export class PolicyControlComponent implements OnInit {
     this.policyService.getPolicyTypes().subscribe((policyType: PolicyTypes) => {
       this.policyTypeIds = policyType.policytype_ids.sort();
     });
-    this.ptComponent.toggleVisible();
+    this.minimiseBoolean = !this.minimiseBoolean;
   }
 }
