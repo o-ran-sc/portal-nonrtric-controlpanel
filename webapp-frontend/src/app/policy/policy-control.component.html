@@ -28,6 +28,6 @@
 </div>
 <br>
 
-<nrcp-policy-type *ngFor="let policyTypeId of this.policyTypeIds" [policyTypeId]="policyTypeId"></nrcp-policy-type>
+<nrcp-policy-type *ngFor="let policyTypeId of this.policyTypeIds" [policyTypeId]="policyTypeId" [minimiseTrigger]="minimiseTrigger"></nrcp-policy-type>
 
 <div *ngIf="this.policyTypeIds.length==0">There are no policy types to display.</div>
