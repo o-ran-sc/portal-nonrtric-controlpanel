@@ -18,10 +18,11 @@
  * ========================LICENSE_END===================================
  */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, OnChanges} from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { PolicyType, PolicyTypeSchema } from "@interfaces/policy.types";
 import { PolicyService } from "@app/services/policy/policy.service";
+import "../policy-control.component";
 
 class PolicyTypeInfo {
   constructor(public type: PolicyTypeSchema) {}
@@ -34,8 +35,9 @@ class PolicyTypeInfo {
   templateUrl: "./policy-type.component.html",
   styleUrls: ["./policy-type.component.scss"],
 })
-export class PolicyTypeComponent implements OnInit {
+export class PolicyTypeComponent implements OnInit, OnChanges {
   @Input() policyTypeId: string;
+  @Input() minimiseTrigger: boolean;
 
   isVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -47,6 +49,10 @@ export class PolicyTypeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTypeInfo();
+    this.isVisible.next(false);
+  }
+
+  ngOnChanges(): void {
     this.isVisible.next(false);
   }
 

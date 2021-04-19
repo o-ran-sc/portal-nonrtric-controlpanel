@@ -155,11 +155,13 @@ export class HttpMockRequestInterceptor implements HttpInterceptor {
             console.log('Answered PUT policy ', request.url, request.body);
             return of(new HttpResponse({ status: 200 }));
         }
-        if (request.url === "/a1-policy/v2/policy-types" && this.numberOfTypes > 0) {
-            this.numberOfTypes = 0;
-            return of(new HttpResponse({status: 200, body:JSON.parse('{"policytype_ids": ["","1"]}')}));
-        } else {
-            this.numberOfTypes = 1;
+        if (request.url === "/a1-policy/v2/policy-types"){
+            if(this.numberOfTypes > 0) {
+                this.numberOfTypes = 0;
+                return of(new HttpResponse({status: 200, body:JSON.parse('{"policytype_ids": ["","1"]}')}));
+            } else {
+                this.numberOfTypes = 1;
+            }
         }
         for (const element of urls) {
             if (request.url === element.url) {
