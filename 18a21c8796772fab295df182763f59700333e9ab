@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ecbd946_15ecd78a",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-20T07:48:25Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 6
+      },
+      "revId": "18a21c8796772fab295df182763f59700333e9ab",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63debaef_d8a4b8a8",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.spec.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-20T07:48:25Z",
+      "side": 1,
+      "message": "I think a line jumped here",
+      "revId": "18a21c8796772fab295df182763f59700333e9ab",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bda39822_ba9d5253",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-20T07:48:25Z",
+      "side": 1,
+      "message": "Maybe it\u0027s not necessary to expand the imports",
+      "revId": "18a21c8796772fab295df182763f59700333e9ab",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b912916_62fee2e9",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-20T07:48:25Z",
+      "side": 1,
+      "message": "It could be good for consistency to have a $ either on all or none of the BehaviorSubjects.",
+      "range": {
+        "startLine": 63,
+        "startChar": 17,
+        "endLine": 63,
+        "endChar": 18
+      },
+      "revId": "18a21c8796772fab295df182763f59700333e9ab",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
