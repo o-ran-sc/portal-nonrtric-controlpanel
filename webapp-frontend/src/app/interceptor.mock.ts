@@ -115,6 +115,10 @@ const urls = [
     json: "",
   },
   {
+    url: "/a1-policy/v2/rics?policytype_id=0",
+    json: ric1,
+  },
+  {
     url: "/a1-policy/v2/rics?policytype_id=1",
     json: ric1,
   },

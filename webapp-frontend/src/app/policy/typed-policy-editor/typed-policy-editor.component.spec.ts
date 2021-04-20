@@ -22,14 +22,15 @@ import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/compiler";
 import { Component } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatIconModule } from "@angular/material/icon";
-import { BrowserModule } from "@angular/platform-browser";
+import { BrowserModule, By } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { TypedPolicyEditorComponent } from "./typed-policy-editor.component";
 
 describe("TypedPolicyEditorComponent", () => {
-  let component: TestTypedPolicyEditorComponentHostComponent;
-  let fixture: ComponentFixture<TestTypedPolicyEditorComponentHostComponent>;
+  let hostComponent: TestTypedPolicyEditorComponentHostComponent;
+  let componentUnderTest: TypedPolicyEditorComponent;
+  let hostFixture: ComponentFixture<TestTypedPolicyEditorComponentHostComponent>;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -43,119 +44,199 @@ describe("TypedPolicyEditorComponent", () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(
+    hostFixture = TestBed.createComponent(
       TestTypedPolicyEditorComponentHostComponent
     );
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    hostComponent = hostFixture.componentInstance;
+    componentUnderTest = hostFixture.debugElement.query(
+      By.directive(TypedPolicyEditorComponent)
+    ).componentInstance;
+    hostFixture.detectChanges();
   });
 
   it("should create", () => {
-    expect(component).toBeTruthy();
+    expect(hostComponent).toBeTruthy();
   });
 
   it("should have JSON form visible and JSON and JSON Schema not visible", () => {
-    let propertiesHeading = fixture.debugElement.nativeElement.querySelector(
+    let propertiesHeading = hostFixture.debugElement.nativeElement.querySelector(
       "#propertiesHeading"
     );
     expect(propertiesHeading).toBeTruthy();
     expect(propertiesHeading.innerText).toContain("Properties");
-    let propertiesIcon = fixture.debugElement.nativeElement.querySelector(
+
+    let propertiesIcon = hostFixture.debugElement.nativeElement.querySelector(
       "#propertiesIcon"
     );
     expect(propertiesIcon).toBeTruthy();
     expect(propertiesIcon.innerText).toEqual("expand_less");
-    let jsonForm = fixture.debugElement.nativeElement.querySelector(
+
+    let jsonForm = hostFixture.debugElement.nativeElement.querySelector(
       "json-schema-form"
     );
     expect(jsonForm).toBeTruthy();
 
-    let jsonHeading = fixture.debugElement.nativeElement.querySelector(
+    let jsonHeading = hostFixture.debugElement.nativeElement.querySelector(
       "#jsonHeading"
     );
     expect(jsonHeading).toBeTruthy();
     expect(jsonHeading.innerText).toContain("JSON");
-    let jsonIcon = fixture.debugElement.nativeElement.querySelector(
+
+    let jsonIcon = hostFixture.debugElement.nativeElement.querySelector(
       "#jsonIcon"
     );
     expect(jsonIcon).toBeTruthy();
     expect(jsonIcon.innerText).toEqual("expand_more");
-    let jsonDiv = fixture.debugElement.nativeElement.querySelector("#jsonDiv");
+
+    let jsonDiv = hostFixture.debugElement.nativeElement.querySelector(
+      "#jsonDiv"
+    );
     expect(jsonDiv).toBeFalsy();
 
-    let schemaHeading = fixture.debugElement.nativeElement.querySelector(
+    let schemaHeading = hostFixture.debugElement.nativeElement.querySelector(
       "#schemaHeading"
     );
     expect(schemaHeading).toBeTruthy();
     expect(schemaHeading.innerText).toContain("JSON Schema");
-    let schemaIcon = fixture.debugElement.nativeElement.querySelector(
+
+    let schemaIcon = hostFixture.debugElement.nativeElement.querySelector(
       "#schemaIcon"
     );
     expect(schemaIcon).toBeTruthy();
     expect(schemaIcon.innerText).toEqual("expand_more");
-    let schemaDiv = fixture.debugElement.nativeElement.querySelector(
+
+    let schemaDiv = hostFixture.debugElement.nativeElement.querySelector(
       "#schemaDiv"
     );
     expect(schemaDiv).toBeFalsy();
   });
 
   it("should hide JSON form", () => {
-    let propertiesHeading = fixture.debugElement.nativeElement.querySelector(
+    let propertiesHeading = hostFixture.debugElement.nativeElement.querySelector(
       "#propertiesHeading"
     );
     expect(propertiesHeading).toBeTruthy();
     propertiesHeading.click();
-    fixture.detectChanges();
+    hostFixture.detectChanges();
 
-    let propertiesIcon = fixture.debugElement.nativeElement.querySelector(
+    let propertiesIcon = hostFixture.debugElement.nativeElement.querySelector(
       "#propertiesIcon"
     );
     expect(propertiesIcon).toBeTruthy();
     expect(propertiesIcon.innerText).toEqual("expand_more");
-    let propertiesDiv = fixture.debugElement.nativeElement.querySelector(
+
+    let propertiesDiv = hostFixture.debugElement.nativeElement.querySelector(
       "propertiesDiv"
     );
     expect(propertiesDiv).toBeFalsy();
   });
 
-  it("should show JSON with text for dark mode", () => {
-    let jsonHeading = fixture.debugElement.nativeElement.querySelector(
+  it("should show JSON with text for dark mode and correct content", () => {
+    let jsonHeading = hostFixture.debugElement.nativeElement.querySelector(
       "#jsonHeading"
     );
     expect(jsonHeading).toBeTruthy();
     jsonHeading.click();
-    fixture.detectChanges();
+    hostFixture.detectChanges();
 
-    let jsonIcon = fixture.debugElement.nativeElement.querySelector(
+    let jsonIcon = hostFixture.debugElement.nativeElement.querySelector(
       "#jsonIcon"
     );
     expect(jsonIcon).toBeTruthy();
     expect(jsonIcon.innerText).toEqual("expand_less");
-    let jsonDiv = fixture.debugElement.nativeElement.querySelector("#jsonDiv");
+
+    componentUnderTest.onChanges('{ "qosObjectives": "test" }');
+    hostFixture.detectChanges();
+
+    let jsonDiv = hostFixture.debugElement.nativeElement.querySelector(
+      "#jsonDiv"
+    );
     expect(jsonDiv).toBeTruthy();
     let jsonText = jsonDiv.querySelector("pre");
     expect(jsonText.classList).toContain("text__dark");
+    expect(jsonText.innerText).toEqual('"{ \\"qosObjectives\\": \\"test\\" }"');
   });
 
-  it("should show JSON Schema with text for dark mode", () => {
-    let schemaHeading = fixture.debugElement.nativeElement.querySelector(
+  it("should present error info in JSON div", () => {
+    const errors = [
+      {
+        keyword: "required",
+        dataPath: "/scope/qosObjectives",
+        schemaPath: "#/properties/scope/qosObjectives/required",
+        params: { missingProperty: "priorityLevel" },
+        message: "should have required property 'priorityLevel'",
+      },
+    ];
+    componentUnderTest.validationErrors(errors);
+    hostFixture.detectChanges();
+    componentUnderTest.prettyValidationErrors;
+    hostFixture.detectChanges();
+
+    // Show the JSON
+    let jsonHeading = hostFixture.debugElement.nativeElement.querySelector(
+      "#jsonHeading"
+    );
+    expect(jsonHeading).toBeTruthy();
+    jsonHeading.click();
+    hostFixture.detectChanges();
+
+    let jsonDiv = hostFixture.debugElement.nativeElement.querySelector(
+      "#jsonDiv"
+    );
+    expect(jsonDiv.innerText).toContain("Not valid — errors:");
+    expect(jsonDiv.innerText).toContain(
+      "scope.qosObjectives: should have required property 'priorityLevel'"
+    );
+  });
+
+  it("should show JSON Schema with text for dark mode and correct content", () => {
+    let schemaHeading = hostFixture.debugElement.nativeElement.querySelector(
       "#schemaHeading"
     );
     expect(schemaHeading).toBeTruthy();
     schemaHeading.click();
-    fixture.detectChanges();
+    hostFixture.detectChanges();
 
-    let schemaIcon = fixture.debugElement.nativeElement.querySelector(
+    let schemaIcon = hostFixture.debugElement.nativeElement.querySelector(
       "#schemaIcon"
     );
     expect(schemaIcon).toBeTruthy();
     expect(schemaIcon.innerText).toEqual("expand_less");
-    let schemaDiv = fixture.debugElement.nativeElement.querySelector(
+
+    componentUnderTest.schemaAsString;
+    hostFixture.detectChanges();
+    let schemaDiv = hostFixture.debugElement.nativeElement.querySelector(
       "#schemaDiv"
     );
     expect(schemaDiv).toBeTruthy();
+
     let jsonSchemaText = schemaDiv.querySelector("pre");
     expect(jsonSchemaText.classList).toContain("text__dark");
+    expect(jsonSchemaText.innerText).toContain('qosObjectives: {');
+  });
+
+  it("should send a valid json", () => {
+    let emittedValidJson: string;
+    componentUnderTest.validJson.subscribe((json: string) => {
+      emittedValidJson = json;
+    });
+
+    componentUnderTest.onChanges('{ "qosObjectives": "test" }');
+    hostFixture.detectChanges();
+    componentUnderTest.isValid(true);
+
+    expect(emittedValidJson).toEqual('"{ \\"qosObjectives\\": \\"test\\" }"');
+  });
+
+  it("should send null when invalid json", () => {
+    let emittedValidJson: string;
+    componentUnderTest.validJson.subscribe((json: string) => {
+      emittedValidJson = json;
+    });
+
+    componentUnderTest.isValid(false);
+
+    expect(emittedValidJson).toBeFalsy();
   });
 
   @Component({
@@ -167,8 +248,8 @@ describe("TypedPolicyEditorComponent", () => {
     ></nrcp-typed-policy-editor>`,
   })
   class TestTypedPolicyEditorComponentHostComponent {
-    policyJson: string = '{"A":"A"}';
+    policyJson: string = "{ jsonSchemaObject: 'test' }";
     jsonSchemaObject: string =
-      'policy_schema": { "description": "Type 1 policy type", "title": "1", "type": "object", "properties": { "A": "string" }, "required": [ "A" ]}';
+      "{type: 'object',properties: {qosObjectives: {additionalProperties: false,type: 'object',properties: {priorityLevel: {type: 'number'}},required: ['priorityLevel']}},required: ['qosObjectives']}";
   }
 });
