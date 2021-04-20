@@ -17,78 +17,89 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { HarnessLoader } from '@angular/cdk/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatInputHarness } from '@angular/material/input/testing';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { MatSortHarness } from '@angular/material/sort/testing';
-import { MatPaginatorHarness } from '@angular/material/paginator/testing';
-import { MatTableModule } from '@angular/material/table';
-import { MatTableHarness } from '@angular/material/table/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { of } from 'rxjs/observable/of';
-import { EIJob } from '@interfaces/ei.types';
-import { EIService } from '@services/ei/ei.service';
-import { UiService } from '@services/ui/ui.service';
+import { HarnessLoader } from "@angular/cdk/testing";
+import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
+import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import {
+  async,
+  ComponentFixture,
+  discardPeriodicTasks,
+  fakeAsync,
+  TestBed,
+  tick,
+} from "@angular/core/testing";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatInputHarness } from "@angular/material/input/testing";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
+import { MatSortHarness } from "@angular/material/sort/testing";
+import { MatPaginatorHarness } from "@angular/material/paginator/testing";
+import { MatTableModule } from "@angular/material/table";
+import { MatTableHarness } from "@angular/material/table/testing";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { of } from "rxjs/observable/of";
+import { EIJob } from "@interfaces/ei.types";
+import { EIService } from "@services/ei/ei.service";
+import { UiService } from "@services/ui/ui.service";
 
-import { Job, JobsListComponent } from './jobs-list.component';
+import { Job, JobsListComponent } from "./jobs-list.component";
+import { Subscription } from "rxjs";
 
 let component: JobsListComponent;
 let fixture: ComponentFixture<JobsListComponent>;
 
 const eijob1 = {
-  ei_job_identity: 'job1',
-  ei_type_identity: 'type1',
-  owner: 'owner1',
-  target_uri: 'http://one'
+  ei_job_identity: "job1",
+  ei_type_identity: "type1",
+  owner: "owner1",
+  target_uri: "http://one",
 } as EIJob;
 const eijob2 = {
-  ei_job_identity: 'job2',
-  ei_type_identity: 'type2',
-  owner: 'owner2',
-  target_uri: 'http://two'
+  ei_job_identity: "job2",
+  ei_type_identity: "type2",
+  owner: "owner2",
+  target_uri: "http://two",
 } as EIJob;
 
 const job1 = {
-  jobId: 'job1',
-  typeId: 'type1',
-  owner: 'owner1',
-  targetUri: 'http://one',
-  prodId: 'producer1'
+  jobId: "job1",
+  typeId: "type1",
+  owner: "owner1",
+  targetUri: "http://one",
+  prodId: "producer1",
 } as Job;
 const job2 = {
-  jobId: 'job2',
-  typeId: 'type2',
-  owner: 'owner2',
-  targetUri: 'http://two',
-  prodId: 'producer1'
+  jobId: "job2",
+  typeId: "type2",
+  owner: "owner2",
+  targetUri: "http://two",
+  prodId: "producer1",
 } as Job;
 const job3 = {
-  jobId: 'job1',
-  typeId: 'type1',
-  owner: 'owner1',
-  targetUri: 'http://one',
-  prodId: 'producer2'
+  jobId: "job1",
+  typeId: "type1",
+  owner: "owner1",
+  targetUri: "http://one",
+  prodId: "producer2",
 } as Job;
 const job4 = {
-  jobId: 'job2',
-  typeId: 'type2',
-  owner: 'owner2',
-  targetUri: 'http://two',
-  prodId: 'producer2'
+  jobId: "job2",
+  typeId: "type2",
+  owner: "owner2",
+  targetUri: "http://two",
+  prodId: "producer2",
 } as Job;
 
-describe('JobsListComponent', () => {
+describe("JobsListComponent", () => {
   let loader: HarnessLoader;
 
   beforeEach(async(() => {
-    const spy = jasmine.createSpyObj('EIService', ['getProducerIds', 'getJobsForProducer']);
+    const spy = jasmine.createSpyObj("EIService", [
+      "getProducerIds",
+      "getJobsForProducer",
+    ]);
 
     TestBed.configureTestingModule({
       imports: [
@@ -99,14 +110,11 @@ describe('JobsListComponent', () => {
         ReactiveFormsModule,
         BrowserAnimationsModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [JobsListComponent],
-      providers: [
-        { provide: EIService, useValue: spy },
-        UiService
-      ]
+      providers: [{ provide: EIService, useValue: spy }, UiService],
     })
       .compileComponents()
       .then(() => {
@@ -116,181 +124,350 @@ describe('JobsListComponent', () => {
       });
   }));
 
-  const expectedJob1Row = { jobId: 'job1', prodId: 'producer1', typeId: 'type1', owner: 'owner1', targetUri: 'http://one' };
+  const expectedJob1Row = {
+    jobId: "job1",
+    prodId: "producer1",
+    typeId: "type1",
+    owner: "owner1",
+    targetUri: "http://one",
+  };
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 
-  describe('#content', () => {
-
-    it('should loadJobs', () => {
+  describe("#content", () => {
+    it("should loadJobs", fakeAsync(() => {
       setServiceSpy();
-      component.loadJobs();
+      const newSub: Subscription = component.dataSubscription();
+      tick(0);
+
       const actualJobs: Job[] = component.jobs();
       expect(actualJobs.length).toEqual(4);
       expect(actualJobs).toEqual([job1, job2, job3, job4]);
-    });
+      newSub.unsubscribe();
+    }));
 
-    it('should contain job table with correct columns', async () => {
-      setServiceSpy();
-      let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
-      let headerRow = (await jobsTable.getHeaderRows())[0];
-      let headers = await headerRow.getCellTextByColumnName();
-
-      expect(headers).toEqual({ jobId: 'Job ID', prodId: 'Producer ID', typeId: 'Type ID', owner: 'Owner', targetUri: 'Target URI' });
-    });
-
-    it('should set correct dark mode from UIService', () => {
+    it("should contain job table with correct columns", fakeAsync(() => {
       setServiceSpy();
       component.ngOnInit();
+      tick(0);
+
+      loader
+        .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
+        .then((loadTable) => {
+          loadTable.getHeaderRows().then((headerRow) => {
+            headerRow[0].getCellTextByColumnName().then((header) => {
+              expect(header).toEqual({
+                jobId: "Job ID",
+                prodId: "Producer ID",
+                typeId: "Type ID",
+                owner: "Owner",
+                targetUri: "Target URI",
+              });
+            });
+          });
+        });
+
+      discardPeriodicTasks();
+    }));
+
+    it("should set correct dark mode from UIService", fakeAsync(() => {
+      setServiceSpy();
+      component.ngOnInit();
+      tick(0);
+
       const uiService: UiService = TestBed.inject(UiService);
       expect(component.darkMode).toBeTruthy();
 
       uiService.darkModeState.next(false);
       fixture.detectChanges();
       expect(component.darkMode).toBeFalsy();
-    });
+      discardPeriodicTasks();
+    }));
   });
 
-  describe('#jobsTable', () => {
-
-    it('should contain data after initialization', async () => {
+  describe("#jobsTable", () => {
+    it("should contain data after initialization", fakeAsync(() => {
       setServiceSpy();
       component.ngOnInit();
+      tick(0);
+
       const expectedJobRows = [
         expectedJob1Row,
-        { jobId: 'job2', prodId: 'producer1', typeId: 'type2', owner: 'owner2', targetUri: 'http://two' },
-        { jobId: 'job1', prodId: 'producer2', typeId: 'type1', owner: 'owner1', targetUri: 'http://one' },
-        { jobId: 'job2', prodId: 'producer2', typeId: 'type2', owner: 'owner2', targetUri: 'http://two' }
-      ];
-      let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
-      let jobRows = await jobsTable.getRows();
-      expect(jobRows.length).toEqual(4);
-      jobRows.forEach(row => {
-        row.getCellTextByColumnName().then(values => {
-          expect(expectedJobRows).toContain(jasmine.objectContaining(values));
-        });
-      });
-    });
-
-    it('should display default values for non required properties ', async () => {
-
-      const jobMissingProperties = {
-        "ei_job_identity": "job1",
-        "ei_job_data": {
-          "jobparam2": "value2_job2",
-          "jobparam3": "value3_job2",
-          "jobparam1": "value1_job2"
+        {
+          jobId: "job2",
+          prodId: "producer1",
+          typeId: "type2",
+          owner: "owner2",
+          targetUri: "http://two",
         },
-        "target_uri": "http://one"
+        {
+          jobId: "job1",
+          prodId: "producer2",
+          typeId: "type1",
+          owner: "owner1",
+          targetUri: "http://one",
+        },
+        {
+          jobId: "job2",
+          prodId: "producer2",
+          typeId: "type2",
+          owner: "owner2",
+          targetUri: "http://two",
+        },
+      ];
+
+      loader
+        .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
+        .then((loadTable) => {
+          loadTable.getRows().then((jobRows) => {
+            expect(jobRows.length).toEqual(4);
+            jobRows.forEach((row) => {
+              row.getCellTextByColumnName().then((values) => {
+                expect(expectedJobRows).toContain(
+                  jasmine.objectContaining(values)
+                );
+              });
+            });
+          });
+        });
+      discardPeriodicTasks();
+    }));
+
+    it("should display default values for non required properties ", fakeAsync(() => {
+      const jobMissingProperties = {
+        ei_job_identity: "job1",
+        ei_job_data: {
+          jobparam2: "value2_job2",
+          jobparam3: "value3_job2",
+          jobparam1: "value1_job2",
+        },
+        target_uri: "http://one",
       } as EIJob;
 
       let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
-      eiServiceSpy.getProducerIds.and.returnValue(of(['producer1']));
-      eiServiceSpy.getJobsForProducer.and.returnValue(of([jobMissingProperties]));
+      eiServiceSpy.getProducerIds.and.returnValue(of(["producer1"]));
+      eiServiceSpy.getJobsForProducer.and.returnValue(
+        of([jobMissingProperties])
+      );
 
       component.ngOnInit();
-      const expectedJobRow = { jobId: 'job1', prodId: 'producer1', typeId: '< No type >', owner: '< No owner >', targetUri: 'http://one' };
-      let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
-      let jobRows = await jobsTable.getRows();
-      expect(await jobRows[0].getCellTextByColumnName()).toEqual(expectedJobRow);
-    });
+      tick(0);
+      const expectedJobRow = {
+        jobId: "job1",
+        prodId: "producer1",
+        typeId: "< No type >",
+        owner: "< No owner >",
+        targetUri: "http://one",
+      };
 
-    it('filtering', async () => {
+      loader
+        .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
+        .then((loadTable) => {
+          loadTable.getRows().then((jobRows) => {
+            jobRows[0].getCellTextByColumnName().then((value) => {
+              expect(expectedJobRow).toContain(jasmine.objectContaining(value));
+            });
+          });
+        });
+      discardPeriodicTasks();
+    }));
+
+    it("filtering", fakeAsync(() => {
       setServiceSpy();
       component.ngOnInit();
-      let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
+      tick(0);
 
-      let idFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#jobIdFilter' }));
-      await idFilterInput.setValue("1");
-      let jobRows = await jobsTable.getRows();
-      expect(jobRows.length).toEqual(2);
-      expect(await jobRows[0].getCellTextByColumnName()).toEqual(expectedJob1Row);
+      loader
+        .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
+        .then((loadTable) => {
+          loader
+            .getHarness(MatInputHarness.with({ selector: "#jobIdFilter" }))
+            .then((idFilter) => {
+              idFilter.setValue("1");
+              loadTable.getRows().then((jobRows) => {
+                expect(jobRows.length).toEqual(2);
+                jobRows[0].getCellTextByColumnName().then((value) => {
+                  expect(expectedJob1Row).toContain(
+                    jasmine.objectContaining(value)
+                  );
+                });
+              });
+              idFilter.setValue("");
+            });
+          loader
+            .getHarness(MatInputHarness.with({ selector: "#jobTypeIdFilter" }))
+            .then((typeIdFilter) => {
+              typeIdFilter.setValue("1");
+              loadTable.getRows().then((jobRows) => {
+                expect(jobRows.length).toEqual(2);
+                jobRows[0].getCellTextByColumnName().then((value) => {
+                  expect(expectedJob1Row).toContain(
+                    jasmine.objectContaining(value)
+                  );
+                });
+              });
+              typeIdFilter.setValue("");
+            });
+          loader
+            .getHarness(MatInputHarness.with({ selector: "#jobOwnerFilter" }))
+            .then((ownerFilter) => {
+              ownerFilter.setValue("1");
+              loadTable.getRows().then((jobRows) => {
+                expect(jobRows.length).toEqual(2);
+                jobRows[0].getCellTextByColumnName().then((value) => {
+                  expect(expectedJob1Row).toContain(
+                    jasmine.objectContaining(value)
+                  );
+                });
+              });
+              ownerFilter.setValue("");
+            });
+          loader
+            .getHarness(
+              MatInputHarness.with({ selector: "#jobTargetUriFilter" })
+            )
+            .then((targetUriFilter) => {
+              targetUriFilter.setValue("1");
+              loadTable.getRows().then((jobRows) => {
+                expect(jobRows.length).toEqual(2);
+                jobRows[0].getCellTextByColumnName().then((value) => {
+                  expect(expectedJob1Row).toContain(
+                    jasmine.objectContaining(value)
+                  );
+                });
+              });
+              targetUriFilter.setValue("");
+            });
+        });
 
-      idFilterInput.setValue('');
-      let typeIdFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#jobTypeIdFilter' }));
-      await typeIdFilterInput.setValue("1");
-      jobRows = await jobsTable.getRows();
-      expect(jobRows.length).toEqual(2);
+      discardPeriodicTasks();
+    }));
 
-      typeIdFilterInput.setValue('');
-      let ownerFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#jobOwnerFilter' }));
-      await ownerFilterInput.setValue("1");
-      jobRows = await jobsTable.getRows();
-      expect(jobRows.length).toEqual(2);
-      expect(await jobRows[0].getCellTextByColumnName()).toEqual(expectedJob1Row);
+    describe("#sorting", () => {
+      it("should verify sort functionality on the table", fakeAsync(() => {
+        setServiceSpy();
+        tick(0);
 
-      ownerFilterInput.setValue('');
-      let targetUriFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#jobTargetUriFilter' }));
-      await targetUriFilterInput.setValue("one");
-      jobRows = await jobsTable.getRows();
-      expect(jobRows.length).toEqual(2);
-      expect(await jobRows[0].getCellTextByColumnName()).toEqual(expectedJob1Row);
+        loader.getHarness(MatSortHarness).then((sort) => {
+          sort.getSortHeaders({ sortDirection: "" }).then((headers) => {
+            expect(headers.length).toBe(5);
+
+            headers[0].click().then((_) => {
+              headers[0].isActive().then((active) => {
+                expect(active).toBe(true);
+              });
+              headers[0].getSortDirection().then((direction) => {
+                expect(direction).toBe("asc");
+              });
+            });
+            headers[0].click().then((_) => {
+              headers[0].getSortDirection().then((direction) => {
+                expect(direction).toBe("desc");
+              });
+            });
+          });
+        });
+        discardPeriodicTasks();
+      }));
+
+      it("should sort table asc and desc by first header", fakeAsync(() => {
+        setServiceSpy();
+        tick(0);
+
+        loader.getHarness(MatSortHarness).then((sort) => {
+          loader
+            .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
+            .then((loadTable) => {
+              sort.getSortHeaders().then((headers) => {
+                headers[0].click().then((_) => {
+                  headers[0].getSortDirection().then((direction) => {
+                    expect(direction).toBe("");
+                  });
+                });
+                headers[0].click().then((_) => {
+                  headers[0].getSortDirection().then((direction) => {
+                    expect(direction).toBe("asc");
+                  });
+                });
+                loadTable.getRows().then((jobRows) => {
+                  jobRows[0].getCellTextByColumnName().then((value) => {
+                    expect(expectedJob1Row).toContain(
+                      jasmine.objectContaining(value)
+                    );
+                  });
+                });
+                headers[0].click().then((_) => {
+                  headers[0].getSortDirection().then((direction) => {
+                    expect(direction).toBe("desc");
+                  });
+                });
+                loadTable.getRows().then((jobRows) => {
+                  jobRows[jobRows.length - 1]
+                    .getCellTextByColumnName()
+                    .then((value) => {
+                      expect(expectedJob1Row).toContain(
+                        jasmine.objectContaining(value)
+                      );
+                    });
+                });
+              });
+            });
+        });
+        discardPeriodicTasks();
+      }));
     });
 
-    describe('#sorting', () => {
+    describe("#paging", () => {
+      it("should work properly on the table", fakeAsync(() => {
+        let eiServiceSpy = TestBed.inject(
+          EIService
+        ) as jasmine.SpyObj<EIService>;
+        eiServiceSpy.getProducerIds.and.returnValue(
+          of(["producer1", "producer2"])
+        );
+        eiServiceSpy.getJobsForProducer.and.returnValue(
+          of([eijob1, eijob2, eijob1])
+        );
+        tick(0);
 
-      it('should verify sort functionality on the table', async () => {
-        setServiceSpy();
-        const sort = await loader.getHarness(MatSortHarness);
-        let headers = await sort.getSortHeaders({ sortDirection: '' });
-        expect(headers.length).toBe(5);
+        loader.getHarness(MatPaginatorHarness).then((paging) => {
+          paging.setPageSize(5);
 
-        await headers[0].click();
-        expect(await headers[0].isActive()).toBe(true);
-        expect(await headers[0].getSortDirection()).toBe('asc');
+          loader
+            .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
+            .then((loadTable) => {
+              loadTable.getRows().then((jobRows) => {
+                expect(jobRows.length).toEqual(5);
+              });
+              paging.goToNextPage();
+              loadTable.getRows().then((jobRows) => {
+                expect(jobRows.length).toEqual(1);
+                jobRows[0].getCellTextByColumnName().then((value) => {
+                  const expectedRow = {
+                    jobId: "job1",
+                    prodId: "producer2",
+                    typeId: "type1",
+                    owner: "owner1",
+                    targetUri: "http://one",
+                  };
+                  expect(expectedRow).toContain(
+                    jasmine.objectContaining(value)
+                  );
+                });
+              });
+            });
+        });
 
-        await headers[0].click();
-        expect(await headers[0].getSortDirection()).toBe('desc');
-
-      });
-
-      it('should sort table asc and desc by first header', async () => {
-        setServiceSpy();
-        const sort = await loader.getHarness(MatSortHarness);
-        let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
-        const firstHeader = (await sort.getSortHeaders())[0];
-        expect(await firstHeader.getSortDirection()).toBe('');
-
-        await firstHeader.click();
-        expect(await firstHeader.getSortDirection()).toBe('asc');
-        let jobRows = await jobsTable.getRows();
-        jobRows = await jobsTable.getRows();
-        expect(await jobRows[0].getCellTextByColumnName()).toEqual(expectedJob1Row);
-
-        await firstHeader.click();
-        expect(await firstHeader.getSortDirection()).toBe('desc');
-        jobRows = await jobsTable.getRows();
-        expect(await jobRows[jobRows.length - 1].getCellTextByColumnName()).toEqual(expectedJob1Row);
-      });
-    });
-
-    describe('#paging', () => {
-      it('should work properly on the table', async () => {
-        let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
-        eiServiceSpy.getProducerIds.and.returnValue(of(['producer1', 'producer2']));
-        eiServiceSpy.getJobsForProducer.and.returnValue(of([eijob1, eijob2, eijob1]));
-
-        const paging = await loader.getHarness(MatPaginatorHarness);
-        await paging.setPageSize(5);
-
-        let jobsTable = await loader.getHarness(MatTableHarness.with({ selector: '#jobsTable' }));
-        let jobRows = await jobsTable.getRows();
-        expect(jobRows.length).toEqual(5);
-
-        await paging.goToNextPage();
-        jobRows = await jobsTable.getRows();
-        expect(jobRows.length).toEqual(1);
-        const expectedRow = { jobId: 'job1', prodId: 'producer2', typeId: 'type1', owner: 'owner1', targetUri: 'http://one' };
-        expect(await jobRows[jobRows.length - 1].getCellTextByColumnName()).toEqual(expectedRow);
-      });
+        discardPeriodicTasks();
+      }));
     });
   });
 });
 
 function setServiceSpy() {
   let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
-  eiServiceSpy.getProducerIds.and.returnValue(of(['producer1', 'producer2']));
+  eiServiceSpy.getProducerIds.and.returnValue(of(["producer1", "producer2"]));
   eiServiceSpy.getJobsForProducer.and.returnValue(of([eijob1, eijob2]));
 }
