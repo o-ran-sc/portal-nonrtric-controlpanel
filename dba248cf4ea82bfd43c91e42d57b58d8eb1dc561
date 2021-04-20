@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c269e521_5fc07a6f",
+        "filename": "webapp-frontend/src/app/interceptor.mock.ts",
+        "patchSetId": 3
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-04-20T06:01:08Z",
+      "side": 1,
+      "message": "If this code block is removed, the merge conflict will be solved. This functionality is now included in the conflicting commit.",
+      "revId": "dba248cf4ea82bfd43c91e42d57b58d8eb1dc561",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44a66ef0_9900ad46",
+        "filename": "webapp-frontend/src/app/policy/policy-type/policy-type.component.ts",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-04-20T06:01:08Z",
+      "side": 1,
+      "message": "Please use the alias, @policy/policy-control.component",
+      "range": {
+        "startLine": 25,
+        "startChar": 8,
+        "endLine": 25,
+        "endChar": 35
+      },
+      "revId": "dba248cf4ea82bfd43c91e42d57b58d8eb1dc561",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
