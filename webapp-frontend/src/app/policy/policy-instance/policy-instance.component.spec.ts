@@ -116,17 +116,6 @@ describe("PolicyInstanceComponent", () => {
       "getPolicyStatus",
       "deletePolicy",
     ]);
-    policyServiceSpy.getPolicyInstancesByType.and.returnValue(
-      of(policyInstances)
-    );
-    policyServiceSpy.getPolicyInstance.and.callFake(function (
-      policyId: string
-    ) {
-      return of(policyIdToInstanceMap[policyId]);
-    });
-    policyServiceSpy.getPolicyStatus.and.callFake(function (policyId: string) {
-      return of(policyIdToStatusMap[policyId]);
-    });
 
     dialogSpy = jasmine.createSpyObj("MatDialog", ["open"]);
     notificationServiceSpy = jasmine.createSpyObj("NotificationService", [
@@ -137,7 +126,7 @@ describe("PolicyInstanceComponent", () => {
       "openConfirmDialog",
     ]);
 
-    await TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: [
         BrowserAnimationsModule,
         FormsModule,
@@ -159,200 +148,243 @@ describe("PolicyInstanceComponent", () => {
         { provide: ConfirmDialogService, useValue: confirmServiceSpy },
         UiService,
       ],
-    }).compileComponents();
-
-    hostFixture = TestBed.createComponent(PolicyInstanceComponentHostComponent);
-    hostComponent = hostFixture.componentInstance;
-    componentUnderTest = hostFixture.debugElement.query(
-      By.directive(PolicyInstanceComponent)
-    ).componentInstance;
-    hostFixture.detectChanges();
-    loader = TestbedHarnessEnvironment.loader(hostFixture);
-  });
-
-  it("should create", () => {
-    expect(hostComponent).toBeTruthy();
-
-    expect(componentUnderTest).toBeTruthy();
-  });
-
-  it("should set correct dark mode from UIService", () => {
-    const uiService: UiService = TestBed.inject(UiService);
-    expect(componentUnderTest.darkMode).toBeTruthy();
-
-    uiService.darkModeState.next(false);
-    hostFixture.detectChanges();
-    expect(componentUnderTest.darkMode).toBeFalsy();
-  });
-
-  it("should contain number of instances heading and value, create and refresh buttons, and policies table", async () => {
-    const instancesHeading = hostFixture.debugElement.nativeElement.querySelector(
-      "div"
-    );
-    expect(instancesHeading.innerText).toContain("Number of instances: 2");
-
-    const createButton: MatButtonHarness = await loader.getHarness(
-      MatButtonHarness.with({ selector: "#createButton" })
-    );
-    expect(createButton).toBeTruthy();
-    const createIcon = hostFixture.debugElement.nativeElement.querySelector(
-      "#createIcon"
-    );
-    expect(createIcon.innerText).toContain("add_box");
-
-    const refreshButton: MatButtonHarness = await loader.getHarness(
-      MatButtonHarness.with({ selector: "#refreshButton" })
-    );
-    expect(refreshButton).toBeTruthy();
-    const refreshIcon = hostFixture.debugElement.nativeElement.querySelector(
-      "#refreshIcon"
-    );
-    expect(refreshIcon.innerText).toContain("refresh");
-
-    const policiesTable = await loader.getHarness(
-      MatTableHarness.with({ selector: "#policiesTable" })
-    );
-    expect(policiesTable).toBeTruthy();
-  });
-
-  it("should open dialog to create policy and refresh policies after successful creation", async () => {
-    const dialogRefSpy = setupDialogRefSpy();
-    dialogSpy.open.and.returnValue(dialogRefSpy);
-
-    spyOn(componentUnderTest, "getPolicyInstances");
-
-    const createButton: MatButtonHarness = await loader.getHarness(
-      MatButtonHarness.with({ selector: "#createButton" })
-    );
-    await createButton.click();
-
-    expect(dialogSpy.open).toHaveBeenCalledWith(PolicyInstanceDialogComponent, {
-      maxWidth: "1200px",
-      maxHeight: "900px",
-      width: "900px",
-      role: "dialog",
-      disableClose: false,
-      panelClass: "dark-theme",
-      data: {
-        createSchema: policyTypeSchema,
-        instanceId: null,
-        instanceJson: null,
-        name: "1",
-        ric: null,
-      },
     });
-    expect(componentUnderTest.getPolicyInstances).toHaveBeenCalled();
   });
 
-  it("should open dialog to edit policy and refresh policies after successful update", async () => {
-    const dialogRefSpy = setupDialogRefSpy();
-    dialogSpy.open.and.returnValue(dialogRefSpy);
+  describe("content and dialogs", () => {
+    beforeEach(() => {
+      policyServiceSpy.getPolicyInstancesByType.and.returnValue(
+        of(policyInstances)
+      );
+      policyServiceSpy.getPolicyInstance.and.callFake(function (
+        policyId: string
+      ) {
+        return of(policyIdToInstanceMap[policyId]);
+      });
+      policyServiceSpy.getPolicyStatus.and.callFake(function (
+        policyId: string
+      ) {
+        return of(policyIdToStatusMap[policyId]);
+      });
 
-    spyOn(componentUnderTest, "getPolicyInstances");
-
-    const editButton: MatButtonHarness = await loader.getHarness(
-      MatButtonHarness.with({ selector: "#policy1EditButton" })
-    );
-    await editButton.click();
-
-    expect(dialogSpy.open).toHaveBeenCalledWith(PolicyInstanceDialogComponent, {
-      maxWidth: "1200px",
-      maxHeight: "900px",
-      width: "900px",
-      role: "dialog",
-      disableClose: false,
-      panelClass: "dark-theme",
-      data: {
-        createSchema: policyTypeSchema,
-        instanceId: "policy1",
-        instanceJson: "{}",
-        name: "1",
-        ric: "1",
-      },
+      compileAndGetComponents();
     });
-    expect(componentUnderTest.getPolicyInstances).toHaveBeenCalled();
+
+    it("should create", () => {
+      expect(hostComponent).toBeTruthy();
+
+      expect(componentUnderTest).toBeTruthy();
+    });
+
+    it("should set correct dark mode from UIService", () => {
+      const uiService: UiService = TestBed.inject(UiService);
+      expect(componentUnderTest.darkMode).toBeTruthy();
+
+      uiService.darkModeState.next(false);
+      hostFixture.detectChanges();
+      expect(componentUnderTest.darkMode).toBeFalsy();
+    });
+
+    it("should contain number of instances heading and value, create and refresh buttons, and policies table", async () => {
+      const instancesHeading = hostFixture.debugElement.nativeElement.querySelector(
+        "div"
+      );
+      expect(instancesHeading.innerText).toContain("Number of instances: 2");
+
+      const createButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#createButton" })
+      );
+      expect(createButton).toBeTruthy();
+      const createIcon = hostFixture.debugElement.nativeElement.querySelector(
+        "#createIcon"
+      );
+      expect(createIcon.innerText).toContain("add_box");
+
+      const refreshButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#refreshButton" })
+      );
+      expect(refreshButton).toBeTruthy();
+      const refreshIcon = hostFixture.debugElement.nativeElement.querySelector(
+        "#refreshIcon"
+      );
+      expect(refreshIcon.innerText).toContain("refresh");
+
+      const policiesTable = await loader.getHarness(
+        MatTableHarness.with({ selector: "#policiesTable" })
+      );
+      expect(policiesTable).toBeTruthy();
+    });
+
+    it("should open dialog to create policy and refresh policies after successful creation", async () => {
+      const dialogRefSpy = setupDialogRefSpy();
+      dialogSpy.open.and.returnValue(dialogRefSpy);
+
+      spyOn(componentUnderTest, "getPolicyInstances");
+
+      const createButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#createButton" })
+      );
+      await createButton.click();
+
+      expect(dialogSpy.open).toHaveBeenCalledWith(
+        PolicyInstanceDialogComponent,
+        {
+          maxWidth: "1200px",
+          maxHeight: "900px",
+          width: "900px",
+          role: "dialog",
+          disableClose: false,
+          panelClass: "dark-theme",
+          data: {
+            createSchema: policyTypeSchema,
+            instanceId: null,
+            instanceJson: null,
+            name: "1",
+            ric: null,
+          },
+        }
+      );
+      expect(componentUnderTest.getPolicyInstances).toHaveBeenCalled();
+    });
+
+    it("should open dialog to edit policy and refresh policies after successful update", async () => {
+      const dialogRefSpy = setupDialogRefSpy();
+      dialogSpy.open.and.returnValue(dialogRefSpy);
+
+      spyOn(componentUnderTest, "getPolicyInstances");
+
+      const editButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#policy1EditButton" })
+      );
+      await editButton.click();
+
+      expect(dialogSpy.open).toHaveBeenCalledWith(
+        PolicyInstanceDialogComponent,
+        {
+          maxWidth: "1200px",
+          maxHeight: "900px",
+          width: "900px",
+          role: "dialog",
+          disableClose: false,
+          panelClass: "dark-theme",
+          data: {
+            createSchema: policyTypeSchema,
+            instanceId: "policy1",
+            instanceJson: "{}",
+            name: "1",
+            ric: "1",
+          },
+        }
+      );
+      expect(componentUnderTest.getPolicyInstances).toHaveBeenCalled();
+    });
+
+    it("should open dialog to edit policy and not refresh policies when dialog closed wihtout submit", async () => {
+      const dialogRefSpy = setupDialogRefSpy(false);
+      dialogSpy.open.and.returnValue(dialogRefSpy);
+
+      spyOn(componentUnderTest, "getPolicyInstances");
+
+      const editButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#policy1EditButton" })
+      );
+      await editButton.click();
+
+      expect(componentUnderTest.getPolicyInstances).not.toHaveBeenCalled();
+    });
+
+    it("should open instance dialog when clicking in any policy cell in table", async () => {
+      spyOn(componentUnderTest, "modifyInstance");
+
+      const policiesTable = await loader.getHarness(
+        MatTableHarness.with({ selector: "#policiesTable" })
+      );
+      const firstRow = (await policiesTable.getRows())[0];
+      const idCell = (await firstRow.getCells())[0];
+      (await idCell.host()).click();
+      const ownerCell = (await firstRow.getCells())[1];
+      (await ownerCell.host()).click();
+      const serviceCell = (await firstRow.getCells())[2];
+      (await serviceCell.host()).click();
+      const lastModifiedCell = (await firstRow.getCells())[3];
+      (await lastModifiedCell.host()).click();
+
+      // Totally unnecessary call just to make the bloody framework count the number of calls to the spy correctly!
+      await policiesTable.getRows();
+
+      expect(componentUnderTest.modifyInstance).toHaveBeenCalledTimes(4);
+    });
+
+    it("should open dialog asking for delete and delete when ok response and refresh table afterwards", async () => {
+      const dialogRefSpy = setupDialogRefSpy();
+      confirmServiceSpy.openConfirmDialog.and.returnValue(dialogRefSpy);
+      const createResponse = { status: 204 } as HttpResponse<Object>;
+      policyServiceSpy.deletePolicy.and.returnValue(of(createResponse));
+
+      spyOn(componentUnderTest, "getPolicyInstances");
+      const deleteButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#policy1DeleteButton" })
+      );
+      await deleteButton.click();
+
+      expect(confirmServiceSpy.openConfirmDialog).toHaveBeenCalledWith(
+        "Delete Policy",
+        "Are you sure you want to delete this policy instance?"
+      );
+      expect(policyServiceSpy.deletePolicy).toHaveBeenCalledWith("policy1");
+      expect(notificationServiceSpy.success).toHaveBeenCalledWith(
+        "Delete succeeded!"
+      );
+      expect(componentUnderTest.getPolicyInstances).toHaveBeenCalled();
+    });
+
+    it("should open dialog asking for delete and not delete whith Cancel as response", async () => {
+      const dialogRefSpy = setupDialogRefSpy(false);
+      confirmServiceSpy.openConfirmDialog.and.returnValue(dialogRefSpy);
+
+      const deleteButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#policy1DeleteButton" })
+      );
+      await deleteButton.click();
+
+      expect(policyServiceSpy.deletePolicy).not.toHaveBeenCalled();
+    });
+
+    it("should refresh table", async () => {
+      spyOn(componentUnderTest, "getPolicyInstances");
+
+      const refreshButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#refreshButton" })
+      );
+      await refreshButton.click();
+
+      expect(componentUnderTest.getPolicyInstances).toHaveBeenCalled();
+    });
   });
 
-  it("should open dialog to edit policy and not refresh policies when dialog closed wihtout submit", async () => {
-    const dialogRefSpy = setupDialogRefSpy(false);
-    dialogSpy.open.and.returnValue(dialogRefSpy);
+  describe("no instances", () => {
+    beforeEach(() => {
+      policyServiceSpy.getPolicyInstancesByType.and.returnValue(
+        of({
+          policy_ids: [],
+        } as PolicyInstances)
+      );
 
-    spyOn(componentUnderTest, "getPolicyInstances");
+      compileAndGetComponents();
+    });
 
-    const editButton: MatButtonHarness = await loader.getHarness(
-      MatButtonHarness.with({ selector: "#policy1EditButton" })
-    );
-    await editButton.click();
+    it("should display message of no instances", async () => {
+      const policiesTable = await loader.getHarness(
+        MatTableHarness.with({ selector: "#policiesTable" })
+      );
+      const footerRows = await policiesTable.getFooterRows();
+      const footerRow = footerRows[0];
+      const footerRowHost = await footerRow.host();
 
-    expect(componentUnderTest.getPolicyInstances).not.toHaveBeenCalled();
-  });
-
-  it("should open instance dialog when clicking in any policy cell in table", async () => {
-    spyOn(componentUnderTest, "modifyInstance");
-
-    const policiesTable = await loader.getHarness(
-      MatTableHarness.with({ selector: "#policiesTable" })
-    );
-    const firstRow = (await policiesTable.getRows())[0];
-    const idCell = (await firstRow.getCells())[0];
-    (await idCell.host()).click();
-    const ownerCell = (await firstRow.getCells())[1];
-    (await ownerCell.host()).click();
-    const serviceCell = (await firstRow.getCells())[2];
-    (await serviceCell.host()).click();
-    const lastModifiedCell = (await firstRow.getCells())[3];
-    (await lastModifiedCell.host()).click();
-
-    // Totally unnecessary call just to make the bloody framework count the number of calls to the spy correctly!
-    await policiesTable.getRows();
-
-    expect(componentUnderTest.modifyInstance).toHaveBeenCalledTimes(4);
-  });
-
-  it("should open dialog asking for delete and delete when ok response and refresh table afterwards", async () => {
-    const dialogRefSpy = setupDialogRefSpy();
-    confirmServiceSpy.openConfirmDialog.and.returnValue(dialogRefSpy);
-    const createResponse = { status: 204 } as HttpResponse<Object>;
-    policyServiceSpy.deletePolicy.and.returnValue(of(createResponse));
-
-    spyOn(componentUnderTest, "getPolicyInstances");
-    const deleteButton: MatButtonHarness = await loader.getHarness(
-      MatButtonHarness.with({ selector: "#policy1DeleteButton" })
-    );
-    await deleteButton.click();
-
-    expect(confirmServiceSpy.openConfirmDialog).toHaveBeenCalledWith(
-      "Delete Policy",
-      "Are you sure you want to delete this policy instance?"
-    );
-    expect(policyServiceSpy.deletePolicy).toHaveBeenCalledWith("policy1");
-    expect(notificationServiceSpy.success).toHaveBeenCalledWith(
-      "Delete succeeded!"
-    );
-    expect(componentUnderTest.getPolicyInstances).toHaveBeenCalled();
-  });
-
-  it("should open dialog asking for delete and not delete whith Cancel as response", async () => {
-    const dialogRefSpy = setupDialogRefSpy(false);
-    confirmServiceSpy.openConfirmDialog.and.returnValue(dialogRefSpy);
-
-    const deleteButton: MatButtonHarness = await loader.getHarness(
-      MatButtonHarness.with({ selector: "#policy1DeleteButton" })
-    );
-    await deleteButton.click();
-
-    expect(policyServiceSpy.deletePolicy).not.toHaveBeenCalled();
-  });
-
-  it("should refresh table", async () => {
-    spyOn(componentUnderTest, "getPolicyInstances");
-
-    const refreshButton: MatButtonHarness = await loader.getHarness(
-      MatButtonHarness.with({ selector: "#refreshButton" })
-    );
-    await refreshButton.click();
-
-    expect(componentUnderTest.getPolicyInstances).toHaveBeenCalled();
+      expect(await footerRowHost.hasClass("display-none")).toBeFalsy();
+      const footerTexts = await footerRow.getCellTextByColumnName();
+      expect(footerTexts["noRecordsFound"]).toEqual("No records found.");
+    });
   });
 
   describe("#policiesTable", () => {
@@ -363,6 +395,24 @@ describe("PolicyInstanceComponent", () => {
       lastModified: toLocalTime(lastModifiedTime),
       action: "editdelete",
     };
+
+    beforeEach(() => {
+      policyServiceSpy.getPolicyInstancesByType.and.returnValue(
+        of(policyInstances)
+      );
+      policyServiceSpy.getPolicyInstance.and.callFake(function (
+        policyId: string
+      ) {
+        return of(policyIdToInstanceMap[policyId]);
+      });
+      policyServiceSpy.getPolicyStatus.and.callFake(function (
+        policyId: string
+      ) {
+        return of(policyIdToStatusMap[policyId]);
+      });
+
+      compileAndGetComponents();
+    });
 
     it("should contain correct headings", async () => {
       const policiesTable = await loader.getHarness(
@@ -401,6 +451,13 @@ describe("PolicyInstanceComponent", () => {
           expect(expectedJobRows).toContain(jasmine.objectContaining(values));
         });
       });
+
+      // No message about no entries
+      const footerRows = await policiesTable.getFooterRows();
+      const footerRow = await footerRows[0];
+      const footerRowHost = await footerRow.host();
+
+      expect(await footerRowHost.hasClass("display-none")).toBeTruthy();
     });
 
     it("should have filtering for all four policy data headings", async () => {
@@ -574,6 +631,19 @@ describe("PolicyInstanceComponent", () => {
       });
     });
   });
+
+  function compileAndGetComponents() {
+    TestBed.compileComponents();
+
+    hostFixture = TestBed.createComponent(PolicyInstanceComponentHostComponent);
+    hostComponent = hostFixture.componentInstance;
+    componentUnderTest = hostFixture.debugElement.query(
+      By.directive(PolicyInstanceComponent)
+    ).componentInstance;
+    hostFixture.detectChanges();
+    loader = TestbedHarnessEnvironment.loader(hostFixture);
+    return { hostFixture, hostComponent, componentUnderTest, loader };
+  }
 });
 
 function setupDialogRefSpy(returnValue: boolean = true) {
