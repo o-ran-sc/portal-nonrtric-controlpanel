@@ -17,26 +17,25 @@
  * limitations under the License.
  * ========================LICENSE_END===================================
  */
-import { AppPage } from './app.po';
-import { browser, logging } from 'protractor';
+import { browser, by, element, logging } from "protractor";
 
-describe('workspace-project App', () => {
-  let page: AppPage;
+describe("workspace-project App", () => {
 
   beforeEach(() => {
-    page = new AppPage();
   });
 
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getTitleText()).toEqual('Welcome to controlpanelApp!');
+  it("should display title", () => {
+    browser.get("http://localhost:4200/");
+    expect(browser.getTitle()).toEqual("Non-RT RIC Control Panel");
   });
 
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);
-    expect(logs).not.toContain(jasmine.objectContaining({
-      level: logging.Level.SEVERE,
-    }));
+    expect(logs).not.toContain(
+      jasmine.objectContaining({
+        level: logging.Level.SEVERE,
+      })
+    );
   });
 });
