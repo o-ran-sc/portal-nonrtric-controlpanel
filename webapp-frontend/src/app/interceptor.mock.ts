@@ -47,6 +47,7 @@ import * as policytypes0 from "./mock/policy-type0.json";
 import * as policyinstanceedit from "./mock/policy-instance-edit.json";
 import * as ric1 from "./mock/ric1.json";
 import * as ric2 from "./mock/ric2.json";
+import * as ricconfig from "./mock/ric-configuration.json";
 import { delay } from "rxjs/operators";
 
 const urls = [
@@ -154,6 +155,10 @@ const urls = [
     url: "/ei-producer/v1/eiproducers/producer2/eijobs",
     json: eijobsProd2,
   },
+    {
+        url: '/a1-policy/v2/configuration',
+        json: ricconfig
+    }
 ];
 
 @Injectable()

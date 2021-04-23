@@ -28,6 +28,7 @@ import { UiService } from '@services/ui/ui.service';
 export class SidenavListComponent implements OnInit {
   darkMode: boolean;
   @Output() sidenavClose = new EventEmitter();
+  showSubMenu = false;
 
   constructor(private ui: UiService) { }
 
@@ -39,6 +40,11 @@ export class SidenavListComponent implements OnInit {
 
   public onSidenavClose = () => {
     this.sidenavClose.emit();
+    this.showSubMenu = !this.showSubMenu;
+  }
+
+  public toggle(){
+    this.showSubMenu = !this.showSubMenu;
   }
 
 }

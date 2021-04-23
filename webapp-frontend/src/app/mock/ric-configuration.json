@@ -1,0 +1,15 @@
+{
+  "config": {
+    "//description": "Application configuration",
+    "ric": [
+      {
+        "name": "ric1",
+        "baseUrl": "http://localhost:30001/",
+        "managedElementIds": [
+          "kista_1",
+          "kista_2"
+        ]
+      }
+    ]
+  }
+}
