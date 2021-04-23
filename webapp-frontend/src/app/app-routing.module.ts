@@ -24,11 +24,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './main/main.component';
 import { PolicyControlComponent } from '@policy/policy-control.component';
 import { EICoordinatorComponent } from '@ei-coordinator/ei-coordinator.component';
+import { RicConfigComponent } from './ric-config/ric-config.component';
 
 
 const routes: Routes = [
     { path: '', component: MainComponent },
     { path: 'policy', component: PolicyControlComponent },
+    { path: 'ric-config', component: RicConfigComponent},
     { path: 'ei-coordinator', component: EICoordinatorComponent }
 ];
 

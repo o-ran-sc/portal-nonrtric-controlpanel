@@ -45,6 +45,7 @@ import { HttpMockRequestInterceptor } from './interceptor.mock';
 import { environment } from 'environments/environment';
 import { HttpRequestInterceptor } from './interceptor';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { RicConfigModule } from './ric-config/ricconfig.module';
 
 export const isMock = environment.mock;
 
@@ -71,6 +72,7 @@ export const isMock = environment.mock;
     MDBBootstrapModule.forRoot(),
     PolicyModule,
     EiCoordinatorModule,
+    RicConfigModule,
     ToastrModule.forRoot(),
   ],
   entryComponents: [

@@ -31,6 +31,8 @@ import {
   PolicyTypes,
 } from "@interfaces/policy.types";
 import { Rics } from "@interfaces/ric";
+import { RicConfig } from "@app/interfaces/ric.config";
+import { HttpHeaders } from "@angular/common/http";
 
 /**
  * Services for calling the policy endpoints.
@@ -111,5 +113,19 @@ export class PolicyService {
   getRics(policyTypeId: string): Observable<Rics> {
     const url = this.buildPath("rics") + "?policytype_id=" + policyTypeId;
     return this.httpClient.get<any>(url);
+  }
+
+  getConfiguration(): Observable<RicConfig> {
+    const url = this.buildPath("configuration");
+    return this.httpClient.get<RicConfig>(url);
+  }
+
+  updateConfiguration(ricConfig: RicConfig): Observable<RicConfig> {
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      observe: 'response' as 'body'
+    }
+    const url = this.buildPath("configuration");
+    return this.httpClient.put<RicConfig>(url, ricConfig, httpOptions);
   }
 }
