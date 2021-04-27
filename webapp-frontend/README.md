@@ -3,7 +3,8 @@
 ## Development server
 
 Run `./ng serve --proxy-config proxy.conf.json` or `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-You may also need to Start the Control Panel Gateway,Policy Management Service & EI Coordinator if you want to view the data in UI.
+
+You may also need to Start the Control Panel Gateway, Policy Management Service & EI Coordinator if you want to view the data in UI.
 
 ## Development server with Mock Data
 Run `npm run start:mock` for a dev server with mock data. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files. This enables the developer to test the UI without the need of backend.
