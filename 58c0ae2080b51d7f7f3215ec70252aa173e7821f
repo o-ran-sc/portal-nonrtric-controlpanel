@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0313dfb6_44c94c89",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-04-28T08:00:23Z",
+      "side": 1,
+      "message": "viewed",
+      "range": {
+        "startLine": 13,
+        "startChar": 78,
+        "endLine": 13,
+        "endChar": 83
+      },
+      "revId": "58c0ae2080b51d7f7f3215ec70252aa173e7821f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "707b5347_056b8b31",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-04-28T08:00:23Z",
+      "side": 1,
+      "message": "Please remove trailing whitespaces",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 4
+      },
+      "revId": "58c0ae2080b51d7f7f3215ec70252aa173e7821f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39c711b5_c2ec9095",
+        "filename": "docs/installation-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-04-28T08:00:23Z",
+      "side": 1,
+      "message": "Please remove trailing whitespaces",
+      "range": {
+        "startLine": 52,
+        "startChar": 94,
+        "endLine": 52,
+        "endChar": 95
+      },
+      "revId": "58c0ae2080b51d7f7f3215ec70252aa173e7821f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
