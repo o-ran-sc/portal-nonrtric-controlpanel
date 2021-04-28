@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6915ff42_eead0d7b",
+        "filename": "webapp-frontend/src/app/app.module.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-04-28T12:30:33Z",
+      "side": 1,
+      "message": "Since the Ric configuration is, kind of, part of the policy handling, I wonder if it might not fit in the PolicyModule?",
+      "range": {
+        "startLine": 48,
+        "startChar": 9,
+        "endLine": 48,
+        "endChar": 25
+      },
+      "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19878fee_15be8039",
+        "filename": "webapp-frontend/src/app/ric-config/ric-config.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-04-28T12:30:33Z",
+      "side": 1,
+      "message": "With a little bit of name refactoring of the no-type-policy-editor, to json-editor maybe, I believe it can be reused here to edit the configuration json.",
+      "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41cfabfe_36142cee",
+        "filename": "webapp-frontend/src/app/ric-config/ric-config.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-04-28T12:30:33Z",
+      "side": 1,
+      "message": "Would it be possible to disable this button when the configuration is invalid?",
+      "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf0e9d80_062b39ee",
+        "filename": "webapp-frontend/src/app/ric-config/ric-config.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-04-28T12:30:33Z",
+      "side": 1,
+      "message": "Maybe add a Close button to get the same experience as in the other dialogs?",
+      "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0616e317_9b9d395a",
+        "filename": "webapp-frontend/src/app/ric-config/ric-config.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-04-28T12:30:33Z",
+      "side": 1,
+      "message": "Please remove trailing whitespaces",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 2
+      },
+      "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
