@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61f2cbb3_49671c24",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-29T13:35:38Z",
+      "side": 1,
+      "message": "Additionally",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 11
+      },
+      "revId": "377e340415bd451ee563b0c81ad776b555dded2a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddadd186_dc10b0f2",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-29T13:35:38Z",
+      "side": 1,
+      "message": "managed",
+      "range": {
+        "startLine": 13,
+        "startChar": 89,
+        "endLine": 13,
+        "endChar": 95
+      },
+      "revId": "377e340415bd451ee563b0c81ad776b555dded2a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccd9ec21_531e03c5",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-29T13:35:38Z",
+      "side": 1,
+      "message": "Information",
+      "range": {
+        "startLine": 13,
+        "startChar": 50,
+        "endLine": 13,
+        "endChar": 51
+      },
+      "revId": "377e340415bd451ee563b0c81ad776b555dded2a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "893e1e28_7d9db1d6",
+        "filename": "docs/index.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-29T13:35:38Z",
+      "side": 1,
+      "message": "Is it the formatting the sent it up? It\u0027s not in alphabetical order anymore.",
+      "range": {
+        "startLine": 12,
+        "startChar": 3,
+        "endLine": 12,
+        "endChar": 17
+      },
+      "revId": "377e340415bd451ee563b0c81ad776b555dded2a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c6d057f_8ccf908b",
+        "filename": "docs/installation-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-29T13:35:38Z",
+      "side": 1,
+      "message": "Information",
+      "range": {
+        "startLine": 35,
+        "startChar": 179,
+        "endLine": 35,
+        "endChar": 180
+      },
+      "revId": "377e340415bd451ee563b0c81ad776b555dded2a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67a4f90f_1e75e978",
+        "filename": "docs/installation-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-29T13:35:38Z",
+      "side": 1,
+      "message": "Information",
+      "range": {
+        "startLine": 53,
+        "startChar": 77,
+        "endLine": 53,
+        "endChar": 79
+      },
+      "revId": "377e340415bd451ee563b0c81ad776b555dded2a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef537df6_717a6e30",
+        "filename": "docs/installation-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-29T13:35:38Z",
+      "side": 1,
+      "message": "ones",
+      "range": {
+        "startLine": 54,
+        "startChar": 23,
+        "endLine": 54,
+        "endChar": 26
+      },
+      "revId": "377e340415bd451ee563b0c81ad776b555dded2a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b444e38_a543521f",
+        "filename": "docs/installation-guide.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-29T13:35:38Z",
+      "side": 1,
+      "message": "Information",
+      "range": {
+        "startLine": 56,
+        "startChar": 50,
+        "endLine": 56,
+        "endChar": 51
+      },
+      "revId": "377e340415bd451ee563b0c81ad776b555dded2a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8662a14_a7bc7462",
+        "filename": "docs/overview.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-04-29T13:35:38Z",
+      "side": 1,
+      "message": "Information",
+      "range": {
+        "startLine": 9,
+        "startChar": 60,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "377e340415bd451ee563b0c81ad776b555dded2a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
