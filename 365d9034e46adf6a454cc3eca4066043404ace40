@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "6915ff42_eead0d7b",
         "filename": "webapp-frontend/src/app/app.module.ts",
@@ -20,10 +21,34 @@
         "endChar": 25
       },
       "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
-      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
-      "unresolved": true
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0582c3e8_d3e618a2",
+        "filename": "webapp-frontend/src/app/app.module.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-04-29T15:12:43Z",
+      "side": 1,
+      "message": "Yes. Its kind of policy module. But RIC config has its own path. not sure how to redirect that if its inside policy component. I can move the entire ric-config directory under policy if that\u0027s what you mean.",
+      "parentUuid": "6915ff42_eead0d7b",
+      "range": {
+        "startLine": 48,
+        "startChar": 9,
+        "endLine": 48,
+        "endChar": 25
+      },
+      "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "19878fee_15be8039",
         "filename": "webapp-frontend/src/app/ric-config/ric-config.component.html",
@@ -37,10 +62,28 @@
       "side": 1,
       "message": "With a little bit of name refactoring of the no-type-policy-editor, to json-editor maybe, I believe it can be reused here to edit the configuration json.",
       "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
-      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
-      "unresolved": true
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae888055_3f7d20d6",
+        "filename": "webapp-frontend/src/app/ric-config/ric-config.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-04-29T15:12:43Z",
+      "side": 1,
+      "message": "It\u0027s a very good suggestion \u0026 I had that in my mind while developing this but I think we can improvise it in future commits.",
+      "parentUuid": "19878fee_15be8039",
+      "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "41cfabfe_36142cee",
         "filename": "webapp-frontend/src/app/ric-config/ric-config.component.html",
@@ -54,10 +97,28 @@
       "side": 1,
       "message": "Would it be possible to disable this button when the configuration is invalid?",
       "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
-      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
-      "unresolved": true
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "de748f2a_0c3533d3",
+        "filename": "webapp-frontend/src/app/ric-config/ric-config.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-04-29T15:12:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41cfabfe_36142cee",
+      "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "cf0e9d80_062b39ee",
         "filename": "webapp-frontend/src/app/ric-config/ric-config.component.html",
@@ -71,10 +132,28 @@
       "side": 1,
       "message": "Maybe add a Close button to get the same experience as in the other dialogs?",
       "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
-      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
-      "unresolved": true
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c6074b6_e6d81b6e",
+        "filename": "webapp-frontend/src/app/ric-config/ric-config.component.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-04-29T15:12:43Z",
+      "side": 1,
+      "message": "This is not a popup screen so you can not close it but you may add close or back button that would redirect to home page. is that what you mean?",
+      "parentUuid": "cf0e9d80_062b39ee",
+      "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "0616e317_9b9d395a",
         "filename": "webapp-frontend/src/app/ric-config/ric-config.component.ts",
@@ -94,8 +173,31 @@
         "endChar": 2
       },
       "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
-      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
-      "unresolved": true
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea5e66f4_d23cd1fd",
+        "filename": "webapp-frontend/src/app/ric-config/ric-config.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-04-29T15:12:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0616e317_9b9d395a",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 2
+      },
+      "revId": "365d9034e46adf6a454cc3eca4066043404ace40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
