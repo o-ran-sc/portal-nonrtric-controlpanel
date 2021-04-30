@@ -22,7 +22,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { By } from "@angular/platform-browser";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
-import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from "@angular/core";
 import { of } from "rxjs";
 
 import { PolicyControlComponent } from "./policy-control.component";
@@ -31,57 +31,121 @@ import { PolicyService } from "@services/policy/policy.service";
 import { MockComponent } from "ng-mocks";
 import { PolicyTypeComponent } from "./policy-type/policy-type.component";
 import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatButtonModule } from '@angular/material/button';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
 describe("PolicyControlComponent", () => {
-  let component: PolicyControlComponent;
-  let fixture: ComponentFixture<PolicyControlComponent>;
+  let hostComponent: PolicyControlComponent;
+  let hostFixture: ComponentFixture<PolicyControlComponent>;
   let loader: HarnessLoader;
+  let policyServiceSpy: jasmine.SpyObj<PolicyService>;
+  let el: DebugElement;
 
   beforeEach(async(() => {
-    const policyServiceSpy = jasmine.createSpyObj("PolicyService", [
+    policyServiceSpy = jasmine.createSpyObj("PolicyService", [
       "getPolicyTypes",
     ]);
-    const policyTypes = { policytype_ids: ["type1", "type2"] } as PolicyTypes;
-    policyServiceSpy.getPolicyTypes.and.returnValue(of(policyTypes));
 
     TestBed.configureTestingModule({
-      imports: [MatIconModule, MatTableModule, BrowserAnimationsModule],
+      imports: [
+        MatIconModule,
+        MatTableModule,
+        BrowserAnimationsModule,
+        MatButtonModule,
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [
         PolicyControlComponent,
         MockComponent(PolicyTypeComponent),
       ],
-      providers: [{ provide: PolicyService, useValue: policyServiceSpy }],
-    }).compileComponents();
+      providers: [
+        { provide: PolicyService, useValue: policyServiceSpy }
+      ],
+    });
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PolicyControlComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    loader = TestbedHarnessEnvironment.loader(fixture);
+  describe("normally functioning", () => {
+    beforeEach(() => {
+      const policyTypes = { policytype_ids: ["type1", "type2"] } as PolicyTypes;
+      policyServiceSpy.getPolicyTypes.and.returnValue(of(policyTypes));
+
+      compileAndGetComponents();
+    });
+
+    it("should create", () => {
+      expect(hostComponent).toBeTruthy();
+    });
+
+    it("should contain two PolicyType components instantiated with the correct type", () => {
+      const typeComponents: PolicyTypeComponent[] = hostFixture.debugElement
+        .queryAll(By.directive(PolicyTypeComponent))
+        .map((component) => component.componentInstance);
+
+      expect(typeComponents.length).toEqual(2);
+      expect(typeComponents[0].policyTypeId).toEqual("type1");
+      expect(typeComponents[1].policyTypeId).toEqual("type2");
+    });
+
+    it("should call the refresh button when clicking on it", async () => {
+      let refreshButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#refreshButton" })
+      );
+      spyOn(hostComponent, "refreshTables");
+      await refreshButton.click();
+      expect(hostComponent.refreshTables).toHaveBeenCalled();
+    })
+
+    it("should close instance tables when clicking on refresh button", async () => {
+      let refreshButton: MatButtonHarness = await loader.getHarness(
+        MatButtonHarness.with({ selector: "#refreshButton" })
+      );
+      const policyTypeComponent: PolicyTypeComponent = hostFixture.debugElement.query(
+        By.directive(PolicyTypeComponent)
+      ).componentInstance;
+      let booleanTrigger = policyTypeComponent.minimiseTrigger
+      await refreshButton.click();
+      expect(policyTypeComponent.minimiseTrigger).not.toEqual(booleanTrigger);
+    })
+
+    it("should render the types sorted when clicking on refresh button", async () => {
+      const typeComponents: PolicyTypeComponent[] = hostFixture.debugElement
+        .queryAll(By.directive(PolicyTypeComponent))
+        .map((component) => component.componentInstance);
+
+      for(var i= 0; i < typeComponents.length-1; i++){
+        expect(typeComponents[i].policyTypeId<typeComponents[i+1].policyTypeId).toBeTruthy();
+      }
+    })
+  })
+
+  describe("no types", () => {
+    beforeEach(() => {
+      policyServiceSpy.getPolicyTypes.and.returnValue(
+        of({
+          policytype_ids: [],
+        } as PolicyTypes)
+      );
+
+      compileAndGetComponents();
+    });
+
+    it("should display message of no types", async () => {
+      expect(policyServiceSpy.getPolicyTypes.length).toEqual(0);
+      const content = el.query(By.css('#noInstance')).nativeElement;
+      expect(content.innerText).toBe("There are no policy types to display.");
+    });
   });
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
+  function compileAndGetComponents() {
+    TestBed.compileComponents();
+    console.log(TestBed);
 
-  it("should contain two PolicyType components instantiated with the correct type", () => {
-    const typeComponents: PolicyTypeComponent[] = fixture.debugElement
-      .queryAll(By.directive(PolicyTypeComponent))
-      .map((component) => component.componentInstance);
-
-    expect(typeComponents.length).toEqual(2);
-    expect(typeComponents[0].policyTypeId).toEqual("type1");
-    expect(typeComponents[1].policyTypeId).toEqual("type2");
-  });
-
-  /*it("should reload when clicking on refresh button", async () => {
-    let refreshButton: MatButtonHarness = await loader.getHarness(
-      MatButtonHarness.with({ selector: "#refreshButton" })
-    );
-
-  })*/
+    hostFixture = TestBed.createComponent(PolicyControlComponent);
+    hostComponent = hostFixture.componentInstance;
+    el = hostFixture.debugElement;
+    hostFixture.detectChanges();
+    loader = TestbedHarnessEnvironment.loader(hostFixture);
+    return { hostFixture, hostComponent, loader };
+  }
 });
