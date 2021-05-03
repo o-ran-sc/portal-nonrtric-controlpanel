@@ -22,20 +22,9 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import {
-  EMPTY,
-  forkJoin,
-  Subscription,
-  timer,
-} from "rxjs";
+import { EMPTY, forkJoin, Subscription, timer } from "rxjs";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import {
-  mergeMap,
-  finalize,
-  map,
-  tap,
-  switchMap
-} from "rxjs/operators";
+import { mergeMap, finalize, map, tap, switchMap } from "rxjs/operators";
 import { EIJob } from "@interfaces/ei.types";
 import { EIService } from "@services/ei/ei.service";
 import { UiService } from "@services/ui/ui.service";
@@ -63,10 +52,11 @@ export class JobsListComponent implements OnInit {
   private jobsSubject$ = new BehaviorSubject<Job[]>([]);
   private refresh$ = new BehaviorSubject("");
   private loadingSubject$ = new BehaviorSubject<boolean>(false);
-  private polling$ = new BehaviorSubject<boolean>(true);
+  private polling$ = new BehaviorSubject(0);
   public loading$ = this.loadingSubject$.asObservable();
   subscription: Subscription;
   checked: boolean = false;
+  firstTime: boolean = true;
 
   constructor(private eiSvc: EIService, private ui: UiService) {
     this.jobForm = new FormGroup({
@@ -116,23 +106,26 @@ export class JobsListComponent implements OnInit {
       finalize(() => this.loadingSubject$.next(false))
     );
 
-    const refreshedJobs$ = this.refresh$
-      .pipe(
-        switchMap((_) => timer(0, 10000).pipe(
+    const refreshedJobs$ = this.refresh$.pipe(
+      switchMap((_) =>
+        timer(0, 10000).pipe(
           tap((_) => {
             this.loadingSubject$.next(true);
           }),
           switchMap((_) => jobs$),
           map((response) => this.extractJobs(prodId, response))
         )
-        )
-      );
-    
-    return this.polling$.pipe(
-      switchMap(p => {
-        return p ? refreshedJobs$ : EMPTY;
-      })
-    ).subscribe();
+      )
+    );
+
+    return this.polling$
+      .pipe(
+        switchMap((value) => {
+          let pollCondition = value == 0 || this.checked;
+          return pollCondition ? refreshedJobs$ : EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
@@ -169,8 +162,9 @@ export class JobsListComponent implements OnInit {
     this.jobsDataSource.data = data;
   }
 
-  stopPolling(checked){
-    this.polling$.next(checked);
+  stopPolling(checked) {
+    this.checked = checked;
+    this.polling$.next(this.jobs().length);
   }
 
   compare(a: any, b: any, isAsc: boolean) {
@@ -212,6 +206,10 @@ export class JobsListComponent implements OnInit {
       jobList = jobList.concat(jobs.map((job) => this.createJob(element, job)));
     });
     this.jobsSubject$.next(jobList);
+    if (this.firstTime && jobList.length > 0) {
+      this.polling$.next(jobList.length);
+      this.firstTime = false;
+    }
     return jobList;
   }
 

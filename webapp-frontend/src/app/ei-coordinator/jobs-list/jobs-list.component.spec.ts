@@ -27,6 +27,7 @@ import {
   fakeAsync,
   TestBed,
   tick,
+  flushMicrotasks,
 } from "@angular/core/testing";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -267,7 +268,7 @@ describe("JobsListComponent", () => {
         .then((loadTable) => {
           loadTable.getRows().then((jobRows) => {
             jobRows[0].getCellTextByColumnName().then((value) => {
-              expect(expectedJobRow).toContain(jasmine.objectContaining(value));
+              expect(expectedJobRow).toEqual(jasmine.objectContaining(value));
             });
           });
         });
@@ -285,63 +286,78 @@ describe("JobsListComponent", () => {
           loader
             .getHarness(MatInputHarness.with({ selector: "#jobIdFilter" }))
             .then((idFilter) => {
-              idFilter.setValue("1");
-              loadTable.getRows().then((jobRows) => {
-                expect(jobRows.length).toEqual(2);
-                jobRows[0].getCellTextByColumnName().then((value) => {
-                  expect(expectedJob1Row).toContain(
-                    jasmine.objectContaining(value)
-                  );
+              tick(10);
+              idFilter.setValue("1").then((_) => {
+                tick(10);
+                loadTable.getRows().then((jobRows) => {
+                  expect(jobRows.length).toEqual(2);
+                  jobRows[0].getCellTextByColumnName().then((value) => {
+                    expect(expectedJob1Row).toEqual(
+                      jasmine.objectContaining(value)
+                    );
+                    idFilter.setValue("");
+                    flushMicrotasks();
+                  });
                 });
               });
-              idFilter.setValue("");
             });
+
           loader
             .getHarness(MatInputHarness.with({ selector: "#jobTypeIdFilter" }))
             .then((typeIdFilter) => {
-              typeIdFilter.setValue("1");
-              loadTable.getRows().then((jobRows) => {
-                expect(jobRows.length).toEqual(2);
-                jobRows[0].getCellTextByColumnName().then((value) => {
-                  expect(expectedJob1Row).toContain(
-                    jasmine.objectContaining(value)
-                  );
+              tick(10);
+              typeIdFilter.setValue("1").then((_) => {
+                loadTable.getRows().then((jobRows) => {
+                  expect(jobRows.length).toEqual(2);
+                  jobRows[0].getCellTextByColumnName().then((value) => {
+                    expect(expectedJob1Row).toEqual(
+                      jasmine.objectContaining(value)
+                    );
+                    typeIdFilter.setValue("");
+                    flushMicrotasks();
+                  });
                 });
               });
-              typeIdFilter.setValue("");
             });
+
           loader
             .getHarness(MatInputHarness.with({ selector: "#jobOwnerFilter" }))
             .then((ownerFilter) => {
-              ownerFilter.setValue("1");
-              loadTable.getRows().then((jobRows) => {
-                expect(jobRows.length).toEqual(2);
-                jobRows[0].getCellTextByColumnName().then((value) => {
-                  expect(expectedJob1Row).toContain(
-                    jasmine.objectContaining(value)
-                  );
+              tick(10);
+              ownerFilter.setValue("1").then((_) => {
+                loadTable.getRows().then((jobRows) => {
+                  expect(jobRows.length).toEqual(2);
+                  jobRows[0].getCellTextByColumnName().then((value) => {
+                    expect(expectedJob1Row).toEqual(
+                      jasmine.objectContaining(value)
+                    );
+                    ownerFilter.setValue("");
+                    flushMicrotasks();
+                  });
                 });
               });
-              ownerFilter.setValue("");
             });
+
           loader
             .getHarness(
               MatInputHarness.with({ selector: "#jobTargetUriFilter" })
             )
             .then((targetUriFilter) => {
-              targetUriFilter.setValue("1");
-              loadTable.getRows().then((jobRows) => {
-                expect(jobRows.length).toEqual(2);
-                jobRows[0].getCellTextByColumnName().then((value) => {
-                  expect(expectedJob1Row).toContain(
-                    jasmine.objectContaining(value)
-                  );
+              tick(10);
+              targetUriFilter.setValue("one").then((_) => {
+                loadTable.getRows().then((jobRows) => {
+                  expect(jobRows.length).toEqual(2);
+                  jobRows[0].getCellTextByColumnName().then((value) => {
+                    expect(expectedJob1Row).toEqual(
+                      jasmine.objectContaining(value)
+                    );
+                    targetUriFilter.setValue("");
+                    flushMicrotasks();
+                  });
                 });
               });
-              targetUriFilter.setValue("");
             });
         });
-
       discardPeriodicTasks();
     }));
 
@@ -418,7 +434,15 @@ describe("JobsListComponent", () => {
         discardPeriodicTasks();
       }));
 
-      it("should not sort when clicking on filtering box", fakeAsync(() => {
+      fit("should not sort when clicking on filtering box", fakeAsync(() => {
+        const expectedJobRow = {
+          jobId: "job1",
+          prodId: "producer2",
+          typeId: "type1",
+          owner: "owner1",
+          targetUri: "http://one",
+        };
+
         setServiceSpy();
         component.ngOnInit();
         tick(0);
@@ -426,67 +450,72 @@ describe("JobsListComponent", () => {
         loader
           .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
           .then((loadTable) => {
-            loadTable.getRows().then((jobRows) => {
-              let jobIds, jobTypeIds, jobOwner, jobTargetUri: String[];
-              for (let i = 0; i < jobRows.length; i++) {
-                jobRows[i].getCellTextByColumnName().then((value) => {
-                  jobIds.push(value[0]);
-                  jobTypeIds.push(value[2]);
-                  jobOwner.push(value[3]);
-                  jobTargetUri.push(value[4]);
-                });
-              };
-              loader
-                .getHarness(MatInputHarness.with({ selector: "#jobIdFilter"}))
-                .then((idFilter) => {
-                  let unfilteredJobIds: String[];
-                  idFilter.setValue("");
-                  for (let i = 0; i < jobRows.length; i++) {
-                    jobRows[i].getCellTextByColumnName().then((value) => {
-                      unfilteredJobIds.push(value[0]);
+            loader
+              .getHarness(MatInputHarness.with({ selector: "#jobIdFilter" }))
+              .then((idFilter) => {
+                tick(10);
+                idFilter.setValue("").then((_) => {
+                  loadTable.getRows().then((jobRows) => {
+                    expect(jobRows.length).toEqual(4);
+                    jobRows[2].getCellTextByColumnName().then((value) => {
+                      expect(expectedJobRow).toEqual(
+                        jasmine.objectContaining(value)
+                      );
                     });
-                  };
-                  expect(unfilteredJobIds).toBe(jobIds);
+                  });
                 });
-              loader
-                .getHarness(MatInputHarness.with({ selector: "#jobTypeIdFilter"}))
-                .then((idFilter) => {
-                  let unfilteredJobTypeIds: String[];
-                  idFilter.setValue("");
-                  for (let i = 0; i < jobRows.length; i++) {
-                    jobRows[i].getCellTextByColumnName().then((value) => {
-                      unfilteredJobTypeIds.push(value[2]);
+              });
+            loader
+              .getHarness(
+                MatInputHarness.with({ selector: "#jobTypeIdFilter" })
+              )
+              .then((typeIdFilter) => {
+                tick(10);
+                typeIdFilter.setValue("").then((_) => {
+                  loadTable.getRows().then((jobRows) => {
+                    expect(jobRows.length).toEqual(4);
+                    jobRows[2].getCellTextByColumnName().then((value) => {
+                      expect(expectedJobRow).toEqual(
+                        jasmine.objectContaining(value)
+                      );
                     });
-                  };
-                  expect(unfilteredJobTypeIds).toBe(jobTypeIds);
+                  });
                 });
-              loader
-                .getHarness(MatInputHarness.with({ selector: "#jobOwnerFilter"}))
-                .then((idFilter) => {
-                  let unfilteredJobOwner: String[];
-                  idFilter.setValue("");
-                  for (let i = 0; i < jobRows.length; i++) {
-                    jobRows[i].getCellTextByColumnName().then((value) => {
-                      unfilteredJobOwner.push(value[3]);
+              });
+            loader
+              .getHarness(MatInputHarness.with({ selector: "#jobOwnerFilter" }))
+              .then((ownerFilter) => {
+                tick(10);
+                ownerFilter.setValue("").then((_) => {
+                  loadTable.getRows().then((jobRows) => {
+                    expect(jobRows.length).toEqual(4);
+                    jobRows[2].getCellTextByColumnName().then((value) => {
+                      expect(expectedJobRow).toEqual(
+                        jasmine.objectContaining(value)
+                      );
                     });
-                  };
-                  expect(unfilteredJobOwner).toBe(jobOwner);
+                  });
                 });
-              loader
-                .getHarness(MatInputHarness.with({ selector: "#jobTargetUriFilter"}))
-                .then((idFilter) => {
-                  let unfilteredJobTargetUri: String[];
-                  idFilter.setValue("");
-                  for (let i = 0; i < jobRows.length; i++) {
-                    jobRows[i].getCellTextByColumnName().then((value) => {
-                      unfilteredJobTargetUri.push(value[4]);
+              });
+            loader
+              .getHarness(
+                MatInputHarness.with({ selector: "#jobTargetUriFilter" })
+              )
+              .then((targetUriFilter) => {
+                tick(10);
+                targetUriFilter.setValue("").then((_) => {
+                  loadTable.getRows().then((jobRows) => {
+                    expect(jobRows.length).toEqual(4);
+                    jobRows[2].getCellTextByColumnName().then((value) => {
+                      expect(expectedJobRow).toEqual(
+                        jasmine.objectContaining(value)
+                      );
                     });
-                  };
-                  expect(unfilteredJobTargetUri).toBe(jobTargetUri);
+                  });
                 });
-            });
+              });
           });
-          discardPeriodicTasks();
+        discardPeriodicTasks();
       }));
     });
 
