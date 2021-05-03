@@ -63,10 +63,11 @@ export class JobsListComponent implements OnInit {
   private jobsSubject$ = new BehaviorSubject<Job[]>([]);
   private refresh$ = new BehaviorSubject("");
   private loadingSubject$ = new BehaviorSubject<boolean>(false);
-  private polling$ = new BehaviorSubject<boolean>(true);
+  private polling$ = new BehaviorSubject(0);
   public loading$ = this.loadingSubject$.asObservable();
   subscription: Subscription;
   checked: boolean = false;
+  firstTime: boolean = true;
 
   constructor(private eiSvc: EIService, private ui: UiService) {
     this.jobForm = new FormGroup({
@@ -104,6 +105,7 @@ export class JobsListComponent implements OnInit {
     this.ui.darkModeState.subscribe((isDark) => {
       this.darkMode = isDark;
     });
+    
   }
 
   dataSubscription(): Subscription {
@@ -123,14 +125,15 @@ export class JobsListComponent implements OnInit {
             this.loadingSubject$.next(true);
           }),
           switchMap((_) => jobs$),
-          map((response) => this.extractJobs(prodId, response))
+          map((response) => this.extractJobs(prodId, response)),
         )
         )
       );
     
     return this.polling$.pipe(
-      switchMap(p => {
-        return p ? refreshedJobs$ : EMPTY;
+      switchMap(value => {
+        let pollCondition = (value == 0) || this.checked;
+        return pollCondition ? refreshedJobs$ : EMPTY;
       })
     ).subscribe();
   }
@@ -170,7 +173,8 @@ export class JobsListComponent implements OnInit {
   }
 
   stopPolling(checked){
-    this.polling$.next(checked);
+    this.checked = checked;
+    this.polling$.next(this.jobs().length);
   }
 
   compare(a: any, b: any, isAsc: boolean) {
@@ -212,6 +216,10 @@ export class JobsListComponent implements OnInit {
       jobList = jobList.concat(jobs.map((job) => this.createJob(element, job)));
     });
     this.jobsSubject$.next(jobList);
+    if(this.firstTime && jobList.length > 0){
+      this.polling$.next(jobList.length);
+      this.firstTime = false;
+    }
     return jobList;
   }
 

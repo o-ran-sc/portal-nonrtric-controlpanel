@@ -27,6 +27,7 @@ import {
   fakeAsync,
   TestBed,
   tick,
+  flushMicrotasks
 } from "@angular/core/testing";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -267,7 +268,7 @@ describe("JobsListComponent", () => {
         .then((loadTable) => {
           loadTable.getRows().then((jobRows) => {
             jobRows[0].getCellTextByColumnName().then((value) => {
-              expect(expectedJobRow).toContain(jasmine.objectContaining(value));
+              expect(expectedJobRow).toEqual(jasmine.objectContaining(value));
             });
           });
         });
@@ -279,69 +280,64 @@ describe("JobsListComponent", () => {
       component.ngOnInit();
       tick(0);
 
-      loader
-        .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
-        .then((loadTable) => {
-          loader
-            .getHarness(MatInputHarness.with({ selector: "#jobIdFilter" }))
-            .then((idFilter) => {
-              idFilter.setValue("1");
-              loadTable.getRows().then((jobRows) => {
-                expect(jobRows.length).toEqual(2);
-                jobRows[0].getCellTextByColumnName().then((value) => {
-                  expect(expectedJob1Row).toContain(
-                    jasmine.objectContaining(value)
-                  );
-                });
+      loader.getHarness(MatTableHarness.with({ selector: "#jobsTable" })).then((loadTable) => {
+        loader.getHarness(MatInputHarness.with({ selector: "#jobIdFilter" })).then((idFilter) => {
+          tick(10);
+          idFilter.setValue("1").then((_) => {
+            tick(10);
+            loadTable.getRows().then((jobRows) => {
+              expect(jobRows.length).toEqual(2);
+              jobRows[0].getCellTextByColumnName().then((value) => {
+                expect(expectedJob1Row).toEqual(jasmine.objectContaining(value));
+                idFilter.setValue("");
+                flushMicrotasks();
               });
-              idFilter.setValue("");
             });
-          loader
-            .getHarness(MatInputHarness.with({ selector: "#jobTypeIdFilter" }))
-            .then((typeIdFilter) => {
-              typeIdFilter.setValue("1");
-              loadTable.getRows().then((jobRows) => {
-                expect(jobRows.length).toEqual(2);
-                jobRows[0].getCellTextByColumnName().then((value) => {
-                  expect(expectedJob1Row).toContain(
-                    jasmine.objectContaining(value)
-                  );
-                });
-              });
-              typeIdFilter.setValue("");
-            });
-          loader
-            .getHarness(MatInputHarness.with({ selector: "#jobOwnerFilter" }))
-            .then((ownerFilter) => {
-              ownerFilter.setValue("1");
-              loadTable.getRows().then((jobRows) => {
-                expect(jobRows.length).toEqual(2);
-                jobRows[0].getCellTextByColumnName().then((value) => {
-                  expect(expectedJob1Row).toContain(
-                    jasmine.objectContaining(value)
-                  );
-                });
-              });
-              ownerFilter.setValue("");
-            });
-          loader
-            .getHarness(
-              MatInputHarness.with({ selector: "#jobTargetUriFilter" })
-            )
-            .then((targetUriFilter) => {
-              targetUriFilter.setValue("1");
-              loadTable.getRows().then((jobRows) => {
-                expect(jobRows.length).toEqual(2);
-                jobRows[0].getCellTextByColumnName().then((value) => {
-                  expect(expectedJob1Row).toContain(
-                    jasmine.objectContaining(value)
-                  );
-                });
-              });
-              targetUriFilter.setValue("");
-            });
+          });
         });
 
+        loader.getHarness(MatInputHarness.with({ selector: "#jobTypeIdFilter" })).then((typeIdFilter) => {
+          tick(10);
+          typeIdFilter.setValue("1").then((_) => {
+            loadTable.getRows().then((jobRows) => {
+              expect(jobRows.length).toEqual(2);
+              jobRows[0].getCellTextByColumnName().then((value) => {
+                expect(expectedJob1Row).toEqual(jasmine.objectContaining(value));
+                typeIdFilter.setValue("");
+                flushMicrotasks();
+              });
+            });
+          });
+        });
+
+        loader.getHarness(MatInputHarness.with({ selector: "#jobOwnerFilter" })).then((ownerFilter) => {
+          tick(10);
+          ownerFilter.setValue("1").then((_) => {
+            loadTable.getRows().then((jobRows) => {
+              expect(jobRows.length).toEqual(2);
+              jobRows[0].getCellTextByColumnName().then((value) => {
+                expect(expectedJob1Row).toEqual(jasmine.objectContaining(value));
+                ownerFilter.setValue("");
+                flushMicrotasks();
+              });
+            });
+          });
+        });
+
+        loader.getHarness(MatInputHarness.with({ selector: "#jobTargetUriFilter" })).then((targetUriFilter) => {
+          tick(10);
+          targetUriFilter.setValue("one").then((_) => {
+            loadTable.getRows().then((jobRows) => {
+              expect(jobRows.length).toEqual(2);
+              jobRows[0].getCellTextByColumnName().then((value) => {
+                expect(expectedJob1Row).toEqual(jasmine.objectContaining(value));
+                targetUriFilter.setValue("");
+                flushMicrotasks();
+              });
+            });
+          });
+        });
+      });
       discardPeriodicTasks();
     }));
 
