@@ -9,9 +9,9 @@ Non-RT RIC Control Panel
    :maxdepth: 2
    :caption: Contents:
 
+   ./overview.rst
    ./developer-guide.rst
    ./installation-guide.rst
-   ./overview.rst
    ./release-notes.rst
 
 
