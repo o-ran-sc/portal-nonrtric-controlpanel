@@ -417,6 +417,77 @@ describe("JobsListComponent", () => {
         });
         discardPeriodicTasks();
       }));
+
+      it("should not sort when clicking on filtering box", fakeAsync(() => {
+        setServiceSpy();
+        component.ngOnInit();
+        tick(0);
+
+        loader
+          .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
+          .then((loadTable) => {
+            loadTable.getRows().then((jobRows) => {
+              let jobIds, jobTypeIds, jobOwner, jobTargetUri: String[];
+              for (let i = 0; i < jobRows.length; i++) {
+                jobRows[i].getCellTextByColumnName().then((value) => {
+                  jobIds.push(value[0]);
+                  jobTypeIds.push(value[2]);
+                  jobOwner.push(value[3]);
+                  jobTargetUri.push(value[4]);
+                });
+              };
+              loader
+                .getHarness(MatInputHarness.with({ selector: "#jobIdFilter"}))
+                .then((idFilter) => {
+                  let unfilteredJobIds: String[];
+                  idFilter.setValue("");
+                  for (let i = 0; i < jobRows.length; i++) {
+                    jobRows[i].getCellTextByColumnName().then((value) => {
+                      unfilteredJobIds.push(value[0]);
+                    });
+                  };
+                  expect(unfilteredJobIds).toBe(jobIds);
+                });
+              loader
+                .getHarness(MatInputHarness.with({ selector: "#jobTypeIdFilter"}))
+                .then((idFilter) => {
+                  let unfilteredJobTypeIds: String[];
+                  idFilter.setValue("");
+                  for (let i = 0; i < jobRows.length; i++) {
+                    jobRows[i].getCellTextByColumnName().then((value) => {
+                      unfilteredJobTypeIds.push(value[2]);
+                    });
+                  };
+                  expect(unfilteredJobTypeIds).toBe(jobTypeIds);
+                });
+              loader
+                .getHarness(MatInputHarness.with({ selector: "#jobOwnerFilter"}))
+                .then((idFilter) => {
+                  let unfilteredJobOwner: String[];
+                  idFilter.setValue("");
+                  for (let i = 0; i < jobRows.length; i++) {
+                    jobRows[i].getCellTextByColumnName().then((value) => {
+                      unfilteredJobOwner.push(value[3]);
+                    });
+                  };
+                  expect(unfilteredJobOwner).toBe(jobOwner);
+                });
+              loader
+                .getHarness(MatInputHarness.with({ selector: "#jobTargetUriFilter"}))
+                .then((idFilter) => {
+                  let unfilteredJobTargetUri: String[];
+                  idFilter.setValue("");
+                  for (let i = 0; i < jobRows.length; i++) {
+                    jobRows[i].getCellTextByColumnName().then((value) => {
+                      unfilteredJobTargetUri.push(value[4]);
+                    });
+                  };
+                  expect(unfilteredJobTargetUri).toBe(jobTargetUri);
+                });
+            });
+          });
+          discardPeriodicTasks();
+      }));
     });
 
     describe("#paging", () => {
@@ -459,7 +530,6 @@ describe("JobsListComponent", () => {
               });
             });
         });
-
         discardPeriodicTasks();
       }));
     });

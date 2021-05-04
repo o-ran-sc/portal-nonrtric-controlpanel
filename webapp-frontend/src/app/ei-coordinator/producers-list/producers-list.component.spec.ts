@@ -198,6 +198,49 @@ describe('ProducersListComponent', () => {
         prodRows = await producersTable.getRows();
         expect(await prodRows[prodRows.length - 1].getCellTextByColumnName()).toEqual(expectedProducer1Row);
       });
+
+      it('should not sort when clicking on the filter input field', async () => {
+        setServiceSpy();
+        let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#producersTable' }));
+        let producerRows = await producersTable.getRows();
+        let producerIdFilter = await loader.getHarness(MatInputHarness.with({ selector: '#producerIdFilter'}));
+        let producerTypesFilter = await loader.getHarness(MatInputHarness.with({ selector: '#producerTypesFilter'}));
+        let producerStatusFilter = await loader.getHarness(MatInputHarness.with({ selector: '#producerStatusFilter'}));
+        let producerIds, producerTypes, producerStatuses: String[];
+        let unfilteredProducerIds, unfilteredProducerTypes, unfilteredProducerStatuses: String[];
+
+        for (let i = 0; i < producerRows.length; i++) {
+          producerRows[i].getCellTextByColumnName().then((value) => {
+            producerIds.push(value[0]);
+            producerTypes.push(value[1]);
+            producerStatuses.push(value[2]);
+          });
+        };
+
+        producerIdFilter.setValue("");
+        for (let i = 0; i < producerRows.length; i++) {
+          producerRows[i].getCellTextByColumnName().then((value) => {
+            unfilteredProducerIds.push(value[0]);
+          });
+        };
+        expect(unfilteredProducerIds).toBe(producerIds);
+
+        producerTypesFilter.setValue("");
+        for (let i = 0; i < producerRows.length; i++) {
+          producerRows[i].getCellTextByColumnName().then((value) => {
+            unfilteredProducerTypes.push(value[1]);
+          });
+        };
+        expect(unfilteredProducerTypes).toBe(producerTypes);
+
+        producerStatusFilter.setValue("");
+        for (let i = 0; i < producerRows.length; i++) {
+          producerRows[i].getCellTextByColumnName().then((value) => {
+            unfilteredProducerStatuses.push(value[2]);
+          });
+        };
+        expect(unfilteredProducerStatuses).toBe(producerStatuses);
+      });
     });
   });
 });
