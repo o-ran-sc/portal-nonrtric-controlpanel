@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca38410f_ee09a06f",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.spec.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-05-05T11:01:41Z",
+      "side": 1,
+      "message": "Please remove this. Otherwise only this test will be run in the verification job",
+      "range": {
+        "startLine": 437,
+        "startChar": 6,
+        "endLine": 437,
+        "endChar": 7
+      },
+      "revId": "d54b4ec9ca94b1b89d03e1aea0908a43e60cfa06",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
