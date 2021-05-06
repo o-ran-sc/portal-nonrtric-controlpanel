@@ -366,22 +366,26 @@ describe("JobsListComponent", () => {
         setServiceSpy();
         tick(0);
 
-        loader.getHarness(MatSortHarness).then((sort) => {
-          sort.getSortHeaders({ sortDirection: "" }).then((headers) => {
+        let sort = loader.getHarness(MatSortHarness);
+        tick(10);
+
+        sort.then((value) => {
+          value.getSortHeaders({ sortDirection: "" }).then((headers) => {
             expect(headers.length).toBe(5);
 
-            headers[0].click().then((_) => {
-              headers[0].isActive().then((active) => {
-                expect(active).toBe(true);
-              });
-              headers[0].getSortDirection().then((direction) => {
-                expect(direction).toBe("asc");
-              });
+            headers[0].click();
+            tick(10);
+            headers[0].isActive().then((value) => {
+              expect(value).toBe(true);
             });
-            headers[0].click().then((_) => {
-              headers[0].getSortDirection().then((direction) => {
-                expect(direction).toBe("desc");
-              });
+            headers[0].getSortDirection().then((value) => {
+              expect(value).toBe("asc");
+            });
+
+            headers[0].click();
+            tick(10);
+            headers[0].getSortDirection().then((value) => {
+              expect(value).toBe("desc");
             });
           });
         });
@@ -392,38 +396,38 @@ describe("JobsListComponent", () => {
         setServiceSpy();
         tick(0);
 
-        loader.getHarness(MatSortHarness).then((sort) => {
+        let sort = loader.getHarness(MatSortHarness);
+        tick(10);
+
+        sort.then((value) => {
           loader
             .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
             .then((loadTable) => {
-              sort.getSortHeaders().then((headers) => {
-                headers[0].click().then((_) => {
-                  headers[0].getSortDirection().then((direction) => {
-                    expect(direction).toBe("");
-                  });
-                });
-                headers[0].click().then((_) => {
-                  headers[0].getSortDirection().then((direction) => {
-                    expect(direction).toBe("asc");
-                  });
+              tick(10);
+              value.getSortHeaders().then((headers) => {
+                headers[0].click();
+                tick(10);
+                headers[0].getSortDirection().then((direction) => {
+                  expect(direction).toBe("asc");
                 });
                 loadTable.getRows().then((jobRows) => {
                   jobRows[0].getCellTextByColumnName().then((value) => {
-                    expect(expectedJob1Row).toContain(
+                    expect(expectedJob1Row).toEqual(
                       jasmine.objectContaining(value)
                     );
                   });
                 });
-                headers[0].click().then((_) => {
-                  headers[0].getSortDirection().then((direction) => {
-                    expect(direction).toBe("desc");
-                  });
+
+                headers[0].click();
+                tick(10);
+                headers[0].getSortDirection().then((direction) => {
+                  expect(direction).toBe("desc");
                 });
                 loadTable.getRows().then((jobRows) => {
                   jobRows[jobRows.length - 1]
                     .getCellTextByColumnName()
                     .then((value) => {
-                      expect(expectedJob1Row).toContain(
+                      expect(expectedJob1Row).toEqual(
                         jasmine.objectContaining(value)
                       );
                     });
