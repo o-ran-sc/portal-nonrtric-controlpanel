@@ -24,8 +24,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { forkJoin, of } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { mergeMap, finalize } from 'rxjs/operators';
-import { EIService } from '@services/ei/ei.service';
-import { EIProducer } from '@interfaces/ei.types';
+import { ProducerService } from '@services/ei/producer.service';
+import { Producer } from '@interfaces/producer.types';
 import { UiService } from '@services/ui/ui.service';
 
 @Component({
@@ -37,21 +37,21 @@ export class ProducersListComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  producersDataSource: MatTableDataSource<EIProducer>;
+  producersDataSource: MatTableDataSource<Producer>;
   producerForm: FormGroup;
   darkMode: boolean;
 
   private loadingSubject = new BehaviorSubject<boolean>(false);
-  private producerSubject = new BehaviorSubject<EIProducer[]>([]);
+  private producerSubject = new BehaviorSubject<Producer[]>([]);
   public loading$ = this.loadingSubject.asObservable();
 
   constructor(
-    private eiSvc: EIService,
+    private producerService: ProducerService,
     private ui: UiService) {
 
     this.producerForm = new FormGroup({
-      ei_producer_id: new FormControl(''),
-      ei_producer_types: new FormControl(''),
+      producer_id: new FormControl(''),
+      producer_types: new FormControl(''),
       status: new FormControl('')
     });
   }
@@ -59,14 +59,14 @@ export class ProducersListComponent implements OnInit {
   ngOnInit(): void {
     this.loadProducers();
     this.producerSubject.subscribe((data) => {
-      this.producersDataSource = new MatTableDataSource<EIProducer>(data);
+      this.producersDataSource = new MatTableDataSource<Producer>(data);
 
       this.producersDataSource.filterPredicate = ((data, filter) => {
         let searchTerms = JSON.parse(filter);
-        return this.isDataIncluding(data.ei_producer_id, searchTerms.ei_producer_id)
-          && this.isDataIncluding(data.ei_producer_types.join(','), searchTerms.ei_producer_types)
+        return this.isDataIncluding(data.producer_id, searchTerms.producer_id)
+          && this.isDataIncluding(data.producer_types.join(','), searchTerms.producer_types)
           && this.isDataIncluding(data.status, searchTerms.status);
-      }) as (data: EIProducer, filter: any) => boolean;
+      }) as (data: Producer, filter: any) => boolean;
     });
 
     this.producerForm.valueChanges.subscribe(value => {
@@ -90,18 +90,18 @@ export class ProducersListComponent implements OnInit {
   }
 
   clearFilter() {
-    this.producerForm.get('ei_producer_id').setValue('');
-    this.producerForm.get('ei_producer_types').setValue('');
+    this.producerForm.get('producer_id').setValue('');
+    this.producerForm.get('producer_types').setValue('');
     this.producerForm.get('status').setValue('');
   }
 
   sortProducers(sort: Sort) {
     const data = this.producersDataSource.data
-    data.sort((a: EIProducer, b: EIProducer) => {
+    data.sort((a: Producer, b: Producer) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'id': return this.compare(a.ei_producer_id, b.ei_producer_id, isAsc);
-        case 'types': return this.compare(a.ei_producer_types, b.ei_producer_types, isAsc);
+        case 'id': return this.compare(a.producer_id, b.producer_id, isAsc);
+        case 'types': return this.compare(a.producer_types, b.producer_types, isAsc);
         case 'status': return this.compare(a.status, b.status, isAsc);
         default: return 0;
       }
@@ -117,21 +117,21 @@ export class ProducersListComponent implements OnInit {
     event.stopPropagation();
   }
 
-  getProducerTypes(eiProducer: EIProducer): string[] {
-    if (eiProducer.ei_producer_types) {
-      return eiProducer.ei_producer_types;
+  getProducerTypes(producer: Producer): string[] {
+    if (producer.producer_types) {
+      return producer.producer_types;
     }
     return ['< No types >'];
   }
 
-  getProducerStatus(eiProducer: EIProducer): string {
-    if (eiProducer.status) {
-      return eiProducer.status;
+  getProducerStatus(producer: Producer): string {
+    if (producer.status) {
+      return producer.status;
     }
     return '< No status >';
   }
 
-  public eiProducers(): EIProducer[] {
+  public producers(): Producer[] {
     return this.producerSubject.value;
   }
 
@@ -139,28 +139,28 @@ export class ProducersListComponent implements OnInit {
     this.loadingSubject.next(true);
     let producers = [];
 
-    this.eiSvc.getProducerIds().pipe(
+    this.producerService.getProducerIds().pipe(
       mergeMap(prodIds =>
         forkJoin(prodIds.map(id => {
           return forkJoin([
             of(id),
-            this.eiSvc.getProducer(id),
-            this.eiSvc.getProducerStatus(id)
+            this.producerService.getProducer(id),
+            this.producerService.getProducerStatus(id)
           ])
         })
         )),
       finalize(() => this.loadingSubject.next(false)),
     ).subscribe(result => {
       producers = result.map(producer => {
-        let eiProducer = <EIProducer>{};
-        eiProducer.ei_producer_id = producer[0];
-        if (producer[1].supported_ei_types) {
-          eiProducer.ei_producer_types = producer[1].supported_ei_types;
+        let producerObj = <Producer>{};
+        producerObj.producer_id = producer[0];
+        if (producer[1].supported_info_types) {
+          producerObj.producer_types = producer[1].supported_info_types;
         }
         if (producer[2].operational_state) {
-          eiProducer.status = producer[2].operational_state.toString();
+          producerObj.status = producer[2].operational_state.toString();
         }
-        return eiProducer;
+        return producerObj;
       });
       this.producerSubject.next(producers);
     }, err => {

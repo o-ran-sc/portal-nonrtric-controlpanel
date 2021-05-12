@@ -26,13 +26,13 @@ limitations under the License.
         <div (click)="stopSort($event)">
           <form style="display: flex" [formGroup]="producerForm">
             <mat-form-field>
-              <input id="producerIdFilter" matInput formControlName="ei_producer_id">
+              <input id="producerIdFilter" matInput formControlName="producer_id">
               <mat-placeholder>Producer ID</mat-placeholder>
             </mat-form-field>
           </form>
         </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let eiProducer"> {{eiProducer.ei_producer_id}} </mat-cell>
+      <mat-cell *matCellDef="let producer"> {{producer.producer_id}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="types">
@@ -40,13 +40,13 @@ limitations under the License.
         <div (click)="stopSort($event)">
           <form style="display: flex" [formGroup]="producerForm">
             <mat-form-field>
-              <input id="producerTypesFilter" matInput formControlName="ei_producer_types">
+              <input id="producerTypesFilter" matInput formControlName="producer_types">
               <mat-placeholder>Producer types</mat-placeholder>
             </mat-form-field>
           </form>
         </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let eiProducer"> {{this.getProducerTypes(eiProducer)}} </mat-cell>
+      <mat-cell *matCellDef="let producer"> {{this.getProducerTypes(producer)}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="status">
@@ -60,7 +60,7 @@ limitations under the License.
           </form>
         </div>
       </mat-header-cell>
-      <mat-cell *matCellDef="let eiProducer"> {{this.getProducerStatus(eiProducer)}} </mat-cell>
+      <mat-cell *matCellDef="let producer"> {{this.getProducerStatus(producer)}} </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="['id', 'types', 'status']"></mat-header-row>

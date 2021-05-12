@@ -5,8 +5,8 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { MatTableHarness } from '@angular/material/table/testing';
 import { MatSortHarness } from '@angular/material/sort/testing';
 import { ProducersListComponent } from "./producers-list.component";
-import { EIService } from '@services/ei/ei.service';
-import { EIProducer, OperationalState, ProducerRegistrationInfo, ProducerStatus } from '@interfaces/ei.types';
+import { ProducerService } from '@services/ei/producer.service';
+import { Producer, OperationalState, ProducerRegistrationInfo, ProducerStatus } from '@interfaces/producer.types';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -42,7 +42,7 @@ describe('ProducersListComponent', () => {
         ProducersListComponent
       ],
       providers: [
-        { provide: EIService, useValue: spy },
+        { provide: ProducerService, useValue: spy },
         UiService,
       ]
     })
@@ -62,19 +62,19 @@ describe('ProducersListComponent', () => {
 
     it('should loadProducers', () => {
       const producer1 = {
-        ei_producer_id: 'producer1',
-        ei_producer_types: ['type1', 'type2'],
+        producer_id: 'producer1',
+        producer_types: ['type1', 'type2'],
         status: 'ENABLED'
-      } as EIProducer;
+      } as Producer;
       const producer2 = {
-        ei_producer_id: 'producer2',
-        ei_producer_types: ['type2', 'type3'],
+        producer_id: 'producer2',
+        producer_types: ['type2', 'type3'],
         status: 'DISABLED'
-      } as EIProducer;
+      } as Producer;
 
       setServiceSpy();
       component.loadProducers();
-      const actualProducers: EIProducer[] = component.eiProducers();
+      const actualProducers: Producer[] = component.producers();
       expect(actualProducers).toEqual([producer1, producer2]);
     });
 
@@ -121,11 +121,11 @@ describe('ProducersListComponent', () => {
     });
 
     it('should display defaults values for non required properties', async () => {
-      let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
+      let producerServiceSpy = TestBed.inject(ProducerService) as jasmine.SpyObj<ProducerService>;
 
-      eiServiceSpy.getProducerIds.and.returnValue(of(['producer1']));
-      eiServiceSpy.getProducer.and.returnValues(of({} as ProducerRegistrationInfo));
-      eiServiceSpy.getProducerStatus.and.returnValues(of({} as ProducerStatus));
+      producerServiceSpy.getProducerIds.and.returnValue(of(['producer1']));
+      producerServiceSpy.getProducer.and.returnValues(of({} as ProducerRegistrationInfo));
+      producerServiceSpy.getProducerStatus.and.returnValues(of({} as ProducerStatus));
 
       component.ngOnInit();
       const expectedProducerRow = { id: 'producer1', types: '< No types >', status: '< No status >' };
@@ -247,10 +247,10 @@ describe('ProducersListComponent', () => {
 
 function setServiceSpy() {
   let producerRegInfo1 = {
-    supported_ei_types: ['type1', 'type2']
+    supported_info_types: ['type1', 'type2']
   } as ProducerRegistrationInfo;
   let producerRegInfo2 = {
-    supported_ei_types: ['type2', 'type3']
+    supported_info_types: ['type2', 'type3']
   } as ProducerRegistrationInfo;
   let producerStatus1 = {
     operational_state: OperationalState.ENABLED
@@ -259,11 +259,11 @@ function setServiceSpy() {
     operational_state: OperationalState.DISABLED
   } as ProducerStatus;
 
-  let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
+  let producerServiceSpy = TestBed.inject(ProducerService) as jasmine.SpyObj<ProducerService>;
 
-  eiServiceSpy.getProducerIds.and.returnValue(of(['producer1', 'producer2']));
-  eiServiceSpy.getProducer.and.returnValues(of(producerRegInfo1), of(producerRegInfo2));
-  eiServiceSpy.getProducerStatus.and.returnValues(of(producerStatus1), of(producerStatus2));
+  producerServiceSpy.getProducerIds.and.returnValue(of(['producer1', 'producer2']));
+  producerServiceSpy.getProducer.and.returnValues(of(producerRegInfo1), of(producerRegInfo2));
+  producerServiceSpy.getProducerStatus.and.returnValues(of(producerStatus1), of(producerStatus2));
 }
 
 

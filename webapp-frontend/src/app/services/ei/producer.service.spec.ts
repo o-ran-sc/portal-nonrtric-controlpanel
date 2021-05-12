@@ -20,12 +20,12 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing';
 
-import { EIJob, ProducerStatus, OperationalState, ProducerRegistrationInfo } from '@interfaces/ei.types';
-import { EIService } from './ei.service';
+import { JobInfo, ProducerStatus, OperationalState, ProducerRegistrationInfo } from '@interfaces/producer.types';
+import { ProducerService } from './producer.service';
 
-describe('EIService', () => {
-  let basePath = '/ei-producer/v1';
-  let service: EIService;
+describe('ProducerService', () => {
+  let basePath = '/data-producer/v1';
+  let service: ProducerService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => TestBed.configureTestingModule({
@@ -33,12 +33,12 @@ describe('EIService', () => {
       HttpClientTestingModule
     ],
     providers: [
-      EIService
+      ProducerService
     ]
   }));
 
   it('should be created', () => {
-    service = TestBed.inject(EIService);
+    service = TestBed.inject(ProducerService);
     expect(service).toBeTruthy();
   });
 
@@ -46,7 +46,7 @@ describe('EIService', () => {
     let expectedEIProducerIds: string[];
 
     beforeEach(() => {
-      service = TestBed.inject(EIService);
+      service = TestBed.inject(ProducerService);
       httpTestingController = TestBed.inject(HttpTestingController);
       expectedEIProducerIds = [ 'producer1', 'producer2' ] as string[];
     });
@@ -57,7 +57,7 @@ describe('EIService', () => {
         fail
       );
 
-      const req = httpTestingController.expectOne(basePath + '/' + service.eiProducersPath);
+      const req = httpTestingController.expectOne(basePath + '/' + service.producersPath);
       expect(req.request.method).toEqual('GET');
 
       req.flush(expectedEIProducerIds); //Return expected producer IDs
@@ -67,15 +67,15 @@ describe('EIService', () => {
   });
 
   describe('#getJobsForProducer', () => {
-    let expectedEIJobs: EIJob[];
+    let expectedEIJobs: JobInfo[];
 
     beforeEach(() => {
-      service = TestBed.inject(EIService);
+      service = TestBed.inject(ProducerService);
       httpTestingController = TestBed.inject(HttpTestingController);
       expectedEIJobs = [
-        { ei_job_identity: '1', ei_job_data: 'data', ei_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'},
-        { ei_job_identity: '2', ei_job_data: 'EI Job 2', ei_type_identity: 'Type ID 2',  target_uri: 'hhtp://url', owner: 'owner'}
-      ] as EIJob[];
+        { info_job_identity: '1', info_job_data: 'data', info_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'},
+        { info_job_identity: '2', info_job_data: 'EI Job 2', info_type_identity: 'Type ID 2',  target_uri: 'hhtp://url', owner: 'owner'}
+      ] as JobInfo[];
     });
 
     it('should return all jobs', () => {
@@ -84,7 +84,7 @@ describe('EIService', () => {
         fail
       );
 
-      const req = httpTestingController.expectOne(basePath + '/' + service.eiProducersPath + '/producer1/' + service.eiJobsPath);
+      const req = httpTestingController.expectOne(basePath + '/' + service.producersPath + '/producer1/' + service.jobsPath);
       expect(req.request.method).toEqual('GET');
 
       req.flush(expectedEIJobs); //Return expectedEIJobs
@@ -97,10 +97,10 @@ describe('EIService', () => {
     let expectedProducer: ProducerRegistrationInfo;
 
     beforeEach(() => {
-      service = TestBed.inject(EIService);
+      service = TestBed.inject(ProducerService);
       httpTestingController = TestBed.inject(HttpTestingController);
       expectedProducer = {
-        supported_ei_types: [ 'type1', 'type2' ]
+        supported_info_types: [ 'type1', 'type2' ]
       } as ProducerRegistrationInfo;
     });
 
@@ -110,7 +110,7 @@ describe('EIService', () => {
         fail
       );
 
-      const req = httpTestingController.expectOne(basePath + '/' + service.eiProducersPath + '/producer1');
+      const req = httpTestingController.expectOne(basePath + '/' + service.producersPath + '/producer1');
       expect(req.request.method).toEqual('GET');
 
       req.flush(expectedProducer); //Return expected producer
@@ -123,7 +123,7 @@ describe('EIService', () => {
     let expectedProducerStatus: ProducerStatus;
 
     beforeEach(() => {
-      service = TestBed.inject(EIService);
+      service = TestBed.inject(ProducerService);
       httpTestingController = TestBed.inject(HttpTestingController);
       expectedProducerStatus = {
         operational_state: OperationalState.ENABLED
@@ -136,7 +136,7 @@ describe('EIService', () => {
         fail
       );
 
-      const req = httpTestingController.expectOne(basePath + '/' + service.eiProducersPath + '/producer1/' + service.eiProducerStatusPath);
+      const req = httpTestingController.expectOne(basePath + '/' + service.producersPath + '/producer1/' + service.producerStatusPath);
       expect(req.request.method).toEqual('GET');
 
       req.flush(expectedProducerStatus); //Return expected status

@@ -32,7 +32,7 @@ import {
   PolicyType,
   PolicyTypes,
 } from "@interfaces/policy.types";
-import { Ric, Rics } from "@app/interfaces/ric";
+import { Ric, Rics } from "@interfaces/ric";
 
 describe("PolicyService", () => {
   let apiVersion2 = "v2";

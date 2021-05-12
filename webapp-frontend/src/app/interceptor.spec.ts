@@ -26,11 +26,11 @@ import {
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpRequestInterceptor } from './interceptor';
 import { NotificationService } from '@services/ui/notification.service';
-import { EIService } from '@services/ei/ei.service';
+import { ProducerService } from '@services/ei/producer.service';
 import { of } from 'rxjs/observable/of';
 
 describe(`HttpRequestInterceptor`, () => {
-    let service: EIService;
+    let service: ProducerService;
     const notificationServiceSpy = jasmine.createSpyObj('NotificationService', [ 'error' ]);
     let httpMock: HttpTestingController;
 
@@ -47,12 +47,12 @@ describe(`HttpRequestInterceptor`, () => {
                     useClass: HttpRequestInterceptor,
                     multi: true,
                 },
-                EIService
+                ProducerService
             ]
         });
 
         httpMock = TestBed.inject(HttpTestingController);
-        service = TestBed.inject(EIService);
+        service = TestBed.inject(ProducerService);
     });
 
     it('should create', () => {
@@ -85,7 +85,7 @@ describe(`HttpRequestInterceptor`, () => {
 
     const data = 'Invalid request parameters';
     const mockErrorResponse = { status: 400, statusText: 'Bad Request' };
-    httpMock.expectOne(`/ei-producer/v1/eiproducers`).flush(data, mockErrorResponse);
+    httpMock.expectOne(`/data-producer/v1/info-producers`).flush(data, mockErrorResponse);
 
     httpMock.verify();
 

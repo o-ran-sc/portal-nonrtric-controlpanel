@@ -21,7 +21,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { EIJob, ProducerStatus, ProducerRegistrationInfo } from '@interfaces/ei.types';
+import { JobInfo, ProducerStatus, ProducerRegistrationInfo } from '@interfaces/producer.types';
 
 /**
  * Services for calling the EI endpoints.
@@ -29,12 +29,12 @@ import { EIJob, ProducerStatus, ProducerRegistrationInfo } from '@interfaces/ei.
 @Injectable({
     providedIn: 'root'
 })
-export class EIService {
+export class ProducerService {
 
-    private basePath = '/ei-producer/v1';
-    readonly eiJobsPath = 'eijobs';
-    readonly eiProducersPath = 'eiproducers';
-    readonly eiProducerStatusPath = 'status';
+    private basePath = '/data-producer/v1';
+    readonly jobsPath = 'info-jobs';
+    readonly producersPath = 'info-producers';
+    readonly producerStatusPath = 'status';
 
     private buildPath(...args: any[]) {
         let result = this.basePath;
@@ -49,22 +49,22 @@ export class EIService {
     }
 
     getProducerIds(): Observable<string[]> {
-        const url = this.buildPath(this.eiProducersPath);
+        const url = this.buildPath(this.producersPath);
         return this.httpClient.get<string[]>(url);
     }
 
-    getJobsForProducer(producerId: string): Observable<EIJob[]> {
-        const url = this.buildPath(this.eiProducersPath, producerId, this.eiJobsPath);
-        return this.httpClient.get<EIJob[]>(url);
+    getJobsForProducer(producerId: string): Observable<JobInfo[]> {
+        const url = this.buildPath(this.producersPath, producerId, this.jobsPath);
+        return this.httpClient.get<JobInfo[]>(url);
     }
 
     getProducer(producerId: string): Observable<ProducerRegistrationInfo> {
-        const url = this.buildPath(this.eiProducersPath, producerId);
+        const url = this.buildPath(this.producersPath, producerId);
         return this.httpClient.get<ProducerRegistrationInfo>(url);
     }
 
     getProducerStatus(producerId: string): Observable<ProducerStatus> {
-        const url = this.buildPath(this.eiProducersPath, producerId, this.eiProducerStatusPath);
+        const url = this.buildPath(this.producersPath, producerId, this.producerStatusPath);
         return this.httpClient.get<ProducerStatus>(url);
     }
 }

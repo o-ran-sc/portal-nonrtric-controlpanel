@@ -18,7 +18,7 @@
  * ========================LICENSE_END===================================
  */
 import { Component, OnInit, Output } from "@angular/core";
-import { RicConfig } from "@app/interfaces/ric.config";
+import { RicConfig } from "@interfaces/ric.config";
 import {
   AbstractControl,
   ControlContainer,
@@ -30,7 +30,7 @@ import {
 } from "@angular/forms";
 import { PolicyService } from "@services/policy/policy.service";
 import { EventEmitter } from "@angular/core";
-import { NotificationService } from "@app/services/ui/notification.service";
+import { NotificationService } from "@services/ui/notification.service";
 import { HttpResponse } from "@angular/common/http";
 
 @Component({

@@ -3,7 +3,7 @@
      "target": "http://localhost:9090",
      "secure": false
   },
-  "/ei-producer": {
+  "/data-producer": {
     "target": "http://localhost:9090",
     "secure": false
  }

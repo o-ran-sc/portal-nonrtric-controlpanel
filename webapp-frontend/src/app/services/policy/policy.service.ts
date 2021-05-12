@@ -31,7 +31,7 @@ import {
   PolicyTypes,
 } from "@interfaces/policy.types";
 import { Rics } from "@interfaces/ric";
-import { RicConfig } from "@app/interfaces/ric.config";
+import { RicConfig } from "@interfaces/ric.config";
 import { HttpHeaders } from "@angular/common/http";
 
 /**

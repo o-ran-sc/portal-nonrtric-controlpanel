@@ -1,9 +1,9 @@
 [
     {
-      "ei_job_identity": "job3",
-      "ei_type_identity": "type2",
+      "info_job_identity": "job3",
+      "info_type_identity": "type2",
       "owner": "owner1",
-      "ei_job_data": {
+      "info_job_data": {
         "jobparam2": "value2_job3",
         "jobparam3": "value3_job3",
         "jobparam1": "value1_job3"
@@ -11,10 +11,10 @@
       "target_uri": "https://ricsim_g3_1:8185/datadelivery"
     },
     {
-      "ei_job_identity": "job5",
-      "ei_type_identity": "type2",
+      "info_job_identity": "job5",
+      "info_type_identity": "type2",
       "owner": "owner5",
-      "ei_job_data": {
+      "info_job_data": {
         "jobparam2": "value2_job2",
         "jobparam3": "value3_job2",
         "jobparam1": "value1_job2"

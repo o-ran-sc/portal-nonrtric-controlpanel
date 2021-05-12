@@ -21,7 +21,7 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges} from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { PolicyType, PolicyTypeSchema } from "@interfaces/policy.types";
-import { PolicyService } from "@app/services/policy/policy.service";
+import { PolicyService } from "@services/policy/policy.service";
 import "@policy/policy-control.component";
 
 class PolicyTypeInfo {

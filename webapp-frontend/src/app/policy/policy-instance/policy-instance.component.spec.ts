@@ -39,11 +39,11 @@ import {
   PolicyInstances,
   PolicyStatus,
   PolicyTypeSchema,
-} from "@app/interfaces/policy.types";
-import { PolicyService } from "@app/services/policy/policy.service";
-import { ConfirmDialogService } from "@app/services/ui/confirm-dialog.service";
-import { NotificationService } from "@app/services/ui/notification.service";
-import { UiService } from "@app/services/ui/ui.service";
+} from "@interfaces/policy.types";
+import { PolicyService } from "@services/policy/policy.service";
+import { ConfirmDialogService } from "@services/ui/confirm-dialog.service";
+import { NotificationService } from "@services/ui/notification.service";
+import { UiService } from "@services/ui/ui.service";
 import { ToastrModule } from "ngx-toastr";
 import { Observable, of } from "rxjs";
 import { PolicyInstanceDialogComponent } from "../policy-instance-dialog/policy-instance-dialog.component";

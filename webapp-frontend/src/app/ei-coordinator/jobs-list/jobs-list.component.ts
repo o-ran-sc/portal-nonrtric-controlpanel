@@ -25,8 +25,8 @@ import { MatTableDataSource } from "@angular/material/table";
 import { EMPTY, forkJoin, Subscription, timer } from "rxjs";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { mergeMap, finalize, map, tap, switchMap } from "rxjs/operators";
-import { EIJob } from "@interfaces/ei.types";
-import { EIService } from "@services/ei/ei.service";
+import { JobInfo } from "@interfaces/producer.types";
+import { ProducerService } from "@services/ei/producer.service";
 import { UiService } from "@services/ui/ui.service";
 
 export interface Job {
@@ -58,7 +58,7 @@ export class JobsListComponent implements OnInit {
   checked: boolean = false;
   firstTime: boolean = true;
 
-  constructor(private eiSvc: EIService, private ui: UiService) {
+  constructor(private producerService: ProducerService, private ui: UiService) {
     this.jobForm = new FormGroup({
       jobId: new FormControl(""),
       typeId: new FormControl(""),
@@ -98,10 +98,10 @@ export class JobsListComponent implements OnInit {
 
   dataSubscription(): Subscription {
     let prodId = [];
-    const jobs$ = this.eiSvc.getProducerIds().pipe(
+    const jobs$ = this.producerService.getProducerIds().pipe(
       tap((data) => (prodId = data)),
       mergeMap((prodIds) =>
-        forkJoin(prodIds.map((id) => this.eiSvc.getJobsForProducer(id)))
+        forkJoin(prodIds.map((id) => this.producerService.getJobsForProducer(id)))
       ),
       finalize(() => this.loadingSubject$.next(false))
     );
@@ -180,16 +180,16 @@ export class JobsListComponent implements OnInit {
     return data.toLowerCase().includes(transformedFilter);
   }
 
-  getJobTypeId(eiJob: Job): string {
-    if (eiJob.typeId) {
-      return eiJob.typeId;
+  getJobTypeId(job: Job): string {
+    if (job.typeId) {
+      return job.typeId;
     }
     return "< No type >";
   }
 
-  getJobOwner(eiJob: Job): string {
-    if (eiJob.owner) {
-      return eiJob.owner;
+  getJobOwner(job: Job): string {
+    if (job.owner) {
+      return job.owner;
     }
     return "< No owner >";
   }
@@ -198,7 +198,7 @@ export class JobsListComponent implements OnInit {
     return this.jobsSubject$.value;
   }
 
-  private extractJobs(prodId: number[], res: EIJob[][]) {
+  private extractJobs(prodId: number[], res: JobInfo[][]) {
     this.clearFilter();
     let jobList = [];
     prodId.forEach((element, index) => {
@@ -213,7 +213,7 @@ export class JobsListComponent implements OnInit {
     return jobList;
   }
 
-  createJobList(prodId: any[], result: EIJob[][]) {
+  createJobList(prodId: any[], result: JobInfo[][]) {
     let jobList = [];
     prodId.forEach((element, index) => {
       let jobs = result[index];
@@ -222,14 +222,14 @@ export class JobsListComponent implements OnInit {
     return jobList;
   }
 
-  createJob(element: any, job: EIJob): any {
-    let eiJob = <Job>{};
-    eiJob.jobId = job.ei_job_identity;
-    eiJob.typeId = job.ei_type_identity;
-    eiJob.owner = job.owner;
-    eiJob.targetUri = job.target_uri;
-    eiJob.prodId = element;
-    return eiJob;
+  createJob(element: any, job: JobInfo): any {
+    let infoJob = <Job>{};
+    infoJob.jobId = job.info_job_identity;
+    infoJob.typeId = job.info_type_identity;
+    infoJob.owner = job.owner;
+    infoJob.targetUri = job.target_uri;
+    infoJob.prodId = element;
+    return infoJob;
   }
 
   refreshDataClick() {

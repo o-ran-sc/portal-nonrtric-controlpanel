@@ -35,13 +35,13 @@ import * as policyinstance2 from "./mock/policy-instance-2.json";
 import * as noTypePolicyinstance from "./mock/policy-instance-notype.json";
 import * as policyinstance1Status from "./mock/policy-instance-1-status.json";
 import * as policyinstance2Status from "./mock/policy-instance-2-status.json";
-import * as eijobsProd1 from "./mock/ei-jobs-producer1.json";
-import * as eijobsProd2 from "./mock/ei-jobs-producer2.json";
-import * as eiProducerIds from "./mock/ei-producerids.json";
-import * as eiproducer1 from "./mock/ei-producer1.json";
-import * as eiproducer2 from "./mock/ei-producer2.json";
-import * as eiproducerstatus1 from "./mock/ei-producer-status1.json";
-import * as eiproducerstatus2 from "./mock/ei-producer-status2.json";
+import * as jobsProd1 from "./mock/jobs-producer1.json";
+import * as jobsProd2 from "./mock/jobs-producer2.json";
+import * as producerIds from "./mock/producerids.json";
+import * as producer1 from "./mock/producer1.json";
+import * as producer2 from "./mock/producer2.json";
+import * as producerstatus1 from "./mock/producer-status1.json";
+import * as producerstatus2 from "./mock/producer-status2.json";
 import * as policytypes1 from "./mock/policy-type1.json";
 import * as policytypes0 from "./mock/policy-type0.json";
 import * as policyinstanceedit from "./mock/policy-instance-edit.json";
@@ -50,110 +50,113 @@ import * as ric2 from "./mock/ric2.json";
 import * as ricconfig from "./mock/ric-configuration.json";
 import { delay } from "rxjs/operators";
 
+const POLICY_PATH = "/a1-policy/v2"
+const INFO_PATH = "/data-producer/v1"
+
 const urls = [
   {
-    url: "/a1-policy/v2/policy-types/1",
+    url: POLICY_PATH + "/policy-types/1",
     json: policytypes1,
   },
   {
-    url: "/a1-policy/v2/policy-types/0",
+    url: POLICY_PATH + "/policy-types/0",
     json: policytypes0,
   },
   {
-    url: "/a1-policy/v2/policies?policytype_id=",
+    url: POLICY_PATH + "/policies?policytype_id=",
     json: noTypePolicies,
   },
   {
-    url: "/a1-policy/v2/policies?policytype_id=0",
+    url: POLICY_PATH + "/policies?policytype_id=0",
     json: type0Policies,
   },
   {
-    url: "/a1-policy/v2/policies?policytype_id=1",
+    url: POLICY_PATH + "/policies?policytype_id=1",
     json: type1Policies,
   },
   {
-    url: "/a1-policy/v2/policies/2001",
+    url: POLICY_PATH + "/policies/2001",
     json: noTypePolicyinstance,
   },
   {
-    url: "/a1-policy/v2/policies/2000",
+    url: POLICY_PATH + "/policies/2000",
     json: policyinstance1,
   },
   {
-    url: "/a1-policy/v2/policies/2100",
+    url: POLICY_PATH + "/policies/2100",
     json: policyinstance2,
   },
   {
-    url: "/a1-policy/v2/policies/2001/status",
+    url: POLICY_PATH + "/policies/2001/status",
     json: policyinstance1Status,
   },
   {
-    url: "/a1-policy/v2/policies/2000/status",
+    url: POLICY_PATH + "/policies/2000/status",
     json: policyinstance1Status,
   },
   {
-    url: "/a1-policy/v2/policies/2100/status",
+    url: POLICY_PATH + "/policies/2100/status",
     json: policyinstance2Status,
   },
   {
-    url: "/a1-policy/v2/policies/2000?type=",
+    url: POLICY_PATH + "/policies/2000?type=",
     json: policyinstanceedit,
   },
   {
-    url: "/a1-policy/v2/policies/2100?type=",
+    url: POLICY_PATH + "/policies/2100?type=",
     json: policyinstanceedit,
   },
   {
-    url: "/a1-policy/v2/policies/2000?type=1",
+    url: POLICY_PATH + "/policies/2000?type=1",
     json: policyinstanceedit,
   },
   {
-    url: "/a1-policy/v2/policies/2100?type=1",
+    url: POLICY_PATH + "/policies/2100?type=1",
     json: policyinstanceedit,
   },
   {
-    url: "/a1-policy/v2/policies/2000?ric=ric1&type=1",
+    url: POLICY_PATH + "/policies/2000?ric=ric1&type=1",
     json: "",
   },
   {
-    url: "/a1-policy/v2/rics?policytype_id=0",
+    url: POLICY_PATH + "/rics?policytype_id=0",
     json: ric1,
   },
   {
-    url: "/a1-policy/v2/rics?policytype_id=1",
+    url: POLICY_PATH + "/rics?policytype_id=1",
     json: ric1,
   },
   {
-    url: "/a1-policy/v2/rics?policytype_id=",
+    url: POLICY_PATH + "/rics?policytype_id=",
     json: ric2,
   },
   {
-    url: "/ei-producer/v1/eiproducers",
-    json: eiProducerIds,
+    url: INFO_PATH + "/info-producers",
+    json: producerIds,
   },
   {
-    url: "/ei-producer/v1/eiproducers/producer1",
-    json: eiproducer1,
+    url: INFO_PATH + "/info-producers/producer1",
+    json: producer1,
   },
   {
-    url: "/ei-producer/v1/eiproducers/producer2",
-    json: eiproducer2,
+    url: INFO_PATH + "/info-producers/producer2",
+    json: producer2,
   },
   {
-    url: "/ei-producer/v1/eiproducers/producer1/status",
-    json: eiproducerstatus1,
+    url: INFO_PATH + "/info-producers/producer1/status",
+    json: producerstatus1,
   },
   {
-    url: "/ei-producer/v1/eiproducers/producer2/status",
-    json: eiproducerstatus2,
+    url: INFO_PATH + "/info-producers/producer2/status",
+    json: producerstatus2,
   },
   {
-    url: "/ei-producer/v1/eiproducers/producer1/eijobs",
-    json: eijobsProd1,
+    url: INFO_PATH + "/info-producers/producer1/info-jobs",
+    json: jobsProd1,
   },
   {
-    url: "/ei-producer/v1/eiproducers/producer2/eijobs",
-    json: eijobsProd2,
+    url: INFO_PATH + "/info-producers/producer2/info-jobs",
+    json: jobsProd2,
   },
     {
         url: '/a1-policy/v2/configuration',
@@ -176,7 +179,7 @@ export class HttpMockRequestInterceptor implements HttpInterceptor {
       result = new HttpResponse({ status: 200 });
     } else if (request.method === "DELETE") {
       result = new HttpResponse({ status: 204 });
-    } else if (request.url === "/a1-policy/v2/policy-types") {
+    } else if (request.url === POLICY_PATH + "/policy-types") {
       result = this.getAlternatingNoOfTypes();
     } else {
       for (const element of urls) {

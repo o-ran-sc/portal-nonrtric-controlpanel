@@ -41,8 +41,8 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTableHarness } from "@angular/material/table/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { of } from "rxjs/observable/of";
-import { EIJob } from "@interfaces/ei.types";
-import { EIService } from "@services/ei/ei.service";
+import { JobInfo } from "@interfaces/producer.types";
+import { ProducerService } from "@services/ei/producer.service";
 import { UiService } from "@services/ui/ui.service";
 
 import { Job, JobsListComponent } from "./jobs-list.component";
@@ -51,18 +51,18 @@ import { Subscription } from "rxjs";
 let component: JobsListComponent;
 let fixture: ComponentFixture<JobsListComponent>;
 
-const eijob1 = {
-  ei_job_identity: "job1",
-  ei_type_identity: "type1",
+const jobInfo1 = {
+  info_job_identity: "job1",
+  info_type_identity: "type1",
   owner: "owner1",
   target_uri: "http://one",
-} as EIJob;
-const eijob2 = {
-  ei_job_identity: "job2",
-  ei_type_identity: "type2",
+} as JobInfo;
+const jobInfo2 = {
+  info_job_identity: "job2",
+  info_type_identity: "type2",
   owner: "owner2",
   target_uri: "http://two",
-} as EIJob;
+} as JobInfo;
 
 const job1 = {
   jobId: "job1",
@@ -115,7 +115,7 @@ describe("JobsListComponent", () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [JobsListComponent],
-      providers: [{ provide: EIService, useValue: spy }, UiService],
+      providers: [{ provide: ProducerService, useValue: spy }, UiService],
     })
       .compileComponents()
       .then(() => {
@@ -238,18 +238,18 @@ describe("JobsListComponent", () => {
 
     it("should display default values for non required properties ", fakeAsync(() => {
       const jobMissingProperties = {
-        ei_job_identity: "job1",
-        ei_job_data: {
+        info_job_identity: "job1",
+        info_job_data: {
           jobparam2: "value2_job2",
           jobparam3: "value3_job2",
           jobparam1: "value1_job2",
         },
         target_uri: "http://one",
-      } as EIJob;
+      } as JobInfo;
 
-      let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
-      eiServiceSpy.getProducerIds.and.returnValue(of(["producer1"]));
-      eiServiceSpy.getJobsForProducer.and.returnValue(
+      let producerServiceSpy = TestBed.inject(ProducerService) as jasmine.SpyObj<ProducerService>;
+      producerServiceSpy.getProducerIds.and.returnValue(of(["producer1"]));
+      producerServiceSpy.getJobsForProducer.and.returnValue(
         of([jobMissingProperties])
       );
 
@@ -525,14 +525,14 @@ describe("JobsListComponent", () => {
 
     describe("#paging", () => {
       it("should work properly on the table", fakeAsync(() => {
-        let eiServiceSpy = TestBed.inject(
-          EIService
-        ) as jasmine.SpyObj<EIService>;
-        eiServiceSpy.getProducerIds.and.returnValue(
+        let producerServiceSpy = TestBed.inject(
+          ProducerService
+        ) as jasmine.SpyObj<ProducerService>;
+        producerServiceSpy.getProducerIds.and.returnValue(
           of(["producer1", "producer2"])
         );
-        eiServiceSpy.getJobsForProducer.and.returnValue(
-          of([eijob1, eijob2, eijob1])
+        producerServiceSpy.getJobsForProducer.and.returnValue(
+          of([jobInfo1, jobInfo2, jobInfo1])
         );
         tick(0);
 
@@ -570,7 +570,7 @@ describe("JobsListComponent", () => {
 });
 
 function setServiceSpy() {
-  let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
-  eiServiceSpy.getProducerIds.and.returnValue(of(["producer1", "producer2"]));
-  eiServiceSpy.getJobsForProducer.and.returnValue(of([eijob1, eijob2]));
+  let producerServiceSpy = TestBed.inject(ProducerService) as jasmine.SpyObj<ProducerService>;
+  producerServiceSpy.getProducerIds.and.returnValue(of(["producer1", "producer2"]));
+  producerServiceSpy.getJobsForProducer.and.returnValue(of([jobInfo1, jobInfo2]));
 }
