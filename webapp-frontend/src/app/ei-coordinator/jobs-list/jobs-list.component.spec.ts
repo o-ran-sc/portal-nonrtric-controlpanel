@@ -41,7 +41,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTableHarness } from "@angular/material/table/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { of } from "rxjs/observable/of";
-import { EIJob } from "@interfaces/ei.types";
+import { JobInfo } from "@interfaces/ei.types";
 import { EIService } from "@services/ei/ei.service";
 import { UiService } from "@services/ui/ui.service";
 
@@ -52,17 +52,17 @@ let component: JobsListComponent;
 let fixture: ComponentFixture<JobsListComponent>;
 
 const eijob1 = {
-  ei_job_identity: "job1",
-  ei_type_identity: "type1",
+  info_job_identity: "job1",
+  info_type_identity: "type1",
   owner: "owner1",
   target_uri: "http://one",
-} as EIJob;
+} as JobInfo;
 const eijob2 = {
-  ei_job_identity: "job2",
-  ei_type_identity: "type2",
+  info_job_identity: "job2",
+  info_type_identity: "type2",
   owner: "owner2",
   target_uri: "http://two",
-} as EIJob;
+} as JobInfo;
 
 const job1 = {
   jobId: "job1",
@@ -238,14 +238,14 @@ describe("JobsListComponent", () => {
 
     it("should display default values for non required properties ", fakeAsync(() => {
       const jobMissingProperties = {
-        ei_job_identity: "job1",
-        ei_job_data: {
+        info_job_identity: "job1",
+        info_job_data: {
           jobparam2: "value2_job2",
           jobparam3: "value3_job2",
           jobparam1: "value1_job2",
         },
         target_uri: "http://one",
-      } as EIJob;
+      } as JobInfo;
 
       let eiServiceSpy = TestBed.inject(EIService) as jasmine.SpyObj<EIService>;
       eiServiceSpy.getProducerIds.and.returnValue(of(["producer1"]));

@@ -25,7 +25,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { EMPTY, forkJoin, Subscription, timer } from "rxjs";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { mergeMap, finalize, map, tap, switchMap } from "rxjs/operators";
-import { EIJob } from "@interfaces/ei.types";
+import { JobInfo } from "@interfaces/ei.types";
 import { EIService } from "@services/ei/ei.service";
 import { UiService } from "@services/ui/ui.service";
 
@@ -198,7 +198,7 @@ export class JobsListComponent implements OnInit {
     return this.jobsSubject$.value;
   }
 
-  private extractJobs(prodId: number[], res: EIJob[][]) {
+  private extractJobs(prodId: number[], res: JobInfo[][]) {
     this.clearFilter();
     let jobList = [];
     prodId.forEach((element, index) => {
@@ -213,7 +213,7 @@ export class JobsListComponent implements OnInit {
     return jobList;
   }
 
-  createJobList(prodId: any[], result: EIJob[][]) {
+  createJobList(prodId: any[], result: JobInfo[][]) {
     let jobList = [];
     prodId.forEach((element, index) => {
       let jobs = result[index];
@@ -222,10 +222,10 @@ export class JobsListComponent implements OnInit {
     return jobList;
   }
 
-  createJob(element: any, job: EIJob): any {
+  createJob(element: any, job: JobInfo): any {
     let eiJob = <Job>{};
-    eiJob.jobId = job.ei_job_identity;
-    eiJob.typeId = job.ei_type_identity;
+    eiJob.jobId = job.info_job_identity;
+    eiJob.typeId = job.info_type_identity;
     eiJob.owner = job.owner;
     eiJob.targetUri = job.target_uri;
     eiJob.prodId = element;

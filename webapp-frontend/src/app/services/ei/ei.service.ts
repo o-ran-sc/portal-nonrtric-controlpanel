@@ -21,7 +21,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { EIJob, ProducerStatus, ProducerRegistrationInfo } from '@interfaces/ei.types';
+import { JobInfo, ProducerStatus, ProducerRegistrationInfo } from '@interfaces/ei.types';
 
 /**
  * Services for calling the EI endpoints.
@@ -53,9 +53,9 @@ export class EIService {
         return this.httpClient.get<string[]>(url);
     }
 
-    getJobsForProducer(producerId: string): Observable<EIJob[]> {
+    getJobsForProducer(producerId: string): Observable<JobInfo[]> {
         const url = this.buildPath(this.eiProducersPath, producerId, this.eiJobsPath);
-        return this.httpClient.get<EIJob[]>(url);
+        return this.httpClient.get<JobInfo[]>(url);
     }
 
     getProducer(producerId: string): Observable<ProducerRegistrationInfo> {

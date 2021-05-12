@@ -20,7 +20,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing';
 
-import { EIJob, ProducerStatus, OperationalState, ProducerRegistrationInfo } from '@interfaces/ei.types';
+import { JobInfo, ProducerStatus, OperationalState, ProducerRegistrationInfo } from '@interfaces/ei.types';
 import { EIService } from './ei.service';
 
 describe('EIService', () => {
@@ -67,15 +67,15 @@ describe('EIService', () => {
   });
 
   describe('#getJobsForProducer', () => {
-    let expectedEIJobs: EIJob[];
+    let expectedEIJobs: JobInfo[];
 
     beforeEach(() => {
       service = TestBed.inject(EIService);
       httpTestingController = TestBed.inject(HttpTestingController);
       expectedEIJobs = [
-        { ei_job_identity: '1', ei_job_data: 'data', ei_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'},
-        { ei_job_identity: '2', ei_job_data: 'EI Job 2', ei_type_identity: 'Type ID 2',  target_uri: 'hhtp://url', owner: 'owner'}
-      ] as EIJob[];
+        { info_job_identity: '1', info_job_data: 'data', info_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'},
+        { info_job_identity: '2', info_job_data: 'EI Job 2', info_type_identity: 'Type ID 2',  target_uri: 'hhtp://url', owner: 'owner'}
+      ] as JobInfo[];
     });
 
     it('should return all jobs', () => {
