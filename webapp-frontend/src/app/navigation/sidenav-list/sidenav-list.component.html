@@ -21,23 +21,23 @@
 
 <!-- browse icons at https://material.io/tools/icons/?style=baseline -->
 <mat-nav-list [ngClass]="{'dark': darkMode}">
-  <a mat-list-item routerLink="/" (click)="onSidenavClose()">
+  <a mat-list-item id="homeLink" routerLink="/" (click)="onSidenavClose()">
     <mat-icon>home</mat-icon> <span class="nav-caption">Home</span>
   </a>
-  <a mat-list-item (click)="toggle()">
+  <a mat-list-item id="policyToggle" (click)="toggle()">
       <mat-icon>dashboard</mat-icon> <span class="nav-caption">Policy</span>
       <mat-icon *ngIf="showSubMenu">expand_more</mat-icon>
       <mat-icon *ngIf="!showSubMenu">chevron_right</mat-icon>
   </a>
   <mat-nav-list [ngClass]="{'dark': darkMode}" *ngIf="showSubMenu">
-    <a mat-list-item routerLink="/policy" (click)="onSidenavClose()">
+    <a mat-list-item id="policyLink" routerLink="/policy" (click)="onSidenavClose()">
       <mat-icon>dashboard</mat-icon> <span class="nav-caption">Policy Types</span>
     </a>
-    <a mat-list-item routerLink="/ric-config" (click)="onSidenavClose()">
+    <a mat-list-item id="ricConfigLink" routerLink="/ric-config" (click)="onSidenavClose()">
       <mat-icon>build</mat-icon> <span class="nav-caption">RIC Config</span>
     </a>
   </mat-nav-list>
-  <a mat-list-item routerLink="/ei-coordinator" (click)="onSidenavClose()">
+  <a mat-list-item id="eicLink" routerLink="/ei-coordinator" (click)="onSidenavClose()">
     <mat-icon>dashboard</mat-icon> <span class="nav-caption">Enrichment Information Coordinator</span>
 </a>
 </mat-nav-list>
