@@ -3,18 +3,22 @@
 .. Copyright (C) 2020 Nordix
 
 Non-RT RIC Control Panel Overview
-==================================
+=================================
 
-The Non-RT RIC Control Panel is a graphical user interface that enables the user to manage the Policies in the
-network and also view producers and jobs for the Enrichement coordinator service.
+Graphical user interface with the following capabilities:
 
-The Control Panel generates its GUI from JSON schemas in a model driven fashion.
+*  View and Manage A1 policies in the RAN (near-RT-RICs)
+*  Interacts with the Policy agent’s NBI (REST API)
+*  Graphical A1 policy creation/editing is model-driven, based on policy type’s JSON schema
+*  View and manage producers and jobs for the Enrichment coordinator service
+*  Configure A1 Policy Management Service (e.g. add/remove near-rt-rics)
+*  Interacts with the A1-PolicyManagementService & A1-EI-Coordinator (REST NBIs) via Service Exposure gateway
 
-The Control Panel consists of a frontend and a gateway. Frontend is developed using the Angular framework. 
+The Control Panel consists of a frontend and a gateway. The frontend is developed using the Angular framework.
 The Gateway is a Spring Cloud Gateway that provides an API Gateway for all the Non-RT-RIC Components.
 
 .. note::
-   It is fully supported in Firefox and Chrome. Minor issues in Safari. 
+   It is fully supported in Firefox and Chrome. Minor issues in Safari.
    Not supported in Microsoft Edge and IE.
 
 Control Panel architecture
