@@ -8,59 +8,79 @@ Developer Guide
 This document provides a quickstart for developers of the Non-RT RIC Control Panel.
 
 The Non-RT RIC Control Panel is an interface that allows human users to create, edit and delete policy instances, for
-each existing policy type. The policy types and their definitions are retrieved from each Near-RT RIC.
+each existing policy type. The policy types and their definitions are retrieved from each Near-RT RIC. It is also
+possible to change the configuration of available RICs, provided that Consul is not used.
 
-Additionally, producers and jobs for the Enrichment Information coordinator service can be viewed and managed.
+Additionally, producers and jobs for the Enrichment Information coordinator service can be viewed.
 
 See the README.md file in the nonrtric-controlpanel repo for information about how to use it.
 
 Start the Control Panel for development
 ---------------------------------------
 
-To run the Control Panel locally for development with simulated services, follow these steps:
+To run the Control Panel locally for development , follow the steps below.
 
-- Fetch the latest code from `gerrit`_
+First, fetch the latest code from `gerrit <https://gerrit.o-ran-sc.org/r/admin/repos/portal/nonrtric-controlpanel>`_ and
+go in to the frontend folder in the repo:
 
-.. _gerrit: https://gerrit.o-ran-sc.org/r/admin/repos/portal/nonrtric-controlpanel
 
-- Start the frontend:
+    +----------------------------------------------------+
+    | cd nonrtric-controlpanel/webapp-frontend           |
+    +----------------------------------------------------+
 
-    +------------------------------+
-    | cd webapp-frontend           |
-    +------------------------------+
+The Control Panel can be started with mock data to make it easy to develop the GUI without the need to start all services.
+Run the following command to start with mock data:
 
-    - To start the frontend with Mock data:
+  +------------------------------+
+  | npm run start:mock           |
+  +------------------------------+
 
-        +------------------------------+
-        | npm run start:mock           |
-        +------------------------------+
+To start the frontend to get real information from Non-RT RIC services the following services need to be started first:
 
-    - To start the UI:
+-  ControlPanel API Gateway
+-  Policy Management Service,
+-  EI Service.
 
-        - You need to start the ControlPanel API Gateway, Policy Management Service & EI Service for the UI to list policy & EI information
+By pulling the `nonrtric <https://gerrit.o-ran-sc.org/r/admin/repos/nonrtric>`__ repo and using the script
+"PM_EI_DEMO.sh" in the folder "test/autotest", the above services will be started and populated with data. It requires
+Docker to run. To run this script with a local version of the Control Panel, a docker image of the Control Panel must
+first be created. To do this, run the following command:
 
-        +---------------------------------------------------+
-        | ./ng serve --proxy-config proxy.conf.json         |
-        +---------------------------------------------------+
+  +-------------------------------------------------------------------+
+  | docker build -t o-ran-sc/nonrtric-controlpanel:2.2.0-SNAPSHOT .   |
+  +-------------------------------------------------------------------+
 
-        OR
+Then run the following command to start the script with the local image:
 
-        +---------------------+
-        | npm start           |
-        +---------------------+
+  +-------------------------------------------------------------------------------------------------------------------+
+  | sudo ./PM_EI_DEMO.sh remote-remove docker  --env-file ../common/test_env-oran-d-release.sh --use-local-image CP   |
+  +-------------------------------------------------------------------------------------------------------------------+
 
-    - Now you can open URL:  `localhost:4200`_ in a browser to access the Control Panel.
+When the above servers are started and populated with data, run the following command:
+
+   +---------------------+
+   | npm start           |
+   +---------------------+
+
+Open the URL:  `localhost:4200`_ in a browser to access the Control Panel.
 
     .. _localhost:4200: http://localhost:4200
 
-From the main page, click on the "Policy Control" card. From here, it is possible to create or list instances for each
-existing policy type.
+From the main page, click on the "Policy Control" card or use the menu on the left hand side of the page. From here, it
+is possible to create or list instances for each existing policy type.
 
 When the instances are listed, it is possible to edit or delete each instance from the expanded view.
 
 .. image:: ./images/non-RT_RIC_controlpanel_Policy.PNG
 
-In order to view producers and jobs from the EI service, from the main page, click on the "Enrichment information coordinator" card or use the menu on the left hand side of the page. 
+It is also possible to manage the configuration of available RICs, provided that Consul is not used, from the Control Panel.
+From the menu on the left hand side, select "Policy -> RIC Config".
+
+.. image:: ./images/non-RT_RIC_controlpanel_ric_config.PNG
+
+
+From the main page, click on the "Enrichment information coordinator" card or use the menu on the left hand side of the page.
+From here it is possible to view producers and jobs from the EI service,
 
 .. image:: ./images/non-RT_RIC_controlpanel_EI.PNG
 
