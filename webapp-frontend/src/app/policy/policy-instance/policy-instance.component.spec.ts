@@ -186,27 +186,24 @@ describe("PolicyInstanceComponent", () => {
     });
 
     it("should contain number of instances heading and value, create and refresh buttons, and policies table", async () => {
-      const instancesHeading = hostFixture.debugElement.nativeElement.querySelector(
-        "div"
-      );
+      const instancesHeading =
+        hostFixture.debugElement.nativeElement.querySelector("div");
       expect(instancesHeading.innerText).toContain("Number of instances: 2");
 
       const createButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#createButton" })
       );
       expect(createButton).toBeTruthy();
-      const createIcon = hostFixture.debugElement.nativeElement.querySelector(
-        "#createIcon"
-      );
+      const createIcon =
+        hostFixture.debugElement.nativeElement.querySelector("#createIcon");
       expect(createIcon.innerText).toContain("add_box");
 
       const refreshButton: MatButtonHarness = await loader.getHarness(
         MatButtonHarness.with({ selector: "#refreshButton" })
       );
       expect(refreshButton).toBeTruthy();
-      const refreshIcon = hostFixture.debugElement.nativeElement.querySelector(
-        "#refreshIcon"
-      );
+      const refreshIcon =
+        hostFixture.debugElement.nativeElement.querySelector("#refreshIcon");
       expect(refreshIcon.innerText).toContain("refresh");
 
       const policiesTable = await loader.getHarness(
@@ -309,7 +306,7 @@ describe("PolicyInstanceComponent", () => {
       const lastModifiedCell = (await firstRow.getCells())[3];
       (await lastModifiedCell.host()).click();
 
-      // Totally unnecessary call just to make the bloody framework count the number of calls to the spy correctly!
+      // Totally unnecessary call just to make the framework count the number of calls to the spy correctly!
       await policiesTable.getRows();
 
       expect(componentUnderTest.modifyInstance).toHaveBeenCalledTimes(4);
@@ -494,24 +491,22 @@ describe("PolicyInstanceComponent", () => {
     it("should not sort when click in filter inputs", async () => {
       spyOn(componentUnderTest, "stopSort").and.callThrough();
 
-      const idFilterInputDiv = hostFixture.debugElement.nativeElement.querySelector(
-        "#idSortStop"
-      );
+      const idFilterInputDiv =
+        hostFixture.debugElement.nativeElement.querySelector("#idSortStop");
       idFilterInputDiv.click();
 
-      const targetFilterInputDiv = hostFixture.debugElement.nativeElement.querySelector(
-        "#targetSortStop"
-      );
+      const targetFilterInputDiv =
+        hostFixture.debugElement.nativeElement.querySelector("#targetSortStop");
       targetFilterInputDiv.click();
 
-      const ownerFilterInputDiv = hostFixture.debugElement.nativeElement.querySelector(
-        "#ownerSortStop"
-      );
+      const ownerFilterInputDiv =
+        hostFixture.debugElement.nativeElement.querySelector("#ownerSortStop");
       ownerFilterInputDiv.click();
 
-      const lastModifiedFilterInputDiv = hostFixture.debugElement.nativeElement.querySelector(
-        "#lastModifiedSortStop"
-      );
+      const lastModifiedFilterInputDiv =
+        hostFixture.debugElement.nativeElement.querySelector(
+          "#lastModifiedSortStop"
+        );
       lastModifiedFilterInputDiv.click();
 
       expect(componentUnderTest.stopSort).toHaveBeenCalledTimes(4);
@@ -519,6 +514,38 @@ describe("PolicyInstanceComponent", () => {
       const eventSpy = jasmine.createSpyObj("any", ["stopPropagation"]);
       componentUnderTest.stopSort(eventSpy);
       expect(eventSpy.stopPropagation).toHaveBeenCalled();
+    });
+
+    describe("#truncate data", () => {
+      fit("should verify that data is correctly truncated when needed", async () => {
+        policyServiceSpy.getPolicyInstancesByType.and.returnValue(
+          of(policyInstances)
+        );
+        policyServiceSpy.getPolicyInstance.and.callFake(function (
+          policyId: string
+        ) {
+          return of(policyIdToInstanceMap[policyId]);
+        });
+        policyServiceSpy.getPolicyStatus.and.callFake(function (
+          policyId: string
+        ) {
+          return of(policyIdToStatusMap[policyId]);
+        });
+        compileAndGetComponents();
+        componentUnderTest.slice = 1;
+        componentUnderTest.ngOnInit();
+
+        const policiesTable = await loader.getHarness(
+          MatTableHarness.with({ selector: "#policiesTable" })
+        );
+        const policyRows = await policiesTable.getRows();
+        expect(policyRows.length).toEqual(1);
+        policyRows[0].getCellTextByColumnName().then((values) => {
+          expect(expectedPolicy1Row).toEqual(jasmine.objectContaining(values));
+        });
+
+        expect(componentUnderTest.truncated).toBeTruthy();
+      });
     });
 
     describe("#sorting", () => {
