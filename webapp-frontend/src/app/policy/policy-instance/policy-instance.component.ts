@@ -33,7 +33,7 @@ import { BehaviorSubject, forkJoin } from "rxjs";
 import { UiService } from "@services/ui/ui.service";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatTableDataSource } from "@angular/material/table";
-import { mergeMap } from "rxjs/operators";
+import { finalize, mergeMap, map } from "rxjs/operators";
 
 @Component({
   selector: "nrcp-policy-instance",
@@ -41,12 +41,16 @@ import { mergeMap } from "rxjs/operators";
   styleUrls: ["./policy-instance.component.scss"],
 })
 export class PolicyInstanceComponent implements OnInit {
+  public slice: number = 1000;
   @Input() policyTypeSchema: PolicyTypeSchema;
   darkMode: boolean;
   instanceDataSource: MatTableDataSource<PolicyInstance>;
   policyInstanceForm: FormGroup;
   private policyInstanceSubject = new BehaviorSubject<PolicyInstance[]>([]);
   policyInstances: PolicyInstance[] = [];
+  private loadingSubject$ = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject$.asObservable();
+  public truncated = false;
 
   constructor(
     private policySvc: PolicyService,
@@ -96,9 +100,17 @@ export class PolicyInstanceComponent implements OnInit {
 
   getPolicyInstances() {
     this.policyInstances = [] as PolicyInstance[];
+    this.loadingSubject$.next(true);
     this.policySvc
       .getPolicyInstancesByType(this.policyTypeSchema.id)
       .pipe(
+        map((data) => {
+          if (data.policy_ids.length > this.slice) {
+            this.truncated = true;
+            data.policy_ids = data.policy_ids.slice(0, this.slice);
+          }
+          return data;
+        }),
         mergeMap((policyIds) =>
           forkJoin(
             policyIds.policy_ids.map((id) => {
@@ -108,7 +120,8 @@ export class PolicyInstanceComponent implements OnInit {
               ]);
             })
           )
-        )
+        ),
+        finalize(() => this.loadingSubject$.next(false))
       )
       .subscribe((res) => {
         this.policyInstances = res.map((policy) => {
@@ -178,7 +191,7 @@ export class PolicyInstanceComponent implements OnInit {
 
   hasInstances(): boolean {
     return this.instanceCount() > 0;
-}
+  }
 
   instanceCount(): number {
     return this.policyInstances.length;
@@ -212,6 +225,7 @@ export class PolicyInstanceComponent implements OnInit {
   }
 
   refreshTable() {
+    this.truncated = false;
     this.getPolicyInstances();
   }
 }

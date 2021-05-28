@@ -43,6 +43,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const routes:Routes = [
   {path: 'policy', component: PolicyControlComponent}
@@ -69,6 +70,7 @@ const routes:Routes = [
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
     MatSortModule,
     MaterialDesignFrameworkModule,
