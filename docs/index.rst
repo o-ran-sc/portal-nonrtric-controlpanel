@@ -11,6 +11,7 @@ Non-RT RIC Control Panel
 
    ./overview.rst
    ./developer-guide.rst
+   ./api-docs.rst
    ./installation-guide.rst
    ./release-notes.rst
 
