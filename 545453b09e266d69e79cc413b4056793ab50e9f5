@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d366b5ac_378b0ea4",
+        "filename": "docker-compose/nonrtric-gateway/config/application-nonrtricgateway.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-05-31T12:04:39Z",
+      "side": 1,
+      "message": "Do you need multiple predicates?\n/a1-policy or /a1-policy/v2 should work.",
+      "revId": "545453b09e266d69e79cc413b4056793ab50e9f5",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3737456_3b452be7",
+        "filename": "docker-compose/nonrtric-gateway/config/application-nonrtricgateway.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2021-05-31T12:04:39Z",
+      "side": 1,
+      "message": "Same as above.\n/data-consumer missing?",
+      "revId": "545453b09e266d69e79cc413b4056793ab50e9f5",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
