@@ -36,6 +36,10 @@ Run the following command to start with mock data:
   | npm run start:mock           |
   +------------------------------+
 
+Open the URL:  `localhost:4200`_ in a browser to access the Control Panel with mock information.
+
+    .. _localhost:4200: http://localhost:4200
+
 To start the frontend to get real information from Non-RT RIC services the following services need to be started first:
 
 -  ControlPanel API Gateway
@@ -63,9 +67,9 @@ When the above servers are started and populated with data, run the following co
    | npm start           |
    +---------------------+
 
-Open the URL:  `localhost:4200`_ in a browser to access the Control Panel.
+Open the URL:  `localhost:8080`_ in a browser to access the Control Panel with real information.
 
-    .. _localhost:4200: http://localhost:4200
+    .. _localhost:8080: http://localhost:8080
 
 From the main page, click on the "Policy Control" card or use the menu on the left hand side of the page. From here, it
 is possible to create or list instances for each existing policy type.
