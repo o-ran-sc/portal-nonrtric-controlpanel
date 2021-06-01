@@ -38,3 +38,10 @@ Look under the "PORTS" column to see the port used by the Gateway.
 The Gateway supports calls to the A1 Policy Management Service and A1 Enrichment Information Coordinator.
 See `A1 Policy Management Service API <https://docs.o-ran-sc.org/projects/o-ran-sc-nonrtric/en/latest/api-docs.html#a1-policy-management-service>`__
 and `A1 Enrichment Information Coordinator API <https://docs.o-ran-sc.org/projects/o-ran-sc-nonrtric/en/latest/api-docs.html#enrichment-coordinator-service>`__.
+
+Some examples on how to call the gateway with CURL:
+
+ .. code-block:: bash
+
+   curl GET localhost:9090/a1-policy/v2/policy-instances
+   curl GET localhost:9090/data-producer/v1/info-types
