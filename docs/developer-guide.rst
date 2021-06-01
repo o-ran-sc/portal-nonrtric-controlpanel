@@ -18,7 +18,8 @@ See the README.md file in the nonrtric-controlpanel repo for information about h
 Start the Control Panel for development
 ---------------------------------------
 
-To run the Control Panel locally for development , follow the steps below.
+To run the Control Panel locally for development, follow the steps below.
+
 
 First, fetch the latest code from `gerrit <https://gerrit.o-ran-sc.org/r/admin/repos/portal/nonrtric-controlpanel>`_ and
 go in to the frontend folder in the repo:
