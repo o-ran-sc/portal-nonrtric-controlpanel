@@ -517,7 +517,7 @@ describe("PolicyInstanceComponent", () => {
     });
 
     describe("#truncate data", () => {
-      fit("should verify that data is correctly truncated when needed", async () => {
+      it("should verify that data is correctly truncated when needed", async () => {
         policyServiceSpy.getPolicyInstancesByType.and.returnValue(
           of(policyInstances)
         );
