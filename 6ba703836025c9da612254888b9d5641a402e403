@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2600a3a_f8bb4675",
+        "filename": "webapp-frontend/src/app/policy/policy-instance/policy-instance.component.spec.ts",
+        "patchSetId": 3
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1001106
+      },
+      "writtenOn": "2021-06-07T06:37:30Z",
+      "side": 0,
+      "message": "Thanks for this!",
+      "range": {
+        "startLine": 520,
+        "startChar": 6,
+        "endLine": 520,
+        "endChar": 7
+      },
+      "revId": "6ba703836025c9da612254888b9d5641a402e403",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
