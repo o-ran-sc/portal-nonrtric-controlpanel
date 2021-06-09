@@ -1,0 +1,11 @@
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Code-Review+1: Chengkai Yan <martin.c.yan@est.tech>
+Code-Review+1: Yennifer Chacon <yennifer.chacon@est.tech>
+Code-Review+1: Muhammad Rehan Raza <muhammad.rehan.raza@est.tech>
+Code-Review+2: John  Keeney <john.keeney@est.tech>
+Code-Review+1: Bj�rn Magnusson <bjorn.magnusson@est.tech>
+Submitted-by: Patrik Buhr <patrik.buhr@est.tech>
+Submitted-at: Wed, 09 Jun 2021 09:23:37 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/portal/nonrtric-controlpanel/+/6255
+Project: portal/nonrtric-controlpanel
+Branch: refs/heads/master
