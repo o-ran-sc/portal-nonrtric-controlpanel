@@ -9,7 +9,7 @@ Graphical user interface with the following capabilities:
 
 *  View and Manage A1 policies in the RAN (near-RT-RICs)
 *  Graphical A1 policy creation/editing is model-driven, based on policy type’s JSON schema
-*  View and manage producers and jobs for the Enrichment coordinator service
+*  View producers and jobs for the Enrichment coordinator service
 *  Configure A1 Policy Management Service (add/remove near-rt-rics)
 
 The Control Panel frontend interacts with the A1 Policy Management Service and A1 Enrichment Information Coordinator
