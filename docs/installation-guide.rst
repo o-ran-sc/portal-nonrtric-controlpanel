@@ -12,7 +12,7 @@ This document describes how to install the Non-RT RIC Control Panel, its depende
 
 
 The Non-RT RIC Control Panel is a graphical user interface that enables the user to view and manage the A1 policies in
-the RAN and also view producers and jobs for the Enrichement Information coordinator service. 
+the RAN and also view producers and jobs for the Enrichement Information coordinator service.
 
 Preface
 -------
@@ -20,6 +20,10 @@ Preface
 Since the control Panel depends on the A1 Policy Management Service and A1 Enrichment Information Coordinator, they
 must be installed to make it work. See `Non-RT RIC <https://docs.o-ran-sc.org/projects/o-ran-sc-nonrtric/en/latest/index.html>`__
 for how to install and set them up.
+
+This guide is to install both the NonRtRIC Control Panel and the NonRtRIC Service Gateway.
+
+The installation of the NonRtRIC Service Gateway is needed as it exposes A1 Policy Management Service and Enrichment Coordinator Service.
 
 Software Installation and Deployment
 ------------------------------------
