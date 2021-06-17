@@ -21,6 +21,10 @@ Since the control Panel depends on the A1 Policy Management Service and A1 Enric
 must be installed to make it work. See `Non-RT RIC <https://docs.o-ran-sc.org/projects/o-ran-sc-nonrtric/en/latest/index.html>`__
 for how to install and set them up.
 
+This guide is to install both the NonRtRIC Control Panel and the NonRtRIC Service Gateway. 
+
+The installation of the NonRtRIC Service Gateway is needed as it exposes A1 Policy Management Service and Enrichment Coordinator Service.
+
 Software Installation and Deployment
 ------------------------------------
 
