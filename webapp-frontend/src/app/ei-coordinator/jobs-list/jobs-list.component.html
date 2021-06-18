@@ -38,18 +38,18 @@ limitations under the License.
             </mat-header-cell>
             <mat-cell *matCellDef="let job"> {{job.jobId}} </mat-cell>
         </ng-container>
-        <ng-container matColumnDef="prodId">
+        <ng-container matColumnDef="prodIds">
             <mat-header-cell *matHeaderCellDef mat-sort-header>
                 <div (click)="stopSort($event)">
                     <form style="display: flex" [formGroup]="jobForm">
                         <mat-form-field>
-                            <input id="jobProdIdFilter" matInput formControlName="prodId">
-                            <mat-placeholder>Producer ID</mat-placeholder>
+                            <input id="jobProdIdFilter" matInput formControlName="prodIds">
+                            <mat-placeholder>Producers</mat-placeholder>
                         </mat-form-field>
                     </form>
                 </div>
             </mat-header-cell>
-            <mat-cell *matCellDef="let job"> {{job.prodId}} </mat-cell>
+            <mat-cell *matCellDef="let job"> {{job.prodIds}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="typeId">
             <mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -90,8 +90,8 @@ limitations under the License.
             </mat-header-cell>
             <mat-cell *matCellDef="let job"> {{job.targetUri}} </mat-cell>
         </ng-container>
-        <mat-header-row *matHeaderRowDef="['jobId', 'prodId', 'typeId', 'owner', 'targetUri']"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: ['jobId', 'prodId', 'typeId', 'owner', 'targetUri'];"></mat-row>
+        <mat-header-row *matHeaderRowDef="['jobId', 'prodIds', 'typeId', 'owner', 'targetUri']"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ['jobId', 'prodIds', 'typeId', 'owner', 'targetUri'];"></mat-row>
     </mat-table>
     <mat-paginator [length]="jobs()?.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
         class="ei-coordinator-table mat-elevation-z8"></mat-paginator>

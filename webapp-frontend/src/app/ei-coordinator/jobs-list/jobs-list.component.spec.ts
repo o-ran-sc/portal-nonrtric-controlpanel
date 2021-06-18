@@ -41,56 +41,41 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTableHarness } from "@angular/material/table/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { of } from "rxjs/observable/of";
-import { JobInfo } from "@interfaces/producer.types";
-import { ProducerService } from "@services/ei/producer.service";
+import { ConsumerStatus, JobInfo } from "@interfaces/consumer.types";
 import { UiService } from "@services/ui/ui.service";
 
 import { Job, JobsListComponent } from "./jobs-list.component";
 import { Subscription } from "rxjs";
+import { ConsumerService } from "@services/ei/consumer.service";
 
 let component: JobsListComponent;
 let fixture: ComponentFixture<JobsListComponent>;
 
 const jobInfo1 = {
-  info_job_identity: "job1",
-  info_type_identity: "type1",
-  owner: "owner1",
-  target_uri: "http://one",
+  info_type_id: "type1",
+  job_owner: "owner1",
+  job_result_uri: "http://one",
+  job_definition: {},
 } as JobInfo;
-const jobInfo2 = {
-  info_job_identity: "job2",
-  info_type_identity: "type2",
-  owner: "owner2",
-  target_uri: "http://two",
-} as JobInfo;
+
+const jobStatus1 = {
+  info_job_status: "ENABLED",
+  producers: ["producer1"],
+} as ConsumerStatus;
 
 const job1 = {
   jobId: "job1",
   typeId: "type1",
   owner: "owner1",
   targetUri: "http://one",
-  prodId: "producer1",
+  prodIds: ["producer1"],
 } as Job;
 const job2 = {
   jobId: "job2",
-  typeId: "type2",
-  owner: "owner2",
-  targetUri: "http://two",
-  prodId: "producer1",
-} as Job;
-const job3 = {
-  jobId: "job1",
   typeId: "type1",
   owner: "owner1",
   targetUri: "http://one",
-  prodId: "producer2",
-} as Job;
-const job4 = {
-  jobId: "job2",
-  typeId: "type2",
-  owner: "owner2",
-  targetUri: "http://two",
-  prodId: "producer2",
+  prodIds: ["producer1"],
 } as Job;
 
 describe("JobsListComponent", () => {
@@ -98,8 +83,9 @@ describe("JobsListComponent", () => {
 
   beforeEach(async(() => {
     const spy = jasmine.createSpyObj("EIService", [
-      "getProducerIds",
-      "getJobsForProducer",
+      "getJobIds",
+      "getJobInfo",
+      "getConsumerStatus",
     ]);
 
     TestBed.configureTestingModule({
@@ -115,7 +101,7 @@ describe("JobsListComponent", () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [JobsListComponent],
-      providers: [{ provide: ProducerService, useValue: spy }, UiService],
+      providers: [{ provide: ConsumerService, useValue: spy }, UiService],
     })
       .compileComponents()
       .then(() => {
@@ -127,7 +113,7 @@ describe("JobsListComponent", () => {
 
   const expectedJob1Row = {
     jobId: "job1",
-    prodId: "producer1",
+    prodIds: "producer1",
     typeId: "type1",
     owner: "owner1",
     targetUri: "http://one",
@@ -144,8 +130,8 @@ describe("JobsListComponent", () => {
       tick(0);
 
       const actualJobs: Job[] = component.jobs();
-      expect(actualJobs.length).toEqual(4);
-      expect(actualJobs).toEqual([job1, job2, job3, job4]);
+      expect(actualJobs.length).toEqual(2);
+      expect(actualJobs).toEqual([job1, job2]);
       newSub.unsubscribe();
     }));
 
@@ -161,7 +147,7 @@ describe("JobsListComponent", () => {
             headerRow[0].getCellTextByColumnName().then((header) => {
               expect(header).toEqual({
                 jobId: "Job ID",
-                prodId: "Producer ID",
+                prodIds: "Producers",
                 typeId: "Type ID",
                 owner: "Owner",
                 targetUri: "Target URI",
@@ -198,24 +184,10 @@ describe("JobsListComponent", () => {
         expectedJob1Row,
         {
           jobId: "job2",
-          prodId: "producer1",
-          typeId: "type2",
-          owner: "owner2",
-          targetUri: "http://two",
-        },
-        {
-          jobId: "job1",
-          prodId: "producer2",
+          prodIds: "producer1",
           typeId: "type1",
           owner: "owner1",
           targetUri: "http://one",
-        },
-        {
-          jobId: "job2",
-          prodId: "producer2",
-          typeId: "type2",
-          owner: "owner2",
-          targetUri: "http://two",
         },
       ];
 
@@ -223,7 +195,7 @@ describe("JobsListComponent", () => {
         .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
         .then((loadTable) => {
           loadTable.getRows().then((jobRows) => {
-            expect(jobRows.length).toEqual(4);
+            expect(jobRows.length).toEqual(2);
             jobRows.forEach((row) => {
               row.getCellTextByColumnName().then((values) => {
                 expect(expectedJobRows).toContain(
@@ -238,26 +210,32 @@ describe("JobsListComponent", () => {
 
     it("should display default values for non required properties ", fakeAsync(() => {
       const jobMissingProperties = {
-        info_job_identity: "job1",
-        info_job_data: {
+        job_definition: {
           jobparam2: "value2_job2",
           jobparam3: "value3_job2",
           jobparam1: "value1_job2",
         },
-        target_uri: "http://one",
+        job_result_uri: "http://one",
       } as JobInfo;
+      const jobMissingPropertiesStatus = {
+        info_job_status: "ENABLED",
+        producers: ["producer1"],
+      } as ConsumerStatus;
 
-      let producerServiceSpy = TestBed.inject(ProducerService) as jasmine.SpyObj<ProducerService>;
-      producerServiceSpy.getProducerIds.and.returnValue(of(["producer1"]));
-      producerServiceSpy.getJobsForProducer.and.returnValue(
-        of([jobMissingProperties])
+      let consumerServiceSpy = TestBed.inject(
+        ConsumerService
+      ) as jasmine.SpyObj<ConsumerService>;
+      consumerServiceSpy.getJobIds.and.returnValue(of(["job1"]));
+      consumerServiceSpy.getJobInfo.and.returnValue(of(jobMissingProperties));
+      consumerServiceSpy.getConsumerStatus.and.returnValue(
+        of(jobMissingPropertiesStatus)
       );
 
       component.ngOnInit();
       tick(0);
       const expectedJobRow = {
         jobId: "job1",
-        prodId: "producer1",
+        prodIds: "producer1",
         typeId: "< No type >",
         owner: "< No owner >",
         targetUri: "http://one",
@@ -290,7 +268,7 @@ describe("JobsListComponent", () => {
               idFilter.setValue("1").then((_) => {
                 tick(10);
                 loadTable.getRows().then((jobRows) => {
-                  expect(jobRows.length).toEqual(2);
+                  expect(jobRows.length).toEqual(1);
                   jobRows[0].getCellTextByColumnName().then((value) => {
                     expect(expectedJob1Row).toEqual(
                       jasmine.objectContaining(value)
@@ -440,8 +418,8 @@ describe("JobsListComponent", () => {
 
       it("should not sort when clicking on filtering box", fakeAsync(() => {
         const expectedJobRow = {
-          jobId: "job1",
-          prodId: "producer2",
+          jobId: "job2",
+          prodIds: "producer1",
           typeId: "type1",
           owner: "owner1",
           targetUri: "http://one",
@@ -460,8 +438,8 @@ describe("JobsListComponent", () => {
                 tick(10);
                 idFilter.setValue("").then((_) => {
                   loadTable.getRows().then((jobRows) => {
-                    expect(jobRows.length).toEqual(4);
-                    jobRows[2].getCellTextByColumnName().then((value) => {
+                    expect(jobRows.length).toEqual(2);
+                    jobRows[1].getCellTextByColumnName().then((value) => {
                       expect(expectedJobRow).toEqual(
                         jasmine.objectContaining(value)
                       );
@@ -477,8 +455,8 @@ describe("JobsListComponent", () => {
                 tick(10);
                 typeIdFilter.setValue("").then((_) => {
                   loadTable.getRows().then((jobRows) => {
-                    expect(jobRows.length).toEqual(4);
-                    jobRows[2].getCellTextByColumnName().then((value) => {
+                    expect(jobRows.length).toEqual(2);
+                    jobRows[1].getCellTextByColumnName().then((value) => {
                       expect(expectedJobRow).toEqual(
                         jasmine.objectContaining(value)
                       );
@@ -492,8 +470,8 @@ describe("JobsListComponent", () => {
                 tick(10);
                 ownerFilter.setValue("").then((_) => {
                   loadTable.getRows().then((jobRows) => {
-                    expect(jobRows.length).toEqual(4);
-                    jobRows[2].getCellTextByColumnName().then((value) => {
+                    expect(jobRows.length).toEqual(2);
+                    jobRows[1].getCellTextByColumnName().then((value) => {
                       expect(expectedJobRow).toEqual(
                         jasmine.objectContaining(value)
                       );
@@ -509,8 +487,8 @@ describe("JobsListComponent", () => {
                 tick(10);
                 targetUriFilter.setValue("").then((_) => {
                   loadTable.getRows().then((jobRows) => {
-                    expect(jobRows.length).toEqual(4);
-                    jobRows[2].getCellTextByColumnName().then((value) => {
+                    expect(jobRows.length).toEqual(2);
+                    jobRows[1].getCellTextByColumnName().then((value) => {
                       expect(expectedJobRow).toEqual(
                         jasmine.objectContaining(value)
                       );
@@ -525,52 +503,56 @@ describe("JobsListComponent", () => {
 
     describe("#paging", () => {
       it("should work properly on the table", fakeAsync(() => {
-        let producerServiceSpy = TestBed.inject(
-          ProducerService
-        ) as jasmine.SpyObj<ProducerService>;
-        producerServiceSpy.getProducerIds.and.returnValue(
-          of(["producer1", "producer2"])
+        let consumerServiceSpy = TestBed.inject(
+          ConsumerService
+        ) as jasmine.SpyObj<ConsumerService>;
+        consumerServiceSpy.getJobIds.and.returnValue(
+          of(["job1", "job2", "job3", "job4", "job5", "job6", "job7"])
         );
-        producerServiceSpy.getJobsForProducer.and.returnValue(
-          of([jobInfo1, jobInfo2, jobInfo1])
-        );
-        tick(0);
+        consumerServiceSpy.getJobInfo.and.returnValue(of(jobInfo1));
+        consumerServiceSpy.getConsumerStatus.and.returnValue(of(jobStatus1));
+        component.ngOnInit();
+        tick();
 
         loader.getHarness(MatPaginatorHarness).then((paging) => {
           paging.setPageSize(5);
-
+          tick(1000);
           loader
             .getHarness(MatTableHarness.with({ selector: "#jobsTable" }))
             .then((loadTable) => {
               loadTable.getRows().then((jobRows) => {
                 expect(jobRows.length).toEqual(5);
               });
+
               paging.goToNextPage();
+              tick(1000);
+
               loadTable.getRows().then((jobRows) => {
-                expect(jobRows.length).toEqual(1);
+                expect(jobRows.length).toEqual(2);
                 jobRows[0].getCellTextByColumnName().then((value) => {
                   const expectedRow = {
-                    jobId: "job1",
-                    prodId: "producer2",
+                    jobId: "job6",
+                    prodIds: "producer1",
                     typeId: "type1",
                     owner: "owner1",
                     targetUri: "http://one",
                   };
-                  expect(expectedRow).toContain(
-                    jasmine.objectContaining(value)
-                  );
+                  discardPeriodicTasks();
+                  expect(expectedRow).toEqual(jasmine.objectContaining(value));
                 });
               });
             });
         });
-        discardPeriodicTasks();
       }));
     });
   });
 });
 
 function setServiceSpy() {
-  let producerServiceSpy = TestBed.inject(ProducerService) as jasmine.SpyObj<ProducerService>;
-  producerServiceSpy.getProducerIds.and.returnValue(of(["producer1", "producer2"]));
-  producerServiceSpy.getJobsForProducer.and.returnValue(of([jobInfo1, jobInfo2]));
+  let consumerServiceSpy = TestBed.inject(
+    ConsumerService
+  ) as jasmine.SpyObj<ConsumerService>;
+  consumerServiceSpy.getJobIds.and.returnValue(of(["job1", "job2"]));
+  consumerServiceSpy.getJobInfo.and.returnValue(of(jobInfo1));
+  consumerServiceSpy.getConsumerStatus.and.returnValue(of(jobStatus1));
 }
