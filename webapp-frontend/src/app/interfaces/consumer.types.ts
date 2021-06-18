@@ -20,20 +20,25 @@
 
 // Models of data used by the EI Coordinator
 
-export interface Producer {
-  producer_id: string;
-  producer_types: string[];
-  status: string;
+export interface JobInfo {
+  info_type_id: string;
+  job_definition: any;
+  job_result_uri: string;
+  job_owner: string;
+  status_notification_uri: string;
 }
 
-export interface ProducerRegistrationInfo {
-  supported_info_types: string[]
+export interface Consumer {
+  consumer_id: string;
+  status: string;
 }
 
 export enum OperationalState {
   ENABLED = 'ENABLED',
   DISABLED = 'DISABLED'
 }
-export interface ProducerStatus {
-  operational_state: OperationalState
+
+export interface ConsumerStatus {
+  info_job_status: OperationalState;
+  producers: string[];
 }
