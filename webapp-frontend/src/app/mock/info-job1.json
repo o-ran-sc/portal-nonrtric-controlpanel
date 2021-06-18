@@ -1,0 +1,7 @@
+{
+    "info_type_id": "type1",
+    "job_owner": "ricsim_g3_2",
+    "job_definition": {},
+    "job_result_uri": "https://ricsim_g3_1:8185/datadelivery",
+    "status_notification_uri": "http://producer:80/"
+}

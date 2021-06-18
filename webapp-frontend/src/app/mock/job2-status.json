@@ -1,0 +1,7 @@
+{
+    "info_job_status": "ENABLED",
+    "producers": [
+        "prod1",
+        "prod2"
+    ]
+}

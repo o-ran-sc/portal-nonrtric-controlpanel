@@ -35,8 +35,6 @@ import * as policyinstance2 from "./mock/policy-instance-2.json";
 import * as noTypePolicyinstance from "./mock/policy-instance-notype.json";
 import * as policyinstance1Status from "./mock/policy-instance-1-status.json";
 import * as policyinstance2Status from "./mock/policy-instance-2-status.json";
-import * as jobsProd1 from "./mock/jobs-producer1.json";
-import * as jobsProd2 from "./mock/jobs-producer2.json";
 import * as producerIds from "./mock/producerids.json";
 import * as producer1 from "./mock/producer1.json";
 import * as producer2 from "./mock/producer2.json";
@@ -48,10 +46,16 @@ import * as policyinstanceedit from "./mock/policy-instance-edit.json";
 import * as ric1 from "./mock/ric1.json";
 import * as ric2 from "./mock/ric2.json";
 import * as ricconfig from "./mock/ric-configuration.json";
+import * as jobIds from "./mock/jobids.json";
+import * as infoJob1 from "./mock/info-job1.json";
+import * as infoJob2 from "./mock/info-job2.json";
+import * as job1Status from "./mock/job1-status.json";
+import * as job2Status from "./mock/job2-status.json";
 import { delay } from "rxjs/operators";
 
 const POLICY_PATH = "/a1-policy/v2"
 const INFO_PATH = "/data-producer/v1"
+const CONSUMER_PATH = "/data-consumer/v1"
 
 const urls = [
   {
@@ -151,12 +155,24 @@ const urls = [
     json: producerstatus2,
   },
   {
-    url: INFO_PATH + "/info-producers/producer1/info-jobs",
-    json: jobsProd1,
+    url: CONSUMER_PATH + "/info-jobs",
+    json: jobIds,
   },
   {
-    url: INFO_PATH + "/info-producers/producer2/info-jobs",
-    json: jobsProd2,
+    url: CONSUMER_PATH + "/info-jobs/job1",
+    json: infoJob1,
+  },
+  {
+    url: CONSUMER_PATH + "/info-jobs/job2",
+    json: infoJob2,
+  },
+  {
+    url: CONSUMER_PATH + "/info-jobs/job1/status",
+    json: job1Status,
+  },
+  {
+    url: CONSUMER_PATH + "/info-jobs/job2/status",
+    json: job2Status,
   },
     {
         url: '/a1-policy/v2/configuration',
