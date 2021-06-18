@@ -27,11 +27,11 @@ spring:
         wiretap: true
       routes:
       - id: A1-Policy
-        uri: https://localhost:8433
+        uri: https://policy-agent:8433
         predicates:
         - Path=/a1-policy/**
       - id: A1-EI
-        uri: https://localhost:8434
+        uri: https://ecs:8434
         predicates:
         - Path=/data-producer/**,/data-consumer/**
 management:

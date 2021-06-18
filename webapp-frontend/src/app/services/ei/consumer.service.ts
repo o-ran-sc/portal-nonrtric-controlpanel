@@ -21,7 +21,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ProducerStatus, ProducerRegistrationInfo } from '@interfaces/producer.types';
+import { ConsumerStatus, JobInfo } from '@interfaces/consumer.types';
 
 /**
  * Services for calling the EI endpoints.
@@ -29,12 +29,11 @@ import { ProducerStatus, ProducerRegistrationInfo } from '@interfaces/producer.t
 @Injectable({
     providedIn: 'root'
 })
-export class ProducerService {
+export class ConsumerService {
 
-    private basePath = '/data-producer/v1';
+    private basePath = '/data-consumer/v1';
     readonly jobsPath = 'info-jobs';
-    readonly producersPath = 'info-producers';
-    readonly producerStatusPath = 'status';
+    readonly consumerStatusPath = 'status';
 
     private buildPath(...args: any[]) {
         let result = this.basePath;
@@ -48,18 +47,18 @@ export class ProducerService {
         // injects to variable httpClient
     }
 
-    getProducerIds(): Observable<string[]> {
-        const url = this.buildPath(this.producersPath);
+    getJobIds(): Observable<string[]> {
+        const url = this.buildPath(this.jobsPath);
         return this.httpClient.get<string[]>(url);
     }
 
-    getProducer(producerId: string): Observable<ProducerRegistrationInfo> {
-        const url = this.buildPath(this.producersPath, producerId);
-        return this.httpClient.get<ProducerRegistrationInfo>(url);
+    getJobInfo(infoJobId: string): Observable<JobInfo> {
+        const url = this.buildPath(this.jobsPath, infoJobId);
+        return this.httpClient.get<JobInfo>(url);
     }
 
-    getProducerStatus(producerId: string): Observable<ProducerStatus> {
-        const url = this.buildPath(this.producersPath, producerId, this.producerStatusPath);
-        return this.httpClient.get<ProducerStatus>(url);
+    getConsumerStatus(infoJobId: string): Observable<ConsumerStatus> {
+        const url = this.buildPath(this.jobsPath, infoJobId, this.consumerStatusPath);
+        return this.httpClient.get<ConsumerStatus>(url);
     }
 }

@@ -22,20 +22,18 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { EMPTY, forkJoin, Subscription, timer } from "rxjs";
+import { EMPTY, forkJoin, of, Subscription, timer } from "rxjs";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { mergeMap, finalize, map, tap, switchMap } from "rxjs/operators";
-import { JobInfo } from "@interfaces/producer.types";
-import { ProducerService } from "@services/ei/producer.service";
+import { ConsumerService } from "@services/ei/consumer.service";
 import { UiService } from "@services/ui/ui.service";
 
 export interface Job {
   jobId: string;
-  jobData: any;
   typeId: string;
   targetUri: string;
   owner: string;
-  prodId: string;
+  prodIds: string[];
 }
 
 @Component({
@@ -58,13 +56,13 @@ export class JobsListComponent implements OnInit {
   checked: boolean = false;
   firstTime: boolean = true;
 
-  constructor(private producerService: ProducerService, private ui: UiService) {
+  constructor(private consumerService: ConsumerService, private ui: UiService) {
     this.jobForm = new FormGroup({
       jobId: new FormControl(""),
       typeId: new FormControl(""),
       owner: new FormControl(""),
       targetUri: new FormControl(""),
-      prodId: new FormControl(""),
+      prodIds: new FormControl(""),
     });
   }
 
@@ -82,7 +80,7 @@ export class JobsListComponent implements OnInit {
           this.isDataIncluding(data.jobId, searchTerms.jobId) &&
           this.isDataIncluding(data.owner, searchTerms.owner) &&
           this.isDataIncluding(data.typeId, searchTerms.typeId) &&
-          this.isDataIncluding(data.prodId, searchTerms.prodId)
+          this.isArrayIncluding(data.prodIds, searchTerms.prodIds)
         );
       }) as (data: Job, filter: any) => boolean;
     });
@@ -97,11 +95,15 @@ export class JobsListComponent implements OnInit {
   }
 
   dataSubscription(): Subscription {
-    let prodId = [];
-    const jobs$ = this.producerService.getProducerIds().pipe(
-      tap((data) => (prodId = data)),
-      mergeMap((prodIds) =>
-        forkJoin(prodIds.map((id) => this.producerService.getJobsForProducer(id)))
+    const jobsInfo$ = this.consumerService.getJobIds().pipe(
+      mergeMap((jobIds) =>
+        forkJoin(jobIds.map((jobId) => {
+          return forkJoin([
+            of(jobId),
+            this.consumerService.getJobInfo(jobId),
+            this.consumerService.getConsumerStatus(jobId)
+          ])
+        }))
       ),
       finalize(() => this.loadingSubject$.next(false))
     );
@@ -112,8 +114,8 @@ export class JobsListComponent implements OnInit {
           tap((_) => {
             this.loadingSubject$.next(true);
           }),
-          switchMap((_) => jobs$),
-          map((response) => this.extractJobs(prodId, response))
+          switchMap((_) => jobsInfo$),
+          map((response) => this.extractJobs(response))
         )
       )
     );
@@ -137,7 +139,7 @@ export class JobsListComponent implements OnInit {
     this.jobForm.get("typeId").setValue("");
     this.jobForm.get("owner").setValue("");
     this.jobForm.get("targetUri").setValue("");
-    this.jobForm.get("prodId").setValue("");
+    this.jobForm.get("prodIds").setValue("");
   }
 
   sortJobs(sort: Sort) {
@@ -153,8 +155,8 @@ export class JobsListComponent implements OnInit {
           return this.compare(a.owner, b.owner, isAsc);
         case "targetUri":
           return this.compare(a.targetUri, b.targetUri, isAsc);
-        case "prodId":
-          return this.compare(a.prodId, b.prodId, isAsc);
+        case "prodIds":
+          return this.compare(a.prodIds, b.prodIds, isAsc);
         default:
           return 0;
       }
@@ -180,6 +182,14 @@ export class JobsListComponent implements OnInit {
     return data.toLowerCase().includes(transformedFilter);
   }
 
+  isArrayIncluding(data: string[], filter: string): boolean {
+    if(!data)
+      return true;
+    for (let i = 0; i < data.length; i++) {
+      return this.isDataIncluding(data[i], filter);
+    }
+  }
+
   getJobTypeId(job: Job): string {
     if (job.typeId) {
       return job.typeId;
@@ -198,38 +208,25 @@ export class JobsListComponent implements OnInit {
     return this.jobsSubject$.value;
   }
 
-  private extractJobs(prodId: number[], res: JobInfo[][]) {
+  private extractJobs(res: any) {
     this.clearFilter();
     let jobList = [];
-    prodId.forEach((element, index) => {
-      let jobs = res[index];
-      jobList = jobList.concat(jobs.map((job) => this.createJob(element, job)));
-    });
+    res.forEach(element => {
+      let jobObj = <Job>{};
+      jobObj.jobId = element[0];
+      jobObj.owner = element[1].job_owner;
+      jobObj.targetUri = element[1].job_result_uri;
+      jobObj.typeId = element[1].info_type_id;
+      jobObj.prodIds = (element[2].producers) ? element[2].producers : ["No Producers"];      
+      jobList = jobList.concat(jobObj);
+    });  
+   
     this.jobsSubject$.next(jobList);
     if (this.firstTime && jobList.length > 0) {
       this.polling$.next(jobList.length);
       this.firstTime = false;
     }
     return jobList;
-  }
-
-  createJobList(prodId: any[], result: JobInfo[][]) {
-    let jobList = [];
-    prodId.forEach((element, index) => {
-      let jobs = result[index];
-      jobList = jobList.concat(jobs.map((job) => this.createJob(element, job)));
-    });
-    return jobList;
-  }
-
-  createJob(element: any, job: JobInfo): any {
-    let infoJob = <Job>{};
-    infoJob.jobId = job.info_job_identity;
-    infoJob.typeId = job.info_type_identity;
-    infoJob.owner = job.owner;
-    infoJob.targetUri = job.target_uri;
-    infoJob.prodId = element;
-    return infoJob;
   }
 
   refreshDataClick() {
