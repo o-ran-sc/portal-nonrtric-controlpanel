@@ -1,10 +1,10 @@
 ---
 distribution_type: container
-container_release_tag: 2.1.0
+container_release_tag: 2.2.0
 container_pull_registry: nexus3.o-ran-sc.org:10004
 container_push_registry: nexus3.o-ran-sc.org:10002
 project: portal
-ref: 9d99a37374c9266f3d11ff0a19c2d068571159ba
+ref: cb87bb89109dfb04fb82bfe2fc63ef7fd1a848d7
 containers:
     - name: nonrtric-controlpanel
-      version: 2.1.0
+      version: 2.2.0
