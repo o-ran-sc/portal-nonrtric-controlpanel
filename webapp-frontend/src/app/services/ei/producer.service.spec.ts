@@ -20,7 +20,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing';
 
-import { JobInfo, ProducerStatus, OperationalState, ProducerRegistrationInfo } from '@interfaces/producer.types';
+import { ProducerStatus, OperationalState, ProducerRegistrationInfo } from '@interfaces/producer.types';
 import { ProducerService } from './producer.service';
 
 describe('ProducerService', () => {
@@ -64,33 +64,6 @@ describe('ProducerService', () => {
 
       httpTestingController.verify();
     });
-  });
-
-  describe('#getJobsForProducer', () => {
-    let expectedEIJobs: JobInfo[];
-
-    beforeEach(() => {
-      service = TestBed.inject(ProducerService);
-      httpTestingController = TestBed.inject(HttpTestingController);
-      expectedEIJobs = [
-        { info_job_identity: '1', info_job_data: 'data', info_type_identity: 'Type ID 1',  target_uri: 'hhtp://url', owner: 'owner'},
-        { info_job_identity: '2', info_job_data: 'EI Job 2', info_type_identity: 'Type ID 2',  target_uri: 'hhtp://url', owner: 'owner'}
-      ] as JobInfo[];
-    });
-
-    it('should return all jobs', () => {
-      service.getJobsForProducer('producer1').subscribe(
-        jobs => expect(jobs).toEqual(expectedEIJobs, 'should return expected Jobs'),
-        fail
-      );
-
-      const req = httpTestingController.expectOne(basePath + '/' + service.producersPath + '/producer1/' + service.jobsPath);
-      expect(req.request.method).toEqual('GET');
-
-      req.flush(expectedEIJobs); //Return expectedEIJobs
-
-      httpTestingController.verify();
-     });
   });
 
   describe('#getProducer', () => {
