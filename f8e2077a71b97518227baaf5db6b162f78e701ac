@@ -1,0 +1,8 @@
+Code-Review+2: Patrik Buhr <patrik.buhr@est.tech>
+Code-Review+2: John  Keeney <john.keeney@est.tech>
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Submitted-by: Patrik Buhr <patrik.buhr@est.tech>
+Submitted-at: Wed, 23 Jun 2021 07:19:21 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/portal/nonrtric-controlpanel/+/6370
+Project: portal/nonrtric-controlpanel
+Branch: refs/heads/master
