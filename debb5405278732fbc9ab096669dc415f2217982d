@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdf6ce66_4aa8ba4f",
+        "filename": "webapp-frontend/src/app/services/ei/consumer.service.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000214
+      },
+      "writtenOn": "2021-06-28T12:06:58Z",
+      "side": 1,
+      "message": "I\u0027m not sure if we should have this function, since the path is not defined in the API.",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 5
+      },
+      "revId": "debb5405278732fbc9ab096669dc415f2217982d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
