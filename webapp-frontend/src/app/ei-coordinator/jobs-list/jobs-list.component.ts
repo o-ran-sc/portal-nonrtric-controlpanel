@@ -22,9 +22,9 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { EMPTY, forkJoin, of, Subscription, timer } from "rxjs";
+import { EMPTY, forkJoin, of, pipe, Subscription, concat } from "rxjs";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { mergeMap, finalize, map, tap, switchMap } from "rxjs/operators";
+import { mergeMap, finalize, map, tap, concatMap, delay, skip } from "rxjs/operators";
 import { ConsumerService } from "@services/ei/consumer.service";
 import { UiService } from "@services/ui/ui.service";
 
@@ -108,24 +108,29 @@ export class JobsListComponent implements OnInit {
       finalize(() => this.loadingSubject$.next(false))
     );
 
+    const whenToRefresh$ = of('').pipe(
+      delay(10000),
+      tap((_) => this.refresh$.next('')),
+      skip(1),
+    );
+
+    const poll$ = concat(jobsInfo$, whenToRefresh$);
+
     const refreshedJobs$ = this.refresh$.pipe(
-      switchMap((_) =>
-        timer(0, 10000).pipe(
-          tap((_) => {
-            this.loadingSubject$.next(true);
-          }),
-          switchMap((_) => jobsInfo$),
-          map((response) => this.extractJobs(response))
-        )
-      )
+      tap((_) => console.log("Inside refreshedJobs")),
+      tap((_) => {
+        this.loadingSubject$.next(true);
+      }),
+      concatMap((_) => this.checked ? poll$ : jobsInfo$),
+      map((response) => this.extractJobs(response))
     );
 
     return this.polling$
       .pipe(
-        switchMap((value) => {
+        concatMap((value) => {
           let pollCondition = value == 0 || this.checked;
           return pollCondition ? refreshedJobs$ : EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
@@ -167,6 +172,7 @@ export class JobsListComponent implements OnInit {
   stopPolling(checked) {
     this.checked = checked;
     this.polling$.next(this.jobs().length);
+    this.refreshDataClick();
   }
 
   compare(a: any, b: any, isAsc: boolean) {
@@ -217,10 +223,10 @@ export class JobsListComponent implements OnInit {
       jobObj.owner = element[1].job_owner;
       jobObj.targetUri = element[1].job_result_uri;
       jobObj.typeId = element[1].info_type_id;
-      jobObj.prodIds = (element[2].producers) ? element[2].producers : ["No Producers"];      
+      jobObj.prodIds = (element[2].producers) ? element[2].producers : ["No Producers"];
       jobList = jobList.concat(jobObj);
-    });  
-   
+    });
+
     this.jobsSubject$.next(jobList);
     if (this.firstTime && jobList.length > 0) {
       this.polling$.next(jobList.length);
