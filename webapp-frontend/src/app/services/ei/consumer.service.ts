@@ -19,7 +19,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ConsumerStatus, JobInfo } from '@interfaces/consumer.types';
 
@@ -34,6 +34,7 @@ export class ConsumerService {
     private basePath = '/data-consumer/v1';
     readonly jobsPath = 'info-jobs';
     readonly consumerStatusPath = 'status';
+    private customHttpClient: HttpClient;
 
     private buildPath(...args: any[]) {
         let result = this.basePath;
@@ -43,8 +44,9 @@ export class ConsumerService {
         return result;
     }
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient, backend: HttpBackend) {
         // injects to variable httpClient
+        this.customHttpClient = new HttpClient(backend);
     }
 
     getJobIds(): Observable<string[]> {
