@@ -19,6 +19,7 @@
  */
 
 import {
+  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
@@ -26,7 +27,7 @@ import {
   HttpResponse,
 } from "@angular/common/http";
 import { Injectable, Injector } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { Observable, of, throwError } from "rxjs";
 import * as policyinstance1 from "./mock/policy-instance-1.json";
 import * as noTypePolicies from "./mock/no-type-policies.json";
 import * as type0Policies from "./mock/type0-policies.json";
@@ -228,7 +229,28 @@ export class HttpMockRequestInterceptor implements HttpInterceptor {
       }
     }
 
-    if (result) {
+    /*if(request.url.includes("/info-jobs/job1") || request.url.includes("/info-jobs/job1/status")) {
+    var resultError: HttpErrorResponse;
+      for (const element of urls) {
+        if (request.url === element.url) {
+          console.log("Inputting a 404!");
+          resultError = new HttpErrorResponse({
+            status: 404,
+            statusText: "Faking a problem in job1"
+          });
+        }
+      }
+    }
+
+    if (resultError) {
+      console.log(
+        "Mock answering http call :" + request.method + " " + request.url,
+        request.method === "PUT" ? request.body : null
+      );
+      console.log("Returning: " + resultError.status, resultError.statusText);
+      // Adding a delay to simulate real server call.
+      return throwError(resultError);
+    } else*/ if (result) {
       console.log(
         "Mock answering http call :" + request.method + " " + request.url,
         request.method === "PUT" ? request.body : null
@@ -258,4 +280,5 @@ export class HttpMockRequestInterceptor implements HttpInterceptor {
     }
     return result;
   }
+
 }
