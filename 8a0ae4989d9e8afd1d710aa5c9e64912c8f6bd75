@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5e7f8d0_433169a2",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2021-10-04T13:33:02Z",
+      "side": 1,
+      "message": "What if one of these fields is -1 ? \nIs the job ignored?",
+      "range": {
+        "startLine": 232,
+        "startChar": 10,
+        "endLine": 233,
+        "endChar": 15
+      },
+      "revId": "8a0ae4989d9e8afd1d710aa5c9e64912c8f6bd75",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9cc09d5_4ca787d9",
+        "filename": "webapp-frontend/src/app/interceptor.mock.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2021-10-04T13:33:02Z",
+      "side": 1,
+      "message": "If this is not needed please remove.",
+      "range": {
+        "startLine": 236,
+        "startChar": 10,
+        "endLine": 241,
+        "endChar": 9
+      },
+      "revId": "8a0ae4989d9e8afd1d710aa5c9e64912c8f6bd75",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
