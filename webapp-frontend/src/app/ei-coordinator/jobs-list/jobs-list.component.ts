@@ -22,11 +22,12 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { EMPTY, forkJoin, of, pipe, Subscription, concat } from "rxjs";
+import { EMPTY, forkJoin, of, pipe, Subscription, concat, Observable } from "rxjs";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { mergeMap, finalize, map, tap, concatMap, delay, skip } from "rxjs/operators";
+import { mergeMap, finalize, map, tap, concatMap, delay, skip, catchError } from "rxjs/operators";
 import { ConsumerService } from "@services/ei/consumer.service";
 import { UiService } from "@services/ui/ui.service";
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 
 export interface Job {
   jobId: string;
@@ -100,12 +101,21 @@ export class JobsListComponent implements OnInit {
         forkJoin(jobIds.map((jobId) => {
           return forkJoin([
             of(jobId),
-            this.consumerService.getJobInfo(jobId),
-            this.consumerService.getConsumerStatus(jobId)
+            this.consumerService.getJobInfo(jobId).pipe(
+              catchError(err => {
+                return of([-1]);
+              })),
+            this.consumerService.getConsumerStatus(jobId).pipe(
+              catchError(err => {
+                return of([-1]);
+              })),
           ])
         }))
       ),
-      finalize(() => this.loadingSubject$.next(false))
+      finalize(() => {
+        this.loadingSubject$.next(false)
+      })
+
     );
 
     const whenToRefresh$ = of('').pipe(
@@ -188,7 +198,7 @@ export class JobsListComponent implements OnInit {
   }
 
   isArrayIncluding(data: string[], filter: string): boolean {
-    if(!data)
+    if (!data)
       return true;
     for (let i = 0; i < data.length; i++) {
       return this.isDataIncluding(data[i], filter);
@@ -217,13 +227,15 @@ export class JobsListComponent implements OnInit {
     this.clearFilter();
     let jobList = [];
     res.forEach(element => {
-      let jobObj = <Job>{};
-      jobObj.jobId = element[0];
-      jobObj.owner = element[1].job_owner;
-      jobObj.targetUri = element[1].job_result_uri;
-      jobObj.typeId = element[1].info_type_id;
-      jobObj.prodIds = (element[2].producers) ? element[2].producers : ["No Producers"];
-      jobList = jobList.concat(jobObj);
+      if(element[1] != -1 && element[2] != -1){
+        let jobObj = <Job>{};
+        jobObj.jobId = element[0];
+        jobObj.owner = element[1].job_owner;
+        jobObj.targetUri = element[1].job_result_uri;
+        jobObj.typeId = element[1].info_type_id;
+        jobObj.prodIds = (element[2].producers) ? element[2].producers : ["No Producers"];
+        jobList = jobList.concat(jobObj);
+      }
     });
 
     this.jobsSubject$.next(jobList);
