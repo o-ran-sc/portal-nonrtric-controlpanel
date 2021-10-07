@@ -195,17 +195,17 @@ const urls = [
     url: CONSUMER_PATH + "/info-jobs/job3/status",
     json: job3Status,
   },
-    {
-        url: '/a1-policy/v2/configuration',
-        json: ricconfig
-    }
+  {
+    url: '/a1-policy/v2/configuration',
+    json: ricconfig
+  }
 ];
 
 @Injectable()
 export class HttpMockRequestInterceptor implements HttpInterceptor {
   private toggleTypes = true;
 
-  constructor(private injector: Injector) {}
+  constructor(private injector: Injector) { }
 
   intercept(
     request: HttpRequest<any>,
@@ -229,7 +229,7 @@ export class HttpMockRequestInterceptor implements HttpInterceptor {
       }
     }
 
-  if (result) {
+    if (result) {
       console.log(
         "Mock answering http call :" + request.method + " " + request.url,
         request.method === "PUT" ? request.body : null
