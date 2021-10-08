@@ -121,7 +121,10 @@ export class PolicyInstanceComponent implements OnInit {
             })
           )
         ),
-        finalize(() => this.loadingSubject$.next(false))
+        finalize(() => {
+          this.loadingSubject$.next(false);
+          this.policyInstanceSubject.next(this.policyInstances);
+        })
       )
       .subscribe((res) => {
         this.policyInstances = res.map((policy) => {
@@ -130,7 +133,6 @@ export class PolicyInstanceComponent implements OnInit {
           policyInstance.lastModified = policy[1].last_modified;
           return policyInstance;
         });
-        this.policyInstanceSubject.next(this.policyInstances);
       });
   }
 
@@ -194,7 +196,7 @@ export class PolicyInstanceComponent implements OnInit {
   }
 
   instanceCount(): number {
-    return this.policyInstances.length;
+    return this.instanceDataSource.data.length;
   }
 
   toLocalTime(utcTime: string): string {
