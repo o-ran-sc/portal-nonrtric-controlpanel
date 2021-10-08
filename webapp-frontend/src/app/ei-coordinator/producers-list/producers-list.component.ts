@@ -149,7 +149,10 @@ export class ProducersListComponent implements OnInit {
           ])
         })
         )),
-      finalize(() => this.loadingSubject.next(false)),
+      finalize(() => {
+        this.loadingSubject.next(false);
+        this.producerSubject.next(producers);
+      })
     ).subscribe(result => {
       producers = result.map(producer => {
         let producerObj = <Producer>{};
@@ -162,9 +165,13 @@ export class ProducersListComponent implements OnInit {
         }
         return producerObj;
       });
-      this.producerSubject.next(producers);
     }, err => {
       console.error("Subscribe function error:" + err);
     });
   }
+
+  hasProducers(): boolean {
+    return this.producers().length > 0;
+  }
+
 }
