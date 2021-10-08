@@ -105,7 +105,6 @@ describe('ProducersListComponent', () => {
 
     it('should contain data after initialization', async () => {
       setServiceSpy();
-      component.ngOnInit();
       const expectedProducerRows = [
         expectedProducer1Row,
         { id: 'producer2', types: 'type2,type3', status: 'DISABLED' }
@@ -127,8 +126,8 @@ describe('ProducersListComponent', () => {
       producerServiceSpy.getProducer.and.returnValues(of({} as ProducerRegistrationInfo));
       producerServiceSpy.getProducerStatus.and.returnValues(of({} as ProducerStatus));
 
-      component.ngOnInit();
       const expectedProducerRow = { id: 'producer1', types: '< No types >', status: '< No status >' };
+
       let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#producersTable' }));
       let producerRows = await producersTable.getRows();
       expect(await producerRows[0].getCellTextByColumnName()).toEqual(expectedProducerRow);
@@ -136,7 +135,6 @@ describe('ProducersListComponent', () => {
 
     it('filtering', async () => {
       setServiceSpy();
-      component.ngOnInit();
       let producersTable = await loader.getHarness(MatTableHarness.with({ selector: '#producersTable' }));
 
       let idFilterInput = await loader.getHarness(MatInputHarness.with({ selector: '#producerIdFilter' }));
