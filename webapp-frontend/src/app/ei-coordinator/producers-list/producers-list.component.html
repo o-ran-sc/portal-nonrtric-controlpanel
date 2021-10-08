@@ -63,7 +63,14 @@ limitations under the License.
       <mat-cell *matCellDef="let producer"> {{this.getProducerStatus(producer)}} </mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="['id', 'types', 'status']"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="['id', 'types', 'status']" [ngClass]="{'display-none': !this.hasProducers()}"></mat-header-row>
     <mat-row *matRowDef="let row; columns: ['id', 'types', 'status'];"></mat-row>
+
+    <ng-container matColumnDef="noRecordsFound">
+        <mat-footer-cell *matFooterCellDef>No records found.</mat-footer-cell>
+    </ng-container>
+
+    <mat-footer-row *matFooterRowDef="['noRecordsFound']" [ngClass]="{'display-none': this.hasProducers()}">
+    </mat-footer-row>
   </mat-table>
 </div>
