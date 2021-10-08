@@ -27,7 +27,6 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { mergeMap, finalize, map, tap, concatMap, delay, skip, catchError } from "rxjs/operators";
 import { ConsumerService } from "@services/ei/consumer.service";
 import { UiService } from "@services/ui/ui.service";
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 
 export interface Job {
   jobId: string;
@@ -56,6 +55,7 @@ export class JobsListComponent implements OnInit {
   subscription: Subscription;
   checked: boolean = false;
   firstTime: boolean = true;
+  jobList: Job[] = [];
 
   constructor(private consumerService: ConsumerService, private ui: UiService) {
     this.jobForm = new FormGroup({
@@ -97,6 +97,9 @@ export class JobsListComponent implements OnInit {
 
   dataSubscription(): Subscription {
     const jobsInfo$ = this.consumerService.getJobIds().pipe(
+      tap((_) => {
+        this.jobList = [] as Job[];
+      }),
       mergeMap((jobIds) =>
         forkJoin(jobIds.map((jobId) => {
           return forkJoin([
@@ -113,7 +116,8 @@ export class JobsListComponent implements OnInit {
         }))
       ),
       finalize(() => {
-        this.loadingSubject$.next(false)
+        this.loadingSubject$.next(false);
+        this.jobsSubject$.next(this.jobList);
       })
 
     );
@@ -139,7 +143,7 @@ export class JobsListComponent implements OnInit {
         concatMap((value) => {
           let pollCondition = value == 0 || this.checked;
           return pollCondition ? refreshedJobs$ : EMPTY;
-        }),
+        })
       )
       .subscribe();
   }
@@ -220,12 +224,11 @@ export class JobsListComponent implements OnInit {
   }
 
   public jobs(): Job[] {
-    return this.jobsSubject$.value;
+    return this.jobsDataSource.data;
   }
 
   private extractJobs(res: any) {
     this.clearFilter();
-    let jobList = [];
     res.forEach(element => {
       if(element[1] != -1 && element[2] != -1){
         let jobObj = <Job>{};
@@ -234,19 +237,23 @@ export class JobsListComponent implements OnInit {
         jobObj.targetUri = element[1].job_result_uri;
         jobObj.typeId = element[1].info_type_id;
         jobObj.prodIds = (element[2].producers) ? element[2].producers : ["No Producers"];
-        jobList = jobList.concat(jobObj);
+        this.jobList = this.jobList.concat(jobObj);
       }
     });
 
-    this.jobsSubject$.next(jobList);
-    if (this.firstTime && jobList.length > 0) {
-      this.polling$.next(jobList.length);
+    if (this.firstTime && this.jobList.length > 0) {
+      this.polling$.next(this.jobList.length);
       this.firstTime = false;
     }
-    return jobList;
+    return this.jobList;
   }
 
   refreshDataClick() {
     this.refresh$.next("");
   }
+
+  hasJobs(): boolean {
+    return this.jobs().length > 0;
+  }
+
 }
