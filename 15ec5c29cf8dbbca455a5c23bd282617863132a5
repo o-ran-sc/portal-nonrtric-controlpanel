@@ -16,6 +16,29 @@
       "message": "recheck",
       "revId": "15ec5c29cf8dbbca455a5c23bd282617863132a5",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "424044b2_84d2de93",
+        "filename": "webapp-frontend/src/app/ei-coordinator/jobs-list/jobs-list.component.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000201
+      },
+      "writtenOn": "2021-10-14T09:06:25Z",
+      "side": 1,
+      "message": "Please remove trailing whitespaces",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 8
+      },
+      "revId": "15ec5c29cf8dbbca455a5c23bd282617863132a5",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
