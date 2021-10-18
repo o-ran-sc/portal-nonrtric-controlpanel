@@ -69,6 +69,7 @@ const job1 = {
   owner: "owner1",
   targetUri: "http://one",
   prodIds: ["producer1"],
+  status: "ENABLED"
 } as Job;
 const job2 = {
   jobId: "job2",
@@ -76,6 +77,7 @@ const job2 = {
   owner: "owner1",
   targetUri: "http://one",
   prodIds: ["producer1"],
+  status: "ENABLED"
 } as Job;
 
 describe("JobsListComponent", () => {
@@ -117,6 +119,7 @@ describe("JobsListComponent", () => {
     typeId: "type1",
     owner: "owner1",
     targetUri: "http://one",
+    status: "ENABLED"
   };
 
   it("should create", () => {
@@ -151,6 +154,7 @@ describe("JobsListComponent", () => {
                 typeId: "Type ID",
                 owner: "Owner",
                 targetUri: "Target URI",
+                status: "Status"
               });
             });
           });
@@ -188,6 +192,7 @@ describe("JobsListComponent", () => {
           typeId: "type1",
           owner: "owner1",
           targetUri: "http://one",
+          status: "ENABLED"
         },
       ];
 
@@ -239,6 +244,7 @@ describe("JobsListComponent", () => {
         typeId: "< No type >",
         owner: "< No owner >",
         targetUri: "http://one",
+        status: "ENABLED",
       };
 
       loader
@@ -335,6 +341,26 @@ describe("JobsListComponent", () => {
                 });
               });
             });
+
+            loader
+            .getHarness(
+              MatInputHarness.with({ selector: "#jobStatusFilter" })
+            )
+            .then((statusFilter) => {
+              tick(10);
+              statusFilter.setValue("ENA").then((_) => {
+                loadTable.getRows().then((jobRows) => {
+                  expect(jobRows.length).toEqual(2);
+                  jobRows[0].getCellTextByColumnName().then((value) => {
+                    expect(expectedJob1Row).toEqual(
+                      jasmine.objectContaining(value)
+                    );
+                    statusFilter.setValue("");
+                    flushMicrotasks();
+                  });
+                });
+              });
+            });
         });
       discardPeriodicTasks();
     }));
@@ -349,7 +375,7 @@ describe("JobsListComponent", () => {
 
         sort.then((value) => {
           value.getSortHeaders({ sortDirection: "" }).then((headers) => {
-            expect(headers.length).toBe(5);
+            expect(headers.length).toBe(6);
 
             headers[0].click();
             tick(10);
@@ -423,6 +449,7 @@ describe("JobsListComponent", () => {
           typeId: "type1",
           owner: "owner1",
           targetUri: "http://one",
+          status: "ENABLED"
         };
 
         setServiceSpy();
@@ -496,6 +523,23 @@ describe("JobsListComponent", () => {
                   });
                 });
               });
+              loader
+              .getHarness(
+                MatInputHarness.with({ selector: "#jobStatusFilter" })
+              )
+              .then((statusFilter) => {
+                tick(10);
+                statusFilter.setValue("").then((_) => {
+                  loadTable.getRows().then((jobRows) => {
+                    expect(jobRows.length).toEqual(2);
+                    jobRows[1].getCellTextByColumnName().then((value) => {
+                      expect(expectedJobRow).toEqual(
+                        jasmine.objectContaining(value)
+                      );
+                    });
+                  });
+                });
+              });
           });
         discardPeriodicTasks();
       }));
@@ -536,6 +580,7 @@ describe("JobsListComponent", () => {
                     typeId: "type1",
                     owner: "owner1",
                     targetUri: "http://one",
+                    status: "ENABLED",
                   };
                   discardPeriodicTasks();
                   expect(expectedRow).toEqual(jasmine.objectContaining(value));

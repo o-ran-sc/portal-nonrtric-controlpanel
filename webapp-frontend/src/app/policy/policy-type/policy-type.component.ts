@@ -18,7 +18,7 @@
  * ========================LICENSE_END===================================
  */
 
-import { Component, Input, OnInit, OnChanges, SimpleChanges} from "@angular/core";
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { PolicyType, PolicyTypeSchema } from "@interfaces/policy.types";
 import { PolicyService } from "@services/policy/policy.service";

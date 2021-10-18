@@ -90,8 +90,21 @@ limitations under the License.
             </mat-header-cell>
             <mat-cell *matCellDef="let job"> {{job.targetUri}} </mat-cell>
         </ng-container>
-        <mat-header-row *matHeaderRowDef="['jobId', 'prodIds', 'typeId', 'owner', 'targetUri']"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: ['jobId', 'prodIds', 'typeId', 'owner', 'targetUri'];"></mat-row>
+        <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                <div (click)="stopSort($event)">
+                    <form style="display: flex" [formGroup]="jobForm">
+                        <mat-form-field>
+                            <input id="jobStatusFilter" matInput formControlName="status">
+                            <mat-placeholder>Status</mat-placeholder>
+                        </mat-form-field>
+                    </form>
+                </div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let job"> {{job.status}} </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="['jobId', 'prodIds', 'typeId', 'owner', 'targetUri', 'status']"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ['jobId', 'prodIds', 'typeId', 'owner', 'targetUri', 'status'];"></mat-row>
     </mat-table>
     <mat-paginator [length]="jobs()?.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
         class="ei-coordinator-table mat-elevation-z8"></mat-paginator>

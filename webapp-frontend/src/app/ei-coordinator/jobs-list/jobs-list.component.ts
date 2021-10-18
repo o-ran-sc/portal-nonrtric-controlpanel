@@ -27,6 +27,7 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { mergeMap, finalize, map, tap, concatMap, delay, skip, catchError } from "rxjs/operators";
 import { ConsumerService } from "@services/ei/consumer.service";
 import { UiService } from "@services/ui/ui.service";
+import { OperationalState } from '@app/interfaces/consumer.types';
 
 export interface Job {
   jobId: string;
@@ -34,6 +35,7 @@ export interface Job {
   targetUri: string;
   owner: string;
   prodIds: string[];
+  status: OperationalState;
 }
 
 @Component({
@@ -64,6 +66,7 @@ export class JobsListComponent implements OnInit {
       owner: new FormControl(""),
       targetUri: new FormControl(""),
       prodIds: new FormControl(""),
+      status: new FormControl("")
     });
   }
 
@@ -81,7 +84,8 @@ export class JobsListComponent implements OnInit {
           this.isDataIncluding(data.jobId, searchTerms.jobId) &&
           this.isDataIncluding(data.owner, searchTerms.owner) &&
           this.isDataIncluding(data.typeId, searchTerms.typeId) &&
-          this.isArrayIncluding(data.prodIds, searchTerms.prodIds)
+          this.isArrayIncluding(data.prodIds, searchTerms.prodIds) &&
+          this.isDataIncluding(data.status, searchTerms.status)
         );
       }) as (data: Job, filter: any) => boolean;
     });
@@ -103,7 +107,11 @@ export class JobsListComponent implements OnInit {
       mergeMap((jobIds) =>
         forkJoin(jobIds.map((jobId) => {
           return forkJoin([
-            of(jobId),
+            of(jobId).pipe(
+              catchError(err => {
+                return of([-1]);
+              })
+            ),
             this.consumerService.getJobInfo(jobId).pipe(
               catchError(err => {
                 return of([-1]);
@@ -119,7 +127,6 @@ export class JobsListComponent implements OnInit {
         this.loadingSubject$.next(false);
         this.jobsSubject$.next(this.jobList);
       })
-
     );
 
     const whenToRefresh$ = of('').pipe(
@@ -158,6 +165,7 @@ export class JobsListComponent implements OnInit {
     this.jobForm.get("owner").setValue("");
     this.jobForm.get("targetUri").setValue("");
     this.jobForm.get("prodIds").setValue("");
+    this.jobForm.get("status").setValue("");
   }
 
   sortJobs(sort: Sort) {
@@ -175,6 +183,8 @@ export class JobsListComponent implements OnInit {
           return this.compare(a.targetUri, b.targetUri, isAsc);
         case "prodIds":
           return this.compare(a.prodIds, b.prodIds, isAsc);
+        case "status":
+          return this.compare(a.status, b.status, isAsc);
         default:
           return 0;
       }
@@ -185,7 +195,9 @@ export class JobsListComponent implements OnInit {
   stopPolling(checked) {
     this.checked = checked;
     this.polling$.next(this.jobs().length);
-    this.refreshDataClick();
+    if (this.checked) {
+      this.refreshDataClick();
+    }
   }
 
   compare(a: any, b: any, isAsc: boolean) {
@@ -230,14 +242,30 @@ export class JobsListComponent implements OnInit {
   private extractJobs(res: any) {
     this.clearFilter();
     res.forEach(element => {
-      if(element[1] != -1 && element[2] != -1){
-        let jobObj = <Job>{};
-        jobObj.jobId = element[0];
-        jobObj.owner = element[1].job_owner;
-        jobObj.targetUri = element[1].job_result_uri;
-        jobObj.typeId = element[1].info_type_id;
-        jobObj.prodIds = (element[2].producers) ? element[2].producers : ["No Producers"];
-        this.jobList = this.jobList.concat(jobObj);
+      if (element[0] != -1) {
+        if (element[1] != -1 && element[2] != -1) {
+          let jobObj = <Job>{};
+          jobObj.jobId = element[0];
+          jobObj.owner = element[1].job_owner;
+          jobObj.targetUri = element[1].job_result_uri;
+          jobObj.typeId = element[1].info_type_id;
+          jobObj.prodIds = (element[2].producers) ? element[2].producers : ["No Producers"];
+          jobObj.status = element[2].info_job_status;
+          this.jobList = this.jobList.concat(jobObj);
+        } else {
+          let jobObj = <Job>{};
+          jobObj.jobId = element[0];
+          if (element[1] == -1) {
+            jobObj.owner = "--Missing information--";
+            jobObj.targetUri = "--Missing information--";
+            jobObj.typeId = "--Missing information--";
+          }
+          if (element[2] == -1) {
+            jobObj.prodIds = "--Missing information--" as unknown as [];
+            jobObj.status = "--Missing information--" as OperationalState;
+          }
+          this.jobList = this.jobList.concat(jobObj);
+        }
       }
     });
 
