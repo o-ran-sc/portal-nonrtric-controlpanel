@@ -171,7 +171,7 @@ export class ProducersListComponent implements OnInit {
   }
 
   hasProducers(): boolean {
-    return this.producers().length > 0;
+    return this.producersDataSource.data.length > 0;
   }
 
 }
