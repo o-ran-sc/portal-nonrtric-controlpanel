@@ -280,8 +280,12 @@ export class JobsListComponent implements OnInit {
     this.refresh$.next("");
   }
 
+  jobsNumber() : number {
+    return this.jobsDataSource.data.length;
+  }
+
   hasJobs(): boolean {
-    return this.jobs().length > 0;
+    return this.jobsNumber() > 0;
   }
 
 }

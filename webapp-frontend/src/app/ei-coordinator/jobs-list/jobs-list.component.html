@@ -103,9 +103,19 @@ limitations under the License.
             </mat-header-cell>
             <mat-cell *matCellDef="let job"> {{job.status}} </mat-cell>
         </ng-container>
-        <mat-header-row *matHeaderRowDef="['jobId', 'prodIds', 'typeId', 'owner', 'targetUri', 'status']"></mat-header-row>
+        
+        <ng-container matColumnDef="noRecordsFound">
+            <mat-footer-cell *matFooterCellDef>No records found.</mat-footer-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="['jobId', 'prodIds', 'typeId', 'owner', 'targetUri', 'status']" [ngClass]="{'display-none': !this.hasJobs()}">
+        </mat-header-row>
         <mat-row *matRowDef="let row; columns: ['jobId', 'prodIds', 'typeId', 'owner', 'targetUri', 'status'];"></mat-row>
+
+        <mat-footer-row *matFooterRowDef="['noRecordsFound']" [ngClass]="{'display-none': this.hasJobs()}">
+        </mat-footer-row>
+
     </mat-table>
-    <mat-paginator [length]="jobs()?.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
+    <mat-paginator [length]="this.jobsNumber()" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
         class="ei-coordinator-table mat-elevation-z8"></mat-paginator>
 </div>

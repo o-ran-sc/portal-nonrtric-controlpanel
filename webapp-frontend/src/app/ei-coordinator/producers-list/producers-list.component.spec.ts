@@ -73,8 +73,10 @@ describe('ProducersListComponent', () => {
       } as Producer;
 
       setServiceSpy();
+
       component.loadProducers();
       const actualProducers: Producer[] = component.producers();
+      expect(actualProducers.length).toEqual(2);
       expect(actualProducers).toEqual([producer1, producer2]);
     });
 
