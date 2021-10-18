@@ -1,0 +1,10 @@
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Code-Review+1: Sonia Sangari <sonia.sangari@est.tech>
+Code-Review+1: Henrik Andersson <henrik.b.andersson@est.tech>
+Code-Review+1: Yennifer Chacon <yennifer.chacon@est.tech>
+Code-Review+2: John  Keeney <john.keeney@est.tech>
+Submitted-by: John  Keeney <john.keeney@est.tech>
+Submitted-at: Mon, 18 Oct 2021 15:00:07 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/portal/nonrtric-controlpanel/+/6885
+Project: portal/nonrtric-controlpanel
+Branch: refs/heads/master
