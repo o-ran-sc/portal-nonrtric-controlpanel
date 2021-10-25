@@ -31,23 +31,16 @@ export class HttpRequestInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         console.log('Interceptor Invoked' + request.url);
-        if (!request.url.includes("info-jobs")) {
-            return next.handle(request).pipe(
-                catchError((error: HttpErrorResponse) => {
-                    console.error("Error from error interceptor", error);
-
+        return next.handle(request).pipe(
+            catchError((error: HttpErrorResponse) => {
+                console.error("Error from error interceptor", error);
+                
+                if (!request.url.includes("info-jobs") && error.status != 404) {
                     // show dialog for error message
                     this.notificationService.error(error.message);
-                    return throwError(error);
-                })
-            ) as Observable<HttpEvent<any>>;
-        } else {
-            return next.handle(request).pipe(
-                catchError((error: HttpErrorResponse) => {
-                    console.error("Error from error interceptor", error);
-                    return throwError(error);
-                })
-            ) as Observable<HttpEvent<any>>;
-        }
+                }
+                return throwError(error);
+            })
+        ) as Observable<HttpEvent<any>>;
     }
 }

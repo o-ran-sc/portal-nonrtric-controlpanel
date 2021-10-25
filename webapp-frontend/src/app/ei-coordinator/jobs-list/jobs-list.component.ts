@@ -22,7 +22,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { EMPTY, forkJoin, of, pipe, Subscription, concat, Observable } from "rxjs";
+import { EMPTY, forkJoin, of, Subscription, concat } from "rxjs";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { mergeMap, finalize, map, tap, concatMap, delay, skip, catchError } from "rxjs/operators";
 import { ConsumerService } from "@services/ei/consumer.service";
@@ -101,6 +101,7 @@ export class JobsListComponent implements OnInit {
 
   dataSubscription(): Subscription {
     const jobsInfo$ = this.consumerService.getJobIds().pipe(
+      catchError(_ => { return EMPTY }),
       tap((_) => {
         this.jobList = [] as Job[];
       }),
