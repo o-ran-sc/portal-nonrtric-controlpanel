@@ -34,8 +34,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
                 console.error("Error from error interceptor", error);
-                
-                if (!request.url.includes("info-jobs") && error.status != 404) {
+                if (!request.url.includes("info-jobs") || error.status != 404) {
                     // show dialog for error message
                     this.notificationService.error(error.message);
                 }
