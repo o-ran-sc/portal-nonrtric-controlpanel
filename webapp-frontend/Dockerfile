@@ -21,13 +21,6 @@ COPY package.json ./
 RUN npm install
 COPY . .
 
-# RUN karma test
-RUN apk update
-RUN apk add chromium
-RUN export CHROME_BIN=/usr/bin/chromium-browser
-ENV CHROME_BIN /usr/bin/chromium-browser
-RUN ./ng test --browsers ChromeHeadless --code-coverage=true --watch=false
-
 RUN npm run-script build:prod
 
 ### STAGE 2: Run App ###
