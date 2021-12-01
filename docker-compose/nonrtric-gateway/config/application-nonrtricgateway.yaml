@@ -31,7 +31,7 @@ spring:
         predicates:
         - Path=/a1-policy/**
       - id: A1-EI
-        uri: https://ecs:8434
+        uri: https://ics:8434
         predicates:
         - Path=/data-producer/**,/data-consumer/**
 management:
