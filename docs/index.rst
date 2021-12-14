@@ -10,8 +10,7 @@ Non-RT RIC Control Panel
    :caption: Contents:
 
    ./overview.rst
-   ./developer-guide.rst
-   ./api-docs.rst
+   ./developer-guide.rst  
    ./installation-guide.rst
    ./release-notes.rst
 

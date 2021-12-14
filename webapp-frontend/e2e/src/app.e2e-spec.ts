@@ -35,7 +35,7 @@ describe("Home page", () => {
     expect(browser.getCurrentUrl()).toEqual("http://localhost:4200/policy");
   });
 
-  it("should reach enrichment information coordinator page when clicking on the enrichment information coordinator card", async () => {
+  it("should reach information coordinator page when clicking on the information coordinator card", async () => {
     await element(by.id('eicCard')).click();
     expect(browser.getCurrentUrl()).toEqual("http://localhost:4200/ei-coordinator");
   });
@@ -70,7 +70,7 @@ describe("Sidebar navigation", () => {
     expect(browser.getCurrentUrl()).toEqual("http://localhost:4200/ric-config");
   });
 
-  it("should reach enrichment information coordinator page when clicking in the side bar", async () => {
+  it("should reach information coordinator page when clicking in the side bar", async () => {
     await element(by.id('eicLink')).click();
     expect(browser.getCurrentUrl()).toEqual("http://localhost:4200/ei-coordinator");
   });
@@ -127,13 +127,13 @@ describe("Policy types page", () => {
   });
 });
 
-describe("Enrichment information coordinator page", () => {
+describe("Information coordinator page", () => {
 
   beforeEach(() => {
     browser.get("http://localhost:4200/ei-coordinator");
   });
 
-  it("should reach back to home from enrichment information coordinator page when clicking in the side bar", async () => {
+  it("should reach back to home from information coordinator page when clicking in the side bar", async () => {
     await element(by.id('Menu_Burger_Icon')).click();
     await element(by.id('homeLink')).click();
     expect(browser.getCurrentUrl()).toEqual("http://localhost:4200/");
