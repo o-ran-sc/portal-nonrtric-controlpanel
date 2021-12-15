@@ -46,6 +46,7 @@ target
 
 ### visual studio ###
 .vs
+.vscode
 
 # OSx cruft
 **/.DS_Store

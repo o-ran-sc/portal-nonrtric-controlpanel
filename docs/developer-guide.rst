@@ -1,6 +1,6 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. SPDX-License-Identifier: CC-BY-4.0
-.. Copyright (C) 2020 Nordix
+.. Copyright (C) 2021 Nordix
 
 Developer Guide
 ===============
@@ -94,4 +94,4 @@ End-to-end call
 
 In order to make a complete end-to-end call, follow the instructions given in this `guide`_.
 
-.. _guide: https://wiki.o-ran-sc.org/pages/viewpage.action?pageId=34963461
+.. _guide: https://wiki.o-ran-sc.org/display/RICNR/Testing+End+to+End+call+in+Release+E
