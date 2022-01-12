@@ -29,7 +29,14 @@ EXPOSE 9090
 ADD /config/application.yaml /opt/app/nonrtric-gateway/config/application.yaml
 ADD target/${JAR} /opt/app/nonrtric-gateway/nonrtric-gateway.jar
 
+ARG user=nonrtric
+ARG group=nonrtric
 
-RUN chmod -R 777 /opt/app/nonrtric-gateway/config/
+RUN groupadd $user && \
+    useradd -r -g $group $user
+RUN chown -R $user:$group /opt/app/nonrtric-gateway
+RUN chown -R $user:$group /var/log/nonrtric-gateway
+
+USER ${user}
 
 CMD ["java", "-jar", "/opt/app/nonrtric-gateway/nonrtric-gateway.jar"]
