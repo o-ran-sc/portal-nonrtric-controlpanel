@@ -33,4 +33,17 @@ RUN npm run-script build:prod
 ### STAGE 2: Run App ###
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=stage1 /usr/src/app/dist/controlpanelApp /usr/share/nginx/html
+
+## use build-in nginx user
+ARG user=nginx
+
+## change ownership of nginx config files
+RUN chown -R $user /var/log/nginx
+RUN chown -R $user /etc/nginx/conf.d
+RUN chown -R $user /var/cache/nginx/
+RUN touch /var/run/nginx.pid
+RUN chown -R $user /var/run/nginx.pid
+
+USER ${user}
+
+COPY --chown=$user --from=stage1 /usr/src/app/dist/controlpanelApp /usr/share/nginx/html
