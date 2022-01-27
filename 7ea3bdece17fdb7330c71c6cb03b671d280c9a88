@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b30f60e_a5a5413d",
+        "filename": "webapp-frontend/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2022-01-27T18:39:09Z",
+      "side": 1,
+      "message": "Will user ${user} have the appropriate permission here?",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 74
+      },
+      "revId": "7ea3bdece17fdb7330c71c6cb03b671d280c9a88",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
