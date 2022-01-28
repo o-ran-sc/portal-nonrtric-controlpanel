@@ -22,6 +22,30 @@
       },
       "revId": "7ea3bdece17fdb7330c71c6cb03b671d280c9a88",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d86f01c8_faed9ed9",
+        "filename": "webapp-frontend/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000247
+      },
+      "writtenOn": "2022-01-28T08:57:05Z",
+      "side": 1,
+      "message": "Good point.\n\nAccording to docker docs, when using \"COPY\" command, All new files and directories are created with a UID and GID of 0, which is root. ${user} will have read access to these files, which is enough in this case. \n\nA better solution is to add a --chown flag when doing \"COPY\".",
+      "parentUuid": "4b30f60e_a5a5413d",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 74
+      },
+      "revId": "7ea3bdece17fdb7330c71c6cb03b671d280c9a88",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
