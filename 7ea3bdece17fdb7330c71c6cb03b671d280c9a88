@@ -46,6 +46,30 @@
       },
       "revId": "7ea3bdece17fdb7330c71c6cb03b671d280c9a88",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9079e2d4_55ad6836",
+        "filename": "webapp-frontend/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2022-01-28T10:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d86f01c8_faed9ed9",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 74
+      },
+      "revId": "7ea3bdece17fdb7330c71c6cb03b671d280c9a88",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
