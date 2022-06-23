@@ -29,3 +29,5 @@ The architecture of the Control Panel is as shown on the following picture:
    :scale: 50 %
 
 The Control Panel can be deployed following the instructions in the Installation Guide.
+
+This product is a part of :doc:`NONRTRIC <nonrtric:index>`.

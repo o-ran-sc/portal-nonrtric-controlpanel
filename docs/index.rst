@@ -13,8 +13,3 @@ Non-RT RIC Control Panel
    ./developer-guide.rst  
    ./installation-guide.rst
    ./release-notes.rst
-
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
