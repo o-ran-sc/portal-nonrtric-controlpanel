@@ -10,7 +10,9 @@
     "test": "ng test --watch=true",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "webdriver-update": "webdriver-manager update"
+    "webdriver-update": "webdriver-manager update",
+    "sonar": "sonar-scanner"
+
   },
   "private": true,
   "dependencies": {
