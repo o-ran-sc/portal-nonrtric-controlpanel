@@ -23,7 +23,7 @@ linkcheck_ignore = [
     'https://gerrit.o-ran-sc.org.*'
 ]
 
-branch = 'latest'
+branch = 'g-relase'
 
 extensions = [
     'sphinx.ext.intersphinx',
