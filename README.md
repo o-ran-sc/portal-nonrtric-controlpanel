@@ -1,8 +1,8 @@
 # O-RAN-SC Non-RT RIC Control Panel Web Application
 
 The O-RAN Non-RT RIC Control Panel provides administrative and operator functions for a Near-RT RIC through the A1 API.
-This web app consists of an Angular (version 9) front end
-and a Java (version 11) Spring Cloud Gateway (version 2020.0.0).
+This web app consists of an Angular (version 9) front end, see [frontend](webapp-frontend/README.md),
+and a Java (version 11) Spring Cloud Gateway (version 2020.0.0), see [gateway](nonrtric-gateway/README.md).
 
 Please see the documentation in the docs/ folder.
 

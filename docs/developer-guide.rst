@@ -5,7 +5,7 @@
 Developer Guide
 ===============
 
-This document provides a quickstart for developers of the Non-RT RIC Control Panel.
+This document provides a quick start for developers of the Non-RT RIC Control Panel.
 
 The Non-RT RIC Control Panel is an interface that allows human users to create, edit and delete policy instances, for
 each existing policy type. The policy types and their definitions are retrieved from each Near-RT RIC. It is also
