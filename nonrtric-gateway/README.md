@@ -4,7 +4,6 @@ The O-RAN Non-RT RIC ControlPanel Gateway provides an API Gateway for all the No
 
 The application is a spring cloud gateway and all the route configurations are provided in application.yaml.
 
-
 ## License
 
 Copyright (C) 2021 Nordix Foundation. All rights reserved.
