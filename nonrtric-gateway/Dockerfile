@@ -17,7 +17,25 @@
 # SPDX-License-Identifier: Apache-2.0
 # ============LICENSE_END=========================================================
 #
-FROM openjdk:11-jre-slim
+FROM openjdk:17-jdk as jre-build
+
+RUN $JAVA_HOME/bin/jlink \
+--verbose \
+--add-modules ALL-MODULE-PATH \
+--strip-debug \
+--no-man-pages \
+--no-header-files \
+--compress=2 \
+--output /customjre
+
+# Use debian base image (same as openjdk uses)
+FROM debian:11-slim
+
+ENV JAVA_HOME=/jre
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+#copy JRE from the base image
+COPY --from=jre-build /customjre $JAVA_HOME
 
 ARG JAR
 
@@ -39,4 +57,4 @@ RUN chown -R $user:$group /var/log/nonrtric-gateway
 
 USER ${user}
 
-CMD ["java", "-jar", "/opt/app/nonrtric-gateway/nonrtric-gateway.jar"]
+CMD ["/jre/bin/java", "-jar", "/opt/app/nonrtric-gateway/nonrtric-gateway.jar"]
