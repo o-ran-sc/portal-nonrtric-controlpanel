@@ -23,7 +23,7 @@ linkcheck_ignore = [
     'https://gerrit.o-ran-sc.org.*'
 ]
 
-branch = 'latest'
+branch = 'h-release'
 
 extensions = [
     'sphinx.ext.intersphinx',
