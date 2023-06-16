@@ -29,7 +29,7 @@
     </parent>
     <groupId>org.o-ran-sc.nonrtric</groupId>
     <artifactId>nonrtric-gateway</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.3.0-SNAPSHOT</version>
     <name>Nonrtric Gateway</name>
     <description>Nonrtric Gateway</description>
 
