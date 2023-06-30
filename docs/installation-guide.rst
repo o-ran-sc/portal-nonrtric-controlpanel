@@ -49,9 +49,9 @@ Install with Helm
 +++++++++++++++++
 
 Helm charts and an example recipe are provided in the `it/dep repo <https://gerrit.o-ran-sc.org/r/admin/repos/it/dep>`__,
-under "nonrtric". By modifying the variables named "installXXX" in the beginning of the example recipe file, which
-components that will be installed can be controlled. Then the components can be installed and started by running the
-following comand:
+under "nonrtric". By modifying the variables named "installXXX" at the beginning of the example recipe file, the  
+components that will be installed can be controlled. The components can be then be installed and started by running the
+following command:
 
       .. code-block:: bash
 
