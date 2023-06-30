@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c9ebc13_94b779fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2023-06-30T12:45:23Z",
+      "side": 1,
+      "message": "Please make a small trivial change in both \n  * /portal/nonrtric-controlpanel/nonrtric-gateway  \n  * /portal/nonrtric-controlpanel/webapp-frontend\n... to trigger their verify jobs to check that the changes in requirements.txt do not affect the python environment used test the gateway and frontend. \nThanks",
+      "revId": "6ea9f823b38fb31942a8f4530cad0dc8496c099f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
