@@ -8,8 +8,7 @@ Developer Guide
 This document provides a quick start for developers of the Non-RT RIC Control Panel.
 
 The Non-RT RIC Control Panel is an interface that allows human users to create, edit and delete policy instances, for
-each existing policy type. The policy types and their definitions are retrieved from each Near-RT RIC. It is also
-possible to change the configuration of available RICs, provided that Consul is not used.
+each existing policy type. The policy types and their definitions are retrieved from each Near-RT RIC. 
 
 Additionally, producers and jobs for the Information coordinator service can be viewed.
 
@@ -78,13 +77,12 @@ When the instances are listed, it is possible to edit or delete each instance fr
 
 .. image:: ./images/non-RT_RIC_controlpanel_Policy.PNG
 
-It is also possible to manage the configuration of available RICs, provided that Consul is not used, from the Control Panel.
 From the menu on the left hand side, select "Policy -> RIC Config".
 
 .. image:: ./images/non-RT_RIC_controlpanel_ric_config.PNG
 
 
-From the main page, click on the "Information information coordinator" card or use the menu on the left hand side of the page.
+From the main page, click on the "Enrichment information coordinator" card or use the menu on the left hand side of the page.
 From here it is possible to view producers and jobs from the Information service,
 
 .. image:: ./images/non-RT_RIC_controlpanel_EI.PNG

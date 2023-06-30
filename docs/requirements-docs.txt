@@ -3,3 +3,12 @@ sphinx-rtd-theme
 sphinxcontrib-httpdomain
 recommonmark
 lfdocs-conf
+tox
+doc8
+docutils < 0.17
+setuptools
+six
+sphinxcontrib-needs
+sphinxcontrib-swaggerdoc
+sphinx_bootstrap_theme
+sphinxcontrib-redoc
