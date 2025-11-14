@@ -1,4 +1,10 @@
-# Non-RT RIC Control Panel Web Application Frontend
+# Non-RT RIC Control Panel Web Application Frontend  (Experimental O-RAN-SC Module)
+
+![Status: Not for Production](https://img.shields.io/badge/status-not--for--production-red)
+![Status: Experimental](https://img.shields.io/badge/CVE%20Support-none-lightgrey)
+
+> [!WARNING]
+> This repository is pre-spec and not intended for production use. No CVE remediation or production guarantees apply.
 
 ## Development server
 
@@ -27,6 +33,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
 Modifications Copyright (C) 2019 Nordix Foundation
 Modifications Copyright (C) 2020 Nordix Foundation
+Copyright (C) 2023-2025 OpenInfra Foundation Europe.
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at

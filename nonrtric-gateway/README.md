@@ -1,4 +1,10 @@
-# O-RAN-SC Non-RT RIC ControlPanel Gateway
+# O-RAN-SC Non-RT RIC ControlPanel Gateway  (Experimental O-RAN-SC Module)
+
+![Status: Not for Production](https://img.shields.io/badge/status-not--for--production-red)
+![Status: Experimental](https://img.shields.io/badge/CVE%20Support-none-lightgrey)
+
+> [!WARNING]
+> This repository is pre-spec and not intended for production use. No CVE remediation or production guarantees apply.
 
 The O-RAN Non-RT RIC ControlPanel Gateway provides an API Gateway for all the Non-RT-RIC Components
 
@@ -7,6 +13,7 @@ The application is a spring cloud gateway and all the route configurations are p
 ## License
 
 Copyright (C) 2021-2023 Nordix Foundation. All rights reserved.
+Copyright (C) 2023-2025 OpenInfra Foundation Europe.
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
