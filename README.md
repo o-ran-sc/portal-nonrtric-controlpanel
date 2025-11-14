@@ -1,4 +1,10 @@
-# O-RAN-SC Non-RT RIC Control Panel Web Application
+# O-RAN-SC Non-RT RIC Control Panel Web Application (Experimental O-RAN-SC Module)
+
+![Status: Not for Production](https://img.shields.io/badge/status-not--for--production-red)
+![Status: Experimental](https://img.shields.io/badge/CVE%20Support-none-lightgrey)
+
+> [!WARNING]
+> This repository is pre-spec and not intended for production use. No CVE remediation or production guarantees apply.
 
 The O-RAN Non-RT RIC Control Panel provides administrative and operator functions for a Near-RT RIC through the A1 API.
 This web app consists of an Angular (version 9) front end, see [frontend](webapp-frontend/README.md),
@@ -12,6 +18,7 @@ URL `http://your-host-name-here:8080/swagger-ui.html`
 ## License
 
 Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+Copyright (C) 2025 OpenInfra Foundation Europe.
 Modifications Copyright (C) 2019 Nordix Foundation
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
