@@ -1,5 +1,6 @@
 #  ============LICENSE_START===============================================
-#  Copyright (C) 2020 Nordix Foundation. All rights reserved.
+#  Copyright (C) 2020-2023 Nordix Foundation. All rights reserved.
+#  Copyright (C) 2023-2025 OpenInfra Foundation Europe. All rights reserved.
 #  ========================================================================
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -15,7 +16,7 @@
 #  ============LICENSE_END=================================================
 #
 ### STAGE 1: Build App ###
-FROM node:14-alpine AS stage1
+FROM nexus3.o-ran-sc.org:10001/node:14-alpine AS stage1
 WORKDIR /usr/src/app
 COPY package.json ./
 RUN npm install
@@ -31,7 +32,7 @@ RUN ./ng test --browsers ChromeHeadless --code-coverage=true --watch=false
 RUN npm run-script build:prod
 
 ### STAGE 2: Run App ###
-FROM nginx:alpine
+FROM nexus3.o-ran-sc.org:10001/nginx:alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 
 ## use build-in nginx user
