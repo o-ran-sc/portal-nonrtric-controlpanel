@@ -20,7 +20,7 @@
 #
 FROM nexus3.onap.org:10001/library/amazoncorretto:17-alpine3.22-jdk as jre-build
 
-RUN apk add binutils
+RUN apk add --no-cache binutils
 RUN $JAVA_HOME/bin/jlink \
 --verbose \
 --add-modules ALL-MODULE-PATH \
@@ -30,8 +30,7 @@ RUN $JAVA_HOME/bin/jlink \
 --compress=2 \
 --output /customjre
 
-# Use debian base image (same as openjdk uses)
-FROM nexus3.o-ran-sc.org:10001/debian:11-slim
+FROM nexus3.onap.org:10001/library/amazoncorretto:17-alpine3.22
 
 ENV JAVA_HOME=/jre
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
@@ -46,16 +45,16 @@ RUN mkdir -p /var/log/nonrtric-gateway
 
 EXPOSE 9090
 
-ADD /config/application.yaml /opt/app/nonrtric-gateway/config/application.yaml
-ADD target/${JAR} /opt/app/nonrtric-gateway/nonrtric-gateway.jar
+COPY /config/application.yaml /opt/app/nonrtric-gateway/config/application.yaml
+COPY target/${JAR} /opt/app/nonrtric-gateway/nonrtric-gateway.jar
 
 ARG user=nonrtric
 ARG group=nonrtric
 
-RUN groupadd $user && \
-    useradd -r -g $group $user
-RUN chown -R $user:$group /opt/app/nonrtric-gateway
-RUN chown -R $user:$group /var/log/nonrtric-gateway
+RUN addgroup -S $group && \
+    adduser -S -G $group $user && \
+    chown -R $user:$group /opt/app/nonrtric-gateway && \
+    chown -R $user:$group /var/log/nonrtric-gateway
 
 USER ${user}
 
