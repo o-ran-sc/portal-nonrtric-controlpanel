@@ -18,9 +18,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # ============LICENSE_END=========================================================
 #
-FROM nexus3.o-ran-sc.org:10001/amazoncorretto:17.0.17 AS jre-build
-RUN yum install -y binutils
+FROM nexus3.onap.org:10001/library/amazoncorretto:17-alpine3.22-jdk as jre-build
 
+RUN apk add binutils
 RUN $JAVA_HOME/bin/jlink \
 --verbose \
 --add-modules ALL-MODULE-PATH \
@@ -30,7 +30,7 @@ RUN $JAVA_HOME/bin/jlink \
 --compress=2 \
 --output /customjre
 
-# Use debian base image
+# Use debian base image (same as openjdk uses)
 FROM nexus3.o-ran-sc.org:10001/debian:11-slim
 
 ENV JAVA_HOME=/jre
